@@ -1,0 +1,48 @@
+import axios from "axios";
+import { urlPropTypes } from "./types";
+import { endPoints } from './apiLib';
+import { Storage } from "../stores/InAppStorage";
+import { baseURL } from "./api.env";
+
+const baseUrl = (): string => `${baseURL}`;
+
+export const apiCall = ({ 
+    urlExtra, 
+    name, 
+    data = {}, 
+    params = {}, 
+    action = () => undefined 
+}: urlPropTypes) => {
+    return new Promise((res, rej) => {
+        const theName = name as keyof typeof endPoints;
+        const userDetails: any = Storage?.getItem('userDetails') || '{}';
+        const { token } = userDetails || { token: "" };
+        let headers: any = endPoints[theName]?.headers || {};
+
+        if (endPoints[theName]?.auth) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        axios({
+            url: `${baseUrl()}${endPoints[theName]?.url}${urlExtra || ""}`,
+            method: endPoints[theName]?.method,
+            headers,
+            data,
+            params
+        })
+        .then(async (r) => {
+            const returned = await action(r.data);
+            if (r.status === 401) {
+                window.location.href = '/'; // Redirect to login on 401
+            } else if (r.data.respCode === "00" || r.status === 200) {
+                res(r.data.respBody || r.data);
+            } else {
+                console.error("Response Error:", r);
+            }
+        })
+        .catch((err) => {
+            console.error("API Call Error:", err);
+            rej(err);
+        });
+    });
+};

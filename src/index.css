@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+  --color-softPink: #FDE8EC;
+  --color-lightLavender: #F5EBF9;
+  --color-white: #FFFFFF;
+  --color-palePink: #FBD1D9;
+  --color-lightPurple: #ECD8F3;
+  --color-lightGrey: #F2F3F3;
+  --color-lightCoral: #F8BBC6;
+  --color-lavender: #E2C4ED;
+  --color-veryLightGrey: #E5E6E7;
+  --color-softRed: #F6A4B3;
+  --color-pastelPurple: #D8B0E7;
+  --color-mutedGrey: #D8DADB;
+  --color-brightRed: #F2768D;
+  --color-vibrantPurple: #C589DB;
+  --color-mutedBlueGrey: #CBCECF;
+  --color-pink: #ED4967;
+  --color-purple: #B161CF;
+  --color-softGrey: #B1B5B7;
+  --color-crimsonRed: #E91B41;
+  --color-vividPurple: #9E3AC3;
+  --color-mediumGrey: #979D9F;
+  --color-darkRed: #BA1634;
+  --color-darkPurple: #7E2E9C;
+  --color-darkGrey: #7D8487;
+  --color-deepRed: #8C1027;
+  --color-darkViolet: #5F2375;
+  --color-charcoalGrey: #646A6C;
+  --color-maroon: #5D0B1A;
+  --color-deepViolet: #3F174E;
+  --color-darkCharcoal: #4B4F51;
+  --color-darkMaroon: #460814;
+  --color-deepPurple: #2F113B;
+  --color-almostBlack: #323536;
+  --color-almostRed: #2F050D;
+  --color-blackCherry: #200C27;
+  --color-charcoalBlack: #262829;
+  --color-veryDarkRed: #170307;
+  --color-veryDarkPurple: #100614;
+  --color-black: #191A1B;
+  --color-pureBlack: #0D0D0E;
+  --color-solidBlack: #000000;
+}
