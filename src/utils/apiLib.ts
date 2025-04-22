@@ -13,4 +13,10 @@ const FileHeaders = {
 
 export const endPoints: endPointlistTypes = {
     // Add your endpoint definitions here
+    posts:{
+        url: "/posts",
+        method: "GET",
+        headers,
+        // auth: true,
+    }
 };

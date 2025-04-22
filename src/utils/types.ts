@@ -13,7 +13,7 @@ export type endpointTypes = {
 };
 
 export type endPointlistTypes = {
-    [key: string]: endpointTypes;
+    posts: endpointTypes;
 };
 
 export type urlPropTypes = {

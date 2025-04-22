@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @theme {
+  --color-primary: #E91B41;
   --color-softPink: #FDE8EC;
   --color-lightLavender: #F5EBF9;
   --color-white: #FFFFFF;
@@ -19,7 +20,6 @@
   --color-pink: #ED4967;
   --color-purple: #B161CF;
   --color-softGrey: #B1B5B7;
-  --color-crimsonRed: #E91B41;
   --color-vividPurple: #9E3AC3;
   --color-mediumGrey: #979D9F;
   --color-darkRed: #BA1634;
@@ -42,4 +42,18 @@
   --color-black: #191A1B;
   --color-pureBlack: #0D0D0E;
   --color-solidBlack: #000000;
+  --color-success-light: #D1F7D5;  /* Light green */
+  --color-success-dark: #28A745;  /* Dark green */
+  --color-error-light: #FEE2E2;   /* Light red */
+  --color-error-dark: #DC3545;    /* Dark red */
+  --color-info-light: #E0F7FF;    /* Light blue */
+  --color-info-dark: #007BFF;     /* Dark blue */
+  --color-info-muted: #B0E0E6;
+}
+.Toastify__toast {
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  border: none !important;
 }

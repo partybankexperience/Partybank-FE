@@ -3,6 +3,7 @@ import { urlPropTypes } from "./types";
 import { endPoints } from './apiLib';
 import { Storage } from "../stores/InAppStorage";
 import { baseURL } from "./api.env";
+import { errorAlert, successAlert } from "../components/alerts/ToastService";
 
 const baseUrl = (): string => `${baseURL}`;
 
@@ -35,13 +36,16 @@ export const apiCall = ({
             if (r.status === 401) {
                 window.location.href = '/'; // Redirect to login on 401
             } else if (r.data.respCode === "00" || r.status === 200) {
+                successAlert("Success", "Request completed successfully.");
                 res(r.data.respBody || r.data);
             } else {
                 console.error("Response Error:", r);
+                errorAlert("Oops!", r.data.respMessage || "Something went wrong.");
             }
         })
         .catch((err) => {
             console.error("API Call Error:", err);
+            errorAlert("Network Error", err.response?.data?.message || err.message || "Something went wrong.");
             rej(err);
         });
     });
