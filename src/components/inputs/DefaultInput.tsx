@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { FaEye, FaEyeSlash, FaExclamationTriangle } from "react-icons/fa";
+import {
+  FaEye,
+  FaEyeSlash,
+  FaExclamationTriangle,
+  FaChevronDown,
+} from "react-icons/fa";
 
 type DefaultInputProps = {
   id: string;
@@ -21,8 +26,8 @@ const DefaultInput = ({
   id = "input-id",
   label = "Label",
   placeholder = "Enter value",
-  helperText = "Enter your helper text here",
-  helperLink = "Link",
+  helperText = "",
+  helperLink = "",
   disabled = false,
   type = "text",
   leftContent,
@@ -69,9 +74,10 @@ const DefaultInput = ({
     disabled:bg-darkGrey disabled:cursor-not-allowed`;
 
   const paddingLeft = leftContent ? "pl-[40px]" : "";
-  const paddingRight = (type === "password" || rightContent || showDropdown || hasError)
-    ? "pr-[70px]" // leave room for both error and right content
-    : "";
+  const paddingRight =
+    type === "password" || rightContent || showDropdown || hasError
+      ? "pr-[70px]" // leave room for both error and right content
+      : "";
 
   return (
     <div className="grid gap-2 w-fit relative">
@@ -118,15 +124,19 @@ const DefaultInput = ({
           {rightContent && type !== "password" && !showDropdown && (
             <span className="text-neutralDark text-[14px]">{rightContent}</span>
           )}
-
-          {showDropdown && !hasError && (
-            <select className="bg-white text-neutralDark text-[14px] outline-none border-none appearance-none">
-              {dropdownOptions.map((opt, idx) => (
-                <option key={idx} value={opt}>
-                  {opt}
-                </option>
-              ))}
-            </select>
+          {showDropdown && (
+            <div className="flex items-center cursor-pointer">
+              <select className="bg-white text-neutralDark text-[14px] pr-6 pl-2 py-1 rounded appearance-none outline-none border-none cursor-pointer">
+                {dropdownOptions.map((opt, idx) => (
+                  <option key={idx} value={opt}>
+                    {opt}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-1 flex items-center text-neutralDark text-sm">
+                <FaChevronDown />
+              </div>
+            </div>
           )}
         </div>
       </div>
@@ -149,74 +159,72 @@ const DefaultInput = ({
 
 export default DefaultInput;
 
+// sample use of the default input
+// import DefaultInput from "./DefaultInput";
+// import { FaUser } from "react-icons/fa";
 
-// sample use of the default input       
-    // import DefaultInput from "./DefaultInput";
-    // import { FaUser } from "react-icons/fa";
-    
-    // const SampleForm = () => {
-    //   return (
-    //     <div className="space-y-6 p-6">
-    //       {/* Basic Text Input with Left and Right Content */}
-    //       <DefaultInput
-    //         id="username"
-    //         label="Username"
-    //         placeholder="Enter your username"
-    //         helperText="Your unique ID"
-    //         helperLink="Learn more"
-    //         leftContent={<FaUser />}
-    //         rightContent="@example.com"
-    //         required
-    //       />
-    
-    //       {/* Email Input with Validation */}
-    //       <DefaultInput
-    //         id="email"
-    //         type="email"
-    //         label="Email Address"
-    //         placeholder="user@example.com"
-    //         helperText="We'll never share your email"
-    //         helperLink="Privacy policy"
-    //         required
-    //       />
-    
-    //       {/* Password Input with Visibility Toggle */}
-    //       <DefaultInput
-    //         id="password"
-    //         type="password"
-    //         label="Password"
-    //         placeholder="••••••••"
-    //         helperText="Use 6+ characters"
-    //         helperLink="Forgot password?"
-    //         required
-    //         minLength={6}
-    //       />
-    
-    //       {/* Disabled Input */}
-    //       <DefaultInput
-    //         id="disabled"
-    //         label="Disabled Input"
-    //         placeholder="Can't type here"
-    //         helperText="This field is disabled"
-    //         helperLink="Why?"
-    //         disabled
-    //       />
-    
-    //       {/* Dropdown Input */}
-    //       <DefaultInput
-    //         id="country"
-    //         label="Country"
-    //         placeholder="Select your country"
-    //         helperText="Choose your home country"
-    //         helperLink="Help"
-    //         showDropdown
-    //         dropdownOptions={["Canada", "USA", "UK"]}
-    //         rightContent="🌐"
-    //         required
-    //       />
-    //     </div>
-    //   );
-    // };
-    
-    // export default SampleForm;
-    
+// const SampleForm = () => {
+//   return (
+//     <div className="space-y-6 p-6">
+//       {/* Basic Text Input with Left and Right Content */}
+//       <DefaultInput
+//         id="username"
+//         label="Username"
+//         placeholder="Enter your username"
+//         helperText="Your unique ID"
+//         helperLink="Learn more"
+//         leftContent={<FaUser />}
+//         rightContent="@example.com"
+//         required
+//       />
+
+//       {/* Email Input with Validation */}
+//       <DefaultInput
+//         id="email"
+//         type="email"
+//         label="Email Address"
+//         placeholder="user@example.com"
+//         helperText="We'll never share your email"
+//         helperLink="Privacy policy"
+//         required
+//       />
+
+//       {/* Password Input with Visibility Toggle */}
+//       <DefaultInput
+//         id="password"
+//         type="password"
+//         label="Password"
+//         placeholder="••••••••"
+//         helperText="Use 6+ characters"
+//         helperLink="Forgot password?"
+//         required
+//         minLength={6}
+//       />
+
+//       {/* Disabled Input */}
+//       <DefaultInput
+//         id="disabled"
+//         label="Disabled Input"
+//         placeholder="Can't type here"
+//         helperText="This field is disabled"
+//         helperLink="Why?"
+//         disabled
+//       />
+
+//       {/* Dropdown Input */}
+//       <DefaultInput
+//         id="country"
+//         label="Country"
+//         placeholder="Select your country"
+//         helperText="Choose your home country"
+//         helperLink="Help"
+//         showDropdown
+//         dropdownOptions={["Canada", "USA", "UK"]}
+//         rightContent="🌐"
+//         required
+//       />
+//     </div>
+//   );
+// };
+
+// export default SampleForm;
