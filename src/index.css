@@ -7,7 +7,11 @@
   --color-white: #FFFFFF;
   --color-palePink: #FBD1D9;
   --color-lightPurple: #ECD8F3;
+  --color-purple: #9D2EE7;
+  --color-neutral: #E2E2E2;
+  --color-neutralDark:#9B959F;
   --color-lightGrey: #F2F3F3;
+  --color-grey: #484D57;
   --color-lightCoral: #F8BBC6;
   --color-lavender: #E2C4ED;
   --color-veryLightGrey: #E5E6E7;
@@ -23,6 +27,7 @@
   --color-vividPurple: #9E3AC3;
   --color-mediumGrey: #979D9F;
   --color-darkRed: #BA1634;
+  --color-red: #DB371F;
   --color-darkPurple: #7E2E9C;
   --color-darkGrey: #7D8487;
   --color-deepRed: #8C1027;
