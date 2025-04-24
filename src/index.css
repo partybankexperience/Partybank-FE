@@ -58,6 +58,7 @@
   --color-info-dark: #007BFF;     /* Dark blue */
   --color-info-muted: #B0E0E6;
 }
+
 .Toastify__toast {
   padding: 0 !important;
   margin: 0 !important;
@@ -65,3 +66,8 @@
   background: transparent !important;
   border: none !important;
 }
+
+body {
+  font-family: 'Red Hat Display', sans-serif;
+}
+
