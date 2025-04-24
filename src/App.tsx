@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router"
-import Login from "./Pages/onboarding/Login"
-import Signup from "./Pages/onboarding/Signup"
+import Login from "./pages/onboarding/Login"
+import Signup from "./pages/onboarding/Signup"
 import PrivateRoute from "./utils/privateRoute"
 
 const App = () => {
