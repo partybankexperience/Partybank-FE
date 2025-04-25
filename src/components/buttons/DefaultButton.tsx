@@ -24,7 +24,7 @@ const DefaultButton = ({
     const variantClasses = {
         primary: 'bg-primary text-white hover:bg-pink focus:border-darkRed disabled:bg-mutedBlueGrey disabled:!text-white',
         secondary: ' bg-[#F2F2F2] text-black border-primary hover:text-primary focus:text-darkRed disabled:border-mutedBlueGrey focus:border-darkGrey',
-        tertiary: ' hover:text-darkRed focus:text-darkRed text-primary disabled:border-mutedBlueGrey  focus:border-[1px] focus:border-darkGrey  disabled:!bg-none',
+        tertiary: ' hover:text-darkRed bg-white focus:text-darkRed text-primary disabled:border-mutedBlueGrey  focus:border-[1px] focus:border-darkGrey  disabled:!bg-none',
         black: 'bg-black text-white hover:bg-grey focus:bg-grey focus:border-[1px] focus:border-black disabled:bg-mutedBlueGrey disabled:!text-white',
       };
   const baseStyle = " rounded-[8px] text-[20px] w-fit cursor-pointer disabled:cursor-not-allowed disabled:border-mutedBlueGrey disabled:text-mutedBlueGrey";

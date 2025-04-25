@@ -7,7 +7,7 @@ const LoginLayout = ({children}:any) => {
       <div className="px-[20px] md:px-[50px] lg:px-[100px]  py-[12px] md:py-[5vh] grid grid-rows-[auto_1fr_auto] h-screen">
         <img src={logo} alt="Party bank logo" className="m-auto md:m-0" />
         {children}
-        <p className="text-[14px] text-grey200 text-center">© 2025 PartyBank. All rights reserved.</p>
+        <footer className="text-[14px] text-grey200 text-center">© 2025 PartyBank. All rights reserved.</footer>
       </div>
       <div className="hidden md:block h-full max-h-screen">
         <img src={login} alt="" className="object-cover  min-h-screen" />

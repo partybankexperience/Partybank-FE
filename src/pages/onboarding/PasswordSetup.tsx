@@ -39,7 +39,7 @@ const PasswordSetup = () => {
         <div className="flex gap-[20px] items-center mx-auto">
         <DefaultButton
         type="default"
-        variant="secondary"
+        variant="tertiary"
         className="!w-full md:!w-fit md:!mx-auto"
         onClick={handleBack}
       >

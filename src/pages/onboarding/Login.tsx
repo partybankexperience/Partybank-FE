@@ -40,6 +40,7 @@ const Login = () => {
               size="normal"
               type="default"
               className="w-full"
+              onClick={() => navigate('/dashboard')}
             >
               Sign In
             </DefaultButton>
