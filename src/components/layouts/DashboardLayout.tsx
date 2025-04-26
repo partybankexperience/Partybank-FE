@@ -21,10 +21,10 @@ const DashboardLayout = ({children}:any) => {
     {name:"Reports", path:"/reports",icon:<TbReportAnalytics />},
     {name:"Payout Management", path:"/payout-management",icon:<AiOutlineDollarCircle />}]
   return (
-    <div className="grid grid-cols-[1fr_5fr] min-h-screen">
-        <div className="bg-lightdark md:min-w-[300px]">
-            <button className="p-[20px] border-b border-b-[] grid m-auto" role="button" aria-label="Go to dashboard">
-                <img src={logo} alt="PartyBank Logo" className="md:w-[126px] m-auto "/>
+    <div className="flex h-full min-h-screen w-full">
+        <div className="bg-lightdark md:min-w-[300px] md:fixed md:top-0 md:left-0 md:h-screen">
+            <button className="p-[20px] border-b border-b-[] grid m-auto cursor-pointer" role="button" aria-label="Go to dashboard" onClick={()=>navigate('/dashboard')}>
+                <img src={logo} alt="PartyBank Logo" className="md:w-[126px] m-auto " />
             </button>
             <nav className="flex flex-col gap-[20px] mt-[50px]">
                 {navItems.map((item, index) => (    
@@ -34,7 +34,7 @@ const DashboardLayout = ({children}:any) => {
                             <p className="text-primary " aria-hidden></p>
                         </div>
                     }
-                    <li key={index} className={`flex items-center gap-[12px] text-white font-medium text-[18px] cursor-pointer hover:text-primary p-[18px]`} onClick={()=>navigate(item.path)} >
+                    <li key={index} className={`flex items-center gap-[12px]  font-medium text-[18px] cursor-pointer hover:text-primary p-[18px] ${currentPath === item.path ?'text-white':'text-[#A9ABAE]'}`} onClick={()=>navigate(item.path)} >
                         <div className={`text-[26px] ${currentPath === item.path ?'text-primary':'text-white'}`}>
                         {item.icon}
                         </div>
@@ -44,7 +44,7 @@ const DashboardLayout = ({children}:any) => {
                 ))}
             </nav>
         </div>
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full md:ml-[300px] w-full">
             <header className="bg-white py-[25px] px-[2vw] flex justify-between items-center h-fit border-b border-[#ECECEC]">
 <h1 className="text-black font-bold text-[26px]">Dashboard</h1>
 <div className="flex gap-[20px] items-center">
@@ -59,7 +59,7 @@ const DashboardLayout = ({children}:any) => {
     </DefaultButton>
 </div>
             </header>
-            <main className="bg-[#f8f9f9] flex-grow">
+            <main className="bg-[#f8f9f9] flex-grow p-[2vw]">
 
         {children}
             </main>
