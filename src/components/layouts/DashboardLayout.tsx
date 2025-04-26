@@ -8,6 +8,7 @@ import { BiSolidCalendarStar } from "react-icons/bi";
 import { AiOutlineNotification } from "react-icons/ai";
 import { TbReportAnalytics } from "react-icons/tb";
 import { AiOutlineDollarCircle } from "react-icons/ai";
+import { HiOutlineBars3CenterLeft } from "react-icons/hi2";
 import { useLocation, useNavigate } from "react-router";
 
 const DashboardLayout = ({children}:any) => {
@@ -22,7 +23,7 @@ const DashboardLayout = ({children}:any) => {
     {name:"Payout Management", path:"/payout-management",icon:<AiOutlineDollarCircle />}]
   return (
     <div className="flex h-full min-h-screen w-full">
-        <div className="bg-lightdark md:min-w-[300px] md:fixed md:top-0 md:left-0 md:h-screen">
+        <div className="bg-lightdark md:min-w-[300px] hidden md:block md:fixed md:top-0 md:left-0 md:h-screen">
             <button className="p-[20px] border-b border-b-[] grid m-auto cursor-pointer" role="button" aria-label="Go to dashboard" onClick={()=>navigate('/dashboard')}>
                 <img src={logo} alt="PartyBank Logo" className="md:w-[126px] m-auto " />
             </button>
@@ -46,15 +47,20 @@ const DashboardLayout = ({children}:any) => {
         </div>
         <div className="flex flex-col h-full md:ml-[300px] w-full">
             <header className="bg-white py-[25px] px-[2vw] flex justify-between items-center h-fit border-b border-[#ECECEC]">
-<h1 className="text-black font-bold text-[26px]">Dashboard</h1>
+<h1 className="text-black hidden md:block font-bold text-[26px]">Dashboard</h1>
+<button className="text-[26px] text-black md:hidden">
+    <HiOutlineBars3CenterLeft />
+
+    </button>
 <div className="flex gap-[20px] items-center">
     <button aria-description="Notifications" className="w-[50px] h-[50px] rounded-full border border-[#DEDEDE] flex justify-center items-center">
     <VscBellDot className="text-[26px]"/>
     </button>
-    <div className="w-[50px] h-[50px] rounded-full">
+   
+    <div className="w-[50px] h-[50px] hidden md:block rounded-full">
         <img src={avatar} alt="profile picture" className="w-full rounded-full" />
     </div>
-    <DefaultButton icon={<FaPlus />} type="icon-left" variant="primary" className="">
+    <DefaultButton size='small' icon={<FaPlus />} type="icon-left" variant="primary" className="">
         Create New Event
     </DefaultButton>
 </div>

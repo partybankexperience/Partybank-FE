@@ -1,8 +1,8 @@
 
 const Card = ({icon,title,text}:any) => {
   return (
-    <div className="bg-white flex items-center gap-[18px] rounded-[15px] p-[20px]">
-        <div className="rounded-md p-[12px] bg-[#fce4e8]">
+    <div className="bg-white grid md:flex  items-center gap-[18px] rounded-[15px] p-[20px]">
+        <div className="rounded-md p-[12px] w-fit bg-[#fce4e8]">
             {icon}
         </div>
         <div className="grid">
