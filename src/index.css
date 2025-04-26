@@ -10,9 +10,13 @@
   --color-purple: #9D2EE7;
   --color-neutral: #E2E2E2;
   --color-neutralDark:#9B959F;
-  --color-lightGrey: #F2F3F3;
+  --color-lightGrey: #918F90;
+  --color-lightdark: #080D18;
   --color-grey: #484D57;
-  --color-lightCoral: #F8BBC6;
+  --color-grey200: #A7A5A6;
+  --color-grey300: #F7F6F6;
+  --color-grey400: #A9ABAE;
+  --color-green: #379966;
   --color-lavender: #E2C4ED;
   --color-veryLightGrey: #E5E6E7;
   --color-softRed: #F6A4B3;
@@ -55,6 +59,7 @@
   --color-info-dark: #007BFF;     /* Dark blue */
   --color-info-muted: #B0E0E6;
 }
+
 .Toastify__toast {
   padding: 0 !important;
   margin: 0 !important;
@@ -62,3 +67,8 @@
   background: transparent !important;
   border: none !important;
 }
+
+body {
+  font-family: 'Red Hat Display', sans-serif;
+}
+

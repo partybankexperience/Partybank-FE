@@ -20,6 +20,7 @@ type DefaultInputProps = {
   dropdownOptions?: string[];
   required?: boolean;
   minLength?: number;
+  style?:string
 };
 
 const DefaultInput = ({
@@ -36,6 +37,7 @@ const DefaultInput = ({
   dropdownOptions = [],
   required = false,
   minLength = 6,
+  style = "",
 }: DefaultInputProps) => {
   const [value, setValue] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -51,8 +53,26 @@ const DefaultInput = ({
     if (required && value.trim() === "") return "This field is required.";
     if (type === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
       return "Please enter a valid email.";
-    if (type === "password" && value.length < minLength)
-      return `Password must be at least ${minLength} characters.`;
+    if (type === "password") {
+        if (value.length < 8) {
+          return "Password must be at least 8 characters.";
+        }
+    
+        // Check for a mix of letters (both uppercase and lowercase)
+        if (!/[a-z]/.test(value) || !/[A-Z]/.test(value)) {
+          return "Password must contain a mix of uppercase and lowercase letters.";
+        }
+    
+        // Check for numbers
+        if (!/\d/.test(value)) {
+          return "Password must contain at least one number.";
+        }
+    
+        // Check for symbols
+        if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
+          return "Password must contain at least one special character.";
+        }
+      }
     return null;
   };
 
@@ -71,7 +91,7 @@ const DefaultInput = ({
     hover:shadow-[0_0_0_2px_rgba(77,64,85,0.1)] focus:shadow-[0_0_0_2px_rgba(77,64,85,0.1)] 
     ${hasError ? "border-red" : isFilled ? "border-purple" : "border-neutral"} 
     hover:border-lightPurple focus:border-lightPurple 
-    disabled:bg-darkGrey disabled:cursor-not-allowed`;
+    disabled:bg-darkGrey disabled:cursor-not-allowed bg-white`;
 
   const paddingLeft = leftContent ? "pl-[40px]" : "";
   const paddingRight =
@@ -80,8 +100,8 @@ const DefaultInput = ({
       : "";
 
   return (
-    <div className="grid gap-2 w-fit relative">
-      <label htmlFor={id} className="text-black font-bold text-[16px]">
+    <div className="grid gap-2 w-full relative">
+      <label htmlFor={id} className="text-black text-[16px]">
         {label}
       </label>
 
@@ -102,7 +122,7 @@ const DefaultInput = ({
           onBlur={handleBlur}
           aria-describedby={`${id}-helper`}
           aria-invalid={hasError}
-          className={`${baseStyle} ${paddingLeft} ${paddingRight}`}
+          className={`${baseStyle} ${paddingLeft} ${paddingRight} ${style}`}
         />
 
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">

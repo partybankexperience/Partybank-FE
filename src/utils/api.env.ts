@@ -1,1 +1,1 @@
-export const baseURL = "https://jsonplaceholder.typicode.com"; 
+export const baseURL = "https://organizer-tools-production.up.railway.app/v1"; 
