@@ -3,8 +3,12 @@ import DefaultInput from "../../components/inputs/DefaultInput";
 import { FcGoogle } from "react-icons/fc";
 import LoginLayout from "../../components/layouts/LoginLayout";
 import { useNavigate } from "react-router";
+import { useState } from "react";
 
 const Login = () => {
+  const [email, setemail] = useState('')
+  // const [emailError, setEmailError] = useState('')
+  const [password, setpassword] = useState('')
   const navigate = useNavigate();
   return (
       <LoginLayout>
@@ -25,6 +29,10 @@ const Login = () => {
               placeholder="Enter your email address"
               type="email"
               style="!w-full"
+              value={email}
+              setValue={setemail}
+              required
+              // setExternalError={setEmailError}
             />
             <DefaultInput
               id="password"
@@ -32,6 +40,9 @@ const Login = () => {
               placeholder="********"
               type="password"
               style="!w-full"
+              value={password}
+              setValue={setpassword}
+              required
             />
           </div>
           <div className=" grid gap-[10px]">

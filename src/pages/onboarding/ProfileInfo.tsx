@@ -2,9 +2,12 @@ import { useNavigate } from "react-router";
 import DefaultButton from "../../components/buttons/DefaultButton";
 import DefaultInput from "../../components/inputs/DefaultInput";
 import { useOnboardingStore } from "../../stores/onboardingStore";
+import { useState } from "react";
 
 const ProfileInfo = () => {
     const navigate = useNavigate();
+    const [fullName, setFullName] = useState('')
+    const [businessName, setBusinessName] = useState('')
     const { markStepComplete } = useOnboardingStore();
   
     const handleNext = () => {
@@ -21,8 +24,8 @@ const ProfileInfo = () => {
           gap-[50px]">
   <h1 className="text-[24px] md:text-[36px] font-bold text-black text-center">Profile Information</h1>
   <div className="grid w-full md:w-3/4 lg:w-1/2 md:m-auto gap-[20px]">
-      <DefaultInput id='fullName' label='Full Name' placeholder="Enter full name" type="text" style="!w-full"/>
-      <DefaultInput id='businessName' label='Business Name' placeholder="Enter business name" type="text" style="!w-full"/>
+      <DefaultInput id='fullName' label='Full Name' placeholder="Enter full name" type="text" style="!w-full" value={fullName} setValue={setFullName}/>
+      <DefaultInput id='businessName' label='Business Name' placeholder="Enter business name" type="text" style="!w-full" value={businessName} setValue={setBusinessName}/>
  
   
   </div>

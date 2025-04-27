@@ -33,10 +33,11 @@ export const apiCall = ({
         })
         .then(async (r) => {
             const returned = await action(r.data);
+            console.log(r, "Response Data:", returned);
             if (r.status === 401) {
                 window.location.href = '/'; // Redirect to login on 401
             } else if (r.data.respCode === "00" || r.status === 200) {
-                successAlert("Success", "Request completed successfully.");
+                successAlert("Success",r?.data?.message || "Request completed successfully.");
                 res(r.data.respBody || r.data);
             } else {
                 console.error("Response Error:", r);
@@ -44,7 +45,6 @@ export const apiCall = ({
             }
         })
         .catch((err) => {
-            console.error("API Call Error:", err);
             errorAlert("Network Error", err.response?.data?.message || err.message || "Something went wrong.");
             rej(err);
         });

@@ -12,11 +12,18 @@ const FileHeaders = {
 };
 
 export const endPoints: endPointlistTypes = {
-    // Add your endpoint definitions here
-    posts:{
-        url: "/posts",
-        method: "GET",
+    // onboarding
+    signUp: {
+        url: "/auth/initiate",
+        method: "POST",
         headers,
         // auth: true,
-    }
+    },
+    verifyOTP: {
+        url: "/auth/verify-otp",
+        method: "POST",
+        headers,
+        // auth: false,
+    },
+    
 };

@@ -2,27 +2,45 @@ import { useNavigate } from "react-router";
 import OtpInput from "react-otp-input";
 import { useState } from "react";
 import { useOnboardingStore } from "../../stores/onboardingStore";
-import email from "../../assets/images/email.svg";
+import emailPic from "../../assets/images/email.svg";
 import DefaultButton from "../../components/buttons/DefaultButton";
+import { Verifyotp } from "../../Containers/onBoardingApi";
+import { Storage } from "../../stores/InAppStorage";
+import maskEmail from "../../components/helpers/maskedEmail";
+import { ToastContainer } from "react-toastify";
 
 const EmailVerification = () => {
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
   const { markStepComplete } = useOnboardingStore();
 
-  const handleNext = () => {
-    markStepComplete("emailVerification");
-    navigate("/passwordSetup");
+  const email = Storage.getItem('email')
+  console.log(email, 'the email from storage')
+  const handleNext = async(e:any) => {
+e.preventDefault()
+console.log('in here')
+    try {
+      if (otp.length < 4) {
+        return;
+      }
+      const res=await Verifyotp(email, otp)
+      Storage.setItem('token', res.accessToken)
+      console.log(res, 'the response from the api')
+      markStepComplete("emailVerification");
+      navigate("/passwordSetup");
+    } catch (error) {
+      
+    }
   };
-
+const encryptedEmail= maskEmail(email)
   return (
-    <div className="flex flex-col flex-grow  justify-between h-full">
+    <form className="flex flex-col flex-grow  justify-between h-full" onSubmit={handleNext}>
       <div className="grid mx-auto gap-[20px] h-fit">
         <div className=" grid text-center">
           <h1 className="text-[22px] md:text-[36px] font-bold">Email Verification</h1>
-          <p className="text-[14px] md:text-[18px]">Verification code sent to j*********0@gmail.com</p>
+          <p className="text-[14px] md:text-[18px]">Verification code sent to {encryptedEmail}</p>
         </div>
-        <img src={email} alt="a man receiving an email" className="m-auto" />
+        <img src={emailPic} alt="a man receiving an email" className="m-auto" />
         <OtpInput
           value={otp}
           onChange={setOtp}
@@ -36,16 +54,18 @@ const EmailVerification = () => {
           )}
         />
         <p className="text-center text-primary text-[16px] font-medium cursor-pointer">Resend OTP</p>
+        <ToastContainer/>
       </div>
       <DefaultButton
         type="default"
         variant="primary"
         className="!w-full md:!w-fit md:!mx-auto"
-        onClick={handleNext}
+        onClick={()=>handleNext}
+        submitType="submit"
       >
         Next
       </DefaultButton>
-    </div>
+    </form>
   );
 };
 

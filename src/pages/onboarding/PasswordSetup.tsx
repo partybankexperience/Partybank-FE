@@ -3,9 +3,11 @@ import { useOnboardingStore } from "../../stores/onboardingStore";
 import DefaultButton from "../../components/buttons/DefaultButton";
 import DefaultInput from "../../components/inputs/DefaultInput";
 import { FiCheck } from "react-icons/fi";
+import { useState } from "react";
 
 const PasswordSetup = () => {
   const navigate = useNavigate();
+  const [password, setpassword] = useState('')
   const { markStepComplete } = useOnboardingStore();
 
   const handleNext = () => {
@@ -23,8 +25,8 @@ const PasswordSetup = () => {
         gap-[50px]">
 <h1 className="text-[24px] md:text-[36px] font-bold text-black text-center">Password Setup</h1>
 <div className="grid md:w-fit md:m-auto">
-    <DefaultInput id='password' label='Password' placeholder="Write password" type="password" style="!w-full"/>
-<div className="grid gap-[10px] md:flex items-center">
+    <DefaultInput id='password' label='Password' placeholder="Write password" type="password" style="!w-full" value={password} setValue={setpassword} />
+<div className="grid gap-[10px] md:flex items-center" >
     {passwordVerification.map((item,index)=>(
     <div className="flex items-center gap-[8px] text-grey200 text-[14px]" key={index}>
     <FiCheck />

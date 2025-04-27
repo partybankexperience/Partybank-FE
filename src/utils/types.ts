@@ -13,7 +13,8 @@ export type endpointTypes = {
 };
 
 export type endPointlistTypes = {
-    posts: endpointTypes;
+    signUp: endpointTypes;
+    verifyOTP: endpointTypes;
 };
 
 export type urlPropTypes = {

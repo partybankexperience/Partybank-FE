@@ -9,6 +9,7 @@ type ButtonProps = {
   disabled?: boolean;
   onClick?: () => void;
   className?: string;
+  submitType?:"button" | "submit" | "reset" | undefined
 };
 
 const DefaultButton = ({
@@ -20,6 +21,7 @@ const DefaultButton = ({
   onClick,
   type = "default",
   className = "",
+  submitType = "button",
 }: ButtonProps) => {
     const variantClasses = {
         primary: 'bg-primary text-white hover:bg-pink focus:border-darkRed disabled:bg-mutedBlueGrey disabled:!text-white',
@@ -40,7 +42,7 @@ const DefaultButton = ({
   ) : null;
 
   return (
-    <button className={`${baseStyle} ${sizeStyle} ${variantClasses[variant]} ${className}`} disabled={disabled} onClick={onClick}>
+    <button type={submitType} className={`${baseStyle} ${sizeStyle} ${variantClasses[variant]} ${className}`} disabled={disabled} onClick={onClick}>
       <div className="flex items-center justify-center">
         {iconLeft}
         {children}

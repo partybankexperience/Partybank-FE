@@ -1,1 +1,1 @@
-export const baseURL = "https://organizer-tools-production.up.railway.app/v1"; 
+export const baseURL = "https://partybank-be-production.up.railway.app/api/v2";

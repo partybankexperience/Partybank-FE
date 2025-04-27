@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   FaEye,
   FaEyeSlash,
@@ -9,6 +9,8 @@ import {
 type DefaultInputProps = {
   id: string;
   label: string;
+  value:any;
+  setValue:any;
   placeholder?: string;
   helperText?: string;
   helperLink?: string;
@@ -20,7 +22,9 @@ type DefaultInputProps = {
   dropdownOptions?: string[];
   required?: boolean;
   minLength?: number;
-  style?:string
+  style?:string;
+  inputRef?: React.RefObject<HTMLInputElement>;
+  setExternalError?: (hasError: boolean) => void;
 };
 
 const DefaultInput = ({
@@ -38,12 +42,16 @@ const DefaultInput = ({
   required = false,
   minLength = 6,
   style = "",
+  value,
+  setValue,
+  inputRef,
+  setExternalError,
 }: DefaultInputProps) => {
-  const [value, setValue] = useState("");
+  // const [value, setValue] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [touched, setTouched] = useState(false);
-
+  const internalRef = useRef<HTMLInputElement>(null);
   const inputType = type === "password" && showPassword ? "text" : type;
   const isFilled = value.trim().length > 0;
   const hasError = !!error;
@@ -79,6 +87,12 @@ const DefaultInput = ({
   useEffect(() => {
     if (touched) {
       setError(validate());
+    }
+    const validationError = validate();
+    if (setExternalError) {
+      if (setExternalError) {
+        setExternalError(!!validationError); // True if there's an error, false otherwise
+      }
     }
   }, [value]);
 
