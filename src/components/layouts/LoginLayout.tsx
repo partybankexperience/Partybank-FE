@@ -1,3 +1,4 @@
+import { ToastContainer } from "react-toastify";
 import login from "../../assets/images/Login.png";
 import logo from "../../assets/images/pb-logo 1.png";
 
@@ -12,6 +13,7 @@ const LoginLayout = ({children}:any) => {
       <div className="hidden md:block h-full max-h-screen">
         <img src={login} alt="" className="object-cover  min-h-screen" />
       </div>
+      <ToastContainer/>
     </div>
   )
 }

@@ -3,6 +3,9 @@ import { useLocation, useNavigate } from "react-router";
 import { useOnboardingStore } from "../../stores/onboardingStore";
 import { FiCheck } from "react-icons/fi";
 import logo from "../../assets/images/logoWhite.svg";
+import { ToastContainer } from "react-toastify";
+import { Storage } from "../../stores/InAppStorage";
+import { infoAlert } from "../alerts/ToastService";
 
 const steps = [
   { path: "emailVerification", label: "Email Verification" },
@@ -16,16 +19,44 @@ const OnboardingLayout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const stepParam = location.pathname.split("/").pop();
-  const currentStepIndex = steps.findIndex((s) => s.path === stepParam);
 
+  const { completedSteps,markStepComplete,reset  } = useOnboardingStore();
+
+  const check=async () => {
+
+    const user = Storage.getItem("user");
+
+    if (stepParam!=='emailVerification'&&!user?.onboardingStep) {
+      // If there's no step info, force them to signup
+      reset()
+      infoAlert('Auth invalid','Please sign up/login in first')
+      return navigate("/signup", { replace: true, state: {
+        toast: { type: "info", title: "Auth invalid", message: "Please sign up/login first" },
+      }});
+    }
+
+    const correctStep = user.onboardingStep;
+    const correctStepIndex = steps.findIndex((s) => s.path === correctStep);
+    const currentStepIndex = steps.findIndex((s) => s.path === stepParam);
+    // Mark steps as completed if not already marked
+    for (let i = 0; i < currentStepIndex; i++) {
+      const step = steps[i];
+      if (!completedSteps.includes(step.path)) {
+        markStepComplete(step.path);  // Mark previous steps as completed
+      }
+    }
+
+    if (currentStepIndex !== correctStepIndex) {
+      // If they're not on the correct step, redirect them
+      navigate(`/${correctStep}`, { replace: true });
+    }
+  }
   useEffect(() => {
-    if (currentStepIndex === -1) navigate("/emailVerification", { replace: true });
-  }, [currentStepIndex, navigate]);
+    check()
+  }, [stepParam, navigate, completedSteps, markStepComplete]);
 
-  const { completedSteps } = useOnboardingStore();
+  const stepParamIndex = steps.findIndex((s) => s.path === stepParam);
 
-  const canNavigateTo = (targetIndex: number) =>
-    targetIndex <= currentStepIndex || completedSteps.includes(steps[targetIndex].path);
 
   return (
     <div className="md:p-[20px] md:px-[5vw] md:py-[9.2vh] flex flex-col md:grid md:grid-cols-[1fr_2.5fr] md:gap-[20px] lg:gap-[80px] min-h-screen">
@@ -33,12 +64,12 @@ const OnboardingLayout = ({ children }: { children: React.ReactNode }) => {
         <img src={logo} alt="Partybank logo" className="hidden md:block" />
         <nav className="my-[2vw] md:mb-0 flex justify-between h-fit md:grid gap-[3vh]">
           {steps.map((step, index) => {
-            const isActive = index === currentStepIndex;
+            const isActive = index === stepParamIndex;
             const isComplete = completedSteps.includes(step.path);
             return (
               <div
                 key={step.path}
-                onClick={() => canNavigateTo(index) && navigate(`/${step.path}`)}
+                // onClick={() => canNavigateTo(index) && navigate(`/${step.path}`)}
                 className="flex gap-[15px] items-center mt-[2vw] cursor-pointer"
               >
                 <div
@@ -60,6 +91,7 @@ const OnboardingLayout = ({ children }: { children: React.ReactNode }) => {
             );
           })}
         </nav>
+        <ToastContainer/>
       </div>
 
       <div className="bg-grey300 md:rounded-[22px] md:h-full p-[2vw] flex flex-col flex-grow">

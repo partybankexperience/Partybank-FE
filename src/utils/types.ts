@@ -15,6 +15,7 @@ export type endpointTypes = {
 export type endPointlistTypes = {
     signUp: endpointTypes;
     verifyOTP: endpointTypes;
+    setPassword: endpointTypes;
 };
 
 export type urlPropTypes = {
