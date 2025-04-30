@@ -1,3 +1,4 @@
+import { ToastContainer } from "react-toastify";
 import login from "../../assets/images/Login.png";
 import logo from "../../assets/images/pb-logo 1.svg";
 import avatar from "../../assets/images/avatar.png";
@@ -36,6 +37,7 @@ const LoginLayout = ({children}:any) => {
           </div>
         </div>
       </div>
+      <ToastContainer/>
     </div>
   )
 }

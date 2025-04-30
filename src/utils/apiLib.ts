@@ -25,5 +25,10 @@ export const endPoints: endPointlistTypes = {
         headers,
         // auth: false,
     },
-    
+    setPassword: {
+        url: "/onboarding/set-password",
+        method: "POST",
+        headers,
+        auth: true,
+    },
 };

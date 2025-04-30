@@ -16,8 +16,8 @@ export const apiCall = ({
 }: urlPropTypes) => {
     return new Promise((res, rej) => {
         const theName = name as keyof typeof endPoints;
-        const userDetails: any = Storage?.getItem('userDetails') || '{}';
-        const { token } = userDetails || { token: "" };
+        // const userDetails: any = Storage?.getItem('user') || '{}';
+        const token:any =Storage?.getItem('token') || '';
         let headers: any = endPoints[theName]?.headers || {};
 
         if (endPoints[theName]?.auth) {

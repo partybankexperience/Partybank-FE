@@ -10,6 +10,7 @@ import { TbReportAnalytics } from "react-icons/tb";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { HiOutlineBars3CenterLeft } from "react-icons/hi2";
 import { useLocation, useNavigate } from "react-router";
+import { ToastContainer } from "react-toastify";
 
 const DashboardLayout = ({children}:any) => {
     const navigate = useNavigate();
@@ -70,6 +71,7 @@ const DashboardLayout = ({children}:any) => {
         {children}
             </main>
         </div>
+        <ToastContainer/>
         </div>
   )
 }

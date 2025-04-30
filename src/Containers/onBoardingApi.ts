@@ -23,4 +23,13 @@ const Verifyotp=async (email: String,otp:String): Promise<any> => {
     return response;
 }
 
-export {RegisterUser,Verifyotp}
+// setPassword
+const SetPassword=async (confirmPassword:String,password:String): Promise<any> => {
+    const response = await apiCall({
+        name: "setPassword",
+        data: {password,confirmPassword},
+    })
+    return response;
+}
+
+export {RegisterUser,Verifyotp,SetPassword}

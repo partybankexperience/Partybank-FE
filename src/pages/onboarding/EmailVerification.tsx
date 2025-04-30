@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import OtpInput from "react-otp-input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useOnboardingStore } from "../../stores/onboardingStore";
 import emailPic from "../../assets/images/email.svg";
 import DefaultButton from "../../components/buttons/DefaultButton";
@@ -14,25 +14,31 @@ const EmailVerification = () => {
   const navigate = useNavigate();
   const { markStepComplete } = useOnboardingStore();
 
-  const email = Storage.getItem('email')
-  console.log(email, 'the email from storage')
+  const email = Storage.getItem('email') || null
+  useEffect(() => {
+      if (!email) {
+       navigate("/signup", { replace: true, state: {
+         toast: { type: "error", title: "Auth invalid", message: "Please sign up/login first" },
+       }});
+      }
+    }, []);
   const handleNext = async(e:any) => {
 e.preventDefault()
-console.log('in here')
     try {
       if (otp.length < 4) {
         return;
       }
       const res=await Verifyotp(email, otp)
       Storage.setItem('token', res.accessToken)
-      console.log(res, 'the response from the api')
+      Storage.setItem('user', res.user)
       markStepComplete("emailVerification");
-      navigate("/passwordSetup");
+      navigate("/passwordSetup", { replace: true });
     } catch (error) {
       
     }
   };
-const encryptedEmail= maskEmail(email)
+  const encryptedEmail = email ? maskEmail(email) : "";
+
   return (
     <form className="flex flex-col flex-grow  justify-between h-full" onSubmit={handleNext}>
       <div className="grid mx-auto gap-[20px] h-fit">
