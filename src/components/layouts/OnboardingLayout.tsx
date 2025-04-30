@@ -73,9 +73,21 @@ const OnboardingLayout = ({ children }: { children: React.ReactNode }) => {
               <div
                 key={step.path}
                 // onClick={() => canNavigateTo(index) && navigate(`/${step.path}`)}
-                className="flex gap-[15px] items-center mt-[2vw] cursor-pointer"
+                className="flex gap-[15px]   cursor-pointer"
               >
-                <div
+                <div className="flex pt-1 sm:flex-row md:flex-col items-center gap-[5px]">
+                <div className={`w-[22px] h-[22px] rounded-full flex items-center justify-center ${isComplete ? "bg-green" : "bg-grey200"} ${isActive && "bg-red text-white"}`}>
+                  <FiCheck className="w-[22px] m-auto text-white text-lg" />
+                </div>
+                {!isLastStep && (
+                  <div className={`w-[60px] sm:w-[80px] h-[2px] sm:h-[2px] md:w-[2px] md:h-[40px] ${isLineWhite ? "bg-black md:bg-white" : "bg-grey200"} sm:ml-0 md:ml-[0]`}></div>
+                )}
+                </div>
+                <a className={`hidden md:block text-[20px] font-medium ${ isActive ? "text-white" : isComplete ? "text-white" : "text-grey400"}`} tabIndex={0}>
+                  {step.label}
+                </a>
+              
+                {/* <div
                   className={`w-[22px] h-[22px] rounded-full flex items-center justify-center ${
                     isComplete ? "bg-green" : "bg-grey200"
                   } ${isActive && "bg-red text-white"}`}
@@ -84,7 +96,7 @@ const OnboardingLayout = ({ children }: { children: React.ReactNode }) => {
                 </div>
                 <a className={`hidden md:block text-[20px] font-medium ${ isActive ? "text-white" : isComplete ? "text-white" : "text-grey400"}`} tabIndex={0}>
                   {step.label}
-                </a>
+                </a> */}
               </div>
             );
           })}
