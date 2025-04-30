@@ -18,7 +18,11 @@ const PasswordSetup = () => {
     navigate(-1);
 
   }
-  const passwordVerification=['Minimum 8 characters','Mix of letters','Numbers and symbols']
+  const passwordVerification = [
+    { label: 'Minimum 8 characters', check: password.length >= 8 },
+    { label: 'Mix of letters', check: /[a-zA-Z]/.test(password) },
+    { label: 'Numbers and symbols', check: /[0-9!@#$%^&*(),.?":{}|<>]/.test(password) },
+  ];  
   return (
     <div className="flex flex-col flex-grow  justify-between h-full px-[20px] md:px-0">
         <div className="h-fit grid
@@ -27,13 +31,12 @@ const PasswordSetup = () => {
 <div className="grid md:w-fit md:m-auto">
     <DefaultInput id='password' label='Password' placeholder="Write password" type="password" style="!w-full" value={password} setValue={setpassword} />
 <div className="grid gap-[10px] md:flex items-center" >
-    {passwordVerification.map((item,index)=>(
-    <div className="flex items-center gap-[8px] text-grey200 text-[14px]" key={index}>
+  {passwordVerification.map((item,index)=>(
+  <div className={`flex items-center gap-[8px] text-[14px] ${item.check ? "text-green-800" : "text-grey200"}`} key={index} >
     <FiCheck />
-    <p>{item}</p>
-    </div>
-
-    ))}
+    <p>{item.label}</p>
+  </div>  
+  ))}
 </div>
 
 </div>

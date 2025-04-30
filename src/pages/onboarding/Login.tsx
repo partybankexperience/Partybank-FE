@@ -12,7 +12,6 @@ const Login = () => {
   const navigate = useNavigate();
   return (
       <LoginLayout>
-
         <div className="grid mt-[2vh] md:mt-[4vh] gap-[3vh] h-fit ">
           <div className="grid gap-[10px] text-center md:text-left">
             <h1 className="text-black text-[24px] md:text-[36px] font-bold">
@@ -44,6 +43,17 @@ const Login = () => {
               setValue={setpassword}
               required
             />
+            <div className="text-right">
+              <span
+                className="text-[14px] text-red cursor-pointer hover:underline"
+                onClick={() => navigate('/forgot')}
+                role="link"
+                tabIndex={0}
+              >
+                Forgot password?
+              </span>
+            </div>
+
           </div>
           <div className=" grid gap-[10px]">
             <DefaultButton
