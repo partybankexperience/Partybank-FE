@@ -5,18 +5,17 @@ import DefaultInput from "../../components/inputs/DefaultInput";
 import { FiCheck } from "react-icons/fi";
 import { useState } from "react";
 import { SetPassword } from "../../Containers/onBoardingApi";
-import { Storage } from "../../stores/InAppStorage";
 
 const PasswordSetup = () => {
   const navigate = useNavigate();
   const [password, setpassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const { markStepComplete } = useOnboardingStore();
+  const { markStepComplete,updateOnboardingStep } = useOnboardingStore();
 
   const handleNext = async () => {
     try {
       const res=await SetPassword(confirmPassword,password)
-      Storage.setItem('user', res.user)
+      updateOnboardingStep(res.currentStep);
       markStepComplete("passwordSetup");
       navigate("/profileInformation", { replace: true });
     } catch (error) {

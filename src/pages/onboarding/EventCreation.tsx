@@ -7,12 +7,21 @@ import { FaPlus } from "react-icons/fa6";
 import { Modal } from "../../components/modal/Modal";
 import { useState } from "react";
 import createEvent from "../../assets/images/createEvent.svg";
+import { CreateSeries } from "../../Containers/onBoardingApi";
 
 const EventCreation = () => {
     const navigate = useNavigate();
     const { markStepComplete } = useOnboardingStore();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleNext = () => {
+        try {
+            // const res=await CreateSeries(confirmPassword,password)
+            markStepComplete("pinSetup");
+            setIsModalOpen(true);
+            // navigate("/dashboard");
+          } catch (error) {
+            
+          }
       markStepComplete("pinSetup");
       setIsModalOpen(true);
     //   navigate("/createEventSeries");

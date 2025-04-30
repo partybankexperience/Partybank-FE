@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useOnboardingStore } from "../../stores/onboardingStore";
 import { FiCheck } from "react-icons/fi";
@@ -21,39 +21,54 @@ const OnboardingLayout = ({ children }: { children: React.ReactNode }) => {
   const stepParam = location.pathname.split("/").pop();
 
   const { completedSteps,markStepComplete,reset  } = useOnboardingStore();
-
+  const hasReset = useRef(false);
   const check=async () => {
 
     const user = Storage.getItem("user");
-
-    if (stepParam!=='emailVerification'&&!user?.onboardingStep) {
-      // If there's no step info, force them to signup
-      reset()
-      infoAlert('Auth invalid','Please sign up/login in first')
-      return navigate("/signup", { replace: true, state: {
-        toast: { type: "info", title: "Auth invalid", message: "Please sign up/login first" },
-      }});
+console.log("user", user);
+    if (stepParam !== "emailVerification" && !user?.onboardingStep) {
+      if (!hasReset.current) {
+        console.log("email step - reset and redirect");
+        hasReset.current = true;
+        reset();
+        infoAlert("Auth invalid", "Please sign up/login in first");
+        return navigate("/signup", {
+          replace: true,
+          state: {
+            toast: {
+              type: "info",
+              title: "Auth invalid",
+              message: "Please sign up/login first",
+            },
+          },
+        });
+      }
+      return; // Prevent navigating multiple times
     }
 
-    const correctStep = user.onboardingStep;
+    const correctStep = user?.onboardingStep;
     const correctStepIndex = steps.findIndex((s) => s.path === correctStep);
     const currentStepIndex = steps.findIndex((s) => s.path === stepParam);
     // Mark steps as completed if not already marked
     for (let i = 0; i < currentStepIndex; i++) {
       const step = steps[i];
       if (!completedSteps.includes(step.path)) {
+      console.log("completed step");
+
         markStepComplete(step.path);  // Mark previous steps as completed
       }
     }
 
-    if (currentStepIndex !== correctStepIndex) {
+    if (correctStep &&
+      correctStepIndex !== -1 &&currentStepIndex !== correctStepIndex ) {
+      console.log("Incorrect step");
       // If they're not on the correct step, redirect them
       navigate(`/${correctStep}`, { replace: true });
     }
   }
   useEffect(() => {
     check()
-  }, [stepParam, navigate, completedSteps, markStepComplete]);
+  }, [stepParam]);
 
   const stepParamIndex = steps.findIndex((s) => s.path === stepParam);
 

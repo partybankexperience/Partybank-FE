@@ -13,6 +13,18 @@ const FileHeaders = {
 
 export const endPoints: endPointlistTypes = {
     // onboarding
+    login: {
+        url: "/auth/login",
+        method: "POST",
+        headers,
+        auth: false,
+    },
+    loginWithGoogle: {
+        url: "/auth/google",
+        method: "GET",
+        headers,
+        auth: false,
+    },
     signUp: {
         url: "/auth/initiate",
         method: "POST",
@@ -31,4 +43,23 @@ export const endPoints: endPointlistTypes = {
         headers,
         auth: true,
     },
+    setProfile: {
+        url: "/onboarding/set-profile",
+        method: "POST",
+        headers,
+        auth: true,
+    },
+    setPin: {
+        url: "/onboarding/set-pin",
+        method: "POST",
+        headers,
+        auth: true,
+    },
+    createSeries: {
+        url: "/series/create",
+        method: "POST",
+        headers: FileHeaders,
+        auth: true,
+    },
+
 };

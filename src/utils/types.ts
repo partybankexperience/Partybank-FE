@@ -16,6 +16,12 @@ export type endPointlistTypes = {
     signUp: endpointTypes;
     verifyOTP: endpointTypes;
     setPassword: endpointTypes;
+    setProfile: endpointTypes;
+    setPin: endpointTypes;
+    createSeries: endpointTypes;
+    login: endpointTypes;
+    loginWithGoogle: endpointTypes;
+    // getSeries: endpointTypes;
 };
 
 export type urlPropTypes = {

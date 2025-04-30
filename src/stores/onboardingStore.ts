@@ -6,6 +6,7 @@ type OnboardingStore = {
   markStepComplete: (step: string) => void;
   isStepCompleted: (step: string) => boolean;
   reset: () => void;
+  updateOnboardingStep: (step: string) => void;
 };
 
 const orderedSteps = [
@@ -41,5 +42,11 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => {
     },
     isStepCompleted: (step) => get().completedSteps.includes(step),
     reset: () => set({ completedSteps: [] }),
+    updateOnboardingStep: (step) => {
+      const user = Storage.getItem("user");
+      if (user) {
+        Storage.setItem("user", { ...user, onboardingStep: step });
+      }
+    },
   };
 });

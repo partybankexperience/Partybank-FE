@@ -45,6 +45,7 @@ const Signup = () => {
       await RegisterUser(email);
       navigate("/emailVerification");
       Storage.setItem("email", email);
+      console.log("User registered successfully");
     } catch (error) {
       console.log(error);
     }
