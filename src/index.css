@@ -72,3 +72,22 @@ body {
   font-family: 'Red Hat Display', sans-serif;
 }
 
+@media (max-width: 640px) {
+  html {
+    font-size: 90%; /* 1rem = 14.4px */
+  }
+}
+
+/* Tablet / default */
+@media (min-width: 641px) and (max-width: 1024px) {
+  html {
+    font-size: 100%; /* 1rem = 16px */
+  }
+}
+
+/* Desktop: larger root size */
+@media (min-width: 1025px) {
+  html {
+    font-size: 112.5%; /* 1rem = 18px */
+  }
+}
