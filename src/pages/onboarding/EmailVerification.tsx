@@ -7,7 +7,6 @@ import DefaultButton from "../../components/buttons/DefaultButton";
 import { Verifyotp } from "../../Containers/onBoardingApi";
 import { Storage } from "../../stores/InAppStorage";
 import maskEmail from "../../components/helpers/maskedEmail";
-import { ToastContainer } from "react-toastify";
 
 const EmailVerification = () => {
   const [otp, setOtp] = useState("");
@@ -60,7 +59,6 @@ e.preventDefault()
           )}
         />
         <p className="text-center text-primary text-[16px] font-medium cursor-pointer">Resend OTP</p>
-        <ToastContainer/>
       </div>
       <DefaultButton
         type="default"

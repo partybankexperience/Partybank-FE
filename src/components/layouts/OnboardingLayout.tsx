@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from "react-router";
 import { useOnboardingStore } from "../../stores/onboardingStore";
 import { FiCheck } from "react-icons/fi";
 import logo from "../../assets/images/logoWhite.svg";
-import { ToastContainer } from "react-toastify";
 import { Storage } from "../../stores/InAppStorage";
 import { infoAlert } from "../alerts/ToastService";
 
@@ -106,7 +105,6 @@ console.log("user", user);
             );
           })}
         </nav>
-        <ToastContainer/>
       </div>
 
       <div className="bg-grey300 md:rounded-[22px] md:h-full p-[2vw] flex flex-col flex-grow">

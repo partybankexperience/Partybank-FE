@@ -9,7 +9,7 @@
   --color-lightPurple: #ECD8F3;
   --color-purple: #9D2EE7;
   --color-neutral: #E2E2E2;
-  --color-neutralDark:#9B959F;
+  --color-neutralDark: #9B959F;
   --color-lightGrey: #918F90;
   --color-lightdark: #080D18;
   --color-grey: #484D57;
@@ -51,12 +51,18 @@
   --color-black: #191A1B;
   --color-pureBlack: #0D0D0E;
   --color-solidBlack: #000000;
-  --color-success-light: #D1F7D5;  /* Light green */
-  --color-success-dark: #28A745;  /* Dark green */
-  --color-error-light: #FEE2E2;   /* Light red */
-  --color-error-dark: #DC3545;    /* Dark red */
-  --color-info-light: #E0F7FF;    /* Light blue */
-  --color-info-dark: #007BFF;     /* Dark blue */
+  --color-success-light: #D1F7D5;
+  /* Light green */
+  --color-success-dark: #28A745;
+  /* Dark green */
+  --color-error-light: #FEE2E2;
+  /* Light red */
+  --color-error-dark: #DC3545;
+  /* Dark red */
+  --color-info-light: #E0F7FF;
+  /* Light blue */
+  --color-info-dark: #007BFF;
+  /* Dark blue */
   --color-info-muted: #B0E0E6;
 }
 
@@ -68,7 +74,36 @@
   border: none !important;
 }
 
-body {
-  font-family: 'Red Hat Display', sans-serif;
+/* body {
+  /* font-family: 'Red Hat Display', sans-serif; 
+} */
+
+/* Custom Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
 }
 
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d5e7d5;
+  border-radius: 5px;
+}
+
+@font-face {
+  font-family: "RedHat";
+  src: url("./assets/fonts/RedHatDisplay-VariableFont_wght.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "RedHatItalic";
+  src: url("./assets/fonts/RedHatDisplay-Italic-VariableFont_wght.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
