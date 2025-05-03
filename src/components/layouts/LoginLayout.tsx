@@ -9,11 +9,11 @@ interface LoginLayoutProps {
 const LoginLayout = ({ children }: LoginLayoutProps) => {
   return (
     <div className="relative min-h-screen flex">
-      <div className="w-full xl:w-[45%] z-10 flex flex-col justify-between px-5 py-8 lg:pl-16 lg:pr-10 relative">
+      <div className="w-full xl:w-[45%] z-10 flex flex-col gap-2 px-5 py-8 lg:px-10  relative">
         <img src={logo} alt="PartyBank logo" className="w-26 object-contain" />
         <div className="flex-grow mt-6">{children}</div>
-        <footer className="text-sm text-[#A7A5A6] font-[RedHat] text-center mt-24">
-          © 2025 <span className="text-[#E91B41] font-bold">PartyBank</span>.
+        <footer className="text-sm text-grey200 font-[RedHat] text-center ">
+          © 2025 <span className="text-primary font-bold">PartyBank</span>.
           All rights reserved.
         </footer>
       </div>
