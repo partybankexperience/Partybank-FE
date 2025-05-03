@@ -6,7 +6,7 @@ import Graph from "./components/Graph";
 import { useState } from "react";
 import Dropdown from "../../components/inputs/Dropdown";
 import avatar from "../../assets/images/avatar.png";
-import EventCard from "./components/EventCard";
+import EventCard from "../../components/cards/EventCard";
 import { IoIosArrowForward } from "react-icons/io";
 import { useNavigate } from "react-router";
 const Dashboard = () => {

@@ -83,7 +83,8 @@ const DashboardLayout = ({ children }: any) => {
       <div className="flex flex-col h-full md:ml-[300px] w-full">
         <header className="bg-white py-[25px] px-[2vw] flex justify-between items-center h-fit border-b border-[#ECECEC]">
           <h1 className="text-black hidden md:block font-bold text-[26px]">
-            Dashboard
+            {navItems.find((item) => item.path === currentPath)?.name ||
+              "Dashboard"}
           </h1>
           <button className="text-[35px] text-black md:hidden">
             <HiOutlineBars3CenterLeft />
