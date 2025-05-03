@@ -1,16 +1,16 @@
 import { useState, useEffect, useRef } from "react";
 import {
-  FaEye,
-  FaEyeSlash,
   FaExclamationTriangle,
   FaChevronDown,
 } from "react-icons/fa";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+
 
 type DefaultInputProps = {
   id: string;
   label: string;
-  value:any;
-  setValue:any;
+  value: any;
+  setValue: any;
   placeholder?: string;
   helperText?: string;
   helperLink?: string;
@@ -22,7 +22,7 @@ type DefaultInputProps = {
   dropdownOptions?: string[];
   required?: boolean;
   minLength?: number;
-  style?:string;
+  style?: string;
   inputRef?: React.RefObject<HTMLInputElement>;
   setExternalError?: (hasError: boolean) => void;
 };
@@ -62,25 +62,25 @@ const DefaultInput = ({
     if (type === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
       return "Please enter a valid email.";
     if (type === "password") {
-        if (value.length < 8) {
-          return "Password must be at least 8 characters.";
-        }
-    
-        // Check for a mix of letters (both uppercase and lowercase)
-        if (!/[a-z]/.test(value) || !/[A-Z]/.test(value)) {
-          return "Password must contain a mix of uppercase and lowercase letters.";
-        }
-    
-        // Check for numbers
-        if (!/\d/.test(value)) {
-          return "Password must contain at least one number.";
-        }
-    
-        // Check for symbols
-        if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
-          return "Password must contain at least one special character.";
-        }
+      if (value.length < 8) {
+        return "Password must be at least 8 characters.";
       }
+
+      // Check for a mix of letters (both uppercase and lowercase)
+      if (!/[a-z]/.test(value) || !/[A-Z]/.test(value)) {
+        return "Password must contain a mix of uppercase and lowercase letters.";
+      }
+
+      // Check for numbers
+      if (!/\d/.test(value)) {
+        return "Password must contain at least one number.";
+      }
+
+      // Check for symbols
+      if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
+        return "Password must contain at least one special character.";
+      }
+    }
     return null;
   };
 
@@ -101,7 +101,7 @@ const DefaultInput = ({
     setError(validate());
   };
 
-  const baseStyle = `text-[16px] border-[1px] text-black placeholder:text-neutralDark placeholder:text-[16px] rounded-[4px] py-[12px] px-[16px] md:w-[365px] flex items-center 
+  const baseStyle = `text-[14px] border-[1px] text-black placeholder:text-neutralDark placeholder:text-[14px] font-[RedHat] rounded-[4px] py-[10px] px-[16px] md:w-[365px] flex items-center 
     hover:shadow-[0_0_0_2px_rgba(77,64,85,0.1)] focus:shadow-[0_0_0_2px_rgba(77,64,85,0.1)] 
     ${hasError ? "border-red" : isFilled ? "border-purple" : "border-neutral"} 
     hover:border-lightPurple focus:border-lightPurple 
@@ -114,8 +114,11 @@ const DefaultInput = ({
       : "";
 
   return (
-    <div className="grid gap-2 w-full relative">
-      <label htmlFor={id} className="text-black text-[16px]">
+    <div className="grid gap-1  w-full relative">
+      <label
+        htmlFor={id}
+        className="text-[#231F20] text-[16px] font-semibold font-[RedHat]"
+      >
         {label}
       </label>
 
@@ -151,7 +154,7 @@ const DefaultInput = ({
               className="text-neutralDark cursor-pointer"
               onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
+              {showPassword ? <FiEyeOff className="text-lg"/> : <FiEye className="text-lg"/>}
             </span>
           )}
 

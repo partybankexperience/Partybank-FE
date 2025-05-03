@@ -2,7 +2,7 @@ import DefaultButton from "../../components/buttons/DefaultButton";
 import DefaultInput from "../../components/inputs/DefaultInput";
 import { FcGoogle } from "react-icons/fc";
 import LoginLayout from "../../components/layouts/LoginLayout";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router-dom";
 import { useRef, useState } from "react";
 import { LoginUser, LoginWithGoogle } from "../../Containers/onBoardingApi";
 import { Storage } from "../../stores/InAppStorage";
@@ -46,7 +46,7 @@ const Login = () => {
     // event.preventDefault();
     // Handle Google login logic here
     try {
-      await LoginWithGoogle()
+      await LoginWithGoogle();
     } catch (error) {
       console.log(error);
     }
@@ -54,18 +54,18 @@ const Login = () => {
   return (
     <LoginLayout>
       <form
-        className="grid mt-[2vh] md:mt-[4vh] gap-[3vh] h-fit "
+        className="grid mt-[2vh] md:mt-[2vh] gap-[3vh] h-fit w-full "
         onSubmit={handleSignIn}
       >
-        <div className="grid gap-[10px] text-center md:text-left">
-          <h1 className="text-black text-[24px] md:text-[36px] font-bold">
-            Login to Your Account
+        <div className="flex flex-col gap-[6px] text-center md:text-left">
+          <h1 className="font-[RedHat] text-3xl font-semibold">
+            Login to your account
           </h1>
-          <p className="text-lightGrey text-[20px]">
+          <p className="font-[RedHat] text-[#918F90] font-normal text-sm">
             Let’s sign in quickly to continue to your account.
           </p>
         </div>
-        <div className="grid w-full gap-[18px]">
+        <div className="grid w-full gap-[12px] mt-4">
           <DefaultInput
             id="email"
             label="Email"
@@ -92,7 +92,16 @@ const Login = () => {
             setExternalError={setPasswordError}
           />
         </div>
-        <div className=" grid gap-[10px]">
+
+        <div className="flex items-end justify-end">
+          <Link
+            to=""
+            className="-mt-4 font-[RedHat] text-[#E91B41] text-sm font-light"
+          >
+            Forgot password?
+          </Link>
+        </div>
+        <div className="mt-4 grid gap-[10px]">
           <DefaultButton
             variant="primary"
             size="normal"
@@ -111,18 +120,18 @@ const Login = () => {
             type="icon-left"
             onClick={() => handleLoginWithGoogle()}
           >
-            Sign In with Google
+            Sign in with Google
           </DefaultButton>
         </div>
-        <p className="text-grey200 text-[16px]  mt-[1.1vh] text-center">
-          Don’t have an account?{" "}
+        <p className="text-[#A7A5A6] font-[RedHat] text-[14px]  mt-[0.5vh] text-center">
+          Don’t have an account?{"  "}
           <span
-            className="text-red font-medium cursor-pointer hover:text-deepRed"
+            className="text-red cursor-pointer font-bold hover:text-deepRed"
             onClick={() => navigate("/signup")}
             role="link"
             tabIndex={0}
           >
-            Sign Up
+            Sign up
           </span>
         </p>
       </form>

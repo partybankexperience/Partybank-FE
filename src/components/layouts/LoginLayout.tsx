@@ -1,21 +1,32 @@
-import { ToastContainer } from "react-toastify";
+import { ReactNode } from "react";
 import login from "../../assets/images/Login.png";
-import logo from "../../assets/images/pb-logo 1.png";
+import logo from "../../assets/images/pb-logo.png";
 
-const LoginLayout = ({children}:any) => {
-  return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-[3fr_4fr]">
-      <div className="px-[20px] md:px-[50px] lg:px-[100px]  py-[12px] md:py-[5vh] grid grid-rows-[auto_1fr_auto] h-screen">
-        <img src={logo} alt="Party bank logo" className="m-auto md:m-0" />
-        {children}
-        <footer className="text-[14px] text-grey200 text-center">© 2025 PartyBank. All rights reserved.</footer>
-      </div>
-      <div className="hidden md:block h-full max-h-screen">
-        <img src={login} alt="" className="object-cover  min-h-screen" />
-      </div>
-      <ToastContainer/>
-    </div>
-  )
+interface LoginLayoutProps {
+  children: ReactNode;
 }
 
-export default LoginLayout
+const LoginLayout = ({ children }: LoginLayoutProps) => {
+  return (
+    <div className="relative min-h-screen flex">
+      <div className="w-full xl:w-[45%] z-10 flex flex-col justify-between px-5 py-8 lg:pl-16 lg:pr-10 relative">
+        <img src={logo} alt="PartyBank logo" className="w-26 object-contain" />
+        <div className="flex-grow mt-6">{children}</div>
+        <footer className="text-sm text-[#A7A5A6] font-[RedHat] text-center mt-24">
+          © 2025 <span className="text-[#E91B41] font-bold">PartyBank</span>.
+          All rights reserved.
+        </footer>
+      </div>
+
+      <div className="hidden xl:block fixed top-0 right-0 w-[55%] h-screen z-0">
+        <img
+          src={login}
+          alt="Login background"
+          className="w-full h-full object-cover"
+        />
+      </div>
+    </div>
+  );
+};
+
+export default LoginLayout;
