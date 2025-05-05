@@ -43,10 +43,10 @@ const Login = () => {
               setValue={setpassword}
               required
             />
-            <div className="text-right">
+            <div className="-mt-5 text-right">
               <span
                 className="text-[14px] text-red cursor-pointer hover:underline"
-                onClick={() => navigate('/forgot')}
+                onClick={() => navigate('/forgot-password')}
                 role="link"
                 tabIndex={0}
               >
@@ -55,7 +55,7 @@ const Login = () => {
             </div>
 
           </div>
-          <div className=" grid gap-[10px]">
+          <div className=" grid gap-[20px]">
             <DefaultButton
               variant="primary"
               size="normal"

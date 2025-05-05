@@ -5,7 +5,7 @@ import avatar from "../../assets/images/avatar.png";
 
 const LoginLayout = ({children}:any) => {
   return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-[3fr_4fr]">
+    <div className="grid md:grid-cols-2 lg:grid-cols-[3fr_4.3fr]">
       <div className="px-0 py-[12px] md:py-[5vh] grid grid-rows-[auto_1fr_auto] h-screen">
       <div className="relative w-full mb-6">
         <div className="flex  items-center relative z-10">
@@ -15,9 +15,9 @@ const LoginLayout = ({children}:any) => {
         </div>
         </div>
         <div className="w-full flex justify-center">
-          <div className="px-[20px] md:px-[50px] lg:px-[100px]  py-[12px] md:py-[5vh] grid grid-rows-[auto_1fr_auto] h-screen">
-            {children}
-            <footer className="text-[14px] text-grey200 text-center">© 2025 PartyBank. All rights reserved.</footer>
+          <div className="px-[20px] md:px-[50px] lg:px-[100px]pt-[12px] md:pt-[5vh] pb-0 grid grid-rows-[auto_1fr_auto] h-[100%]">
+          <div className="h-[76vh]">{children}</div>
+            <footer className="text-[12px] text-grey200 text-center leading-tight py-[8px]">© 2025 PartyBank. All rights reserved.</footer>
           </div>
         </div>
       </div>

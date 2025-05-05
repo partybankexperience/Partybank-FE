@@ -15,6 +15,7 @@ import BulkAnnouncement from "./pages/bulkAnnouncements/BulkAnnouncement";
 import Reports from "./pages/reports/Reports";
 import PayoutManagement from "./pages/payoutManagement/PayoutManagement";
 import DashboardLayout from "./components/layouts/DashboardLayout";
+import ForgotPassword from "./pages/onboarding/ForgotPassword";
 
 const App = () => {
   return (
@@ -39,6 +40,7 @@ const App = () => {
             </OnboardingLayout>
           }
         />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route
           path="/profileInformation"
           element={
