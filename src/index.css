@@ -74,9 +74,9 @@
   border: none !important;
 }
 
-/* body {
-  /* font-family: 'Red Hat Display', sans-serif; 
-} */
+body {
+  font-family: 'Red Hat Display', sans-serif; 
+}
 
 /* Custom Scrollbar Styling */
 ::-webkit-scrollbar {
@@ -93,7 +93,14 @@
   background-color: #d5e7d5;
   border-radius: 5px;
 }
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
 
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
 @font-face {
   font-family: "RedHat";
   src: url("./assets/fonts/RedHatDisplay-VariableFont_wght.ttf") format("truetype");
@@ -125,3 +132,4 @@
     font-size: 112.5%; /* 1rem = 18px */
   }
 }
+

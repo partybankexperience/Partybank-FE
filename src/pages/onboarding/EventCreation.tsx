@@ -7,7 +7,6 @@ import { FaPlus } from "react-icons/fa6";
 import { Modal } from "../../components/modal/Modal";
 import { useState } from "react";
 import createEvent from "../../assets/images/createEvent.svg";
-import { CreateSeries } from "../../Containers/onBoardingApi";
 
 const EventCreation = () => {
     const navigate = useNavigate();

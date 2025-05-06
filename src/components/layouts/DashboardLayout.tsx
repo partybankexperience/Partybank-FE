@@ -10,11 +10,13 @@ import { TbReportAnalytics } from "react-icons/tb";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { HiOutlineBars3CenterLeft } from "react-icons/hi2";
 import { useLocation, useNavigate } from "react-router";
+import { FaArrowLeft } from "react-icons/fa6";
 
 const DashboardLayout = ({ children }: any) => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
+
   const navItems = [
     { name: "Dashboard", path: "/dashboard", icon: <MdDashboard /> },
     {
@@ -35,6 +37,21 @@ const DashboardLayout = ({ children }: any) => {
       icon: <AiOutlineDollarCircle />,
     },
   ];
+  const currentNavItem = navItems.find((item) =>
+    currentPath.startsWith(item.path)
+  );
+  const subPath = currentPath
+    .replace(currentNavItem?.path || "", "")
+    .replace(/^\//, "");
+
+//   const titleCase = (str: string) =>
+//     str
+//       .split("-")
+//       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+//       .join(" ");
+
+  const showBackButton = subPath !== "";
+
   return (
     <div className="flex h-full min-h-screen w-full">
       <div className="bg-lightdark md:min-w-[300px] hidden md:block md:fixed md:top-0 md:left-0 md:h-screen">
@@ -51,41 +68,50 @@ const DashboardLayout = ({ children }: any) => {
           />
         </button>
         <nav className="flex flex-col gap-[20px] mt-[50px]">
-          {navItems.map((item, index) => (
-            <ul className="flex h-full ">
-              {currentPath === item.path && (
-                <div
-                  className={`w-[10px] h-[100%] py-[30px] bg-primary rounded-r-lg`}
-                >
-                  <p className="text-primary " aria-hidden></p>
-                </div>
-              )}
-              <li
-                key={index}
-                className={`flex items-center gap-[12px]  font-medium text-[18px] cursor-pointer hover:text-primary p-[18px] ${
-                  currentPath === item.path ? "text-white" : "text-[#A9ABAE]"
-                }`}
-                onClick={() => navigate(item.path)}
-              >
-                <div
-                  className={`text-[26px] ${
-                    currentPath === item.path ? "text-primary" : "text-white"
+          {navItems.map((item, index) => {
+            const isActive = currentPath.startsWith(item.path);
+
+            return (
+              <div key={index} className="flex h-full">
+                {isActive && (
+                  <div className="w-[10px] h-full py-[30px] bg-primary rounded-r-lg" />
+                )}
+                <li
+                  className={`flex items-center gap-[12px] font-medium text-[18px] cursor-pointer hover:text-primary p-[18px] ${
+                    isActive ? "text-white" : "text-[#A9ABAE]"
                   }`}
+                  onClick={() => navigate(item.path)}
                 >
-                  {item.icon}
-                </div>
-                <a tabIndex={0}>{item.name}</a>
-              </li>
-            </ul>
-          ))}
+                  <div
+                    className={`text-[26px] ${
+                      isActive ? "text-primary" : "text-white"
+                    }`}
+                  >
+                    {item.icon}
+                  </div>
+                  <a tabIndex={0}>{item.name}</a>
+                </li>
+              </div>
+            );
+          })}
         </nav>
       </div>
       <div className="flex flex-col h-full md:ml-[300px] w-full">
         <header className="bg-white py-[25px] px-[2vw] flex justify-between items-center h-fit border-b border-[#ECECEC]">
-          <h1 className="text-black hidden md:block font-bold text-[26px]">
-            {navItems.find((item) => item.path === currentPath)?.name ||
-              "Dashboard"}
-          </h1>
+          <div className="flex gap-[15px] items-center">
+            {showBackButton && (
+              <button
+                onClick={() => navigate(-1)}
+                aria-label="Go back"
+                className="text-[20px] text-black hover:text-primary"
+              >
+                <FaArrowLeft />
+              </button>
+            )}
+            <h1 className="text-black hidden md:block font-bold text-[26px]">
+              {currentNavItem?.name || "Dashboard"}
+            </h1>
+          </div>
           <button className="text-[35px] text-black md:hidden">
             <HiOutlineBars3CenterLeft />
           </button>

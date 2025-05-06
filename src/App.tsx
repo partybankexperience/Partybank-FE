@@ -1,7 +1,6 @@
 import { Route, Routes } from "react-router";
 import Login from "./pages/onboarding/Login";
 import Signup from "./pages/onboarding/Signup";
-import PrivateRoute from "./utils/privateRoute";
 import EmailVerification from "./pages/onboarding/EmailVerification";
 import OnboardingLayout from "./components/layouts/OnboardingLayout";
 import Dashboard from "./pages/dashboard/Dashboard";
@@ -15,6 +14,7 @@ import BulkAnnouncement from "./pages/bulkAnnouncements/BulkAnnouncement";
 import Reports from "./pages/reports/Reports";
 import PayoutManagement from "./pages/payoutManagement/PayoutManagement";
 import DashboardLayout from "./components/layouts/DashboardLayout";
+import EventPage from "./pages/manageEvents/EventPage";
 
 const App = () => {
   return (
@@ -70,6 +70,14 @@ const App = () => {
           element={
             <DashboardLayout>
               <ManageEvents />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/manage-events/:id"
+          element={
+            <DashboardLayout>
+              <EventPage />
             </DashboardLayout>
           }
         />
