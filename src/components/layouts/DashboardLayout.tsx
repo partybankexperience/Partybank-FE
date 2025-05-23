@@ -11,6 +11,7 @@ import { AiOutlineDollarCircle } from "react-icons/ai";
 import { HiOutlineBars3CenterLeft } from "react-icons/hi2";
 import { useLocation, useNavigate } from "react-router";
 import { FaArrowLeft } from "react-icons/fa6";
+import { ToastContainer } from "react-toastify";
 
 const DashboardLayout = ({ children }: any) => {
   const navigate = useNavigate();
@@ -53,8 +54,9 @@ const DashboardLayout = ({ children }: any) => {
   const showBackButton = subPath !== "";
 
   return (
-    <div className="flex h-full min-h-screen w-full">
-      <div className="bg-lightdark md:min-w-[300px] hidden md:block md:fixed md:top-0 md:left-0 md:h-screen">
+    <div className="flex h-full min-h-screen w-full ">
+      <ToastContainer/>
+      <div className="bg-lightdark md:w-[15rem] hidden md:block md:fixed md:top-0 md:left-0 md:h-screen z-50">
         <button
           className="p-[20px] border-b border-b-[] grid m-auto cursor-pointer"
           role="button"
@@ -77,13 +79,13 @@ const DashboardLayout = ({ children }: any) => {
                   <div className="w-[10px] h-full py-[30px] bg-primary rounded-r-lg" />
                 )}
                 <li
-                  className={`flex items-center gap-[12px] font-medium text-[18px] cursor-pointer hover:text-primary p-[18px] ${
+                  className={`flex items-center gap-[12px] font-medium text-[.9rem] cursor-pointer hover:text-primary p-[1rem] ${
                     isActive ? "text-white" : "text-[#A9ABAE]"
                   }`}
                   onClick={() => navigate(item.path)}
                 >
                   <div
-                    className={`text-[26px] ${
+                    className={`text-[1.3rem] ${
                       isActive ? "text-primary" : "text-white"
                     }`}
                   >
@@ -96,8 +98,8 @@ const DashboardLayout = ({ children }: any) => {
           })}
         </nav>
       </div>
-      <div className="flex flex-col h-full md:ml-[300px] w-full">
-        <header className="bg-white py-[25px] px-[2vw] flex justify-between items-center h-fit border-b border-[#ECECEC]">
+      <div className="flex flex-col h-full md:ml-[15rem] w-full">
+        <header className="fixed w-full md:w-[calc(100vw-15rem)] md:left-[15rem] inset-x-0 top-0  right-0 bg-white py-[25px] px-[2vw] flex justify-between items-center h-fit border-b border-[#ECECEC] z-40">
           <div className="flex gap-[15px] items-center">
             {showBackButton && (
               <button
@@ -136,12 +138,13 @@ const DashboardLayout = ({ children }: any) => {
               type="icon-left"
               variant="primary"
               className=""
+              onClick={() => navigate("/dashboard/create-event")}
             >
               Create New Event
             </DefaultButton>
           </div>
         </header>
-        <main className="bg-[#f8f9f9] flex-grow p-[2vw]">{children}</main>
+        <main className="bg-[#f8f9f9] flex-grow p-[2vw] mt-[7rem] md:mt-[5rem] min-h-[89vh]">{children}</main>
       </div>
     </div>
   );

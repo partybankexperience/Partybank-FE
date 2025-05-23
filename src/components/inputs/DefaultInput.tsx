@@ -15,7 +15,7 @@ type DefaultInputProps = {
   helperText?: string;
   helperLink?: string;
   disabled?: boolean;
-  type?: "text" | "password" | "email";
+type?: "text" | "password" | "email"|"tel"|"date"|"time";
   leftContent?: React.ReactNode | string;
   rightContent?: React.ReactNode | string;
   showDropdown?: boolean;
@@ -25,6 +25,7 @@ type DefaultInputProps = {
   style?: string;
   inputRef?: React.RefObject<HTMLInputElement>;
   setExternalError?: (hasError: boolean) => void;
+  classname?: string;
 };
 
 const DefaultInput = ({
@@ -46,6 +47,7 @@ const DefaultInput = ({
   setValue,
   inputRef,
   setExternalError,
+  classname=''
 }: DefaultInputProps) => {
   // const [value, setValue] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -101,7 +103,7 @@ const DefaultInput = ({
     setError(validate());
   };
 
-  const baseStyle = `text-[14px] border-[1px] text-black placeholder:text-neutralDark placeholder:text-[14px] font-[RedHat] rounded-[4px] py-[10px] px-[16px] md:w-[365px] flex items-center 
+  const baseStyle = `text-[14px] border-[1px] text-black placeholder:text-neutralDark placeholder:text-[14px] font-[RedHat] rounded-[4px] py-[10px] px-[16px] md:w-[20rem] flex items-center ${classname}
     hover:shadow-[0_0_0_2px_rgba(77,64,85,0.1)] focus:shadow-[0_0_0_2px_rgba(77,64,85,0.1)] 
     ${hasError ? "border-red" : isFilled ? "border-purple" : "border-neutral"} 
     hover:border-lightPurple focus:border-lightPurple 
@@ -129,7 +131,7 @@ const DefaultInput = ({
           </div>
         )}
 
-        <input
+        {/* <input
           id={id}
           type={inputType}
           placeholder={placeholder}
@@ -140,8 +142,48 @@ const DefaultInput = ({
           aria-describedby={`${id}-helper`}
           aria-invalid={hasError}
           className={`${baseStyle} ${paddingLeft} ${paddingRight} ${style}`}
-        />
+        /> */}
+{showDropdown ? (
+  <div className="relative w-full">
+  <select
+    id={id}
+    disabled={disabled}
+    value={value}
+    onChange={(e) => setValue(e.target.value)}
+    onBlur={handleBlur}
+    aria-describedby={`${id}-helper`}
+    aria-invalid={hasError}
+    className={`${baseStyle} ${paddingLeft} pr-[40px] ${style} appearance-none cursor-pointer`}
+  >
+    <option value="" disabled hidden>
+      {placeholder}
+    </option>
+    {dropdownOptions.map((opt, idx) => (
+      <option key={idx} value={opt}>
+        {opt}
+      </option>
+    ))}
+  </select>
 
+  {/* Chevron icon positioned absolutely */}
+  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-neutralDark text-sm">
+    <FaChevronDown />
+  </div>
+</div>
+) : (
+  <input
+    id={id}
+    type={inputType}
+    placeholder={placeholder}
+    disabled={disabled}
+    value={value}
+    onChange={(e) => setValue(e.target.value)}
+    onBlur={handleBlur}
+    aria-describedby={`${id}-helper`}
+    aria-invalid={hasError}
+    className={`${baseStyle} ${paddingLeft} ${paddingRight} ${style}`}
+  />
+)}
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
           {hasError && (
             <span className="text-red">
@@ -161,7 +203,7 @@ const DefaultInput = ({
           {rightContent && type !== "password" && !showDropdown && (
             <span className="text-neutralDark text-[14px]">{rightContent}</span>
           )}
-          {showDropdown && (
+          {/* {showDropdown && (
             <div className="flex items-center cursor-pointer">
               <select className="bg-white text-neutralDark text-[14px] pr-6 pl-2 py-1 rounded appearance-none outline-none border-none cursor-pointer">
                 {dropdownOptions.map((opt, idx) => (
@@ -174,7 +216,7 @@ const DefaultInput = ({
                 <FaChevronDown />
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </div>
 

@@ -2,22 +2,18 @@
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 const data = [
-    { month: 'JAN', ticketsSold: 5000, totalRevenue: 50000000 },
-    { month: 'FEB', ticketsSold: 4000, totalRevenue: 40000000 },
-    { month: 'MAR', ticketsSold: 6000, totalRevenue: 60000000 },
-    { month: 'APR', ticketsSold: 8000, totalRevenue: 80000000 },
-    { month: 'MAY', ticketsSold: 10000, totalRevenue: 100000000 },
-    { month: 'JUN', ticketsSold: 12000, totalRevenue: 120000000 },
-    { month: 'JUL', ticketsSold: 11000, totalRevenue: 110000000 },
-    { month: 'AUG', ticketsSold: 9000, totalRevenue: 90000000 },
-    { month: 'SEP', ticketsSold: 70000, totalRevenue: 70000000 },
-    { month: 'OCT', ticketsSold: 6000, totalRevenue: 60000000 },
-    { month: 'NOV', ticketsSold: 4000, totalRevenue: 40000000 },
-    { month: 'DEC', ticketsSold: 3000, totalRevenue: 30000000 },
+    { day: 'Sun', ticketsSold: 5000, totalRevenue: 50000000 },
+    { day: 'Mon', ticketsSold: 4000, totalRevenue: 40000000 },
+    { day: 'Tue', ticketsSold: 6000, totalRevenue: 60000000 },
+    { day: 'Wed', ticketsSold: 8000, totalRevenue: 80000000 },
+    { day: 'Thu', ticketsSold: 10000, totalRevenue: 100000000 },
+    { day: 'Fri', ticketsSold: 12000, totalRevenue: 120000000 },
+    { day: 'Sat', ticketsSold: 11000, totalRevenue: 110000000 },
+
   ];
   
 
-export default function SimpleAreaChart() {
+export default function PerformanceChart() {
   return (
     <ResponsiveContainer width="100%" height={300}>
       <AreaChart data={data} margin={{ top: 20, right: 30, left: 10, bottom: 0 }}>
@@ -30,7 +26,7 @@ export default function SimpleAreaChart() {
           </linearGradient>
         </defs>
 
-        <XAxis dataKey="month" tick={{ fontSize: 10, fill: "#555" }}/>
+        <XAxis dataKey="day" tick={{ fontSize: 10, fill: "#555" }}/>
         <YAxis 
           domain={[0, 14000000]} 
           tickFormatter={(value) => value.toLocaleString()}

@@ -5,13 +5,15 @@ import { GrLocation } from "react-icons/gr";
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import { FaRegClock } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
-import { useState } from "react";
-import { HiOutlineDotsVertical } from "react-icons/hi";
 import { FiCopy } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
+import { RiInboxArchiveLine } from "react-icons/ri";
+import TicketsCard from "../../../components/cards/TicketCard";
+import { useNavigate, useParams } from "react-router";
 
 const Overview = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const navigate=useNavigate()
+  const {id}=useParams()
   const location = [
     { icon: <GrLocation className="text-primary" />, name: "Landmark Centre" },
     {
@@ -24,22 +26,34 @@ const Overview = () => {
     },
   ];
   const buttonOptions = [
-      {
-        name: "Edit",
-        // onClick: () => (onEdit ? onEdit() : navigate("/manage-events/:id")),
-        icon: <LuPencilLine />,
-      },
-      {
-        name: "Duplicate",
-        // onClick: () => onDuplicate?.(),
-        icon: <FiCopy />,
-      },
-      {
-        name: "Delete",
-        // onClick: () => onDelete?.(),
-        icon: <AiOutlineDelete />,
-      },
-    ];
+    {
+      name: "Edit",
+      // onClick: () => (onEdit ? onEdit() : navigate("/manage-events/:id")),
+      icon: <LuPencilLine />,
+    },
+    {
+      name: "Duplicate",
+      // onClick: () => onDuplicate?.(),
+      icon: <FiCopy />,
+    },
+    {
+      name: "Delete",
+      // onClick: () => onDelete?.(),
+      icon: <AiOutlineDelete />,
+    },
+    {
+      name: "Archive",
+      // onClick: () => onDelete?.(),
+      icon: <RiInboxArchiveLine />,
+    },
+  ];
+  const eventDetails = [
+    { label: "Internal ID", value: "1236548765" },
+    { label: "Category", value: "Festival" },
+    { label: "Tags", value: "Beats, Dj, Party" },
+    { label: "Series", value: "My Series" },
+    { label: "Organizer’s Contact Number", value: "+234  704 3946 3386" },
+  ];
   return (
     <div className="grid">
       <h1 className="text-black text-[1.6rem] font-medium">Overview</h1>
@@ -90,45 +104,85 @@ const Overview = () => {
                 type="icon-left"
                 className="!w-fit border"
                 icon={<FaPlus className="text-primary" />}
+                onClick={() => {navigate(`/manage-events/${id}/create-ticket`)}}
               >
                 Create Ticket
               </DefaultButton>
             </div>
-            <div className="flex gap-[20px] ">
-              <div className="grid  border-[#E1E1E1] border rounded-[3px]  w-[14vw] h-[199px]">
-              
-<div className="bg-[#F8F9F9] w-full h-[140px] relative">
-  <h4 className="text-black text-[1rem] font-medium p-[10px]">At the Gate</h4>
-  <div className="absolute top-[15px] right-[15px] z-10">
-          <button
-            onClick={() => setDropdownOpen((prev) => !prev)}
-            className="w-[32px] h-[32px] p-[5px] rounded-[5px] cursor-pointer bg-white hover:bg-[#eaeaea] flex items-center justify-center"
-          >
-            <HiOutlineDotsVertical size={20} />
-          </button>
-          {dropdownOpen && (
-            <div className="absolute right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-md w-[140px] z-20">
-              {buttonOptions.map((option, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    setDropdownOpen(false);
-                    // option.onClick();
-                  }}
-                  className="items-center cursor-pointer w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex gap-2"
+            <div className="grid grid-cols-2 md:grid-cols-3  gap-[20px] ">
+              <TicketsCard
+                title="At the Gate"
+                availability="Limited"
+                capacity="1,000"
+                price="₦10,000"
+                buttonOptions={buttonOptions}
+              />
+              <TicketsCard
+                title="Regular"
+                availability="Limited"
+                capacity="1,000"
+                price="₦10,000"
+                buttonOptions={buttonOptions}
+              />
+              <TicketsCard
+                title="Table for 3"
+                availability="Limited"
+                capacity="1,000"
+                price="₦10,000"
+                buttonOptions={buttonOptions}
+              />
+            </div>
+          </div>
+          <div className="p-[1.25rem] border border-[#EDEDED] rounded-lg">
+            <h5 className="text-[1.25rem] font-bold text-black mb-[1rem]">
+              Event Setup:
+            </h5>
+            <div>
+              {eventDetails.map((item, idx) => (
+                <div
+                  key={idx}
+                  className={`flex justify-between text-[1rem] ${
+                    idx !== eventDetails.length - 1 ? "mb-[0.75rem]" : ""
+                  }`}
                 >
-                  {option.icon}
-                  {option.name}
-                </button>
+                  <p className="text-[#979595]">{item.label}:</p>
+                  <p className="text-black">{item.value}</p>
+                </div>
               ))}
             </div>
-          )}
-        </div>
-</div>
-<div className="">penka</div>
-              </div>
+            <h5 className="text-[1.25rem] font-bold text-black mt-[25px] mb-[1rem]">
+            Schedule & Location :
+            </h5>
+            <div>
+              {eventDetails.map((item, idx) => (
+                <div
+                  key={idx}
+                  className={`flex justify-between text-[1rem] ${
+                    idx !== eventDetails.length - 1 ? "mb-[0.75rem]" : ""
+                  }`}
+                >
+                  <p className="text-[#979595]">{item.label}:</p>
+                  <p className="text-black">{item.value}</p>
+                </div>
+              ))}
             </div>
+            <h5 className="text-[1.25rem] font-bold text-black mt-[25px] mb-[1rem]">
+            Accessibility :
+            </h5>
+            <div>
+              {eventDetails.map((item, idx) => (
+                <div
+                  key={idx}
+                  className={`flex justify-between text-[1rem] ${
+                    idx !== eventDetails.length - 1 ? "mb-[0.75rem]" : ""
+                  }`}
+                >
+                  <p className="text-[#979595]">{item.label}:</p>
+                  <p className="text-black">{item.value}</p>
+                </div>
+              ))}
             </div>
+          </div>
         </div>
       </div>
     </div>

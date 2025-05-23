@@ -51,7 +51,7 @@ const EventCard = ({
   ];
 
   return (
-    <div className="relative rounded-[9px] border border-[#E1E1E1] h-[347px] min-w-[250px] w-full md:w-[18vw] hover:shadow-[0px_4px_20px_rgba(0,0,0,0.1)] transition-all duration-300">
+    <div className="relative rounded-[9px] border min-h-fit border-[#E1E1E1] h-[347px] min-w-[180px] w-full hover:shadow-[0px_4px_20px_rgba(0,0,0,0.1)] transition-all duration-300">
       {/* Dropdown */}
       <div className="absolute top-[15px] right-[15px] z-10">
         <button

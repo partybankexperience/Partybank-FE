@@ -6,8 +6,8 @@ const Card = ({icon,title,text}:any) => {
             {icon}
         </div>
         <div className="grid">
-            <p className="text-black text-[24px] font-medium">{title}</p>
-            <p className="text-lightGrey text-[16px]">{text}</p>
+            <p className="text-black text-[1.2rem] font-medium">{title}</p>
+            <p className="text-lightGrey text-[.8rem]">{text}</p>
         </div>
 
     </div>

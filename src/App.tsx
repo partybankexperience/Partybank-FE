@@ -15,6 +15,10 @@ import Reports from "./pages/reports/Reports";
 import PayoutManagement from "./pages/payoutManagement/PayoutManagement";
 import DashboardLayout from "./components/layouts/DashboardLayout";
 import EventPage from "./pages/manageEvents/EventPage";
+import CreateTicket from "./pages/manageEvents/components/CreateTicket";
+import CreateEvent from "./pages/createEvent/CreateEvent";
+import SeriesDetail from "./pages/manageSeries/components/SeriesDetail";
+import Settings from "./pages/payoutManagement/Settings";
 
 const App = () => {
   return (
@@ -65,6 +69,8 @@ const App = () => {
         />
         {/* Main components */}
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/create-event" element={<DashboardLayout><CreateEvent /></DashboardLayout>} />
+
         <Route
           path="/manage-events"
           element={
@@ -82,10 +88,26 @@ const App = () => {
           }
         />
         <Route
+          path="/manage-events/:id/create-ticket"
+          element={
+            <DashboardLayout>
+              <CreateTicket />
+            </DashboardLayout>
+          }
+        />
+        <Route
           path="/manage-series"
           element={
             <DashboardLayout>
               <ManageSeries />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/manage-series/:id"
+          element={
+            <DashboardLayout>
+              <SeriesDetail />
             </DashboardLayout>
           }
         />
@@ -110,6 +132,14 @@ const App = () => {
           element={
             <DashboardLayout>
               <PayoutManagement />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/payout-management/settings"
+          element={
+            <DashboardLayout>
+              <Settings />
             </DashboardLayout>
           }
         />
