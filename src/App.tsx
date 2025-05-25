@@ -19,6 +19,7 @@ import CreateTicket from "./pages/manageEvents/components/CreateTicket";
 import CreateEvent from "./pages/createEvent/CreateEvent";
 import SeriesDetail from "./pages/manageSeries/components/SeriesDetail";
 import Settings from "./pages/payoutManagement/Settings";
+import Profile from "./pages/profile/Profile";
 
 const App = () => {
   return (
@@ -143,7 +144,16 @@ const App = () => {
             </DashboardLayout>
           }
         />
+        <Route
+          path="/profile"
+          element={
+            <DashboardLayout>
+              <Profile />
+            </DashboardLayout>
+          }
+        />
       </Routes>
+      
     </>
   );
 };

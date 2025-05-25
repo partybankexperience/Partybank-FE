@@ -9,7 +9,7 @@ import { AiOutlineNotification } from "react-icons/ai";
 import { TbReportAnalytics } from "react-icons/tb";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { HiOutlineBars3CenterLeft } from "react-icons/hi2";
-import { useLocation, useNavigate } from "react-router";
+import { matchPath, useLocation, useNavigate } from "react-router";
 import { FaArrowLeft } from "react-icons/fa6";
 import { ToastContainer } from "react-toastify";
 
@@ -17,6 +17,15 @@ const DashboardLayout = ({ children }: any) => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
+  const subPageTitles: Record<string, string> = {
+    "manage-events/:id": "Event Page",
+    "manage-events/:id/create-ticket": "Create Ticket",
+    "dashboard/create-event": "Create Event",
+    "manage-series/:id": "Series Detail",
+    "payout-management/settings": "Settings",
+    "profile": "Profile",
+  };
+  
 
   const navItems = [
     { name: "Dashboard", path: "/dashboard", icon: <MdDashboard /> },
@@ -38,6 +47,18 @@ const DashboardLayout = ({ children }: any) => {
       icon: <AiOutlineDollarCircle />,
     },
   ];
+  const getPageTitle = () => {
+    // Check subpage matches first
+    for (const pattern in subPageTitles) {
+      if (matchPath({ path: pattern, end: false }, currentPath)) {
+        return subPageTitles[pattern];
+      }
+    }
+  
+    // Fallback to nav item name or path
+    return currentNavItem?.name || "Dashboard";
+  };
+  
   const currentNavItem = navItems.find((item) =>
     currentPath.startsWith(item.path)
   );
@@ -111,7 +132,7 @@ const DashboardLayout = ({ children }: any) => {
               </button>
             )}
             <h1 className="text-black hidden md:block font-bold text-[26px]">
-              {currentNavItem?.name || "Dashboard"}
+            {getPageTitle()}
             </h1>
           </div>
           <button className="text-[35px] text-black md:hidden">
@@ -125,13 +146,13 @@ const DashboardLayout = ({ children }: any) => {
               <VscBellDot className="text-[26px]" />
             </button>
 
-            <div className="w-[50px] h-[50px] hidden md:block rounded-full">
+            <button className="w-[50px] h-[50px] hidden md:block cursor-pointer rounded-full" onClick={() => navigate("/profile")}>
               <img
                 src={avatar}
                 alt="profile picture"
                 className="w-full rounded-full"
               />
-            </div>
+            </button>
             <DefaultButton
               size="small"
               icon={<FaPlus />}

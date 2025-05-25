@@ -2,9 +2,15 @@ import { LuPencilLine } from "react-icons/lu";
 import DefaultButton from "../../components/buttons/DefaultButton";
 import SlideToggle from "../../components/inputs/SlideToggle";
 import { useState } from "react";
+import { Modal } from "../../components/modal/Modal";
+import { useNavigate } from "react-router";
+import DefaultInput from "../../components/inputs/DefaultInput";
 
 const Settings = () => {
   const [toggle, settoggle] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const [bankName, setbankName] = useState('')
   const account = [
     { name: "Bank Name :", des: "Citibank Nigeria Ltd" },
     { name: "Account Holder Name :", des: "John Doe" },
@@ -38,7 +44,7 @@ const Settings = () => {
         type="icon-left"
         variant="tertiary"
         icon={<LuPencilLine className="text-[1rem]" />}
-        onClick={() => {}}
+        onClick={() => setIsModalOpen(true)}
         className="h-fit border"
       >
         Edit
@@ -69,6 +75,40 @@ const Settings = () => {
   </div>
 
   </div>
+  <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      >
+        <div className="m-auto 4vw grid gap-[20px]">
+            <h1 className="text-black text-[1.5rem] font-bold text-center">Update Bank Details</h1>
+           <DefaultInput value={bankName} setValue={setbankName} placeholder="Citibank Nigeria Ltd" label="Bank Name" id='bankName' classname="!w-full"/>
+           <DefaultInput value={bankName} setValue={setbankName} placeholder="John Doe" label="Account Holder Name" id='accountHolderName' classname="!w-full"/>
+           <DefaultInput value={bankName} setValue={setbankName} placeholder="452612535678" label="Account Number " id='acctNo' classname="!w-full"/>
+           <DefaultInput value={bankName} setValue={setbankName} placeholder="CITINGLA" label="SWIFT Code" id='swiftCode' classname="!w-full"/>
+           <div className="flex gap-[20px]">
+            <DefaultButton
+            type="default"
+            variant="tertiary"
+            className="!w-full  border"
+            onClick={() => setIsModalOpen(false)}
+          >
+            Cancel
+          </DefaultButton>
+            <DefaultButton
+            type="default"
+            variant="primary"
+            className="!w-full  "
+            onClick={() => {
+                // setIsModalOpen(false);
+                navigate("/dashboard");
+            }
+            }
+          >
+            Update
+          </DefaultButton>
+           </div>
+        </div>
+      </Modal>
 </div>
 
 

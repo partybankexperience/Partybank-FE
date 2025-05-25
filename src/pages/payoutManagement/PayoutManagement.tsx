@@ -12,6 +12,7 @@ import { useNavigate } from "react-router";
 
 const PayoutManagement = () => {
   const navigate = useNavigate();
+  
   interface Guest {
     id: number;
     Email: string;
@@ -81,7 +82,7 @@ const PayoutManagement = () => {
     { name: "Ticket Type", selector: (row) => row.TicketType },
     {
       name: "Actions",
-      cell: (row) => (
+      cell: () => (
         <button className="text-gray-500 hover:text-black">
           <FaEllipsisV />
         </button>
