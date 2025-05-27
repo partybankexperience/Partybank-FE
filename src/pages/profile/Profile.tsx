@@ -7,6 +7,7 @@ import { RiLogoutCircleRLine } from "react-icons/ri";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { IoIosArrowForward } from "react-icons/io";
 import ProfileSection from "./ProfileSection";
+import { useProfileSectionStore } from "../../stores/useProfileStore";
 
 const Profile = () => {
     const [toggle, settoggle] = useState(false)
@@ -15,35 +16,33 @@ const Profile = () => {
     const SecurityInfo=[{name:'PIN :',value:'***'},{name:'Two-Factor Authentication :',value:'Disable '}]
     const organizationInfo=[{name:'Business / Organizer Name :',value:'Tincidunt Food'},{name:'Phone Number :',value:'+234-803-12345678'},{name:'Social Media Links :',value:'+234-803-12345678'},{name:'Organizer Description / Bio :',value:'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'}]
     const profileNav=['Personal Information','Organization Details','Preferences & Notifications','Security','Account Actions']
-    const [selectedSection, setSelectedSection] = useState<string | null>(null);
+    // const [selectedSection, setSelectedSection] = useState<string | null>(null);
+    const { section,setSection } = useProfileSectionStore();
   return (
     <>
     {/* small screens */}
     <div className="md:hidden">
 
-    {selectedSection ? (
+    {section ? (
   <ProfileSection
-    section={selectedSection}
+    section={section}
     personalInfo={personalInfo}
     preferenceInfo={preferenceInfo}
     securityInfo={SecurityInfo}
     organizationInfo={organizationInfo}
     toggle={toggle}
     setToggle={settoggle}
-    onBack={() => setSelectedSection(null)}
+    onBack={() => setSection(null)}
   />
 ) : (
     <div className="bg-white p-[16px] flex flex-col gap-[20px] h-[85vh]">
     {profileNav.map((item, index) => (
-        <button onClick={() => setSelectedSection(item)} key={index} className="border rounded-md py-[12.5px] px-[15px] flex w-full h-fit justify-between items-center text-[#DEDEDE]">
+        <button onClick={() => setSection(item)} key={index} className="border rounded-md py-[12.5px] px-[15px] flex w-full h-fit justify-between items-center text-[#DEDEDE]">
         <p className="text-[1rem] text-black font-medium">{item}</p>
         <IoIosArrowForward />
     </button>
     ))}
-<div className="border rounded-md py-[12.5px] px-[15px] flex w-full h-fit justify-between items-center md:hidden text-[#DEDEDE]">
-<p className="text-[1rem] text-black font-medium">Personal Information</p>
-<IoIosArrowForward />
-</div>
+
 </div>
 )}
     </div>
