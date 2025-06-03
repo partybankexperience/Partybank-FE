@@ -13,6 +13,14 @@ const EventCreation = () => {
     const { markStepComplete } = useOnboardingStore();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleNext = () => {
+        try {
+            // const res=await CreateSeries(confirmPassword,password)
+            markStepComplete("pinSetup");
+            setIsModalOpen(true);
+            // navigate("/dashboard");
+          } catch (error) {
+            
+          }
       markStepComplete("pinSetup");
       setIsModalOpen(true);
     //   navigate("/createEventSeries");

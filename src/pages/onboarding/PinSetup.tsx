@@ -4,21 +4,31 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useOnboardingStore } from "../../stores/onboardingStore";
 import pin from "../../assets/images/pinImage.svg";
+import { SetPin } from "../../Containers/onBoardingApi";
 const PinSetup = () => {
     const [otp, setOtp] = useState("");
     const navigate = useNavigate();
-    const { markStepComplete } = useOnboardingStore();
+    const { markStepComplete ,updateOnboardingStep} = useOnboardingStore();
   
-    const handleNext = () => {
-      markStepComplete("pinSetup");
-      navigate("/createEventSeries");
+    const handleNext =async (e:any) => {
+      e.preventDefault();
+      if (otp.length < 4) {
+        return;
+      }
+      // Handle the OTP submission logic here
+      try {
+        const res = await SetPin(otp);
+        updateOnboardingStep(res.currentStep);
+        markStepComplete("pinSetup");
+        navigate("/createEventSeries", { replace: true });
+      } catch (error) {}
     };
     const handleBack = () => {
         navigate(-1);
     
       }
     return (
-      <div className="flex flex-col flex-grow  justify-between h-full">
+      <form className="flex flex-col flex-grow  justify-between h-full" onSubmit={handleNext}>
         <div className="grid mx-auto gap-[20px] h-fit">
           <div className=" grid text-center">
             <h1 className="text-[22px] md:text-[36px] font-bold">PIN Setup</h1>
@@ -52,13 +62,14 @@ const PinSetup = () => {
           type="default"
           variant="primary"
           className="!w-full md:!w-fit md:!mx-auto"
-          onClick={handleNext}
+          onClick={()=>handleNext}
+          submitType="submit"
         >
           Next
         </DefaultButton>
   
           </div>
-      </div>
+      </form>
     );
 }
 

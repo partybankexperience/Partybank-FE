@@ -1,9 +1,14 @@
-import { ToastContainer } from "react-toastify";
+import { ReactNode } from "react";
 import login from "../../assets/images/Login.png";
 import logo from "../../assets/images/pb-logo 1.svg";
 import avatar from "../../assets/images/avatar.png";
+import { ToastContainer } from "react-toastify";
 
-const LoginLayout = ({children}:any) => {
+interface LoginLayoutProps {
+  children: ReactNode;
+}
+
+const LoginLayout = ({ children }: LoginLayoutProps) => {
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-[3fr_4fr]">
       <div className="px-0 py-[12px] md:py-[5vh] grid grid-rows-[auto_1fr_auto] h-screen">
@@ -37,9 +42,8 @@ const LoginLayout = ({children}:any) => {
           </div>
         </div>
       </div>
-      <ToastContainer/>
     </div>
-  )
-}
+  );
+};
 
-export default LoginLayout
+export default LoginLayout;

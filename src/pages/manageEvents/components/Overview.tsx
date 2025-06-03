@@ -1,0 +1,192 @@
+import ticket from "../../../assets/images/ticket.svg";
+import DefaultButton from "../../../components/buttons/DefaultButton";
+import { LuPencilLine } from "react-icons/lu";
+import { GrLocation } from "react-icons/gr";
+import { MdOutlineCalendarMonth } from "react-icons/md";
+import { FaRegClock } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa6";
+import { FiCopy } from "react-icons/fi";
+import { AiOutlineDelete } from "react-icons/ai";
+import { RiInboxArchiveLine } from "react-icons/ri";
+import TicketsCard from "../../../components/cards/TicketCard";
+import { useNavigate, useParams } from "react-router";
+
+const Overview = () => {
+  const navigate=useNavigate()
+  const {id}=useParams()
+  const location = [
+    { icon: <GrLocation className="text-primary" />, name: "Landmark Centre" },
+    {
+      icon: <MdOutlineCalendarMonth className="text-primary" />,
+      name: "12 Apr 2025",
+    },
+    {
+      icon: <FaRegClock className="text-primary" />,
+      name: "8:15 AM - 08:30 PM",
+    },
+  ];
+  const buttonOptions = [
+    {
+      name: "Edit",
+      // onClick: () => (onEdit ? onEdit() : navigate("/manage-events/:id")),
+      icon: <LuPencilLine />,
+    },
+    {
+      name: "Duplicate",
+      // onClick: () => onDuplicate?.(),
+      icon: <FiCopy />,
+    },
+    {
+      name: "Delete",
+      // onClick: () => onDelete?.(),
+      icon: <AiOutlineDelete />,
+    },
+    {
+      name: "Archive",
+      // onClick: () => onDelete?.(),
+      icon: <RiInboxArchiveLine />,
+    },
+  ];
+  const eventDetails = [
+    { label: "Internal ID", value: "1236548765" },
+    { label: "Category", value: "Festival" },
+    { label: "Tags", value: "Beats, Dj, Party" },
+    { label: "Series", value: "My Series" },
+    { label: "Organizer’s Contact Number", value: "+234  704 3946 3386" },
+  ];
+  return (
+    <div className="grid">
+      <h1 className="text-black text-[1.6rem] font-medium">Overview</h1>
+      <div className="grid md:grid-cols-[1fr_2fr] gap-[30px] mt-[20px]">
+        <div className="rounded-[10px] h-[170px] md:h-[350px] ">
+          <img
+            src={ticket}
+            alt="ticket"
+            className="rounded-[10px]  h-[170px] md:h-[350px] w-full object-cover overflow-hidden"
+          />
+        </div>
+        <div className="grid gap-[20px] h-fit">
+          <div className="pb-[20px] grid gap-[20px] border-b border-b-[#EDEDED]">
+            <div className="flex items-center justify-between h-fit">
+              <h2 className="text-[1.3rem] font-bold">Canvas and Beats</h2>
+              <DefaultButton
+                variant="tertiary"
+                type="icon-left"
+                className="!w-fit border"
+                icon={<LuPencilLine className="text-primary" />}
+              >
+                Edit
+              </DefaultButton>
+            </div>
+            <p className="text-lightGrey text-[1rem]">
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s, when an unknown printer took a galley of
+              type and scrambled
+            </p>
+            <div className="flex flex-col md:flex-row gap-[16px] text-[1rem]">
+              {location.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-1 text-black "
+                >
+                  {item.icon}
+                  <p>{item.name}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="pb-[20px] grid gap-[20px] border-b border-b-[#EDEDED]">
+            <div className="flex items-center justify-between h-fit">
+              <h3 className="text-[1.3rem] ">Tickets</h3>
+              <DefaultButton
+                variant="tertiary"
+                type="icon-left"
+                className="!w-fit border"
+                icon={<FaPlus className="text-primary" />}
+                onClick={() => {navigate(`/manage-events/${id}/create-ticket`)}}
+              >
+                Create Ticket
+              </DefaultButton>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3  gap-[20px] ">
+              <TicketsCard
+                title="At the Gate"
+                availability="Limited"
+                capacity="1,000"
+                price="₦10,000"
+                buttonOptions={buttonOptions}
+              />
+              <TicketsCard
+                title="Regular"
+                availability="Limited"
+                capacity="1,000"
+                price="₦10,000"
+                buttonOptions={buttonOptions}
+              />
+              <TicketsCard
+                title="Table for 3"
+                availability="Limited"
+                capacity="1,000"
+                price="₦10,000"
+                buttonOptions={buttonOptions}
+              />
+            </div>
+          </div>
+          <div className="p-[1.25rem] border border-[#EDEDED] rounded-lg">
+            <h5 className="text-[1.25rem] font-bold text-black mb-[1rem]">
+              Event Setup:
+            </h5>
+            <div>
+              {eventDetails.map((item, idx) => (
+                <div
+                  key={idx}
+                  className={`flex justify-between text-[1rem] ${
+                    idx !== eventDetails.length - 1 ? "mb-[0.75rem]" : ""
+                  }`}
+                >
+                  <p className="text-[#979595]">{item.label}:</p>
+                  <p className="text-black">{item.value}</p>
+                </div>
+              ))}
+            </div>
+            <h5 className="text-[1.25rem] font-bold text-black mt-[25px] mb-[1rem]">
+            Schedule & Location :
+            </h5>
+            <div>
+              {eventDetails.map((item, idx) => (
+                <div
+                  key={idx}
+                  className={`flex justify-between text-[1rem] ${
+                    idx !== eventDetails.length - 1 ? "mb-[0.75rem]" : ""
+                  }`}
+                >
+                  <p className="text-[#979595]">{item.label}:</p>
+                  <p className="text-black">{item.value}</p>
+                </div>
+              ))}
+            </div>
+            <h5 className="text-[1.25rem] font-bold text-black mt-[25px] mb-[1rem]">
+            Accessibility :
+            </h5>
+            <div>
+              {eventDetails.map((item, idx) => (
+                <div
+                  key={idx}
+                  className={`flex justify-between text-[1rem] ${
+                    idx !== eventDetails.length - 1 ? "mb-[0.75rem]" : ""
+                  }`}
+                >
+                  <p className="text-[#979595]">{item.label}:</p>
+                  <p className="text-black">{item.value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Overview;

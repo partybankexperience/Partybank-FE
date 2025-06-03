@@ -1,7 +1,6 @@
 import { Route, Routes } from "react-router";
 import Login from "./pages/onboarding/Login";
 import Signup from "./pages/onboarding/Signup";
-import PrivateRoute from "./utils/privateRoute";
 import EmailVerification from "./pages/onboarding/EmailVerification";
 import OnboardingLayout from "./components/layouts/OnboardingLayout";
 import Dashboard from "./pages/dashboard/Dashboard";
@@ -15,6 +14,12 @@ import BulkAnnouncement from "./pages/bulkAnnouncements/BulkAnnouncement";
 import Reports from "./pages/reports/Reports";
 import PayoutManagement from "./pages/payoutManagement/PayoutManagement";
 import DashboardLayout from "./components/layouts/DashboardLayout";
+import EventPage from "./pages/manageEvents/EventPage";
+import CreateTicket from "./pages/manageEvents/components/CreateTicket";
+import CreateEvent from "./pages/createEvent/CreateEvent";
+import SeriesDetail from "./pages/manageSeries/components/SeriesDetail";
+import Settings from "./pages/payoutManagement/Settings";
+import Profile from "./pages/profile/Profile";
 
 const App = () => {
   return (
@@ -65,6 +70,8 @@ const App = () => {
         />
         {/* Main components */}
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/create-event" element={<DashboardLayout><CreateEvent /></DashboardLayout>} />
+
         <Route
           path="/manage-events"
           element={
@@ -74,10 +81,34 @@ const App = () => {
           }
         />
         <Route
+          path="/manage-events/:id"
+          element={
+            <DashboardLayout>
+              <EventPage />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/manage-events/:id/create-ticket"
+          element={
+            <DashboardLayout>
+              <CreateTicket />
+            </DashboardLayout>
+          }
+        />
+        <Route
           path="/manage-series"
           element={
             <DashboardLayout>
               <ManageSeries />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/manage-series/:id"
+          element={
+            <DashboardLayout>
+              <SeriesDetail />
             </DashboardLayout>
           }
         />
@@ -105,7 +136,24 @@ const App = () => {
             </DashboardLayout>
           }
         />
+        <Route
+          path="/payout-management/settings"
+          element={
+            <DashboardLayout>
+              <Settings />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <DashboardLayout>
+              <Profile />
+            </DashboardLayout>
+          }
+        />
       </Routes>
+      
     </>
   );
 };

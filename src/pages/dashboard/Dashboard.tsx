@@ -6,7 +6,7 @@ import Graph from "./components/Graph";
 import { useState } from "react";
 import Dropdown from "../../components/inputs/Dropdown";
 import avatar from "../../assets/images/avatar.png";
-import EventCard from "./components/EventCard";
+import EventCard from "../../components/cards/EventCard";
 import { IoIosArrowForward } from "react-icons/io";
 import { useNavigate } from "react-router";
 const Dashboard = () => {
@@ -76,7 +76,7 @@ const Dashboard = () => {
             icon={<BsPeopleFill className="text-[30px] text-primary" />}
           />
         </div>
-        <div className="grid md:grid-cols-[2.5fr_1fr] gap-[30px] min-h-[30vh]">
+        <div className="grid lg:grid-cols-[2.5fr_1fr] gap-[30px] ">
           <section className="bg-white rounded-md p-[1vw]" aria-label="Sales">
             <div className="flex justify-between ">
               <h2 className="text-[22px] text-black font-medium" id="Sales">
@@ -100,12 +100,12 @@ const Dashboard = () => {
           </section>
           <section
             aria-label="recentSales"
-            className="bg-white rounded-md grid gap-[18px] p-[1vw] md:min-w-[400px]"
+            className="bg-white rounded-md grid gap-[18px] p-[1vw] md:min-w-[400px] h-fit"
           >
             <h2 className="text-[22px] text-black font-medium" id="recentSales">
               Recent Sale
             </h2>
-            <div className="grid gap-[5px]">
+            <div className="grid  max-h-[300px] overflow-y-auto">
               {sales.map((sale, index) => (
                 <Sales
                   key={index}

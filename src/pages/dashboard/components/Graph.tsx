@@ -20,7 +20,7 @@ const data = [
 export default function SimpleAreaChart() {
   return (
     <ResponsiveContainer width="100%" height={300}>
-      <AreaChart data={data} margin={{ top: 20, right: 30, left: 50, bottom: 0 }}>
+      <AreaChart data={data} margin={{ top: 20, right: 30, left: 10, bottom: 0 }}>
         
         {/* Gradient for area fill */}
         <defs>
@@ -30,10 +30,11 @@ export default function SimpleAreaChart() {
           </linearGradient>
         </defs>
 
-        <XAxis dataKey="month" />
+        <XAxis dataKey="month" tick={{ fontSize: 10, fill: "#555" }}/>
         <YAxis 
           domain={[0, 14000000]} 
           tickFormatter={(value) => value.toLocaleString()}
+          tick={{ fontSize: 10, fill: "#555" }}
         />
         <Tooltip 
   formatter={(value: number, name: string, props) => {
