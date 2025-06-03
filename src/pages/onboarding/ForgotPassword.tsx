@@ -23,7 +23,7 @@ const ForgotPassword = () => {
     <LoginLayout>
       <form
         onSubmit={handleSubmit}
-        className="grid mt-[2vh] md:mt-[4vh] gap-[3vh] h-fit w-full md:w-[36vw] lg:w-[28vw] px-[20px] md:px-0 lg:px-0"
+        className="grid mt-[2vh] md:mt-[4vh] gap-[3vh] h-fit"
       >
         <div className="grid gap-[10px] text-center md:text-left">
           <h1 className="text-black text-[24px] md:text-[36px] font-bold">

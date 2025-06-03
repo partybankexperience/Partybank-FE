@@ -10,8 +10,9 @@ interface LoginLayoutProps {
 
 const LoginLayout = ({ children }: LoginLayoutProps) => {
   return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-[3fr_4.3fr]">
-      <div className="px-0 py-[12px] md:py-[5vh] grid grid-rows-[auto_1fr_auto] h-screen">
+    <div className=" min-h-screen flex">
+      <ToastContainer/>
+      <div className="w-full xl:w-[45%] z-10 flex flex-col gap-2  py-8  relative">
       <div className="relative w-full mb-6">
         <div className="flex  items-center relative z-10">
           <div className="left-0 top-1/2 -translate-y-1/2 h-[0.125rem] w-2/5 lg:w-[5rem] bg-gray-300" />
@@ -19,14 +20,10 @@ const LoginLayout = ({ children }: LoginLayoutProps) => {
           <img src={logo} alt="Party bank logo" className="h-[40px] ml-[0.5rem]" />
         </div>
         </div>
-        <div className="w-full flex justify-center">
-          <div className="px-[20px] md:px-[50px] lg:px-[100px]pt-[12px] md:pt-[5vh] pb-0 grid grid-rows-[auto_1fr_auto] h-[100%]">
-          <div className="h-[76vh]">{children}</div>
+          <div className="flex-grow mt-6 md:mx-[5rem] mx-[2rem]">{children}</div>
             <footer className="text-[12px] text-grey200 text-center leading-tight py-[8px]">© 2025 PartyBank. All rights reserved.</footer>
-          </div>
-        </div>
       </div>
-      <div className="hidden relative md:block h-full max-h-screen">
+      <div className="hidden xl:block fixed top-0 right-0 w-[55%] h-screen z-0">
         <img src={login} alt="" className="object-cover  min-h-screen" />
         <div className="absolute bottom-10 left-10 text-white space-y-4 max-w-[80%]">
           <h2 className="text-2xl font-bold">Create and Manage your own Event</h2>
