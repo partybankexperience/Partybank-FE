@@ -20,6 +20,7 @@ import CreateEvent from "./pages/createEvent/CreateEvent";
 import SeriesDetail from "./pages/manageSeries/components/SeriesDetail";
 import Settings from "./pages/payoutManagement/Settings";
 import Profile from "./pages/profile/Profile";
+import ForgotPassword from "./pages/onboarding/ForgotPassword";
 
 const App = () => {
   return (
@@ -44,6 +45,7 @@ const App = () => {
             </OnboardingLayout>
           }
         />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route
           path="/profileInformation"
           element={

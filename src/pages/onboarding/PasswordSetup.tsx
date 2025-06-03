@@ -18,17 +18,18 @@ const PasswordSetup = () => {
       updateOnboardingStep(res.currentStep);
       markStepComplete("passwordSetup");
       navigate("/profileInformation", { replace: true });
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
   const handleBack = () => {
     navigate(-1);
   };
   const passwordVerification = [
-    "Minimum 8 characters",
-    "Mix of letters",
-    "Numbers and symbols",
+    { label: "Minimum 8 characters", check: password.length >= 8 },
+    { label: "Mix of letters", check: /[a-zA-Z]/.test(password) },
+    {
+      label: "Numbers and symbols",
+      check: /[0-9!@#$%^&*(),.?":{}|<>]/.test(password),
+    },
   ];
   return (
     <div className="flex flex-col flex-grow  justify-between h-full px-[20px] md:px-0">
@@ -56,7 +57,7 @@ const PasswordSetup = () => {
                 key={index}
               >
                 <FiCheck />
-                <p>{item}</p>
+                <p>{item.label}</p>
               </div>
             ))}
           </div>
@@ -78,29 +79,63 @@ const PasswordSetup = () => {
                 key={index}
               >
                 <FiCheck />
-                <p>{item}</p>
+                <p>{item.label}</p>
               </div>
             ))}
           </div>
         </div>
       </div>
       <div className="flex gap-[20px] items-center mx-auto">
-        <DefaultButton
-          type="default"
-          variant="tertiary"
-          className="!w-full md:!w-fit md:!mx-auto"
-          onClick={handleBack}
+        <div
+          className="h-fit grid
+        gap-[50px]"
         >
-          Back
-        </DefaultButton>
-        <DefaultButton
-          type="default"
-          variant="primary"
-          className="!w-full md:!w-fit md:!mx-auto"
-          onClick={handleNext}
-        >
-          Next
-        </DefaultButton>
+          <h1 className="text-[24px] md:text-[36px] font-bold text-black text-center">
+            Password Setup
+          </h1>
+          <div className="grid md:w-fit md:m-auto">
+            <DefaultInput
+              id="password"
+              label="Password"
+              placeholder="Write password"
+              type="password"
+              style="!w-full"
+              value={password}
+              setValue={setpassword}
+            />
+            <div className="grid gap-[10px] md:flex items-center">
+              {passwordVerification.map((item, index) => (
+                <div
+                  className={`flex items-center gap-[8px] text-[14px] ${
+                    item.check ? "text-green-800" : "text-grey200"
+                  }`}
+                  key={index}
+                >
+                  <FiCheck />
+                  <p>{item.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="flex gap-[20px] items-center mx-auto">
+          <DefaultButton
+            type="default"
+            variant="tertiary"
+            className="!w-full md:!w-fit md:!mx-auto"
+            onClick={handleBack}
+          >
+            Back
+          </DefaultButton>
+          <DefaultButton
+            type="default"
+            variant="primary"
+            className="!w-full md:!w-fit md:!mx-auto"
+            onClick={handleNext}
+          >
+            Next
+          </DefaultButton>
+        </div>
       </div>
     </div>
   );

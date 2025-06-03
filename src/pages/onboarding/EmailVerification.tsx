@@ -50,11 +50,11 @@ e.preventDefault()
           value={otp}
           onChange={setOtp}
           numInputs={4}
-          renderSeparator={<span className="mx-[28px]"> </span>}
+          renderSeparator={<span className="mx-[15px]"> </span>}
           renderInput={(props) => (
             <input
               {...props}
-              className="border border-gray-300 rounded !w-[54px] !h-[54px] md:!w-[4vw] md:!h-[4vw] !bg-white text-black text-center focus:outline-none focus:border-primary"
+              className="border border-gray-300 rounded !w-[54px] mx-auto !h-[54px] md:!w-[4vw] md:!h-[4vw] !bg-white text-black text-center focus:outline-none focus:border-primary"
             />
           )}
         />
