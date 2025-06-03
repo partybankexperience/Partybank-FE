@@ -22,19 +22,17 @@ const Signup = () => {
     const toast = location.state?.toast;
     if (toast) {
       errorAlert(toast.title, toast.message);
-
       navigate(location.pathname, { replace: true, state: {} });
     }
   }, [location.state]);
+
   useEffect(() => {
-    // Clear all onboarding-related state
     reset();
-    Storage.clearItem(); // or Storage.removeItem("user") if you only want that
+    Storage.clearItem();
   }, []);
 
   async function handleRegisterUser(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    // Handle registration logic here
     if (emailError) {
       if (emailError && emailRef.current) {
         emailRef.current.focus();
@@ -53,7 +51,7 @@ const Signup = () => {
   return (
     <LoginLayout>
       <form
-        className="grid mt-[2vh] md:mt-[4vh] gap-[3vh] h-fit "
+        className="grid mt-[2vh] md:mt-[4vh] gap-[3vh] h-fit w-full md:w-[36vw] lg:w-[28vw] px-[20px] md:px-0 lg:px-0"
         onSubmit={handleRegisterUser}
       >
         <div className="grid gap-[10px] text-center md:text-left">
@@ -78,7 +76,7 @@ const Signup = () => {
             setExternalError={setEmailError}
           />
         </div>
-        <div className=" grid gap-[10px]">
+        <div className="grid gap-[20px] w-full">
           <DefaultButton
             variant="primary"
             size="normal"
@@ -98,7 +96,7 @@ const Signup = () => {
             Sign Up with Google
           </DefaultButton>
         </div>
-        <p className="text-grey200 text-[16px]  mt-[1.1vh] text-center">
+        <p className="text-grey200 text-[16px] mt-[1.1vh] text-center">
           Already have an account?{" "}
           <span
             className="text-red font-medium cursor-pointer hover:text-deepRed"
