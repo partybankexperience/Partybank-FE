@@ -32,9 +32,28 @@ export const endPoints: endPointlistTypes = {
         // auth: true,
     },
     refreshToken: {
-        url: "/refresh-token",
+        url: "/auth/refresh-token",
         method: "POST",
-        headers
+        headers,
+        auth:false
+    },
+    forgotPassword: {
+        url: "/reset-password/initiate",
+        method: "POST",
+        headers,
+        auth:false
+    },
+    forgotPasswordOTP: {
+        url: "/reset-password/verify",
+        method: "POST",
+        headers,
+        auth:false
+    },
+    resetPassword: {
+        url: "/reset-password/submit",
+        method: "POST",
+        headers,
+        auth:false
     },
     verifyOTP: {
         url: "/auth/verify-otp",

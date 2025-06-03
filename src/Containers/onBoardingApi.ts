@@ -86,6 +86,27 @@ const refreshToken = async (): Promise<any> => {
   });
   return response;
 };
+const forgotPassword = async (email:String): Promise<any> => {
+  const response = await apiCall({
+    name: "forgotPassword",
+    data: {email},
+  });
+  return response;
+};
+const forgotPasswordConfirmOTP = async (email:String,otp:String): Promise<any> => {
+  const response = await apiCall({
+    name: "forgotPasswordOTP",
+    data: {email,otp},
+  });
+  return response;
+};
+const resetPassword = async (email:String,password:String,confirmPassword:String): Promise<any> => {
+  const response = await apiCall({
+    name: "resetPassword",
+    data: {email,password,confirmPassword},
+  });
+  return response;
+};
 export {
   LoginWithGoogle,
   LoginUser,
@@ -95,5 +116,8 @@ export {
   SetProfile,
   SetPin,
   CreateSeries,
-  refreshToken
+  refreshToken,
+  forgotPassword,
+  forgotPasswordConfirmOTP,
+  resetPassword
 };

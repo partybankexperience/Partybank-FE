@@ -2,7 +2,7 @@ import DefaultButton from "../../components/buttons/DefaultButton";
 import DefaultInput from "../../components/inputs/DefaultInput";
 import { FcGoogle } from "react-icons/fc";
 import LoginLayout from "../../components/layouts/LoginLayout";
-import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { LoginUser, LoginWithGoogle } from "../../Containers/onBoardingApi";
 import { Storage } from "../../stores/InAppStorage";
@@ -13,6 +13,8 @@ const Login = () => {
   // const [emailError, setEmailError] = useState('')
   const [password, setpassword] = useState("");
   const [emailError, setEmailError] = useState(false);
+  const [isLoading, setisLoading] = useState(false)
+  const [isGoogleLoading, setisGoogleLoading] = useState(false)
   const [passwordError, setPasswordError] = useState(false);
   const emailRef = useRef<any>(null);
   const passwordRef = useRef<any>(null);
@@ -24,6 +26,10 @@ const Login = () => {
       console.log('User was redirected due to not being authenticated.');
       errorAlert("Not Authenticated","You need to be logged in to access this page.");
       // Show alert, toast, or set a message in local state
+      setTimeout(() => {
+        navigate(location.pathname, { replace: true, state: null });
+      }, 0); // wait a tick to prevent race condition
+    
     }
   }, [location.state]);
 
@@ -42,24 +48,35 @@ const Login = () => {
       return;
     }
     try {
+    setisLoading(true);
       const res = await LoginUser(email, password);
       Storage.setItem("token", res.accessToken);
       Storage.setItem("user", res.user);
       navigate("/dashboard");
     } catch (error) {
       console.log(error);
+    setisLoading(false);
+
     }
+    setisLoading(false);
+
     // Handle sign-in logic here
   }
 
   async function handleLoginWithGoogle() {
     // event.preventDefault();
     // Handle Google login logic here
+    setisGoogleLoading(true);
+
     try {
       await LoginWithGoogle();
     } catch (error) {
       console.log(error);
+    setisLoading(false);
+
     }
+    setisGoogleLoading(false);
+
   }
   return (
     <LoginLayout>
@@ -105,26 +122,17 @@ const Login = () => {
             classname="!mb-0 "
           />
           <div className="text-right m-0 ">
-              <span
+              <a
                 className="text-[14px] text-red cursor-pointer hover:underline"
                 onClick={() => navigate('/forgot-password')}
                 role="link"
                 tabIndex={0}
               >
                 Forgot password?
-              </span>
+              </a>
             </div>
           </div>
         </div>
-
-        {/* <div className="flex items-end justify-end">
-          <Link
-            to=""
-            className="-mt-4 font-[RedHat] text-[#E91B41] text-sm font-light"
-          >
-            Forgot password?
-          </Link>
-        </div> */}
         <div className="mt-4 grid gap-[10px]">
           <DefaultButton
             variant="primary"
@@ -133,6 +141,7 @@ const Login = () => {
             className="w-full"
             onClick={() => handleSignIn}
             submitType="submit"
+            isLoading={isLoading}
           >
             Sign In
           </DefaultButton>
@@ -143,6 +152,7 @@ const Login = () => {
             icon={<FcGoogle />}
             type="icon-left"
             onClick={() => handleLoginWithGoogle()}
+            isLoading={isGoogleLoading}
           >
             Sign in with Google
           </DefaultButton>

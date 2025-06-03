@@ -22,6 +22,9 @@ export type endPointlistTypes = {
     login: endpointTypes;
     loginWithGoogle: endpointTypes;
     refreshToken: endpointTypes;
+    forgotPassword: endpointTypes;
+    forgotPasswordOTP: endpointTypes;
+    resetPassword: endpointTypes;
     // getSeries: endpointTypes;
 };
 
