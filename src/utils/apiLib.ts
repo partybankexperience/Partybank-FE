@@ -31,6 +31,11 @@ export const endPoints: endPointlistTypes = {
         headers,
         // auth: true,
     },
+    refreshToken: {
+        url: "/refresh-token",
+        method: "POST",
+        headers
+    },
     verifyOTP: {
         url: "/auth/verify-otp",
         method: "POST",

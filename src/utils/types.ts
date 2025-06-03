@@ -21,6 +21,7 @@ export type endPointlistTypes = {
     createSeries: endpointTypes;
     login: endpointTypes;
     loginWithGoogle: endpointTypes;
+    refreshToken: endpointTypes;
     // getSeries: endpointTypes;
 };
 

@@ -36,11 +36,12 @@ const SetPassword = async (
 
 const SetProfile = async (
   fullName: String,
-  businessName: String
+  businessName: String,
+  phone: String
 ): Promise<any> => {
   const response = await apiCall({
     name: "setProfile",
-    data: { businessName, fullName },
+    data: { businessName, fullName,phone },
   });
   return response;
 };
@@ -78,6 +79,13 @@ const LoginWithGoogle = async (): Promise<any> => {
   });
   return response;
 };
+const refreshToken = async (): Promise<any> => {
+  const response = await apiCall({
+    name: "refreshToken",
+    // data: {email,password},
+  });
+  return response;
+};
 export {
   LoginWithGoogle,
   LoginUser,
@@ -87,4 +95,5 @@ export {
   SetProfile,
   SetPin,
   CreateSeries,
+  refreshToken
 };

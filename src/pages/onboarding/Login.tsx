@@ -2,10 +2,11 @@ import DefaultButton from "../../components/buttons/DefaultButton";
 import DefaultInput from "../../components/inputs/DefaultInput";
 import { FcGoogle } from "react-icons/fc";
 import LoginLayout from "../../components/layouts/LoginLayout";
-import { useNavigate, Link } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { LoginUser, LoginWithGoogle } from "../../Containers/onBoardingApi";
 import { Storage } from "../../stores/InAppStorage";
+import { errorAlert } from "../../components/alerts/ToastService";
 
 const Login = () => {
   const [email, setemail] = useState("");
@@ -16,6 +17,15 @@ const Login = () => {
   const emailRef = useRef<any>(null);
   const passwordRef = useRef<any>(null);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state === 'notAuthenticated') {
+      console.log('User was redirected due to not being authenticated.');
+      errorAlert("Not Authenticated","You need to be logged in to access this page.");
+      // Show alert, toast, or set a message in local state
+    }
+  }, [location.state]);
 
   async function handleSignIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();

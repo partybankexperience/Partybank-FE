@@ -9,6 +9,7 @@ const ProfileInfo = () => {
   const navigate = useNavigate();
   const [fullName, setFullName] = useState("");
   const [businessName, setBusinessName] = useState("");
+  const [phone, setPhone] = useState("");
   const { markStepComplete,updateOnboardingStep } = useOnboardingStore();
 
   const handleNext = async (e:any) => {
@@ -18,7 +19,7 @@ const ProfileInfo = () => {
       return;
     }
     try {
-      const res = await SetProfile(fullName, businessName);
+      const res = await SetProfile(fullName, businessName,phone);
       updateOnboardingStep(res.currentStep);
       markStepComplete("profileInformation");
       navigate("/pinSetup", { replace: true });
@@ -56,6 +57,15 @@ const ProfileInfo = () => {
             style="!w-full"
             value={businessName}
             setValue={setBusinessName}
+          />
+          <DefaultInput
+            id="phone"
+            label="Phone Number"
+            placeholder="Enter Phone Number"
+            type="text"
+            style="!w-full"
+            value={phone}
+            setValue={setPhone}
           />
         </div>
       </div>

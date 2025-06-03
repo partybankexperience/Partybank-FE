@@ -15,6 +15,7 @@ import { ToastContainer } from "react-toastify";
 import { useProfileSectionStore } from "../../stores/useProfileStore";
 import { useState } from "react";
 import { SidebarModal } from "../modal/SidebarModal";
+import PrivateRoute from "../../utils/privateRoute";
 
 const DashboardLayout = ({ children }: any) => {
   const navigate = useNavigate();
@@ -76,6 +77,8 @@ const DashboardLayout = ({ children }: any) => {
   const showBackButton = subPath !== "";
 
   return (
+    <PrivateRoute>
+
     <div className="flex h-full min-h-screen w-full ">
       <ToastContainer/>
       {/* Mobile Sidebar */}
@@ -207,6 +210,7 @@ const DashboardLayout = ({ children }: any) => {
         <main className="bg-[#f8f9f9] flex-grow p-[2vw] pt-[7.5rem] md:pt-[1.5rem]  md:mt-[5rem] min-h-[90vh]">{children}</main>
       </div>
     </div>
+    </PrivateRoute>
   );
 };
 
