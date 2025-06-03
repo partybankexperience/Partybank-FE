@@ -79,6 +79,8 @@ const Login = () => {
             setExternalError={setEmailError}
             // setExternalError={setEmailError}
           />
+          <div>
+          
           <DefaultInput
             id="password"
             label="Password"
@@ -90,27 +92,29 @@ const Login = () => {
             required
             inputRef={passwordRef}
             setExternalError={setPasswordError}
+            classname="!mb-0 "
           />
-          <div className="text-right">
+          <div className="text-right m-0 ">
               <span
                 className="text-[14px] text-red cursor-pointer hover:underline"
-                onClick={() => navigate('/forgot')}
+                onClick={() => navigate('/forgot-password')}
                 role="link"
                 tabIndex={0}
               >
                 Forgot password?
               </span>
             </div>
+          </div>
         </div>
 
-        <div className="flex items-end justify-end">
+        {/* <div className="flex items-end justify-end">
           <Link
             to=""
             className="-mt-4 font-[RedHat] text-[#E91B41] text-sm font-light"
           >
             Forgot password?
           </Link>
-        </div>
+        </div> */}
         <div className="mt-4 grid gap-[10px]">
           <DefaultButton
             variant="primary"
