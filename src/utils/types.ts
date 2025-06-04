@@ -25,7 +25,10 @@ export type endPointlistTypes = {
     forgotPassword: endpointTypes;
     forgotPasswordOTP: endpointTypes;
     resetPassword: endpointTypes;
-    // getSeries: endpointTypes;
+    getSeries: endpointTypes;
+    getSeriesById: endpointTypes;
+    updateSeries: endpointTypes;
+    deleteSeries: endpointTypes
 };
 
 export type urlPropTypes = {

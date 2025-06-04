@@ -85,5 +85,28 @@ export const endPoints: endPointlistTypes = {
         headers: FileHeaders,
         auth: true,
     },
-
+    getSeries: {
+        url: "/series",
+        method: "GET",
+        headers,
+        auth: true,
+    },
+    getSeriesById: {
+        url: "/series/:id",
+        method: "GET",
+        headers,
+        auth: true,
+    },
+    updateSeries: {
+        url: "/series/:id",
+        method: "PATCH",
+        headers: FileHeaders,
+        auth: true,
+    },
+    deleteSeries: {
+        url: "/series/:id",
+        method: "DELETE",
+        headers,
+        auth: true,
+    }
 };
