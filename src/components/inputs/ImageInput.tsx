@@ -114,34 +114,32 @@ console.log(previewUrl)
         <label className="text-black text-[.9rem] font-semibold font-[RedHat]">
           {label}
         </label>
-        <div className="flex items-center justify-center p-4 border-dotted border border-gray-300 rounded-lg gap-2 w-full h-[260px]">
+        <div className="relative flex items-center justify-center p-4 border-dotted border border-gray-300 rounded-lg gap-2 w-full h-[260px] overflow-hidden">
           <input
             type="file"
             accept="image/*"
             onChange={handleChange}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
           />
-          <div className="text-center">
-            <span className="text-center text-[#918F90]">
-              Drop your image here, or{" "}
-              <span className="text-primary underline cursor-pointer">browse</span>
-            </span>
-            <p className="mt-2 text-xs text-[#A7A5A6] text-[.8rem]">
-              (Recommended size: {requiredSize.width}x{requiredSize.height}px, max{" "}
-              {maxSizeMB}MB)
-            </p>
-          </div>
-        </div>
-
-        {previewUrl && (
-          <div className="mt-2 flex justify-center items-center w-[680px] h-[260px] border border-dotted border-gray-300 rounded-lg">
+          {previewUrl ? (
             <img
               src={previewUrl}
               alt="Preview"
-              className="object-cover w-full h-full rounded-md"
+              className="absolute inset-0 w-full h-full object-cover rounded-lg"
             />
-          </div>
-        )}
+          ) : (
+            <div className="text-center">
+              <span className="text-center text-[#918F90]">
+                Drop your image here, or{" "}
+                <span className="text-primary underline cursor-pointer">browse</span>
+              </span>
+              <p className="mt-2 text-xs text-[#A7A5A6] text-[.8rem]">
+                (Recommended size: {requiredSize.width}x{requiredSize.height}px, max{" "}
+                {maxSizeMB}MB)
+              </p>
+            </div>
+          )}
+        </div>
       </div>
 
       {error && <p className="text-red-500 text-sm">{error}</p>}

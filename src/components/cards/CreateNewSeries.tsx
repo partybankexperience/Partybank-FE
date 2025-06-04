@@ -105,7 +105,21 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
             classname="!w-full"
 
           />
-          <ImageUploadInput/>
+          <ImageUploadInput 
+            label="Cover Image"
+            onImageChange={(file) => {
+              if (file) {
+                // Convert file to base64 or handle as needed for your API
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  setCoverImage(reader.result as string);
+                };
+                reader.readAsDataURL(file);
+              } else {
+                setCoverImage("");
+              }
+            }}
+          />
           <div className="md:mx-auto grid md:flex gap-[20px] ">
           <DefaultButton
             type="default"
