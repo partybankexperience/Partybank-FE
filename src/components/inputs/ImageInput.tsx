@@ -3,9 +3,10 @@ import { useEventStore } from "../../stores/useEventStore";
 
 interface ImageUploadInputProps {
   label?: string;
+  onImageChange?: (file: File | null) => void;
+  value?: File | string;
   requiredSize?: { width: number; height: number };
   maxSizeMB?: number;
-  onImageChange?: (file: File | null) => void;
 }
 
 export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
@@ -13,6 +14,7 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
   requiredSize = { width: 724, height: 340 },
   maxSizeMB = 4,
   onImageChange,
+  value,
 }) => {
   const [error, setError] = useState("");
   const [previewUrl, setPreviewUrl] = useState<any>(null);
@@ -26,12 +28,12 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
 //   }, [storedImage]);
 useEffect(() => {
     let url: string | undefined;
-  
+
     if (storedImage instanceof File) {
       url = URL.createObjectURL(storedImage);
       setPreviewUrl(url);
     }
-  
+
     return () => {
       if (url) {
         URL.revokeObjectURL(url);
@@ -146,5 +148,3 @@ console.log(previewUrl)
     </div>
   );
 };
-
-  

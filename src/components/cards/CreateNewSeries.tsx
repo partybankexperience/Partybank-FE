@@ -16,7 +16,7 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [seriesName, setSeriesName] = useState("");
   const [description, setDescription] = useState("");
-  const [coverImage, setCoverImage] = useState("");
+  const [coverImage, setCoverImage] = useState<File | string>("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -90,7 +90,7 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
         <div className="m-auto 4vw grid gap-[20px] w-full ">
           <DefaultInput
             label="Series Name"
-            id="Series Name"
+            id="seriesName"
             value={seriesName}
             setValue={setSeriesName}
             placeholder="e.g., Lagos Concerts 2025 or VIP Exclusive"
@@ -98,23 +98,17 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
           />
           <DefaultInput
             label="Description"
-            id="Description"
+            id="description"
             value={description}
             setValue={setDescription}
             placeholder="e.g., Multi-location music tour with similar theme"
             classname="!w-full"
-
           />
           <ImageUploadInput 
             label="Cover Image"
             onImageChange={(file) => {
               if (file) {
-                // Convert file to base64 or handle as needed for your API
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                  setCoverImage(reader.result as string);
-                };
-                reader.readAsDataURL(file);
+                setCoverImage(file);
               } else {
                 setCoverImage("");
               }
