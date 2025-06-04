@@ -146,7 +146,7 @@ const EventCreation = () => {
         <div className="m-auto 4vw grid gap-[20px] w-full ">
           <DefaultInput
             label="Series Name"
-            id="Series Name"
+            id="eventSeriesName"
             value={seriesName}
             setValue={setSeriesName}
             placeholder="e.g., Lagos Concerts 2025 or VIP Exclusive"
@@ -154,7 +154,7 @@ const EventCreation = () => {
           />
           <DefaultInput
             label="Description"
-            id="Description"
+            id="eventSeriesDescription"
             value={description}
             setValue={setDescription}
             placeholder="e.g., Multi-location music tour with similar theme"

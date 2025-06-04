@@ -80,7 +80,7 @@ export const endPoints: endPointlistTypes = {
         auth: true,
     },
     createSeries: {
-        url: "/series/create",
+        url: "/series",
         method: "POST",
         headers: FileHeaders,
         auth: true,

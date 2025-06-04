@@ -98,7 +98,7 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
           />
           <DefaultInput
             label="Description"
-            id="description"
+            id="seriesDescription"
             value={description}
             setValue={setDescription}
             placeholder="e.g., Multi-location music tour with similar theme"

@@ -1,12 +1,12 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useEventStore } from "../../stores/useEventStore";
 
 interface ImageUploadInputProps {
   label?: string;
   onImageChange?: (file: File | null) => void;
-  value?: File | string;
   requiredSize?: { width: number; height: number };
   maxSizeMB?: number;
+  value?: File | string;
 }
 
 export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
