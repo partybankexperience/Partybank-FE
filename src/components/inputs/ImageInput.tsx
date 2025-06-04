@@ -21,11 +21,11 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
   const uploadToCloudinary = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('upload_preset', 'your_upload_preset'); // You'll need to set this up in Cloudinary
+    formData.append('upload_preset', 'your_upload_preset'); // Replace with your actual upload preset
 
     try {
       const response = await fetch(
-        'https://api.cloudinary.com/v1_1/your_cloud_name/image/upload', // Replace with your cloud name
+        'https://api.cloudinary.com/v1_1/your_cloud_name/image/upload', // Replace with your actual cloud name
         {
           method: 'POST',
           body: formData,
