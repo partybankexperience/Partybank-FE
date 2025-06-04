@@ -70,7 +70,7 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
           setIsModalOpen(true);
         }}
       >
-        <div className="grid gap-[20px] text-center">
+        <div className="grid gap-[20px] text-center py-[20px]">
           <div className="bg-white rounded-[6px] p-[14px] h-fit w-fit m-auto">
             <FaPlus className="text-[32px] text-primary" />
           </div>
