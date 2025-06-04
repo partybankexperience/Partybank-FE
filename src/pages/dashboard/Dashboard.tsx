@@ -9,6 +9,9 @@ import avatar from "../../assets/images/avatar.png";
 import EventCard from "../../components/cards/EventCard";
 import { IoIosArrowForward } from "react-icons/io";
 import { useNavigate } from "react-router";
+import { BiSolidCalendarStar } from "react-icons/bi";
+import { FaDollarSign } from "react-icons/fa";
+import { RiPuzzle2Fill } from "react-icons/ri";
 const Dashboard = () => {
   const [selectedOption, setSelectedOption] = useState("Yearly");
   const [selectedSaleOption, setSelectedSaleOption] = useState("Sales");
@@ -57,23 +60,23 @@ const Dashboard = () => {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-[30px] h-fit">
           <Card
             title="248"
-            text="Total Ticket Purchase"
-            icon={<BsPeopleFill className="text-[30px] text-primary" />}
+            text="Total Buyers"
+            icon={<BsPeopleFill className="text-[1.2rem] text-primary" />}
           />
           <Card
             title="248"
             text="Total Ticket Purchase"
-            icon={<BsPeopleFill className="text-[30px] text-primary" />}
+            icon={<RiPuzzle2Fill className="text-[1.2rem] text-primary" />}
           />
           <Card
             title="248"
-            text="Total Ticket Purchase"
-            icon={<BsPeopleFill className="text-[30px] text-primary" />}
+            text="Total Events"
+            icon={<BiSolidCalendarStar className="text-[1.2rem] text-primary" />}
           />
           <Card
             title="248"
-            text="Total Ticket Purchase"
-            icon={<BsPeopleFill className="text-[30px] text-primary" />}
+            text="Total Sales"
+            icon={<FaDollarSign className="text-[1.2rem] text-primary" />}
           />
         </div>
         <div className="grid lg:grid-cols-[2.5fr_1fr] gap-[30px] ">

@@ -1,15 +1,17 @@
-
+import line from '../../../assets/images/cardLine.svg'
 const Card = ({icon,title,text}:any) => {
   return (
-    <div className="bg-white grid md:flex  items-center gap-[18px] rounded-[15px] p-[20px]">
-        <div className="rounded-md p-[12px] w-fit bg-[#fce4e8]">
+    <div className="bg-white grid md:flex  items-center gap-[.5rem] rounded-[15px]  p-[.5rem] relative overflow-hidden">
+        <div className="rounded-md p-[.8rem] w-fit bg-[#fce4e8]">
             {icon}
         </div>
         <div className="grid">
-            <p className="text-black text-[1.2rem] font-medium">{title}</p>
+            <p className="text-black text-[1rem] font-medium">{title}</p>
             <p className="text-lightGrey text-[.8rem]">{text}</p>
         </div>
-
+<div className="absolute top-0 right-0  ">
+  <img src={line} alt="" className=' h-fit max-w-[6rem] object-contain'/>
+</div>
     </div>
   )
 }
