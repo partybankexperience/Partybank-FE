@@ -7,11 +7,19 @@ import { FaPlus } from "react-icons/fa6";
 import { Modal } from "../../components/modal/Modal";
 import { useState } from "react";
 import createEvent from "../../assets/images/createEvent.svg";
+import DefaultInput from "../../components/inputs/DefaultInput";
+import { ImageUploadInput } from "../../components/inputs/ImageInput";
+import { CreateSeries } from "../../Containers/onBoardingApi";
+import Storage from "../../stores/InAppStorage";
 
 const EventCreation = () => {
     const navigate = useNavigate();
     const { markStepComplete } = useOnboardingStore();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isCreateSeriesModalOpen, setIsCreateSeriesModalOpen] = useState(false);
+    const [seriesName, setSeriesName] = useState("");
+    const [description, setDescription] = useState("");
+    const [coverImage, setCoverImage] = useState("");
     const handleNext = () => {
         try {
             // const res=await CreateSeries(confirmPassword,password)
@@ -24,6 +32,39 @@ const EventCreation = () => {
       markStepComplete("pinSetup");
       setIsModalOpen(true);
     //   navigate("/createEventSeries");
+    };
+
+    const handleCreateSeries = async () => {
+        if (!seriesName.trim() || !description.trim()) {
+            return;
+        }
+        
+        try {
+            const user = Storage.getItem("user");
+            const userId = user?.id;
+            
+            if (!userId) {
+                console.error("User ID not found");
+                return;
+            }
+
+            const response = await CreateSeries(
+                seriesName,
+                userId,
+                description,
+                coverImage || "https://images.unsplash.com/photo-1485872299829-c673f5194813?q=80&w=2054&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            );
+            
+            console.log("Series created:", response);
+            setIsCreateSeriesModalOpen(false);
+            setSeriesName("");
+            setDescription("");
+            setCoverImage("");
+            markStepComplete("createEventSeries");
+            setIsModalOpen(true);
+        } catch (error) {
+            console.error("Error creating series:", error);
+        }
     };
     const handleBack = () => {
         navigate(-1);
@@ -48,8 +89,9 @@ const EventCreation = () => {
                 <p className="text-black text-[18px] font-medium">My Events</p>
             </div>
             <div
-  className="bg-white rounded-[15px] p-[20px] flex flex-col items-center justify-center m-auto w-full text-center md:w-[20vw] h-[180px] border border-dotted border-primary"
+  className="bg-white rounded-[15px] p-[20px] flex flex-col items-center justify-center m-auto w-full text-center md:w-[20vw] h-[180px] border border-dotted border-primary cursor-pointer hover:shadow-[0px_4px_20px_rgba(0,0,0,0.1)] transition-all duration-300"
   style={{ borderWidth: "2px", borderStyle: "dotted" }}
+  onClick={() => setIsCreateSeriesModalOpen(true)}
 >
   <FaPlus className="text-primary text-[40px] mb-2" />
   <p className="text-center text-[18px] font-medium text-black">Create New Series</p>
@@ -96,6 +138,49 @@ const EventCreation = () => {
           >
             Explore
           </DefaultButton>
+        </div>
+      </Modal>
+
+      <Modal isOpen={isCreateSeriesModalOpen} onClose={() => setIsCreateSeriesModalOpen(false)}>
+        <h1 className="text-[1.5rem] text-black font-medium text-center ">Create Series</h1>
+        <div className="m-auto 4vw grid gap-[20px] w-full ">
+          <DefaultInput
+            label="Series Name"
+            id="Series Name"
+            value={seriesName}
+            setValue={setSeriesName}
+            placeholder="e.g., Lagos Concerts 2025 or VIP Exclusive"
+            classname="!w-full"
+          />
+          <DefaultInput
+            label="Description"
+            id="Description"
+            value={description}
+            setValue={setDescription}
+            placeholder="e.g., Multi-location music tour with similar theme"
+            classname="!w-full"
+          />
+          <ImageUploadInput/>
+          <div className="md:mx-auto grid md:flex gap-[20px] ">
+          <DefaultButton
+            type="default"
+            variant="tertiary"
+            className="!w-full md:!w-[9rem] md:!mx-auto border"
+            onClick={() => {
+                setIsCreateSeriesModalOpen(false);
+            }}
+          >
+            Cancel
+          </DefaultButton>
+          <DefaultButton
+            type="default"
+            variant="primary"
+            className="!w-full md:!w-[9rem] md:!mx-auto"
+            onClick={handleCreateSeries}
+          >
+            Create Series
+          </DefaultButton>
+          </div>
         </div>
       </Modal>
           </div>
