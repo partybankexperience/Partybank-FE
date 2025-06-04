@@ -17,6 +17,7 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
   const [description, setDescription] = useState("");
   const [coverImage, setCoverImage] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleCreateSeries = async () => {
@@ -60,6 +61,50 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!seriesName.trim() || !description.trim()) {
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const user = Storage.getItem("user");
+      const userId = user?.id;
+
+      if (!userId) {
+        console.error("User ID not found");
+        return;
+      }
+
+      const response = await createSeries(
+        seriesName,
+        userId,
+        description,
+        coverImage || "https://images.unsplash.com/photo-1485872299829-c673f5194813?q=80&w=2054&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+      );
+
+      console.log("Series created:", response);
+
+      // Call the callback function to update parent component
+      if (onSeriesCreated) {
+        onSeriesCreated(response.data);
+      }
+
+      // Reset form and close modal
+      setSeriesName("");
+      setDescription("");
+      setCoverImage("");
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Error creating series:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
   return (
     <>
       <div
@@ -84,10 +129,10 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
         </div>
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <h1 className="text-[1.5rem] text-black font-medium text-center ">Create Series</h1>
-        <div className="m-auto 4vw grid gap-[20px] w-full ">
+      <Modal isOpen={isOpen} setIsOpen={setIsModalOpen} className="">
+        <form onSubmit={handleSubmit} className="m-auto 4vw grid gap-[20px] w-full">
           <DefaultInput
+            key="series-name-input"
             label="Series Name"
             id="createSeriesName"
             value={seriesName}
@@ -96,6 +141,7 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
             classname="!w-full"
           />
           <DefaultInput
+            key="series-description-input"
             label="Description"
             id="createSeriesDescription"
             value={description}
@@ -103,7 +149,8 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
             placeholder="e.g., Multi-location music tour with similar theme"
             classname="!w-full"
           />
-          <ImageUploadInput 
+          <ImageUploadInput
+            key="series-image-input"
             label="Cover Image"
             value={coverImage}
             onChange={setCoverImage}
@@ -120,16 +167,15 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
             Cancel
           </DefaultButton>
           <DefaultButton
-            type="default"
+            type="submit"
             variant="primary"
             className="!w-full md:!w-[9rem] md:!mx-auto"
-            onClick={handleCreateSeries}
             isLoading={isLoading}
           >
             Create Series
           </DefaultButton>
           </div>
-        </div>
+        </form>
       </Modal>
     </>
   );
