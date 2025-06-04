@@ -10,7 +10,7 @@ import createEvent from "../../assets/images/createEvent.svg";
 import DefaultInput from "../../components/inputs/DefaultInput";
 import { ImageUploadInput } from "../../components/inputs/ImageInput";
 import { CreateSeries } from "../../Containers/onBoardingApi";
-import Storage from "../../stores/InAppStorage";
+import { Storage } from "../../stores/InAppStorage";
 
 const EventCreation = () => {
     const navigate = useNavigate();
