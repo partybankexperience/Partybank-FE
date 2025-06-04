@@ -159,6 +159,8 @@ const App = () => {
             </DashboardLayout>
           }
         />
+        {/* Catch-all route for debugging */}
+        <Route path="*" element={<div>Page not found - Current path: {window.location.pathname}</div>} />
       </Routes>
       
     </>
