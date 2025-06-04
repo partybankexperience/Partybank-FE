@@ -1,20 +1,16 @@
 import { apiCall } from "../utils/axiosFormat";
 
-const createSeries = async (name: String, userId: String, description: String, coverImage: File | String): Promise<any> => {
-  const formData = new FormData();
-  formData.append('name', name as string);
-  formData.append('userId', userId as string);
-  formData.append('description', description as string);
-  
-  if (coverImage instanceof File) {
-    formData.append('coverImage', coverImage);
-  } else if (coverImage) {
-    formData.append('coverImage', coverImage as string);
-  }
+const createSeries = async (name: String, userId: String, description: String, coverImage: String): Promise<any> => {
+  const payload = {
+    name: name as string,
+    userId: userId as string,
+    description: description as string,
+    coverImage: coverImage as string
+  };
 
   const response = await apiCall({
     name: "createSeries",
-    data: formData,
+    data: payload,
   });
   return response;
 };
@@ -32,21 +28,17 @@ const getSeriesById =async (id: String): Promise<any> =>{
   });
   return response;
 }
-const updateSeries = async (id: String, userId: String, description: String, coverImage: File | String): Promise<any> => {
-  const formData = new FormData();
-  formData.append('userId', userId as string);
-  formData.append('description', description as string);
-  
-  if (coverImage instanceof File) {
-    formData.append('coverImage', coverImage);
-  } else if (coverImage) {
-    formData.append('coverImage', coverImage as string);
-  }
+const updateSeries = async (id: String, userId: String, description: String, coverImage: String): Promise<any> => {
+  const payload = {
+    userId: userId as string,
+    description: description as string,
+    coverImage: coverImage as string
+  };
 
   const response = await apiCall({
     name: "updateSeries",
     urlExtra: `/${id}`,
-    data: formData
+    data: payload
   });
   return response;
 }

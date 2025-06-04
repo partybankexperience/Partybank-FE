@@ -1,112 +1,73 @@
-import React, { useState, useEffect } from "react";
-import { useEventStore } from "../../stores/useEventStore";
+import React, { useState } from "react";
 
 interface ImageUploadInputProps {
   label?: string;
-  onImageChange?: (file: File | null) => void;
+  value?: string;
+  onChange?: (url: string) => void;
   requiredSize?: { width: number; height: number };
   maxSizeMB?: number;
-  value?: File | string;
 }
 
 export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
   label = "Cover Image",
   requiredSize = { width: 724, height: 340 },
   maxSizeMB = 4,
-  onImageChange,
   value,
+  onChange,
 }) => {
   const [error, setError] = useState("");
-  const [previewUrl, setPreviewUrl] = useState<any>(null);
-  const { form } = useEventStore();
-  const eventSetupForm = form["Event Setup"] || {};
-  const storedImage = eventSetupForm.coverImage;
-//   const previewUrl = useMemo(() => {
-//     if (!storedImage) return null;
-//     const url = URL.createObjectURL(storedImage);
-//     return url;
-//   }, [storedImage]);
-useEffect(() => {
-    let url: string | undefined;
+  const [uploading, setUploading] = useState(false);
 
-    if (storedImage instanceof File) {
-      url = URL.createObjectURL(storedImage);
-      setPreviewUrl(url);
-    }
+  const uploadToCloudinary = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'your_upload_preset'); // You'll need to set this up in Cloudinary
 
-    return () => {
-      if (url) {
-        URL.revokeObjectURL(url);
+    try {
+      const response = await fetch(
+        'https://api.cloudinary.com/v1_1/your_cloud_name/image/upload', // Replace with your cloud name
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
       }
-    };
-  }, [storedImage]);
-console.log(storedImage)
-console.log(previewUrl)
-  const resizeImage = (
-    file: File,
-    width: number,
-    height: number
-  ): Promise<File> => {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      const reader = new FileReader();
 
-      reader.onload = (e) => {
-        if (!e.target?.result) return reject("Failed to read file");
-
-        img.src = e.target.result as string;
-      };
-
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext("2d");
-
-        if (!ctx) return reject("No canvas context");
-
-        ctx.drawImage(img, 0, 0, width, height);
-
-        canvas.toBlob(
-          (blob) => {
-            if (!blob) return reject("Failed to convert to Blob");
-
-            const resizedFile = new File([blob], file.name, {
-              type: file.type,
-              lastModified: Date.now(),
-            });
-            resolve(resizedFile);
-          },
-          file.type,
-          1
-        );
-      };
-
-      img.onerror = () => reject("Image load error");
-
-      reader.readAsDataURL(file);
-    });
+      const data = await response.json();
+      return data.secure_url;
+    } catch (error) {
+      console.error('Cloudinary upload error:', error);
+      throw new Error('Failed to upload image');
+    }
   };
 
-  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setError("");
     const file = e.target.files?.[0];
     if (!file) return;
 
     if (file.size > maxSizeMB * 1024 * 1024) {
       setError(`File size exceeds ${maxSizeMB}MB.`);
-      onImageChange?.(null);
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      setError('Please select an image file.');
       return;
     }
 
     try {
-      const resized = await resizeImage(file, requiredSize.width, requiredSize.height);
-      const preview = URL.createObjectURL(resized);
-      setPreviewUrl(preview);
-      onImageChange?.(resized);
+      setUploading(true);
+      const imageUrl = await uploadToCloudinary(file);
+      onChange?.(imageUrl);
     } catch (err) {
-      console.error("Resize failed:", err);
-      setError("Image processing failed.");
+      console.error("Upload failed:", err);
+      setError("Image upload failed. Please try again.");
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -117,15 +78,23 @@ console.log(previewUrl)
           {label}
         </label>
         <div className="relative flex items-center justify-center p-4 border-dotted border border-gray-300 rounded-lg gap-2 w-full h-[260px] overflow-hidden">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleChange}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-          />
-          {previewUrl ? (
+          {!uploading && (
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+            />
+          )}
+
+          {uploading ? (
+            <div className="flex flex-col items-center justify-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              <p className="mt-2 text-sm text-gray-500">Uploading...</p>
+            </div>
+          ) : value ? (
             <img
-              src={previewUrl}
+              src={value}
               alt="Preview"
               className="absolute inset-0 w-full h-full object-cover rounded-lg"
             />

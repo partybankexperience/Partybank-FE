@@ -13,10 +13,9 @@ interface CreateNewSeriesProps {
 }
 
 const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [seriesName, setSeriesName] = useState("");
   const [description, setDescription] = useState("");
-  const [coverImage, setCoverImage] = useState<File | string>("");
+  const [coverImage, setCoverImage] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -106,13 +105,8 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
           />
           <ImageUploadInput 
             label="Cover Image"
-            onImageChange={(file) => {
-              if (file) {
-                setCoverImage(file);
-              } else {
-                setCoverImage("");
-              }
-            }}
+            value={coverImage}
+            onChange={setCoverImage}
           />
           <div className="md:mx-auto grid md:flex gap-[20px] ">
           <DefaultButton

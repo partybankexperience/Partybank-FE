@@ -82,7 +82,7 @@ export const endPoints: endPointlistTypes = {
     createSeries: {
         url: "/series",
         method: "POST",
-        headers: FileHeaders,
+        headers,
         auth: true,
     },
     getSeries: {
@@ -100,7 +100,7 @@ export const endPoints: endPointlistTypes = {
     updateSeries: {
         url: "/series/:id",
         method: "PATCH",
-        headers: FileHeaders,
+        headers,
         auth: true,
     },
     deleteSeries: {
