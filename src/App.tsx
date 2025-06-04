@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router";
+import { useEffect } from "react";
 import Login from "./pages/onboarding/Login";
 import Signup from "./pages/onboarding/Signup";
 import EmailVerification from "./pages/onboarding/EmailVerification";
@@ -23,6 +24,10 @@ import Profile from "./pages/profile/Profile";
 import ForgotPassword from "./pages/onboarding/forgotPassword/ForgotPassword";
 
 const App = () => {
+  useEffect(() => {
+    console.log("App component loaded successfully");
+  }, []);
+
   return (
     <>
       <Routes>
