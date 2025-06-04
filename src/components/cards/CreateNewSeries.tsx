@@ -24,12 +24,12 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
     if (!seriesName.trim() || !description.trim()) {
       return;
     }
-    
+
     try {
       setIsLoading(true);
       const user = Storage.getItem("user");
       const userId = user?.id;
-      
+
       if (!userId) {
         console.error("User ID not found");
         return;
@@ -41,14 +41,14 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
         description,
         coverImage || "https://images.unsplash.com/photo-1485872299829-c673f5194813?q=80&w=2054&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
       );
-      
+
       console.log("Series created:", response);
-      
+
       // Call the callback function to update parent component
       if (onSeriesCreated) {
         onSeriesCreated(response.data);
       }
-      
+
       // Reset form and close modal
       setSeriesName("");
       setDescription("");
@@ -90,7 +90,7 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
         <div className="m-auto 4vw grid gap-[20px] w-full ">
           <DefaultInput
             label="Series Name"
-            id="seriesName"
+            id="createSeriesName"
             value={seriesName}
             setValue={setSeriesName}
             placeholder="e.g., Lagos Concerts 2025 or VIP Exclusive"
@@ -98,7 +98,7 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
           />
           <DefaultInput
             label="Description"
-            id="seriesDescription"
+            id="createSeriesDescription"
             value={description}
             setValue={setDescription}
             placeholder="e.g., Multi-location music tour with similar theme"
