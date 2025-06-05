@@ -8,6 +8,8 @@ export default defineConfig({
   server: {
     allowedHosts: [
       'cae9c917-007f-47be-86ba-0159961920a7-00-3pam7s70q7pth.worf.replit.dev'
-    ]
+    ],
+    // port:  parseInt(process.env.PORT || 5173),
+    host: '0.0.0.0' 
   }
 })
