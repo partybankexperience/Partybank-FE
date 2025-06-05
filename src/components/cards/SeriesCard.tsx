@@ -12,12 +12,14 @@ const SeriesCard = ({
   onEdit,
 //   onDuplicate,
   onDelete,
+  imageUrl
 }: {
   title?: string;
   description?:string;
   onEdit?: () => void;
   onDuplicate?: () => void;
   onDelete?: () => void;
+  imageUrl?: string
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
@@ -69,7 +71,9 @@ const SeriesCard = ({
         )}
       </div>
 
-      <div className="h-[150px] rounded-t-[9px] w-full bg-gray-100" />
+      <div className="h-[150px] rounded-t-[9px] w-full bg-gray-100 overflow-hidden" >
+      <img src={imageUrl} alt={title} className=" w-full object-contain rounded-t-[9px]"/>
+      </div>
       <div className="grid">
         <div className="grid gap-[8px] p-[20px]">
           <p className="text-black font-medium text-[1.125rem]">{title}</p>

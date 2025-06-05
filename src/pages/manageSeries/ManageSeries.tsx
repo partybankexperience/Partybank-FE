@@ -13,7 +13,7 @@ const ManageSeries = () => {
     try {
       setLoading(true)
       const response = await getSeries()
-      setSeries(response?.data || [])
+      setSeries(response || [])
     } catch (error) {
       console.error("Error fetching series:", error)
       setSeries([])
@@ -57,6 +57,7 @@ const ManageSeries = () => {
                 description={seriesItem.description}
                 onEdit={() => navigate(`/manage-series/${seriesItem.id}`)}
                 onDelete={() => handleSeriesDeleted(seriesItem.id)}
+                imageUrl={seriesItem.coverImage}
               />
             ))
           )}

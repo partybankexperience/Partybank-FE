@@ -167,7 +167,7 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
             Cancel
           </DefaultButton>
           <DefaultButton
-            type="submit"
+            submitType="submit"
             variant="primary"
             className="!w-full md:!w-[9rem] md:!mx-auto"
             isLoading={isLoading}
