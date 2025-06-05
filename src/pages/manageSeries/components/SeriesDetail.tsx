@@ -160,6 +160,27 @@ const SeriesDetail = () => {
     return (
         <div className="md:bg-white md:rounded-md h-[80vh] w-full block md:grid mt-[.6rem] md:p-[25px] md:grid-cols-[2fr_3fr] gap-[20px]">
             <div className="rounded-md md:bg-[#F8F9F9] md:p-[20px] h-fit md:h-full ">
+                {isInEditMode && (
+                    <div className="grid grid-cols-2 gap-3 mb-[20px]">
+                        <DefaultButton
+                            type="default"
+                            variant="tertiary"
+                            className="!w-full border"
+                            onClick={handleCancelEdit}
+                        >
+                            Cancel
+                        </DefaultButton>
+                        <DefaultButton
+                            type="default"
+                            variant="primary"
+                            className="!w-full"
+                            onClick={handleSaveChanges}
+                            isLoading={isSaving}
+                        >
+                            Save Changes
+                        </DefaultButton>
+                    </div>
+                )}
                 <div className="rounded-[8px] bg-grey w-full h-[18rem] overflow-hidden">
                     <img 
                         src={seriesData.coverImage} 
@@ -228,27 +249,6 @@ const SeriesDetail = () => {
                 </div>
             </div>
             <div className="grid gap-[20px] h-fit ">
-                {isInEditMode && (
-                    <div className="grid grid-cols-2 gap-2">
-                        <DefaultButton
-                            type="default"
-                            variant="tertiary"
-                            className="!w-full border"
-                            onClick={handleCancelEdit}
-                        >
-                            Cancel
-                        </DefaultButton>
-                        <DefaultButton
-                            type="default"
-                            variant="primary"
-                            className="!w-full"
-                            onClick={handleSaveChanges}
-                            isLoading={isSaving}
-                        >
-                            Save Changes
-                        </DefaultButton>
-                    </div>
-                )}
                 <div className="flex justify-between items-center">
                     <h1 className="text-black font-medium text-[1.2rem]">Event List</h1>
                     <DefaultButton
