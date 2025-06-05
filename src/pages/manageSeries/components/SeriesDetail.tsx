@@ -30,7 +30,7 @@ const SeriesDetail = () => {
     const [seriesData, setSeriesData] = useState<SeriesData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    
+
     // Edit mode states
     const [isEditingName, setIsEditingName] = useState(false);
     const [isEditingDescription, setIsEditingDescription] = useState(false);
@@ -104,7 +104,7 @@ const SeriesDetail = () => {
             setIsSaving(true);
 
             await updateSeries(id, editedName, editedDescription, seriesData.coverImage);
-            
+
             // Success: Update local state with new values
             setSeriesData(prev => prev ? {
                 ...prev,
@@ -115,15 +115,15 @@ const SeriesDetail = () => {
             // Exit edit modes
             setIsEditingName(false);
             setIsEditingDescription(false);
-            
+
             console.log("Series updated successfully");
         } catch (error) {
             console.error("Error updating series:", error);
-            
+
             // Error: Revert to original values
             setEditedName(originalName);
             setEditedDescription(originalDescription);
-            
+
             // Exit edit modes
             setIsEditingName(false);
             setIsEditingDescription(false);
@@ -228,40 +228,38 @@ const SeriesDetail = () => {
                 </div>
             </div>
             <div className="grid gap-[20px] h-fit ">
-                <div className="flex justify-between items-center">
-                    <h1 className="text-black font-medium text-[1.2rem]">Event List</h1>
-                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                        {isInEditMode && (
-                            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 order-1 sm:order-none">
-                                <DefaultButton
-                                    type="default"
-                                    variant="tertiary"
-                                    className="!w-full sm:!w-fit border"
-                                    onClick={handleCancelEdit}
-                                >
-                                    Cancel
-                                </DefaultButton>
-                                <DefaultButton
-                                    type="default"
-                                    variant="primary"
-                                    className="!w-full sm:!w-fit"
-                                    onClick={handleSaveChanges}
-                                    isLoading={isSaving}
-                                >
-                                    Save Changes
-                                </DefaultButton>
-                            </div>
-                        )}
+                {isInEditMode && (
+                    <div className="grid grid-cols-2 gap-2">
                         <DefaultButton
-                            type="icon-left"
-                            className="!w-full sm:!w-fit order-2 sm:order-none"
-                            icon={<FaPlus className="text-[.8rem] text-white" />}
-                            variant="primary"
-                            onClick={() => setIsModalOpen(true)}
+                            type="default"
+                            variant="tertiary"
+                            className="!w-full border"
+                            onClick={handleCancelEdit}
                         >
-                            Add Event
+                            Cancel
+                        </DefaultButton>
+                        <DefaultButton
+                            type="default"
+                            variant="primary"
+                            className="!w-full"
+                            onClick={handleSaveChanges}
+                            isLoading={isSaving}
+                        >
+                            Save Changes
                         </DefaultButton>
                     </div>
+                )}
+                <div className="flex justify-between items-center">
+                    <h1 className="text-black font-medium text-[1.2rem]">Event List</h1>
+                    <DefaultButton
+                        type="icon-left"
+                        className="!w-fit"
+                        icon={<FaPlus className="text-[.8rem] text-white" />}
+                        variant="primary"
+                        onClick={() => setIsModalOpen(true)}
+                    >
+                        Add Event
+                    </DefaultButton>
                 </div>
                 <div className="grid gap-[20px]">
                     {mockEvents.map((event) => (
