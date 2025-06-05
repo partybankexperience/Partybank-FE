@@ -27,7 +27,7 @@ const SeriesCard = ({
   const buttonOptions = [
     {
       name: "Edit",
-      onClick: () => (onEdit ? onEdit() : navigate("/manage-events/:id")),
+      onClick: () => onEdit?.(),
       icon: <LuPencilLine />,
     },
     // {
