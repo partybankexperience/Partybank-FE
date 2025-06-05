@@ -48,7 +48,11 @@ const EventSetup = () => {
 
   const handleTagChange = (selectedTag: string) => {
     setFormValue("Event Setup", "tags", selectedTag);
-    setShowCreateTag(selectedTag === "Other");
+    if (selectedTag === "Other") {
+      setShowCreateTag(true);
+    } else {
+      setShowCreateTag(false);
+    }
   };
 
   const handleCreateTag = async () => {
@@ -134,20 +138,30 @@ const EventSetup = () => {
         disabled={loading}
       />
       
-      {showCreateTag && (
-        <DefaultInput
-          id="newTagName"
-          label="Create New Tag"
-          value={newTagName}
-          setValue={setNewTagName}
-          placeholder="Enter new tag name"
-          classname="!w-full"
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && newTagName.trim()) {
-              handleCreateTag();
-            }
-          }}
-        />
+      {(showCreateTag || eventSetupForm.tags === "Other") && (
+        <>
+          <DefaultInput
+            id="newTagName"
+            label="Create New Tag"
+            value={newTagName}
+            setValue={setNewTagName}
+            placeholder="Enter new tag name"
+            classname="!w-full"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && newTagName.trim()) {
+                handleCreateTag();
+              }
+            }}
+          />
+          <DefaultInput
+            id="newTagDescription"
+            label="Tag Description (Optional)"
+            value={newTagDescription}
+            setValue={setNewTagDescription}
+            placeholder="Enter tag description"
+            classname="!w-full"
+          />
+        </>
       )}
       <DefaultInput
         id="Series"
