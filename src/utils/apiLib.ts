@@ -92,19 +92,19 @@ export const endPoints: endPointlistTypes = {
         auth: true,
     },
     getSeriesById: {
-        url: "/series/:id",
+        url: "/series",
         method: "GET",
         headers,
         auth: true,
     },
     updateSeries: {
-        url: "/series/:id",
+        url: "/series",
         method: "PATCH",
         headers,
         auth: true,
     },
     deleteSeries: {
-        url: "/series/:id",
+        url: "/series",
         method: "DELETE",
         headers,
         auth: true,
