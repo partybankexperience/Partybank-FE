@@ -230,13 +230,13 @@ const SeriesDetail = () => {
             <div className="grid gap-[20px] h-fit ">
                 <div className="flex justify-between items-center">
                     <h1 className="text-black font-medium text-[1.2rem]">Event List</h1>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                         {isInEditMode && (
-                            <>
+                            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 order-1 sm:order-none">
                                 <DefaultButton
                                     type="default"
                                     variant="tertiary"
-                                    className="!w-fit border"
+                                    className="!w-full sm:!w-fit border"
                                     onClick={handleCancelEdit}
                                 >
                                     Cancel
@@ -244,17 +244,17 @@ const SeriesDetail = () => {
                                 <DefaultButton
                                     type="default"
                                     variant="primary"
-                                    className="!w-fit"
+                                    className="!w-full sm:!w-fit"
                                     onClick={handleSaveChanges}
                                     isLoading={isSaving}
                                 >
                                     Save Changes
                                 </DefaultButton>
-                            </>
+                            </div>
                         )}
                         <DefaultButton
                             type="icon-left"
-                            className="!w-fit"
+                            className="!w-full sm:!w-fit order-2 sm:order-none"
                             icon={<FaPlus className="text-[.8rem] text-white" />}
                             variant="primary"
                             onClick={() => setIsModalOpen(true)}
