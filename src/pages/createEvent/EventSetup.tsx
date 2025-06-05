@@ -22,8 +22,12 @@ const EventSetup = () => {
       try {
         setLoading(true);
         const response = await getTags();
-        const tagNames = response.map((tag: any) => tag.name);
-        setTags([...tagNames, "Other"]);
+        if (response && response.length > 0) {
+          const tagNames = response.map((tag: any) => tag.name);
+          setTags([...tagNames, "Other"]);
+        } else {
+          setTags(["Other"]);
+        }
       } catch (error) {
         console.error("Error fetching tags:", error);
         setTags(["Other"]);
@@ -43,13 +47,8 @@ const EventSetup = () => {
   };
 
   const handleTagChange = (selectedTag: string) => {
-    if (selectedTag === "Other") {
-      setShowCreateTag(true);
-      setFormValue("Event Setup", "tags", "Other");
-    } else {
-      setShowCreateTag(false);
-      setFormValue("Event Setup", "tags", selectedTag);
-    }
+    setFormValue("Event Setup", "tags", selectedTag);
+    setShowCreateTag(selectedTag === "Other");
   };
 
   const handleCreateTag = async () => {
