@@ -49,7 +49,7 @@ const SeriesCard = ({
   };
 
   return (
-    <div className="relative rounded-[9px] border border-[#E1E1E1] h-[280px] min-w-[180px] w-full hover:shadow-[0px_4px_20px_rgba(0,0,0,0.1)] transition-all duration-300 flex flex-col">
+    <div className="relative rounded-[9px] border border-[#E1E1E1] h-[17.5rem] min-w-[180px] w-full hover:shadow-[0px_4px_20px_rgba(0,0,0,0.1)] transition-all duration-300 flex flex-col">
       {/* Dropdown */}
       <div className="absolute top-[15px] right-[15px] z-10">
         <button
@@ -77,7 +77,7 @@ const SeriesCard = ({
         )}
       </div>
 
-      <div className="h-[150px] rounded-t-[9px] w-full bg-gray-100 overflow-hidden" >
+      <div className="h-[9.375rem] rounded-t-[9px] w-full bg-gray-100 overflow-hidden" >
         <img src={imageUrl} alt={title} className="w-full h-full object-cover rounded-t-[9px]"/>
       </div>
       <div className="flex-1 flex flex-col">
