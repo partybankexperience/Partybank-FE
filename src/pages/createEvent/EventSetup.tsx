@@ -57,7 +57,7 @@ const EventSetup = () => {
 
     try {
       setIsCreatingTag(true);
-      await createTag(newTagName, newTagDescription);
+      await createTag(newTagName, newTagDescription || "");
       
       // Add the new tag to the tags array and select it
       const updatedTags = [...tags.filter(tag => tag !== "Other"), newTagName, "Other"];
@@ -136,47 +136,19 @@ const EventSetup = () => {
       />
       
       {showCreateTag && (
-        <div className="grid gap-[15px] p-[20px] border border-gray-200 rounded-[8px] bg-gray-50">
-          <h3 className="text-black font-medium text-[1rem]">Create New Tag</h3>
-          <DefaultInput
-            id="newTagName"
-            label="Tag Name"
-            value={newTagName}
-            setValue={setNewTagName}
-            placeholder="Enter tag name"
-            classname="!w-full"
-          />
-          <DefaultInput
-            id="newTagDescription"
-            label="Tag Description"
-            value={newTagDescription}
-            setValue={setNewTagDescription}
-            placeholder="Enter tag description"
-            classname="!w-full"
-          />
-          <div className="flex gap-[10px]">
-            <button
-              type="button"
-              onClick={() => {
-                setShowCreateTag(false);
-                setNewTagName("");
-                setNewTagDescription("");
-                setFormValue("Event Setup", "tags", "");
-              }}
-              className="px-4 py-2 border border-gray-300 rounded-[6px] text-gray-600 hover:bg-gray-100"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              onClick={handleCreateTag}
-              disabled={!newTagName.trim() || isCreatingTag}
-              className="px-4 py-2 bg-primary text-white rounded-[6px] hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isCreatingTag ? "Creating..." : "Create Tag"}
-            </button>
-          </div>
-        </div>
+        <DefaultInput
+          id="newTagName"
+          label="Create New Tag"
+          value={newTagName}
+          setValue={setNewTagName}
+          placeholder="Enter new tag name"
+          classname="!w-full"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && newTagName.trim()) {
+              handleCreateTag();
+            }
+          }}
+        />
       )}
       <DefaultInput
         id="Series"
