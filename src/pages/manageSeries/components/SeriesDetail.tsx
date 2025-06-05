@@ -52,8 +52,6 @@ const SeriesDetail = () => {
     ];
 
     useEffect(() => {
-        const abortController = new AbortController();
-
         const fetchSeriesData = async () => {
             if (!id) {
                 setError("Series ID not found");
@@ -64,29 +62,17 @@ const SeriesDetail = () => {
             try {
                 setLoading(true);
                 const response = await getSeriesById(id);
-
-                // Only update state if component is still mounted
-                if (!abortController.signal.aborted) {
-                    setSeriesData(response);
-                    setError(null);
-                }
+                setSeriesData(response);
+                setError(null);
             } catch (err) {
-                if (!abortController.signal.aborted) {
-                    console.error("Error fetching series data:", err);
-                    setError("Failed to fetch series data");
-                }
+                console.error("Error fetching series data:", err);
+                setError("Failed to fetch series data");
             } finally {
-                if (!abortController.signal.aborted) {
-                    setLoading(false);
-                }
+                setLoading(false);
             }
         };
 
         fetchSeriesData();
-
-        return () => {
-            abortController.abort();
-        };
     }, [id]);
 
     const formatDate = (dateString: string) => {
