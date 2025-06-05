@@ -22,6 +22,7 @@ import SeriesDetail from "./pages/manageSeries/components/SeriesDetail";
 import Settings from "./pages/payoutManagement/Settings";
 import Profile from "./pages/profile/Profile";
 import ForgotPassword from "./pages/onboarding/forgotPassword/ForgotPassword";
+import NotFound from "./pages/NotFound";
 
 const App = () => {
   useEffect(() => {
@@ -159,10 +160,10 @@ const App = () => {
             </DashboardLayout>
           }
         />
-        {/* Catch-all route for debugging */}
-        <Route path="*" element={<div>Page not found - Current path: {window.location.pathname}</div>} />
+        {/* Catch-all route */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
-      
+
     </>
   );
 };
