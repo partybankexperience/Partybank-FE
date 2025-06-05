@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import DefaultButton from "../components/buttons/DefaultButton";
 import { FaHome } from "react-icons/fa";
 import { Storage } from "../stores/InAppStorage";
+import logo from "../assets/images/logoWhite.svg";
 
 const NotFound = () => {
     const navigate = useNavigate();
@@ -15,6 +16,7 @@ const NotFound = () => {
 
     return (
         <div className="w-full h-screen flex flex-col items-center justify-center px-[5%] text-center">
+            <img src={logo} alt="PartyBank Logo" className="h-[60px] mb-6" />
             <h1 className="font-extrabold text-3xl text-center">Oops!</h1>
             <p className="mb-[25px] text-center">We can't seem to find the page you are looking for.</p>
 
