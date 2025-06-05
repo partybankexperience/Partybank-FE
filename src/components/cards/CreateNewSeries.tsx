@@ -132,7 +132,6 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
       <Modal isOpen={isOpen} onClose={() => setIsModalOpen(false)}>
         <form onSubmit={handleSubmit} className="m-auto 4vw grid gap-[20px] w-full">
           <DefaultInput
-            key="series-name-input"
             label="Series Name"
             id="createSeriesName"
             value={seriesName}
@@ -141,7 +140,6 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
             classname="!w-full"
           />
           <DefaultInput
-            key="series-description-input"
             label="Description"
             id="createSeriesDescription"
             value={description}

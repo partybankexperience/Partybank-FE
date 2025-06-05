@@ -1,0 +1,107 @@
+import { apiCall } from "../utils/axiosFormat";
+
+const createEvent = async (
+  name: string,
+  description: string,
+  bannerImage: string,
+  tags: string[],
+  phone: string,
+  category: string,
+  seriesId?: string // optional
+): Promise<any> => {
+  const payload: Record<string, any> = {
+    name,
+    description,
+    bannerImage,
+    tags,
+    phone,
+    category,
+  };
+
+  if (seriesId) {
+    payload.seriesId = seriesId;
+  }
+
+  const response = await apiCall({
+    name: "createEvent",
+    data: payload,
+  });
+
+  return response;
+};
+
+const createTicket = async (
+  eventId: string,
+  name: string,
+  category: "single" | "group" | string,
+  type: "paid" | "free" | string,
+  price: number,
+  purchaseLimit: number,
+  stock: number,
+  soldTarget: number,
+  salesStart: string, // ISO format
+  salesEnd: string,   // ISO format
+  startTime: string,  // "HH:mm"
+  endTime: string,    // "HH:mm"
+  perks: string[],
+  isHidden: boolean,
+  isSoldOut: boolean
+): Promise<any> => {
+  const payload = {
+    eventId,
+    name,
+    category,
+    type,
+    price,
+    purchaseLimit,
+    stock,
+    soldTarget,
+    salesStart,
+    salesEnd,
+    startTime,
+    endTime,
+    perks,
+    isHidden,
+    isSoldOut,
+  };
+
+  const response = await apiCall({
+    name: "createTicket",
+    data: payload,
+  });
+
+  return response;
+};
+const deleteTicket = async (id: string): Promise<any> =>{
+  const response = await apiCall({
+    name: "deleteTicket",
+    urlExtra: `/${id}`
+  });    
+  return response;
+}
+const createTag = async (name: string,description:string): Promise<any> =>{
+  const payload = {
+    name,
+    description
+  }
+  const response = await apiCall({
+    name: "createTag",
+    data: payload,
+  });
+  return response;
+}
+
+const getTags = async (): Promise<any> =>{
+  const response = await apiCall({
+    name: "getTags",
+  });
+  return response;
+}
+const getEventsById =async (id: string): Promise<any> =>{
+  const response = await apiCall({
+    name: "getEventsById",
+    urlExtra: `/${id}`
+  });
+  return response;
+}
+export { createEvent,createTicket,deleteTicket,createTag ,getTags,getEventsById}

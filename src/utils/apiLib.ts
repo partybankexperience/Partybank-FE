@@ -108,5 +108,42 @@ export const endPoints: endPointlistTypes = {
         method: "DELETE",
         headers,
         auth: true,
+    },
+    //Events
+    createEvent: {
+        url: "/events",
+        method: "POST",
+        headers,
+        auth: true,
+    },
+    createTag:{
+        url: "/tags",
+        method: "POST",
+        headers,
+        auth: true,
+    },
+    getTags:{
+        url: "/tags",
+        method: "GET",
+        headers,
+        auth: true,
+    },
+    createTicket:{
+        url: "/tickets",
+        method: "POST",
+        headers,
+        auth: true,
+    },
+    deleteTicket:{
+        url: "/tickets",
+        method: "DELETE",
+        headers,
+        auth: true,
+    },
+    getEventsById: {
+        url: "/events",
+        method: "GET",
+        headers,
+        auth: true,
     }
 };

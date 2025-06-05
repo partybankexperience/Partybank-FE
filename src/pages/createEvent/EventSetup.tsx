@@ -73,6 +73,8 @@ const EventSetup = () => {
         setValue={(val: any) => setFormValue("Event Setup", "tags", val)}
         placeholder="Enter Tags"
         classname="!w-full"
+        showDropdown
+        dropdownOptions={["Festival", "Concert", "Conference"]}
       />
       <DefaultInput
         id="Series"
