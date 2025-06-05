@@ -1,20 +1,77 @@
-// import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import DefaultInput from "../../components/inputs/DefaultInput";
-// import DescriptionEditor from "../../components/inputs/DescriptionEditor"
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { ImageUploadInput } from "../../components/inputs/ImageInput";
 import { useEventStore } from "../../stores/useEventStore";
-import { useMemo } from "react";
+import { getTags, createTag } from "../../Containers/eventApi";
 import type { Options } from "easymde";
 
 const EventSetup = () => {
   const { form, setFormValue } = useEventStore();
   const eventSetupForm = form["Event Setup"] || {};
+  const [tags, setTags] = useState<string[]>([]);
+  const [showCreateTag, setShowCreateTag] = useState(false);
+  const [newTagName, setNewTagName] = useState("");
+  const [newTagDescription, setNewTagDescription] = useState("");
+  const [isCreatingTag, setIsCreatingTag] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        setLoading(true);
+        const response = await getTags();
+        const tagNames = response.map((tag: any) => tag.name);
+        setTags([...tagNames, "Other"]);
+      } catch (error) {
+        console.error("Error fetching tags:", error);
+        setTags(["Other"]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTags();
+  }, []);
+
   const handleImage = (file: File | null) => {
     if (file) {
       console.log("Uploaded image:", file.name);
       setFormValue("Event Setup", "coverImage", file)
+    }
+  };
+
+  const handleTagChange = (selectedTag: string) => {
+    if (selectedTag === "Other") {
+      setShowCreateTag(true);
+      setFormValue("Event Setup", "tags", "");
+    } else {
+      setShowCreateTag(false);
+      setFormValue("Event Setup", "tags", selectedTag);
+    }
+  };
+
+  const handleCreateTag = async () => {
+    if (!newTagName.trim()) return;
+
+    try {
+      setIsCreatingTag(true);
+      await createTag(newTagName, newTagDescription);
+      
+      // Add the new tag to the tags array and select it
+      const updatedTags = [...tags.filter(tag => tag !== "Other"), newTagName, "Other"];
+      setTags(updatedTags);
+      setFormValue("Event Setup", "tags", newTagName);
+      
+      // Reset form and hide create tag section
+      setNewTagName("");
+      setNewTagDescription("");
+      setShowCreateTag(false);
+    } catch (error) {
+      console.error("Error creating tag:", error);
+    } finally {
+      setIsCreatingTag(false);
     }
   };
   const options: Options = useMemo(() => ({
@@ -70,12 +127,57 @@ const EventSetup = () => {
         id="Tags"
         label="Tags"
         value={eventSetupForm.tags || ""}
-        setValue={(val: any) => setFormValue("Event Setup", "tags", val)}
-        placeholder="Enter Tags"
+        setValue={handleTagChange}
+        placeholder={loading ? "Loading tags..." : "Select Tag"}
         classname="!w-full"
         showDropdown
-        dropdownOptions={["Festival", "Concert", "Conference"]}
+        dropdownOptions={tags}
+        disabled={loading}
       />
+      
+      {showCreateTag && (
+        <div className="grid gap-[15px] p-[20px] border border-gray-200 rounded-[8px] bg-gray-50">
+          <h3 className="text-black font-medium text-[1rem]">Create New Tag</h3>
+          <DefaultInput
+            id="newTagName"
+            label="Tag Name"
+            value={newTagName}
+            setValue={setNewTagName}
+            placeholder="Enter tag name"
+            classname="!w-full"
+          />
+          <DefaultInput
+            id="newTagDescription"
+            label="Tag Description"
+            value={newTagDescription}
+            setValue={setNewTagDescription}
+            placeholder="Enter tag description"
+            classname="!w-full"
+          />
+          <div className="flex gap-[10px]">
+            <button
+              type="button"
+              onClick={() => {
+                setShowCreateTag(false);
+                setNewTagName("");
+                setNewTagDescription("");
+                setFormValue("Event Setup", "tags", "");
+              }}
+              className="px-4 py-2 border border-gray-300 rounded-[6px] text-gray-600 hover:bg-gray-100"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleCreateTag}
+              disabled={!newTagName.trim() || isCreatingTag}
+              className="px-4 py-2 bg-primary text-white rounded-[6px] hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isCreatingTag ? "Creating..." : "Create Tag"}
+            </button>
+          </div>
+        </div>
+      )}
       <DefaultInput
         id="Series"
         label="Series"
