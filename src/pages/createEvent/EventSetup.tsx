@@ -134,7 +134,7 @@ const EventSetup = () => {
         disabled={loading}
       />
       
-      {showCreateTag && (
+      {selectedTag==='Others' && (
         <DefaultInput
           id="newTagName"
           label="Create New Tag"
