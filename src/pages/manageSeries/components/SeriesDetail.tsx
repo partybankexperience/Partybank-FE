@@ -7,7 +7,8 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Modal } from "../../../components/modal/Modal";
 import DefaultInput from "../../../components/inputs/DefaultInput";
-import { getSeriesById } from "../../../Containers/seriesApi";
+import { getSeriesById, updateSeries } from "../../../Containers/seriesApi";
+import Storage from "../../../stores/InAppStorage";
 
 interface SeriesData {
   id: string;
@@ -29,6 +30,13 @@ const SeriesDetail = () => {
     const [seriesData, setSeriesData] = useState<SeriesData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    
+    // Edit mode states
+    const [isEditingName, setIsEditingName] = useState(false);
+    const [isEditingDescription, setIsEditingDescription] = useState(false);
+    const [editedName, setEditedName] = useState('');
+    const [editedDescription, setEditedDescription] = useState('');
+    const [isSaving, setIsSaving] = useState(false);
 
     const mockEvents = [
         {
@@ -63,6 +71,8 @@ const SeriesDetail = () => {
                 setLoading(true);
                 const response = await getSeriesById(id);
                 setSeriesData(response);
+                setEditedName(response.name);
+                setEditedDescription(response.description);
                 setError(null);
             } catch (err) {
                 console.error("Error fetching series data:", err);
@@ -82,6 +92,49 @@ const SeriesDetail = () => {
             day: 'numeric'
         });
     };
+
+    const handleSaveChanges = async () => {
+        if (!seriesData || !id) return;
+
+        try {
+            setIsSaving(true);
+            const user = Storage.getItem("user");
+            const userId = user?.id;
+
+            if (!userId) {
+                console.error("User ID not found");
+                return;
+            }
+
+            await updateSeries(id, userId, editedName, editedDescription, seriesData.coverImage);
+            
+            // Update local state
+            setSeriesData(prev => prev ? {
+                ...prev,
+                name: editedName,
+                description: editedDescription
+            } : null);
+
+            // Exit edit modes
+            setIsEditingName(false);
+            setIsEditingDescription(false);
+            
+            console.log("Series updated successfully");
+        } catch (error) {
+            console.error("Error updating series:", error);
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const handleCancelEdit = () => {
+        setEditedName(seriesData?.name || '');
+        setEditedDescription(seriesData?.description || '');
+        setIsEditingName(false);
+        setIsEditingDescription(false);
+    };
+
+    const isInEditMode = isEditingName || isEditingDescription;
 
     if (loading) {
         return (
@@ -111,10 +164,20 @@ const SeriesDetail = () => {
                 </div>
 
                 <div className="flex justify-between items-start gap-[20px] py-[20px] border-b border-[#E1E1E1]">
-                    <div className="grid ">
-                        <h1 className="text-black font-bold text-[1.2rem]">
-                            {seriesData.name}
-                        </h1>
+                    <div className="grid flex-1">
+                        {isEditingName ? (
+                            <DefaultInput
+                                id="editSeriesName"
+                                value={editedName}
+                                setValue={setEditedName}
+                                placeholder="Series name"
+                                classname="!w-full !mb-2"
+                            />
+                        ) : (
+                            <h1 className="text-black font-bold text-[1.2rem]">
+                                {seriesData.name}
+                            </h1>
+                        )}
                         <p className="text-lightGrey font-medium text-[.875rem] flex items-center">
                             {seriesData.isPublished ? 'Published' : 'Draft'}
                             <span className="text-[2rem]">
@@ -126,20 +189,32 @@ const SeriesDetail = () => {
                     <button
                         className="text-[1.2rem] cursor-pointer"
                         aria-labelledby="Edit"
+                        onClick={() => setIsEditingName(true)}
                     >
                         <BiEditAlt />
                     </button>
                 </div>
                 <div className="flex justify-between items-start gap-[20px] py-[20px] ">
-                    <div className="grid ">
+                    <div className="grid flex-1">
                         <h1 className="text-lightGrey text-[.875rem]">Description:</h1>
-                        <p className="text-black font-medium text-[.9rem] flex items-center">
-                            {seriesData.description}
-                        </p>
+                        {isEditingDescription ? (
+                            <DefaultInput
+                                id="editSeriesDescription"
+                                value={editedDescription}
+                                setValue={setEditedDescription}
+                                placeholder="Series description"
+                                classname="!w-full !mt-2"
+                            />
+                        ) : (
+                            <p className="text-black font-medium text-[.9rem] flex items-center">
+                                {seriesData.description}
+                            </p>
+                        )}
                     </div>
                     <button
                         className="text-[1.2rem] cursor-pointer"
                         aria-labelledby="Edit"
+                        onClick={() => setIsEditingDescription(true)}
                     >
                         <BiEditAlt />
                     </button>
@@ -148,15 +223,38 @@ const SeriesDetail = () => {
             <div className="grid gap-[20px] h-fit ">
                 <div className="flex justify-between items-center">
                     <h1 className="text-black font-medium text-[1.2rem]">Event List</h1>
-                    <DefaultButton
-                        type="icon-left"
-                        className="!w-fit"
-                        icon={<FaPlus className="text-[.8rem] text-white" />}
-                        variant="primary"
-                        onClick={() => setIsModalOpen(true)}
-                    >
-                        Add Event
-                    </DefaultButton>
+                    <div className="flex gap-2">
+                        {isInEditMode && (
+                            <>
+                                <DefaultButton
+                                    type="default"
+                                    variant="tertiary"
+                                    className="!w-fit border"
+                                    onClick={handleCancelEdit}
+                                >
+                                    Cancel
+                                </DefaultButton>
+                                <DefaultButton
+                                    type="default"
+                                    variant="primary"
+                                    className="!w-fit"
+                                    onClick={handleSaveChanges}
+                                    isLoading={isSaving}
+                                >
+                                    Save Changes
+                                </DefaultButton>
+                            </>
+                        )}
+                        <DefaultButton
+                            type="icon-left"
+                            className="!w-fit"
+                            icon={<FaPlus className="text-[.8rem] text-white" />}
+                            variant="primary"
+                            onClick={() => setIsModalOpen(true)}
+                        >
+                            Add Event
+                        </DefaultButton>
+                    </div>
                 </div>
                 <div className="grid gap-[20px]">
                     {mockEvents.map((event) => (

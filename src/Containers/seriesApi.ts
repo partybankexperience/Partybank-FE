@@ -28,9 +28,10 @@ const getSeriesById =async (id: String): Promise<any> =>{
   });
   return response;
 }
-const updateSeries = async (id: String, userId: String, description: String, coverImage: String): Promise<any> => {
+const updateSeries = async (id: String, userId: String, name: String, description: String, coverImage: String): Promise<any> => {
   const payload = {
     userId: userId as string,
+    name: name as string,
     description: description as string,
     coverImage: coverImage as string
   };
