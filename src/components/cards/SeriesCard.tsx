@@ -42,8 +42,13 @@ const SeriesCard = ({
     },
   ];
 
+  const truncateText = (text: string, maxLength: number) => {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
+  };
+
   return (
-    <div className="relative rounded-[9px] border min-h-fit border-[#E1E1E1] h-fit min-w-[180px] w-full hover:shadow-[0px_4px_20px_rgba(0,0,0,0.1)] transition-all duration-300">
+    <div className="relative rounded-[9px] border border-[#E1E1E1] h-[280px] min-w-[180px] w-full hover:shadow-[0px_4px_20px_rgba(0,0,0,0.1)] transition-all duration-300 flex flex-col">
       {/* Dropdown */}
       <div className="absolute top-[15px] right-[15px] z-10">
         <button
@@ -72,12 +77,12 @@ const SeriesCard = ({
       </div>
 
       <div className="h-[150px] rounded-t-[9px] w-full bg-gray-100 overflow-hidden" >
-      <img src={imageUrl} alt={title} className=" w-full object-contain rounded-t-[9px]"/>
+        <img src={imageUrl} alt={title} className="w-full h-full object-cover rounded-t-[9px]"/>
       </div>
-      <div className="grid">
-        <div className="grid gap-[8px] p-[20px]">
-          <p className="text-black font-medium text-[1.125rem]">{title}</p>
-          <p className="text-lightGrey font-medium text-[.875rem]">{description}</p>
+      <div className="flex-1 flex flex-col">
+        <div className="grid gap-[8px] p-[20px] flex-1">
+          <p className="text-black font-medium text-[1.125rem] line-clamp-2">{truncateText(title, 50)}</p>
+          <p className="text-lightGrey font-medium text-[.875rem] line-clamp-3">{truncateText(description, 80)}</p>
         </div>
         {/* <div className="absolute bottom-5 left-5 flex items-center gap-2">
           <PiMapPinBold size={16} />
