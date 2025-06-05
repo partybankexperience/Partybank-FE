@@ -9,7 +9,7 @@ import { useState } from "react";
 import createEvent from "../../assets/images/createEvent.svg";
 import DefaultInput from "../../components/inputs/DefaultInput";
 import { ImageUploadInput } from "../../components/inputs/ImageInput";
-import { CreateSeries } from "../../Containers/onBoardingApi";
+import { createSeries } from "../../Containers/seriesApi";
 import { Storage } from "../../stores/InAppStorage";
 
 const EventCreation = () => {
@@ -48,7 +48,7 @@ const EventCreation = () => {
                 return;
             }
 
-            const response = await CreateSeries(
+            const response = await createSeries(
                 seriesName,
                 userId,
                 description,
