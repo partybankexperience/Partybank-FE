@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import { Modal } from "../../../components/modal/Modal";
 import DefaultInput from "../../../components/inputs/DefaultInput";
 import { getSeriesById, updateSeries } from "../../../Containers/seriesApi";
-import Storage from "../../../stores/InAppStorage";
+import { Storage } from "../../../stores/InAppStorage";
 
 interface SeriesData {
   id: string;
@@ -98,15 +98,8 @@ const SeriesDetail = () => {
 
         try {
             setIsSaving(true);
-            const user = Storage.getItem("user");
-            const userId = user?.id;
 
-            if (!userId) {
-                console.error("User ID not found");
-                return;
-            }
-
-            await updateSeries(id, userId, editedName, editedDescription, seriesData.coverImage);
+            await updateSeries(id, editedName, editedDescription, seriesData.coverImage);
             
             // Update local state
             setSeriesData(prev => prev ? {
