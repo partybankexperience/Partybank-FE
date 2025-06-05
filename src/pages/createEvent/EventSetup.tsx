@@ -45,7 +45,7 @@ const EventSetup = () => {
   const handleTagChange = (selectedTag: string) => {
     if (selectedTag === "Other") {
       setShowCreateTag(true);
-      setFormValue("Event Setup", "tags", "");
+      setFormValue("Event Setup", "tags", "Other");
     } else {
       setShowCreateTag(false);
       setFormValue("Event Setup", "tags", selectedTag);
