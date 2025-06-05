@@ -165,6 +165,7 @@ const SeriesDetail = () => {
                                 setValue={setEditedName}
                                 placeholder="Series name"
                                 classname="!w-full !mb-2"
+                                label="Series Name"
                             />
                         ) : (
                             <h1 className="text-black font-bold text-[1.2rem]">
@@ -197,6 +198,7 @@ const SeriesDetail = () => {
                                 setValue={setEditedDescription}
                                 placeholder="Series description"
                                 classname="!w-full !mt-2"
+                                label="Series Description"
                             />
                         ) : (
                             <p className="text-black font-medium text-[.9rem] flex items-center">
@@ -216,7 +218,7 @@ const SeriesDetail = () => {
             <div className="grid gap-[20px] h-fit ">
                 <div className="flex justify-between items-center">
                     <h1 className="text-black font-medium text-[1.2rem]">Event List</h1>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
                         {isInEditMode && (
                             <>
                                 <DefaultButton

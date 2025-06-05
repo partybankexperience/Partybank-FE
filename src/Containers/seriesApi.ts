@@ -33,7 +33,6 @@ const updateSeries = async (id: String, name: String, description: String, cover
     name: name as string,
     description: description as string,
     coverImage: coverImage as string,
-    urlExtra: `/${id}`
   };
 
   const response = await apiCall({
