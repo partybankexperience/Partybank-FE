@@ -1,4 +1,3 @@
-
 import { FaPlus } from "react-icons/fa";
 import { BsDot } from "react-icons/bs";
 import { BiEditAlt } from "react-icons/bi";
@@ -53,6 +52,8 @@ const SeriesDetail = () => {
     ];
 
     useEffect(() => {
+        const abortController = new AbortController();
+
         const fetchSeriesData = async () => {
             if (!id) {
                 setError("Series ID not found");
@@ -63,17 +64,29 @@ const SeriesDetail = () => {
             try {
                 setLoading(true);
                 const response = await getSeriesById(id);
-                setSeriesData(response);
-                setError(null);
+
+                // Only update state if component is still mounted
+                if (!abortController.signal.aborted) {
+                    setSeriesData(response);
+                    setError(null);
+                }
             } catch (err) {
-                console.error("Error fetching series data:", err);
-                setError("Failed to fetch series data");
+                if (!abortController.signal.aborted) {
+                    console.error("Error fetching series data:", err);
+                    setError("Failed to fetch series data");
+                }
             } finally {
-                setLoading(false);
+                if (!abortController.signal.aborted) {
+                    setLoading(false);
+                }
             }
         };
 
         fetchSeriesData();
+
+        return () => {
+            abortController.abort();
+        };
     }, [id]);
 
     const formatDate = (dateString: string) => {
