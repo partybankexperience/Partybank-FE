@@ -96,12 +96,16 @@ const SeriesDetail = () => {
     const handleSaveChanges = async () => {
         if (!seriesData || !id) return;
 
+        // Store original values in case we need to revert
+        const originalName = seriesData.name;
+        const originalDescription = seriesData.description;
+
         try {
             setIsSaving(true);
 
             await updateSeries(id, editedName, editedDescription, seriesData.coverImage);
             
-            // Update local state
+            // Success: Update local state with new values
             setSeriesData(prev => prev ? {
                 ...prev,
                 name: editedName,
@@ -115,6 +119,14 @@ const SeriesDetail = () => {
             console.log("Series updated successfully");
         } catch (error) {
             console.error("Error updating series:", error);
+            
+            // Error: Revert to original values
+            setEditedName(originalName);
+            setEditedDescription(originalDescription);
+            
+            // Exit edit modes
+            setIsEditingName(false);
+            setIsEditingDescription(false);
         } finally {
             setIsSaving(false);
         }
