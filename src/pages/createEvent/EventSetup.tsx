@@ -60,11 +60,9 @@ const EventSetup = () => {
     fetchTags();
   }, []);
 
-  const handleImage = (file: File | null) => {
-    if (file) {
-      console.log("Uploaded image:", file.name);
-      setFormValue("Event Setup", "coverImage", file)
-    }
+  const handleImage = (imageUrl: string) => {
+    console.log("Uploaded image URL:", imageUrl);
+    setFormValue("Event Setup", "coverImage", imageUrl);
   };
 
   const handleTagChange = (selectedTag: string) => {
@@ -235,7 +233,10 @@ const EventSetup = () => {
             helperText={eventSetupErrors.contactNumber || ""}
             style={eventSetupErrors.contactNumber ? "border-red-500" : ""}
           />
-      <ImageUploadInput onImageChange={handleImage} />
+      <ImageUploadInput 
+        value={eventSetupForm.coverImage || ""} 
+        onChange={handleImage} 
+      />
     </div>
   );
 };
