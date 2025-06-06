@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import DefaultInput from "../../components/inputs/DefaultInput";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
@@ -20,6 +20,11 @@ const EventSetup = () => {
   const [seriesLoading, setSeriesLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [eventSetupErrors, setEventSetupErrors] = useState<Record<string, string>>({});
+
+  const nameRef = useRef<HTMLInputElement>(null);
+  const categoryRef = useRef<HTMLInputElement>(null);
+  const tagsRef = useRef<HTMLInputElement>(null);
+  const contactNumberRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const fetchSeries = async () => {
@@ -121,6 +126,37 @@ const EventSetup = () => {
     setEventSetupErrors(prevErrors => ({ ...prevErrors, [key]: "" }));
   };
 
+  const validateForm = () => {
+    let errors: Record<string, string> = {};
+    if (!eventSetupForm.name) {
+      errors.name = "Event Name is required";
+    }
+    if (!eventSetupForm.category) {
+      errors.category = "Category is required";
+    }
+    if (!eventSetupForm.tags) {
+      errors.tags = "Tag is required";
+    }
+    if (!eventSetupForm.contactNumber) {
+      errors.contactNumber = "Contact Number is required";
+    }
+
+    setEventSetupErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const focusOnError = () => {
+    if (eventSetupErrors.name && nameRef.current) {
+      nameRef.current.focus();
+    } else if (eventSetupErrors.category && categoryRef.current) {
+      categoryRef.current.focus();
+    } else if (eventSetupErrors.tags && tagsRef.current) {
+      tagsRef.current.focus();
+    } else if (eventSetupErrors.contactNumber && contactNumberRef.current) {
+      contactNumberRef.current.focus();
+    }
+  };
+
   console.log("EventSetup form data:", eventSetupForm);
   console.log("Current tags state:", tags);
   console.log("Current eventSetupForm.tags:", eventSetupForm.tags);
@@ -138,6 +174,7 @@ const EventSetup = () => {
           helperText={eventSetupErrors.name || ""}
           style={eventSetupErrors.name ? "border-red-500" : ""}
         classname="!w-full"
+        inputRef={nameRef}
         />
       <div className="grid">
           <label htmlFor="description">
@@ -165,6 +202,7 @@ const EventSetup = () => {
           required
           helperText={eventSetupErrors.category || ""}
           style={eventSetupErrors.category ? "border-red-500" : ""}
+          inputRef={categoryRef}
         />
         <DefaultInput
           id="Tags"
@@ -179,6 +217,7 @@ const EventSetup = () => {
           required
           helperText={eventSetupErrors.tags || ""}
           style={eventSetupErrors.tags ? "border-red-500" : ""}
+          inputRef={tagsRef}
         />
 
       {eventSetupForm.tags === "Other" && (
@@ -223,7 +262,7 @@ const EventSetup = () => {
       />
           <DefaultInput
             id="eventSetupContactNumber"
-            label="Organizer’s Contact Number"
+            label="Organizer's Contact Number"
             value={eventSetupForm.contactNumber || ""}
             setValue={(value: string) => handleInputChange("contactNumber", value)}
             type="tel"
@@ -232,6 +271,7 @@ const EventSetup = () => {
             required
             helperText={eventSetupErrors.contactNumber || ""}
             style={eventSetupErrors.contactNumber ? "border-red-500" : ""}
+            inputRef={contactNumberRef}
           />
       <ImageUploadInput 
         value={eventSetupForm.coverImage || ""} 

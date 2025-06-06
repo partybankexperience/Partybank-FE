@@ -25,7 +25,7 @@ const CreateEvent = () => {
   const handleCreateEvent = async (eventSetupData: any) => {
     try {
       setIsCreatingEvent(true);
-      
+
       const response = await createEvent(
         eventSetupData.name,
         eventSetupData.description,
@@ -38,9 +38,9 @@ const CreateEvent = () => {
 
       // Store the created event ID for later use
       setFormValue("Event Setup", "eventId", response.id);
-      
+
       console.log("Event created successfully:", response);
-      
+
       return true;
     } catch (error) {
       console.error("Error creating event:", error);
