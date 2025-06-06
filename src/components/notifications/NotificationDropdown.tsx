@@ -126,14 +126,14 @@ const NotificationDropdown = () => {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-[380px] bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-[500px] overflow-hidden">
+        <div className="absolute right-0 mt-2 w-[380px] md:w-[380px] sm:w-[320px] w-[calc(100vw-2rem)] max-w-[380px] bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-[500px] overflow-hidden">
           {/* Header */}
-          <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center">
-            <h3 className="text-lg font-semibold text-black">Notifications</h3>
+          <div className="px-3 md:px-4 py-3 border-b border-gray-200 flex justify-between items-center">
+            <h3 className="text-base md:text-lg font-semibold text-black">Notifications</h3>
             {unreadCount > 0 && (
               <button
                 onClick={markAllAsRead}
-                className="text-sm text-primary hover:text-primary/80 font-medium"
+                className="text-xs md:text-sm text-primary hover:text-primary/80 font-medium"
               >
                 Mark all as read
               </button>
@@ -143,20 +143,20 @@ const NotificationDropdown = () => {
           {/* Notifications List */}
           <div className="max-h-[400px] overflow-y-auto">
             {notifications.length === 0 ? (
-              <div className="px-4 py-8 text-center text-gray-500">
-                <VscBellDot className="mx-auto text-4xl text-gray-300 mb-2" />
-                <p>No notifications yet</p>
+              <div className="px-3 md:px-4 py-8 text-center text-gray-500">
+                <VscBellDot className="mx-auto text-3xl md:text-4xl text-gray-300 mb-2" />
+                <p className="text-sm md:text-base">No notifications yet</p>
               </div>
             ) : (
               <div className="divide-y divide-gray-100">
                 {notifications.map((notification) => (
                   <div
                     key={notification.id}
-                    className={`px-4 py-3 hover:bg-gray-50 transition-colors ${
+                    className={`px-3 md:px-4 py-3 hover:bg-gray-50 transition-colors ${
                       !notification.isRead ? 'bg-blue-50/50' : ''
                     }`}
                   >
-                    <div className="flex items-start gap-3">
+                    <div className="flex items-start gap-2 md:gap-3">
                       {/* Read/Unread Indicator */}
                       <div className="flex-shrink-0 mt-1">
                         {!notification.isRead ? (
@@ -169,18 +169,18 @@ const NotificationDropdown = () => {
                       {/* Content */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-2">
-                          <div className="flex-1">
-                            <p className={`font-medium text-sm ${getTypeColor(notification.type)}`}>
+                          <div className="flex-1 min-w-0">
+                            <p className={`font-medium text-xs md:text-sm ${getTypeColor(notification.type)}`}>
                               {notification.title}
                             </p>
-                            <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                            <p className="text-xs md:text-sm text-gray-600 mt-1 line-clamp-2 break-words">
                               {notification.message}
                             </p>
                             <div className="flex items-center text-xs text-gray-400 mt-1">
                               <span>{formatTime(notification.createdAt)}</span>
                               {!notification.isRead && (
                                 <>
-                                  <BsDot className="text-lg" />
+                                  <BsDot className="text-base md:text-lg" />
                                   <span className="text-primary font-medium">New</span>
                                 </>
                               )}
@@ -188,14 +188,14 @@ const NotificationDropdown = () => {
                           </div>
 
                           {/* Actions */}
-                          <div className="flex items-center gap-1 ml-2">
+                          <div className="flex items-center gap-1 ml-1 md:ml-2 flex-shrink-0">
                             {!notification.isRead && (
                               <button
                                 onClick={() => markAsRead(notification.id)}
                                 className="p-1 hover:bg-gray-200 rounded-full transition-colors"
                                 title="Mark as read"
                               >
-                                <BiCheck className="text-lg text-green-600" />
+                                <BiCheck className="text-base md:text-lg text-green-600" />
                               </button>
                             )}
                             <button
@@ -203,7 +203,7 @@ const NotificationDropdown = () => {
                               className="p-1 hover:bg-gray-200 rounded-full transition-colors"
                               title="Delete notification"
                             >
-                              <BiTrash className="text-lg text-gray-500" />
+                              <BiTrash className="text-base md:text-lg text-gray-500" />
                             </button>
                           </div>
                         </div>
@@ -217,8 +217,8 @@ const NotificationDropdown = () => {
 
           {/* Footer */}
           {notifications.length > 0 && (
-            <div className="px-4 py-3 border-t border-gray-200 text-center">
-              <button className="text-sm text-primary hover:text-primary/80 font-medium">
+            <div className="px-3 md:px-4 py-3 border-t border-gray-200 text-center">
+              <button className="text-xs md:text-sm text-primary hover:text-primary/80 font-medium">
                 View all notifications
               </button>
             </div>
