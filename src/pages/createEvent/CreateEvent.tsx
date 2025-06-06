@@ -92,6 +92,9 @@ const goNext = async () => {
       // Clear errors if validation passes
       clearStageErrors(stage);
 
+      // Set loading state only when making API call
+      setIsCreatingEvent(true);
+
       // Create the event if validation passes
       const success = await handleCreateEvent(formData);
       if (!success) {
