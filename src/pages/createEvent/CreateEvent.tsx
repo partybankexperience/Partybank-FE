@@ -24,8 +24,6 @@ const CreateEvent = () => {
 
   const handleCreateEvent = async (eventSetupData: any) => {
     try {
-      setIsCreatingEvent(true);
-
       const response = await createEvent(
         eventSetupData.name,
         eventSetupData.description,
@@ -40,14 +38,13 @@ const CreateEvent = () => {
       setFormValue("Event Setup", "eventId", response.id);
 
       console.log("Event created successfully:", response);
-
+      setIsCreatingEvent(false); // Reset loading state on success
       return true;
     } catch (error) {
       console.error("Error creating event:", error);
       errorAlert("Error", "Failed to create event. Please try again.");
+      setIsCreatingEvent(false); // Reset loading state on error
       return false;
-    } finally {
-      setIsCreatingEvent(false);
     }
   };
 
