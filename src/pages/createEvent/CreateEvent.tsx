@@ -11,25 +11,28 @@ import Guest from "./Guest"
 import Notification from "./Notification"
 import Review from "./Review"
 import ScheduleEvent from "./ScheduleEvent"
+import { useState, useEffect } from "react";
+
 
 const CreateEvent = () => {
-    const { stage, setStage, form, errors, setError, clearStageErrors } = useEventStore()
+  const [currentStep, setCurrentStep] = useState(0);
+  const { stage, setStage, form, errors, setError, clearStageErrors, clearEventStorage } = useEventStore()
     const currentIndex = stages.indexOf(stage)
     const navigate = useNavigate()
 
   const goNext = () => {
     const formData = form[stage] || {}
     const { isValid, errors: validationErrors } = validateStage(stage, formData)
-    
+
     if (!isValid) {
       // Clear existing errors first
       clearStageErrors(stage)
-      
+
       // Set new errors
       Object.entries(validationErrors).forEach(([field, error]) => {
         setError(stage, field, error)
       })
-      
+
       // Focus on first error field
       const firstErrorField = Object.keys(validationErrors)[0]
       setTimeout(() => {
@@ -39,14 +42,14 @@ const CreateEvent = () => {
           errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
         }
       }, 100)
-      
+
       errorAlert("Missing Required Fields", "Please fill out all required fields to continue.")
       return
     }
-    
+
     // Clear errors if validation passes
     clearStageErrors(stage)
-    
+
     if (currentIndex < stages.length - 1) {
       setStage(stages[currentIndex + 1])
     }
@@ -57,6 +60,13 @@ const CreateEvent = () => {
       setStage(stages[currentIndex - 1])
     }
   }
+
+    useEffect(() => {
+    // Clear event storage when component unmounts (user leaves the page)
+    return () => {
+      clearEventStorage();
+    };
+  }, [clearEventStorage]);
   return (
     <CreateEventLayout>
   <div className="flex flex-col min-h-[calc(100vh-20rem)] px-4 py-6">

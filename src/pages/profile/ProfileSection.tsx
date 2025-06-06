@@ -5,6 +5,8 @@ import DefaultButton from "../../components/buttons/DefaultButton";
 import { LuPencilLine } from "react-icons/lu";
 import DefaultInput from "../../components/inputs/DefaultInput";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Storage } from "../../stores/InAppStorage";
 
 interface InfoItem {
   name: string;
@@ -33,7 +35,13 @@ const ProfileSection = ({
   onBack,
 }: ProfileSectionProps) => {
     const [profilePic, setProfilePic] = useState<string>("");
-    const [name, setname] = useState('')
+    const [name, setname] = useState('');
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+      Storage.clearItem();
+      navigate('/login');
+    };
   if (section === "Personal Information") {
     return (
       <div className="flex flex-col gap-4 pt-[16px] bg-white px-[20px] h-[85vh] ">
@@ -168,7 +176,10 @@ const ProfileSection = ({
             <RiDeleteBin5Line />
             <p>Delete Account</p>
           </div>
-          <div className="flex items-center text-primary text-sm gap-2 cursor-pointer hover:text-darkRed text-[1.2rem] border rounded-md py-[12.5px] px-[15px] w-full border-[#DEDEDE]">
+          <div 
+            onClick={handleLogout}
+            className="flex items-center text-primary text-sm gap-2 cursor-pointer hover:text-darkRed text-[1.2rem] border rounded-md py-[12.5px] px-[15px] w-full border-[#DEDEDE]"
+          >
             <RiLogoutCircleRLine />
             <p>Logout</p>
           </div>

@@ -16,6 +16,7 @@ import { useProfileSectionStore } from "../../stores/useProfileStore";
 import { useState } from "react";
 import { SidebarModal } from "../modal/SidebarModal";
 import NotificationDropdown from "../notifications/NotificationDropdown";
+import ProfileDropdown from "../dropdowns/ProfileDropdown";
 import PrivateRoute from "../../utils/privateRoute";
 
 const DashboardLayout = ({ children }: any) => {
@@ -176,13 +177,9 @@ const DashboardLayout = ({ children }: any) => {
           <div className={` gap-[20px] items-center ${showBackButton ? "hidden md:flex" : "flex"}`}>
             <NotificationDropdown />
 
-            <button className="w-[50px] h-[50px] hidden md:block cursor-pointer rounded-full" onClick={() => navigate("/profile")}>
-              <img
-                src={avatar}
-                alt="profile picture"
-                className="w-full rounded-full"
-              />
-            </button>
+            <div className="hidden md:block">
+              <ProfileDropdown />
+            </div>
             <DefaultButton
               size="small"
               icon={<FaPlus />}

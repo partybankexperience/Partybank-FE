@@ -21,6 +21,10 @@ interface EventData {
   setError: (stage: string, key: string, error: string) => void
   clearError: (stage: string, key: string) => void
   clearStageErrors: (stage: string) => void
+  // Actions
+  clearForm: (stage: string) => void;
+  resetEventStore: () => void;
+  clearEventStorage: () => void;
 }
 
 export const useEventStore = create<EventData>()(
@@ -73,6 +77,28 @@ export const useEventStore = create<EventData>()(
         set({
           errors: newErrors,
         })
+      },
+      clearForm: (stage) => {
+        const prevForm = get().form;
+        const newForm = { ...prevForm };
+        delete newForm[stage];
+        set({ form: newForm });
+      },
+      resetEventStore: () => {
+        set(() => ({
+          form: {},
+          errors: {},
+          stage: 'Event Setup',
+        }));
+        localStorage.removeItem("event-creation-storage");
+      },
+      clearEventStorage: () => {
+        localStorage.removeItem("event-creation-storage");
+        set(() => ({
+          form: {},
+          errors: {},
+          stage: 'Event Setup',
+        }));
       },
     }),
     {
