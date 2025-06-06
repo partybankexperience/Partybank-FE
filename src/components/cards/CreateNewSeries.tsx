@@ -32,6 +32,7 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
 
       if (!userId) {
         console.error("User ID not found");
+        setIsLoading(false);
         return;
       }
 
@@ -56,6 +57,7 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
       setIsModalOpen(false);
     } catch (error) {
       console.error("Error creating series:", error);
+      // TODO: Show error message to user
     } finally {
       setIsLoading(false);
     }
@@ -75,6 +77,7 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
 
       if (!userId) {
         console.error("User ID not found");
+        setIsLoading(false);
         return;
       }
 
@@ -99,6 +102,7 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
       setIsModalOpen(false);
     } catch (error) {
       console.error("Error creating series:", error);
+      // TODO: Show error message to user
     } finally {
       setIsLoading(false);
     }
