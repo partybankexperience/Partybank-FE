@@ -34,13 +34,7 @@ export const apiCall = ({
       .then(async (r) => {
         const returned = await action(r.data);
         console.log(r, "Response Data:", returned);
-        if (r.status === 401) {
-          // Clear token and redirect with state to trigger notification
-          Storage.removeItem("token");
-          Storage.removeItem("user");
-          window.location.href = "/?state=notAuthenticated";
-          return;
-        } else if (r.data.respCode === "00" || r.status === 200) {
+        if (r.data.respCode === "00" || r.status === 200) {
           successAlert(
             "Success",
             r?.data?.message || "Request completed successfully."
@@ -57,7 +51,10 @@ export const apiCall = ({
           // Clear token and redirect with state to trigger notification
           Storage.removeItem("token");
           Storage.removeItem("user");
-          window.location.href = "/?state=notAuthenticated";
+          // Use history.pushState for navigation without refresh
+          window.history.pushState(null, '', '/?state=notAuthenticated');
+          // Dispatch a popstate event to trigger navigation
+          window.dispatchEvent(new PopStateEvent('popstate'));
           return;
         }
         errorAlert(
