@@ -16,7 +16,7 @@ const EventSetup = () => {
   const [newTagDescription, setNewTagDescription] = useState("");
   const [isCreatingTag, setIsCreatingTag] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [eventSetupErrors, setEventSetupErrors] = useState({});
+  const [eventSetupErrors, setEventSetupErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const fetchTags = async () => {
