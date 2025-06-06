@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { Modal } from "../modal/Modal";
 import DefaultButton from "../buttons/DefaultButton";
@@ -19,6 +19,10 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+  useEffect(() => {
+    console.log("CreateNewSeries mounted")
+  }, [])
+  console.log(description,seriesName)
 
   const resetForm = () => {
     setSeriesName("");
@@ -157,7 +161,6 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
             classname="!w-full"
           />
           <ImageUploadInput
-            key="series-image-input"
             label="Cover Image"
             value={coverImage}
             onChange={setCoverImage}
