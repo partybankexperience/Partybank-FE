@@ -1,4 +1,3 @@
-import { VscBellDot } from "react-icons/vsc";
 import { FaPlus } from "react-icons/fa6";
 import DefaultButton from "../buttons/DefaultButton";
 import avatar from "../../assets/images/avatar.png";
@@ -15,6 +14,7 @@ import { ToastContainer } from "react-toastify";
 import { useProfileSectionStore } from "../../stores/useProfileStore";
 import { useState } from "react";
 import { SidebarModal } from "../modal/SidebarModal";
+import NotificationDropdown from "../notifications/NotificationDropdown";
 import PrivateRoute from "../../utils/privateRoute";
 
 const DashboardLayout = ({ children }: any) => {
@@ -173,12 +173,7 @@ const DashboardLayout = ({ children }: any) => {
             <HiOutlineBars3CenterLeft />
           </button>
           <div className={` gap-[20px] items-center ${showBackButton ? "hidden md:flex" : "flex"}`}>
-            <button
-              aria-description="Notifications"
-              className="w-[50px] h-[50px] rounded-full border border-[#DEDEDE] flex justify-center items-center"
-            >
-              <VscBellDot className="text-[26px]" />
-            </button>
+            <NotificationDropdown />
 
             <button className="w-[50px] h-[50px] hidden md:block cursor-pointer rounded-full" onClick={() => navigate("/profile")}>
               <img
