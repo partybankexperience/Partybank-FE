@@ -18,6 +18,7 @@ const EventSetup = () => {
   const [isCreatingTag, setIsCreatingTag] = useState(false);
   const [series, setSeries] = useState<any[]>([]);
   const [seriesLoading, setSeriesLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [eventSetupErrors, setEventSetupErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
