@@ -51,47 +51,61 @@ const CreateEvent = () => {
     }
   };
 
-  const goNext = async () => {
+const goNext = async () => {
     const formData = form[stage] || {}
 
-    // Special handling for Event Setup stage
+    // Handle validation for Event Setup stage
     if (stage === "Event Setup") {
-      // Check if EventSetup component has validation function available
-      const validateEventSetup = (window as any).validateEventSetup;
-      if (validateEventSetup && !validateEventSetup()) {
-        errorAlert("Missing Required Fields", "Please fill out all required fields to continue.");
+      // Validate required fields directly
+      const errors: Record<string, string> = {};
+
+      if (!formData.name || formData.name.trim() === "") {
+        errors.name = "Event Name is required";
+      }
+      if (!formData.category || formData.category.trim() === "") {
+        errors.category = "Category is required";
+      }
+      if (!formData.tags || formData.tags.trim() === "") {
+        errors.tags = "Tag is required";
+      }
+      if (!formData.contactNumber || formData.contactNumber.trim() === "") {
+        errors.contactNumber = "Contact Number is required";
+      }
+      if (!formData.description || formData.description.trim() === "") {
+        errors.description = "Event Description is required";
+      }
+
+      // Set errors if any exist
+      if (Object.keys(errors).length > 0) {
+        Object.entries(errors).forEach(([field, error]) => {
+          setError(stage, field, error);
+        });
+
+        // Trigger validation in EventSetup component to show errors
+        const validationFn = (window as any).validateEventSetup;
+        if (typeof validationFn === 'function') {
+          validationFn();
+        }
         return;
       }
-      
-      // Create the event
-      const eventCreated = await handleCreateEvent(formData);
-      if (!eventCreated) {
-        return; // Don't proceed if event creation failed
+
+      // Clear errors if validation passes
+      clearStageErrors(stage);
+
+      // Create the event if validation passes
+      const success = await handleCreateEvent(formData);
+      if (!success) {
+        return; // Stop if event creation fails
       }
     } else {
-      // Use general validation for other stages
-      const { isValid, errors: validationErrors } = validateStage(stage, formData)
+      // For other stages, use the validation rules
+      const { isValid, errors } = validateStage(stage, formData)
 
       if (!isValid) {
-        // Clear existing errors first
-        clearStageErrors(stage)
-
-        // Set new errors
-        Object.entries(validationErrors).forEach(([field, error]) => {
+        // Set errors for the current stage
+        Object.entries(errors).forEach(([field, error]) => {
           setError(stage, field, error)
         })
-
-        // Focus on first error field
-        const firstErrorField = Object.keys(validationErrors)[0]
-        setTimeout(() => {
-          const errorElement = document.getElementById(firstErrorField)
-          if (errorElement) {
-            errorElement.focus()
-            errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
-          }
-        }, 100)
-
-        errorAlert("Missing Required Fields", "Please fill out all required fields to continue.")
         return
       }
 

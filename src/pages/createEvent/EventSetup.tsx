@@ -9,8 +9,9 @@ import type { Options } from "easymde";
 import { getSeries } from "../../Containers/seriesApi";
 
 const EventSetup = () => {
-  const { form, setFormValue } = useEventStore();
+  const { form, setFormValue, errors } = useEventStore();
   const eventSetupForm = form["Event Setup"] || {};
+  const eventSetupErrors = errors["Event Setup"] || {};
   const [tags, setTags] = useState<string[]>([]);
   const [showCreateTag, setShowCreateTag] = useState(false);
   const [newTagName, setNewTagName] = useState("");
@@ -19,7 +20,6 @@ const EventSetup = () => {
   const [series, setSeries] = useState<any[]>([]);
   const [seriesLoading, setSeriesLoading] = useState(true);
   const [loading, setLoading] = useState(true);
-  const [eventSetupErrors, setEventSetupErrors] = useState<Record<string, string>>({});
 
   const nameRef = useRef<HTMLInputElement>(null);
   const categoryRef = useRef<HTMLInputElement>(null);
@@ -123,45 +123,25 @@ const EventSetup = () => {
 
   const handleInputChange = (key: string, value: string) => {
     setFormValue("Event Setup", key, value);
-    setEventSetupErrors(prevErrors => ({ ...prevErrors, [key]: "" }));
   };
 
   const validateForm = () => {
-    let errors: Record<string, string> = {};
-    if (!eventSetupForm.name || eventSetupForm.name.trim() === "") {
-      errors.name = "Event Name is required";
-    }
-    if (!eventSetupForm.category || eventSetupForm.category.trim() === "") {
-      errors.category = "Category is required";
-    }
-    if (!eventSetupForm.tags || eventSetupForm.tags.trim() === "") {
-      errors.tags = "Tag is required";
-    }
-    if (!eventSetupForm.contactNumber || eventSetupForm.contactNumber.trim() === "") {
-      errors.contactNumber = "Contact Number is required";
-    }
-    if (!eventSetupForm.description || eventSetupForm.description.trim() === "") {
-      errors.description = "Event Description is required";
-    }
-
-    setEventSetupErrors(errors);
-    
-    // Focus on first error
-    if (Object.keys(errors).length > 0) {
+    // Focus on first error from store
+    if (Object.keys(eventSetupErrors).length > 0) {
       setTimeout(() => {
-        if (errors.name && nameRef.current) {
+        if (eventSetupErrors.name && nameRef.current) {
           nameRef.current.focus();
-        } else if (errors.category && categoryRef.current) {
+        } else if (eventSetupErrors.category && categoryRef.current) {
           categoryRef.current.focus();
-        } else if (errors.tags && tagsRef.current) {
+        } else if (eventSetupErrors.tags && tagsRef.current) {
           tagsRef.current.focus();
-        } else if (errors.contactNumber && contactNumberRef.current) {
+        } else if (eventSetupErrors.contactNumber && contactNumberRef.current) {
           contactNumberRef.current.focus();
         }
       }, 100);
     }
 
-    return Object.keys(errors).length === 0;
+    return Object.keys(eventSetupErrors).length === 0;
   };
 
   // Export validation function for external use
