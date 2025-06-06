@@ -100,6 +100,12 @@ const goNext = async () => {
       if (!success) {
         return; // Stop if event creation fails
       }
+      
+      // Move to next stage after successful event creation
+      if (currentIndex < stages.length - 1) {
+        setStage(stages[currentIndex + 1]);
+      }
+      return; // Important: return here to prevent further execution
     } else {
       // For other stages, use the validation rules
       const { isValid, errors } = validateStage(stage, formData)
@@ -116,6 +122,7 @@ const goNext = async () => {
       clearStageErrors(stage)
     }
 
+    // Stage advancement for other stages (not Event Setup)
     if (currentIndex < stages.length - 1) {
       setStage(stages[currentIndex + 1])
     }
