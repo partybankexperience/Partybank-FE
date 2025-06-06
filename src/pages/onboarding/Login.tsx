@@ -100,7 +100,7 @@ const Login = () => {
         </div>
         <div className="grid w-full gap-[12px] mt-4">
           <DefaultInput
-            id="email"
+            id="loginEmail"
             label="Email"
             placeholder="Enter your email address"
             type="email"
@@ -115,7 +115,7 @@ const Login = () => {
           <div>
 
           <DefaultInput
-            id="password"
+            id="loginPassword"
             label="Password"
             placeholder="********"
             type="password"

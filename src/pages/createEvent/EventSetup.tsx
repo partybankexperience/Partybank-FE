@@ -107,7 +107,7 @@ const EventSetup = () => {
   console.log("Current tags state:", tags);
   console.log("Current eventSetupForm.tags:", eventSetupForm.tags);
   console.log("Should show create tag inputs:", eventSetupForm.tags === "Other");
-  
+
   return (
     <div className="grid gap-[20px]">
       <DefaultInput
@@ -189,7 +189,7 @@ const EventSetup = () => {
         </>
       )}
       <DefaultInput
-        id="Series"
+        id="eventSetupSeries"
         label="Series"
         value={eventSetupForm.series || ""}
         setValue={(val: any) => setFormValue("Event Setup", "series", val)}
@@ -199,7 +199,7 @@ const EventSetup = () => {
         dropdownOptions={["Series 1", "Series 2", "Series 3"]}
       />
           <DefaultInput
-            id="contactNumber"
+            id="eventSetupContactNumber"
             label="Organizer’s Contact Number"
             value={eventSetupForm.contactNumber || ""}
             setValue={(value: string) => handleInputChange("contactNumber", value)}

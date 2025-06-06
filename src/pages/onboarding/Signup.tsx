@@ -64,7 +64,7 @@ const Signup = () => {
         </div>
         <div className="grid w-full gap-[18px]">
           <DefaultInput
-            id="email"
+            id="signupEmail"
             label="Email"
             placeholder="Enter your email address"
             type="email"

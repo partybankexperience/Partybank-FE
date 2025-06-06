@@ -40,7 +40,7 @@ const ProfileInfo = () => {
         </h1>
         <div className="grid w-full md:w-3/4 lg:w-1/2 md:m-auto gap-[20px]">
           <DefaultInput
-            id="fullName"
+            id="profileInfoFullName"
             label="Full Name"
             placeholder="Enter full name"
             type="text"
@@ -50,7 +50,7 @@ const ProfileInfo = () => {
             required
           />
           <DefaultInput
-            id="businessName"
+            id="profileInfoBusinessName"
             label="Business Name"
             placeholder="Enter business name"
             type="text"
@@ -59,7 +59,7 @@ const ProfileInfo = () => {
             setValue={setBusinessName}
           />
           <DefaultInput
-            id="phone"
+            id="profileInfoPhone"
             label="Phone Number"
             placeholder="Enter Phone Number"
             type="text"

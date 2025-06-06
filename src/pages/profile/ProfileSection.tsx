@@ -154,9 +154,9 @@ const ProfileSection = ({
     return (
       <div className="flex flex-col gap-4 pt-[16px] bg-white px-[20px] h-[85vh]">
         <div className="flex flex-col w-full gap-[15px] pt-[16px] ">
-            <DefaultInput id='organizerName' value={name} setValue={setname} classname="w-full" label='PIN' placeholder="***"/>
-            {/* <DefaultInput id='phone' value={name} setValue={setname} classname="w-full" label='Phone Number' placeholder="+234-803-12345678"/> */}
-            <DefaultInput id='bio' value={name} setValue={setname} classname="w-full" label='Two-Factor Authentication' placeholder="Disable"/>
+            <DefaultInput id='profileSecurityPin' value={name} setValue={setname} classname="w-full" label='PIN' placeholder="***"/>
+            {/* <DefaultInput id='profileSecurityPhone' value={name} setValue={setname} classname="w-full" label='Phone Number' placeholder="+234-803-12345678"/> */}
+            <DefaultInput id='profileSecurityTwoFactor' value={name} setValue={setname} classname="w-full" label='Two-Factor Authentication' placeholder="Disable"/>
         </div>
         {/* {securityInfo.map((item, index) => (
           <div key={index} className="grid gap-1">
