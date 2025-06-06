@@ -137,7 +137,7 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
         <form onSubmit={handleSubmit} className="m-auto 4vw grid gap-[20px] w-full">
           <DefaultInput
             label="Series Name"
-            id="createSeriesName"
+            id="createSeriesNames"
             value={seriesName}
             setValue={setSeriesName}
             placeholder="e.g., Lagos Concerts 2025 or VIP Exclusive"
@@ -145,7 +145,7 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
           />
           <DefaultInput
             label="Description"
-            id="createSeriesDescription"
+            id="createSeriesDescriptions"
             value={description}
             setValue={setDescription}
             placeholder="e.g., Multi-location music tour with similar theme"
