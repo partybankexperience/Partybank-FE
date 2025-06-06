@@ -35,7 +35,11 @@ export const apiCall = ({
         const returned = await action(r.data);
         console.log(r, "Response Data:", returned);
         if (r.status === 401) {
-          window.location.href = "/"; // Redirect to login on 401
+          // Clear token and redirect with state to trigger notification
+          Storage.removeItem("token");
+          Storage.removeItem("user");
+          window.location.href = "/?state=notAuthenticated";
+          return;
         } else if (r.data.respCode === "00" || r.status === 200) {
           successAlert(
             "Success",
@@ -48,6 +52,14 @@ export const apiCall = ({
         }
       })
       .catch((err) => {
+        // Check if the error response is 401
+        if (err.response?.status === 401) {
+          // Clear token and redirect with state to trigger notification
+          Storage.removeItem("token");
+          Storage.removeItem("user");
+          window.location.href = "/?state=notAuthenticated";
+          return;
+        }
         errorAlert(
           "Network Error",
           err.response?.data?.message || err.message || "Something went wrong."
@@ -56,3 +68,4 @@ export const apiCall = ({
       });
   });
 };
+```

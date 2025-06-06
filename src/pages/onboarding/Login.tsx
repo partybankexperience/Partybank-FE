@@ -22,16 +22,19 @@ const Login = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (location.state === 'notAuthenticated') {
+    // Check both location.state and URL parameters for notAuthenticated
+    const urlParams = new URLSearchParams(location.search);
+    const isNotAuthenticated = location.state === 'notAuthenticated' || urlParams.get('state') === 'notAuthenticated';
+    
+    if (isNotAuthenticated) {
       console.log('User was redirected due to not being authenticated.');
       errorAlert("Not Authenticated","You need to be logged in to access this page.");
       // Show alert, toast, or set a message in local state
       setTimeout(() => {
-        navigate(location.pathname, { replace: true, state: null });
+        navigate("/", { replace: true, state: null });
       }, 0); // wait a tick to prevent race condition
-    
     }
-  }, [location.state]);
+  }, [location.state, location.search]);
 
   async function handleSignIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
