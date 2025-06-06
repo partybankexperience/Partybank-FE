@@ -23,7 +23,7 @@ const ProfileDropdown = () => {
 
   const handleLogout = () => {
     Storage.clearItem();
-    navigate('/login');
+    navigate('/');
     setIsOpen(false);
   };
 
