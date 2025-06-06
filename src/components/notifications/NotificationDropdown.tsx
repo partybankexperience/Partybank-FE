@@ -126,7 +126,7 @@ const NotificationDropdown = () => {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-[380px] md:w-[380px] sm:w-[320px] w-[calc(100vw-2rem)] max-w-[380px] bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-[500px] overflow-hidden">
+        <div className="absolute right-[-10rem] md:right-0 mt-2 w-[20rem] md:w-[380px]   bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-[500px] overflow-hidden">
           {/* Header */}
           <div className="px-3 md:px-4 py-3 border-b border-gray-200 flex justify-between items-center">
             <h3 className="text-base md:text-lg font-semibold text-black">Notifications</h3>

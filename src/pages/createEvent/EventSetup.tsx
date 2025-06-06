@@ -110,6 +110,7 @@ const EventSetup = () => {
           required
           helperText={eventSetupErrors.name || ""}
           style={eventSetupErrors.name ? "border-red-500" : ""}
+        classname="!w-full"
         />
       <div className="grid">
           <label htmlFor="description">
