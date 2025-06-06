@@ -4,8 +4,9 @@ import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { ImageUploadInput } from "../../components/inputs/ImageInput";
 import { useEventStore } from "../../stores/useEventStore";
-import { getTags, createTag, getSeries } from "../../Containers/eventApi";
+import { getTags, createTag } from "../../Containers/eventApi";
 import type { Options } from "easymde";
+import { getSeries } from "../../Containers/seriesApi";
 
 const EventSetup = () => {
   const { form, setFormValue } = useEventStore();
