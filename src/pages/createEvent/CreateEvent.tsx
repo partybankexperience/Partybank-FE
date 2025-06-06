@@ -4,6 +4,7 @@ import DefaultButton from "../../components/buttons/DefaultButton"
 import CreateEventLayout from "../../components/layouts/CreateEventLayout"
 import CreateTicketComponent from "../../components/pages/CreateTicketComponent"
 import { stages, useEventStore } from "../../stores/useEventStore"
+import { validateStage } from "../../utils/eventValidation"
 import Accessibility from "./Accessibility"
 import EventSetup from "./EventSetup"
 import Guest from "./Guest"
@@ -12,15 +13,40 @@ import Review from "./Review"
 import ScheduleEvent from "./ScheduleEvent"
 
 const CreateEvent = () => {
-    const { stage, setStage, form } = useEventStore()
+    const { stage, setStage, form, errors, setError, clearStageErrors } = useEventStore()
     const currentIndex = stages.indexOf(stage)
-    const navigate=useNavigate()
+    const navigate = useNavigate()
+
   const goNext = () => {
-    if (!isCurrentStepValid(stage)) {
-    //   alert("Please complete this step before continuing.")
-      errorAlert("Fill out all neccessary details","Please complete this step before continuing.")
+    const formData = form[stage] || {}
+    const { isValid, errors: validationErrors } = validateStage(stage, formData)
+    
+    if (!isValid) {
+      // Clear existing errors first
+      clearStageErrors(stage)
+      
+      // Set new errors
+      Object.entries(validationErrors).forEach(([field, error]) => {
+        setError(stage, field, error)
+      })
+      
+      // Focus on first error field
+      const firstErrorField = Object.keys(validationErrors)[0]
+      setTimeout(() => {
+        const errorElement = document.getElementById(firstErrorField)
+        if (errorElement) {
+          errorElement.focus()
+          errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+      }, 100)
+      
+      errorAlert("Missing Required Fields", "Please fill out all required fields to continue.")
       return
     }
+    
+    // Clear errors if validation passes
+    clearStageErrors(stage)
+    
     if (currentIndex < stages.length - 1) {
       setStage(stages[currentIndex + 1])
     }
@@ -30,12 +56,6 @@ const CreateEvent = () => {
     if (currentIndex > 0) {
       setStage(stages[currentIndex - 1])
     }
-  }
-
-  const isCurrentStepValid = (stageName: string) => {
-    const data = form[stageName]
-    // Add real validation logic here based on stage
-    return data && Object.keys(data).length > 0
   }
   return (
     <CreateEventLayout>

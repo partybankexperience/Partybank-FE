@@ -16,6 +16,7 @@ const EventSetup = () => {
   const [newTagDescription, setNewTagDescription] = useState("");
   const [isCreatingTag, setIsCreatingTag] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [eventSetupErrors, setEventSetupErrors] = useState({});
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -61,12 +62,12 @@ const EventSetup = () => {
     try {
       setIsCreatingTag(true);
       await createTag(newTagName, newTagDescription || "");
-      
+
       // Add the new tag to the tags array and select it
       const updatedTags = [...tags.filter(tag => tag !== "Other"), newTagName, "Other"];
       setTags(updatedTags);
       setFormValue("Event Setup", "tags", newTagName);
-      
+
       // Reset form and hide create tag section
       setNewTagName("");
       setNewTagDescription("");
@@ -91,53 +92,67 @@ const EventSetup = () => {
       "preview",
     ] as const, // 👈 Important for satisfying the `readonly` type
   }), []);
+
+  const handleInputChange = (key: string, value: string) => {
+    setFormValue("Event Setup", key, value);
+    setEventSetupErrors(prevErrors => ({ ...prevErrors, [key]: "" }));
+  };
+
   console.log(eventSetupForm);
   return (
     <div className="grid gap-[20px]">
       <DefaultInput
-        id="Name"
-        label="Event Name"
-        value={eventSetupForm.name || ""}
-        setValue={(val: any) => setFormValue("Event Setup", "name", val)}
-        placeholder="Enter event name"
-        classname="!w-full"
-      />
-      <div className="grid">
-        <label htmlFor="description">
-          <p className="text-black ">Event Descriptions</p>
-        </label>
-        <SimpleMDE
-          // value={description}
-          // onChange={(value) => setDescription(value)}
-          value={eventSetupForm.description || ""}
-          onChange={(val) => setFormValue("Event Setup", "description", val)}
-          options={options}
-          id="description"
+          id="name"
+          label="Event Name"
+          value={eventSetupForm.name || ""}
+          setValue={(value: string) => handleInputChange("name", value)}
+          placeholder="Enter event name"
+          required
+          helperText={eventSetupErrors.name || ""}
+          style={eventSetupErrors.name ? "border-red-500" : ""}
         />
-      </div>
+      <div className="grid">
+          <label htmlFor="description">
+            <p className="text-black ">Event Descriptions</p>
+          </label>
+          <SimpleMDE
+            // value={description}
+            // onChange={(value) => setDescription(value)}
+            value={eventSetupForm.description || ""}
+            onChange={(value) => handleInputChange("description", value)}
+            options={options}
+            id="description"
+          />
+        </div>
 
-      <DefaultInput
-        id="Category"
-        label="Category"
-        placeholder="Festival"
-        classname="!w-full"
-        showDropdown
-        dropdownOptions={["Festival", "Concert", "Conference"]}
-        value={eventSetupForm.category || ""}
-        setValue={(val: any) => setFormValue("Event Setup", "category", val)}
-      />
-      <DefaultInput
-        id="Tags"
-        label="Tags"
-        value={eventSetupForm.tags || ""}
-        setValue={handleTagChange}
-        placeholder={loading ? "Loading tags..." : "Select Tag"}
-        classname="!w-full"
-        showDropdown
-        dropdownOptions={tags}
-        disabled={loading}
-      />
-      
+        <DefaultInput
+          id="Category"
+          label="Category"
+          placeholder="Festival"
+          classname="!w-full"
+          showDropdown
+          dropdownOptions={["Festival", "Concert", "Conference"]}
+          value={eventSetupForm.category || ""}
+          setValue={(value: string) => handleInputChange("category", value)}
+          required
+          helperText={eventSetupErrors.category || ""}
+          style={eventSetupErrors.category ? "border-red-500" : ""}
+        />
+        <DefaultInput
+          id="Tags"
+          label="Tags"
+          value={eventSetupForm.tags || ""}
+          setValue={handleTagChange}
+          placeholder={loading ? "Loading tags..." : "Select Tag"}
+          classname="!w-full"
+          showDropdown
+          dropdownOptions={tags}
+          disabled={loading}
+          required
+          helperText={eventSetupErrors.tags || ""}
+          style={eventSetupErrors.tags ? "border-red-500" : ""}
+        />
+
       {(showCreateTag || eventSetupForm.tags === "Other") && (
         <>
           <DefaultInput
@@ -173,18 +188,18 @@ const EventSetup = () => {
         showDropdown
         dropdownOptions={["Series 1", "Series 2", "Series 3"]}
       />
-      <DefaultInput
-        id="Organizer’s Contact Number"
-        label="Organizer’s Contact Number"
-        value={eventSetupForm.contactNumber || ""}
-        setValue={(val: any) =>
-          setFormValue("Event Setup", "contactNumber", val)
-        }
-        type="tel"
-        //   pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-        placeholder="Enter contact number "
-        classname="!w-full"
-      />
+          <DefaultInput
+            id="contactNumber"
+            label="Organizer’s Contact Number"
+            value={eventSetupForm.contactNumber || ""}
+            setValue={(value: string) => handleInputChange("contactNumber", value)}
+            type="tel"
+            placeholder="Enter contact number"
+            classname="!w-full"
+            required
+            helperText={eventSetupErrors.contactNumber || ""}
+            style={eventSetupErrors.contactNumber ? "border-red-500" : ""}
+          />
       <ImageUploadInput onImageChange={handleImage} />
     </div>
   );
