@@ -25,16 +25,19 @@ const Login = () => {
     // Check both location.state and URL parameters for notAuthenticated
     const urlParams = new URLSearchParams(location.search);
     const isNotAuthenticated = location.state === 'notAuthenticated' || urlParams.get('state') === 'notAuthenticated';
-    
+
     if (isNotAuthenticated) {
       console.log('User was redirected due to not being authenticated.');
-      errorAlert("Not Authenticated","You need to be logged in to access this page.");
-      // Show alert, toast, or set a message in local state
-      setTimeout(() => {
+      // Show notification immediately
+      errorAlert("Not Authenticated", "You need to be logged in to access this page.");
+      // Clean up URL after showing notification
+      const timer = setTimeout(() => {
         navigate("/", { replace: true, state: null });
-      }, 0); // wait a tick to prevent race condition
+      }, 2000); // Give time for user to read the notification
+
+      return () => clearTimeout(timer);
     }
-  }, [location.state, location.search]);
+  }, [location.state, location.search, navigate]);
 
   async function handleSignIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -110,7 +113,7 @@ const Login = () => {
             // setExternalError={setEmailError}
           />
           <div>
-          
+
           <DefaultInput
             id="password"
             label="Password"
