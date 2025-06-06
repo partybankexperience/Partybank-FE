@@ -128,34 +128,49 @@ const EventSetup = () => {
 
   const validateForm = () => {
     let errors: Record<string, string> = {};
-    if (!eventSetupForm.name) {
+    if (!eventSetupForm.name || eventSetupForm.name.trim() === "") {
       errors.name = "Event Name is required";
     }
-    if (!eventSetupForm.category) {
+    if (!eventSetupForm.category || eventSetupForm.category.trim() === "") {
       errors.category = "Category is required";
     }
-    if (!eventSetupForm.tags) {
+    if (!eventSetupForm.tags || eventSetupForm.tags.trim() === "") {
       errors.tags = "Tag is required";
     }
-    if (!eventSetupForm.contactNumber) {
+    if (!eventSetupForm.contactNumber || eventSetupForm.contactNumber.trim() === "") {
       errors.contactNumber = "Contact Number is required";
+    }
+    if (!eventSetupForm.description || eventSetupForm.description.trim() === "") {
+      errors.description = "Event Description is required";
     }
 
     setEventSetupErrors(errors);
+    
+    // Focus on first error
+    if (Object.keys(errors).length > 0) {
+      setTimeout(() => {
+        if (errors.name && nameRef.current) {
+          nameRef.current.focus();
+        } else if (errors.category && categoryRef.current) {
+          categoryRef.current.focus();
+        } else if (errors.tags && tagsRef.current) {
+          tagsRef.current.focus();
+        } else if (errors.contactNumber && contactNumberRef.current) {
+          contactNumberRef.current.focus();
+        }
+      }, 100);
+    }
+
     return Object.keys(errors).length === 0;
   };
 
-  const focusOnError = () => {
-    if (eventSetupErrors.name && nameRef.current) {
-      nameRef.current.focus();
-    } else if (eventSetupErrors.category && categoryRef.current) {
-      categoryRef.current.focus();
-    } else if (eventSetupErrors.tags && tagsRef.current) {
-      tagsRef.current.focus();
-    } else if (eventSetupErrors.contactNumber && contactNumberRef.current) {
-      contactNumberRef.current.focus();
-    }
-  };
+  // Export validation function for external use
+  useEffect(() => {
+    (window as any).validateEventSetup = validateForm;
+    return () => {
+      delete (window as any).validateEventSetup;
+    };
+  }, [eventSetupForm]);
 
   console.log("EventSetup form data:", eventSetupForm);
   console.log("Current tags state:", tags);

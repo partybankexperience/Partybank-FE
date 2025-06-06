@@ -53,40 +53,50 @@ const CreateEvent = () => {
 
   const goNext = async () => {
     const formData = form[stage] || {}
-    const { isValid, errors: validationErrors } = validateStage(stage, formData)
 
-    if (!isValid) {
-      // Clear existing errors first
-      clearStageErrors(stage)
-
-      // Set new errors
-      Object.entries(validationErrors).forEach(([field, error]) => {
-        setError(stage, field, error)
-      })
-
-      // Focus on first error field
-      const firstErrorField = Object.keys(validationErrors)[0]
-      setTimeout(() => {
-        const errorElement = document.getElementById(firstErrorField)
-        if (errorElement) {
-          errorElement.focus()
-          errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
-        }
-      }, 100)
-
-      errorAlert("Missing Required Fields", "Please fill out all required fields to continue.")
-      return
-    }
-
-    // Clear errors if validation passes
-    clearStageErrors(stage)
-
-    // If we're on Event Setup stage, create the event first
+    // Special handling for Event Setup stage
     if (stage === "Event Setup") {
+      // Check if EventSetup component has validation function available
+      const validateEventSetup = (window as any).validateEventSetup;
+      if (validateEventSetup && !validateEventSetup()) {
+        errorAlert("Missing Required Fields", "Please fill out all required fields to continue.");
+        return;
+      }
+      
+      // Create the event
       const eventCreated = await handleCreateEvent(formData);
       if (!eventCreated) {
         return; // Don't proceed if event creation failed
       }
+    } else {
+      // Use general validation for other stages
+      const { isValid, errors: validationErrors } = validateStage(stage, formData)
+
+      if (!isValid) {
+        // Clear existing errors first
+        clearStageErrors(stage)
+
+        // Set new errors
+        Object.entries(validationErrors).forEach(([field, error]) => {
+          setError(stage, field, error)
+        })
+
+        // Focus on first error field
+        const firstErrorField = Object.keys(validationErrors)[0]
+        setTimeout(() => {
+          const errorElement = document.getElementById(firstErrorField)
+          if (errorElement) {
+            errorElement.focus()
+            errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          }
+        }, 100)
+
+        errorAlert("Missing Required Fields", "Please fill out all required fields to continue.")
+        return
+      }
+
+      // Clear errors if validation passes
+      clearStageErrors(stage)
     }
 
     if (currentIndex < stages.length - 1) {
