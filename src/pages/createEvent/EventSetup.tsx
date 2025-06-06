@@ -48,6 +48,8 @@ const EventSetup = () => {
   };
 
   const handleTagChange = (selectedTag: string) => {
+    console.log("Selected tag:", selectedTag);
+    console.log("Current eventSetupForm.tags:", eventSetupForm.tags);
     setFormValue("Event Setup", "tags", selectedTag);
     if (selectedTag === "Other") {
       setShowCreateTag(true);
@@ -101,7 +103,11 @@ const EventSetup = () => {
     setEventSetupErrors(prevErrors => ({ ...prevErrors, [key]: "" }));
   };
 
-  console.log(eventSetupForm);
+  console.log("EventSetup form data:", eventSetupForm);
+  console.log("Current tags state:", tags);
+  console.log("Current eventSetupForm.tags:", eventSetupForm.tags);
+  console.log("Should show create tag inputs:", eventSetupForm.tags === "Other");
+  
   return (
     <div className="grid gap-[20px]">
       <DefaultInput
