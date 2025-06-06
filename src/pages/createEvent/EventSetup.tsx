@@ -4,7 +4,7 @@ import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { ImageUploadInput } from "../../components/inputs/ImageInput";
 import { useEventStore } from "../../stores/useEventStore";
-import { getTags, createTag } from "../../Containers/eventApi";
+import { getTags, createTag, getSeries } from "../../Containers/eventApi";
 import type { Options } from "easymde";
 
 const EventSetup = () => {
@@ -15,8 +15,26 @@ const EventSetup = () => {
   const [newTagName, setNewTagName] = useState("");
   const [newTagDescription, setNewTagDescription] = useState("");
   const [isCreatingTag, setIsCreatingTag] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [series, setSeries] = useState<any[]>([]);
+  const [seriesLoading, setSeriesLoading] = useState(true);
   const [eventSetupErrors, setEventSetupErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    const fetchSeries = async () => {
+      try {
+        setSeriesLoading(true);
+        const response = await getSeries();
+        setSeries(response || []);
+      } catch (error) {
+        console.error("Error fetching series:", error);
+        setSeries([]);
+      } finally {
+        setSeriesLoading(false);
+      }
+    };
+
+    fetchSeries();
+  }, []);
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -191,12 +209,17 @@ const EventSetup = () => {
       <DefaultInput
         id="eventSetupSeries"
         label="Series"
-        value={eventSetupForm.series || ""}
-        setValue={(val: any) => setFormValue("Event Setup", "series", val)}
-        placeholder="Enter Series"
+        value={eventSetupForm.seriesName || ""}
+        setValue={(selectedSeriesName: string) => {
+          const selectedSeries = series.find((seriesItem: any) => seriesItem.name === selectedSeriesName);
+          setFormValue("Event Setup", "seriesName", selectedSeriesName);
+          setFormValue("Event Setup", "seriesId", selectedSeries ? selectedSeries.id : null);
+        }}
+        placeholder={seriesLoading ? "Loading series..." : "Select Series"}
         classname="!w-full"
         showDropdown
-        dropdownOptions={["Series 1", "Series 2", "Series 3"]}
+        dropdownOptions={series.map((seriesItem: any) => seriesItem.name)}
+        disabled={seriesLoading}
       />
           <DefaultInput
             id="eventSetupContactNumber"
