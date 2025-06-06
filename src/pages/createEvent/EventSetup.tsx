@@ -53,6 +53,9 @@ const EventSetup = () => {
       setShowCreateTag(true);
     } else {
       setShowCreateTag(false);
+      // Reset the new tag fields when not selecting "Other"
+      setNewTagName("");
+      setNewTagDescription("");
     }
   };
 
@@ -154,7 +157,7 @@ const EventSetup = () => {
           style={eventSetupErrors.tags ? "border-red-500" : ""}
         />
 
-      {(showCreateTag || eventSetupForm.tags === "Other") && (
+      {eventSetupForm.tags === "Other" && (
         <>
           <DefaultInput
             id="newTagName"
