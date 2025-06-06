@@ -5,6 +5,7 @@ import CreateEventLayout from "../../components/layouts/CreateEventLayout"
 import CreateTicketComponent from "../../components/pages/CreateTicketComponent"
 import { stages, useEventStore } from "../../stores/useEventStore"
 import { validateStage } from "../../utils/eventValidation"
+import { createEvent } from "../../Containers/eventApi"
 import Accessibility from "./Accessibility"
 import EventSetup from "./EventSetup"
 import Guest from "./Guest"
@@ -16,11 +17,41 @@ import { useState, useEffect } from "react";
 
 const CreateEvent = () => {
   const [currentStep, setCurrentStep] = useState(0);
-  const { stage, setStage, form, errors, setError, clearStageErrors, clearEventStorage } = useEventStore()
+  const [isCreatingEvent, setIsCreatingEvent] = useState(false);
+  const { stage, setStage, form, errors, setError, clearStageErrors, clearEventStorage, setFormValue } = useEventStore()
     const currentIndex = stages.indexOf(stage)
     const navigate = useNavigate()
 
-  const goNext = () => {
+  const handleCreateEvent = async (eventSetupData: any) => {
+    try {
+      setIsCreatingEvent(true);
+      
+      const response = await createEvent(
+        eventSetupData.name,
+        eventSetupData.description,
+        eventSetupData.coverImage || "",
+        [eventSetupData.tags],
+        eventSetupData.contactNumber,
+        eventSetupData.category,
+        eventSetupData.seriesId || undefined
+      );
+
+      // Store the created event ID for later use
+      setFormValue("Event Setup", "eventId", response.id);
+      
+      console.log("Event created successfully:", response);
+      
+      return true;
+    } catch (error) {
+      console.error("Error creating event:", error);
+      errorAlert("Error", "Failed to create event. Please try again.");
+      return false;
+    } finally {
+      setIsCreatingEvent(false);
+    }
+  };
+
+  const goNext = async () => {
     const formData = form[stage] || {}
     const { isValid, errors: validationErrors } = validateStage(stage, formData)
 
@@ -49,6 +80,14 @@ const CreateEvent = () => {
 
     // Clear errors if validation passes
     clearStageErrors(stage)
+
+    // If we're on Event Setup stage, create the event first
+    if (stage === "Event Setup") {
+      const eventCreated = await handleCreateEvent(formData);
+      if (!eventCreated) {
+        return; // Don't proceed if event creation failed
+      }
+    }
 
     if (currentIndex < stages.length - 1) {
       setStage(stages[currentIndex + 1])
@@ -92,7 +131,9 @@ const CreateEvent = () => {
       )}
 {stage !== "Review & Publish"? (
 
-      <DefaultButton onClick={goNext}>Next</DefaultButton>
+      <DefaultButton onClick={goNext} isLoading={isCreatingEvent}>
+        {stage === "Event Setup" && isCreatingEvent ? "Creating Event..." : "Next"}
+      </DefaultButton>
 ):(
   <DefaultButton variant="primary" onClick={() => navigate("/dashboard")}>
   Publish Event
