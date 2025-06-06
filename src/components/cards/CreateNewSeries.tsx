@@ -20,6 +20,12 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
   const [isOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
+  const resetForm = () => {
+    setSeriesName("");
+    setDescription("");
+    setCoverImage("");
+  };
+
   const handleCreateSeries = async () => {
     if (!seriesName.trim() || !description.trim()) {
       return;
@@ -51,9 +57,7 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
       }
 
       // Reset form and close modal
-      setSeriesName("");
-      setDescription("");
-      setCoverImage("");
+      resetForm();
       setIsModalOpen(false);
     } catch (error) {
       console.error("Error creating series:", error);
@@ -96,9 +100,7 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
       }
 
       // Reset form and close modal
-      setSeriesName("");
-      setDescription("");
-      setCoverImage("");
+      resetForm();
       setIsModalOpen(false);
     } catch (error) {
       console.error("Error creating series:", error);
@@ -133,7 +135,10 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
         </div>
       </div>
 
-      <Modal isOpen={isOpen} onClose={() => setIsModalOpen(false)}>
+      <Modal isOpen={isOpen} onClose={() => {
+        setIsModalOpen(false);
+        resetForm();
+      }}>
         <form onSubmit={handleSubmit} className="m-auto 4vw grid gap-[20px] w-full">
           <DefaultInput
             label="Series Name"
