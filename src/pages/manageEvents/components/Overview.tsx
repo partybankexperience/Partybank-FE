@@ -13,6 +13,8 @@ import { useNavigate, useParams } from "react-router";
 import { getEventsById } from "../../../Containers/eventApi";
 import { useEffect, useState } from "react";
 import { formatDate, formatTimeRange } from "../../../components/helpers/dateTimeHelpers";
+import { useEventStore } from "../../../stores/useEventStore";
+import { Storage } from "../../../stores/InAppStorage";
 
 const Overview = () => {
   const navigate=useNavigate()
@@ -20,6 +22,7 @@ const Overview = () => {
   const [eventData, setEventData] = useState<any>(null);
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { prefillEventData, mapBackendStepToFrontend, setStage } = useEventStore();
   // const location = [
   //   { icon: <GrLocation className="text-primary" />, name: "Landmark Centre" },
   //   {
@@ -121,11 +124,24 @@ const Overview = () => {
       setLoading(true);
       const res= await getEventsById(id as string);
       setEventData(res);
-      if (res.currentStep !=="reviewPublish") {
-        navigate('/dashboard/create-event',{state: { event: res }});
+      
+      if (res.currentStep !== "reviewPublish") {
+        // Store the event ID for editing
+        Storage.setItem("eventId", res.id);
+        
+        // Prefill the form with existing data
+        prefillEventData(res);
+        
+        // Map backend step to frontend stage and set it
+        const frontendStage = mapBackendStepToFrontend(res.currentStep);
+        setStage(frontendStage);
+        
+        // Navigate to create event page
+        navigate('/dashboard/create-event');
         setLoading(false);
         return;
       }
+      
       // Extract tickets from the response
       if (res && res.tickets && Array.isArray(res.tickets)) {
         setTickets(res.tickets);

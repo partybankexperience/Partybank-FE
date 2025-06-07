@@ -100,6 +100,60 @@ export const useEventStore = create<EventData>()(
           stage: 'Event Setup',
         }));
       },
+      prefillEventData: (eventData: any) => {
+        const form: Record<string, any> = {};
+        
+        // Map backend data to Event Setup stage
+        form['Event Setup'] = {
+          name: eventData.name || '',
+          description: eventData.description || '',
+          coverImage: eventData.bannerImage || '',
+          category: eventData.category || '',
+          tags: eventData.tags || '',
+          contactNumber: eventData.phone || '',
+          seriesId: eventData.seriesId || '',
+        };
+
+        // Map backend data to Schedule & Location stage
+        form['Schedule & Location'] = {
+          eventType: eventData.eventType || '',
+          startDate: eventData.startDate ? new Date(eventData.startDate).toISOString().split('T')[0] : '',
+          endDate: eventData.endDate ? new Date(eventData.endDate).toISOString().split('T')[0] : '',
+          startTime: eventData.startTime || '',
+          endTime: eventData.endTime || '',
+          showLocation: !eventData.isLocationTBA,
+          venueName: eventData.venueName || '',
+          address: eventData.address || '',
+        };
+
+        // Map backend data to Accessibility stage
+        form['Accessibility'] = {
+          minAge: eventData.minAge || 18,
+          wheelchairAccessible: eventData.wheelchairAccessible || false,
+          parkingAvailable: eventData.parkingAvailable || false,
+          attendeesCoverFees: eventData.attendeesCoverFees || false,
+        };
+
+        // Map tickets if any
+        if (eventData.tickets && eventData.tickets.length > 0) {
+          form['Tickets Create'] = {
+            tickets: eventData.tickets,
+          };
+        }
+
+        set(() => ({ form }));
+      },
+      mapBackendStepToFrontend: (backendStep: string): string => {
+        const stepMapping: Record<string, string> = {
+          'eventSetup': 'Event Setup',
+          'scheduleLocation': 'Schedule & Location',
+          'ticketSetup': 'Tickets Create',
+          'accessibility': 'Accessibility',
+          'notifications': 'Notifications',
+          'reviewPublish': 'Review & Publish',
+        };
+        return stepMapping[backendStep] || 'Event Setup';
+      },
     }),
     {
       name: 'event-creation-storage',

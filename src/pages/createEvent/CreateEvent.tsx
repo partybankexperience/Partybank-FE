@@ -5,7 +5,7 @@ import CreateEventLayout from "../../components/layouts/CreateEventLayout"
 import CreateTicketComponent from "../../components/pages/CreateTicketComponent"
 import { stages, useEventStore } from "../../stores/useEventStore"
 import { validateStage } from "../../utils/eventValidation"
-import { createEvent, createTag, getScheduleandLocation } from "../../Containers/eventApi"
+import { createEvent, createTag, getScheduleandLocation, editEvent } from "../../Containers/eventApi"
 import Accessibility from "./Accessibility"
 import EventSetup from "./EventSetup"
 import Guest from "./Guest"
@@ -19,10 +19,24 @@ import { Storage } from "../../stores/InAppStorage"
 const CreateEvent = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isCreatingEvent, setIsCreatingEvent] = useState(false);
+  const [originalFormData, setOriginalFormData] = useState<any>(null);
   const { stage, setStage, form, errors, setError, clearStageErrors, clearEventStorage, setFormValue } = useEventStore()
     const currentIndex = stages.indexOf(stage)
     const navigate = useNavigate()
     const eventId = Storage.getItem("eventId") || null;
+
+  // Function to check if form data has changed
+  const hasFormDataChanged = (currentData: any, originalData: any): boolean => {
+    if (!originalData) return true;
+    return JSON.stringify(currentData) !== JSON.stringify(originalData);
+  };
+
+  // Store original form data when component mounts if editing
+  useEffect(() => {
+    if (eventId && form["Event Setup"]) {
+      setOriginalFormData(JSON.parse(JSON.stringify(form["Event Setup"])));
+    }
+  }, [eventId, form]);
 
 // const goNext = async () => {
 //     const formData = form[stage] || {}
@@ -151,16 +165,44 @@ const goNext = async () => {
         finalTagId = formData.selectedTags || formData.tags; // whichever one holds the tag ID
       }
 
-      const success = await createEvent(formData.name,
-         formData.description,
-         formData.coverImage || "",
-         [finalTagId],
-         formData.contactNumber,
-        formData.category,
-       formData.seriesId || undefined);
+      let success;
+      
+      if (eventId) {
+        // Check if data has changed before calling edit endpoint
+        if (!hasFormDataChanged(formData, originalFormData)) {
+          setIsCreatingEvent(false);
+          if (currentIndex < stages.length - 1) {
+            setStage(stages[currentIndex + 1]);
+          }
+          return;
+        }
+        
+        // Edit existing event
+        success = await editEvent(
+          eventId,
+          formData.name,
+          formData.description,
+          formData.coverImage || "",
+          [finalTagId],
+          formData.contactNumber,
+          formData.category,
+          formData.seriesId || undefined
+        );
+      } else {
+        // Create new event
+        success = await createEvent(
+          formData.name,
+          formData.description,
+          formData.coverImage || "",
+          [finalTagId],
+          formData.contactNumber,
+          formData.category,
+          formData.seriesId || undefined
+        );
+        Storage.setItem("eventId", success.eventId);
+      }
+      
       setIsCreatingEvent(false);
-
-      Storage.setItem("eventId", success.eventId);
 
       if (!success) {
         setError(stage, "general", "Failed to create event. Please try again.");
@@ -255,7 +297,9 @@ const goNext = async () => {
 {stage !== "Review & Publish"? (
 
       <DefaultButton onClick={goNext} isLoading={isCreatingEvent}>
-        {stage === "Event Setup" && isCreatingEvent ? "Creating Event..." : "Next"}
+        {stage === "Event Setup" && isCreatingEvent 
+          ? (eventId ? "Updating Event..." : "Creating Event...") 
+          : "Next"}
       </DefaultButton>
 ):(
   <DefaultButton variant="primary" onClick={() => navigate("/dashboard")}>

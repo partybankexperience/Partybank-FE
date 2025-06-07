@@ -37,6 +37,7 @@ export type endPointlistTypes = {
     getEventsById: endpointTypes;
     getEvents: endpointTypes;
     getScheduleandLocation: endpointTypes;
+    editEvent: endpointTypes;
 };
 
 export type urlPropTypes = {

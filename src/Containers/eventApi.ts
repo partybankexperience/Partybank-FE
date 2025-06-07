@@ -139,4 +139,36 @@ const getScheduleandLocation = async (id:string,eventType: string,startDate:stri
   });
   return response;
 }
-export { createEvent,createTicket,deleteTicket,createTag ,getTags,getEventsById,getEvents,getScheduleandLocation}
+const editEvent = async (
+  id: string,
+  name: string,
+  description: string,
+  bannerImage: string,
+  tags: any[],
+  phone: string,
+  category: string,
+  seriesId?: string
+): Promise<any> => {
+  const payload: Record<string, any> = {
+    name,
+    description,
+    bannerImage,
+    tags,
+    phone,
+    category,
+  };
+
+  if (seriesId) {
+    payload.seriesId = seriesId;
+  }
+
+  const response = await apiCall({
+    name: "editEvent",
+    urlExtra: `/${id}`,
+    data: payload,
+  });
+
+  return response;
+};
+
+export { createEvent,createTicket,deleteTicket,createTag ,getTags,getEventsById,getEvents,getScheduleandLocation,editEvent}

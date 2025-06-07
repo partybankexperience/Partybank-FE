@@ -158,4 +158,10 @@ export const endPoints: endPointlistTypes = {
         headers,
         auth: true,
     },
+    editEvent: {
+        url: "/events",
+        method: "PATCH",
+        headers,
+        auth: true,
+    },
 };
