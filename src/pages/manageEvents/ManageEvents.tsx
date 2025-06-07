@@ -42,11 +42,12 @@ const ManageEvents = () => {
               <EventCard
                 key={index}
                 progress={50}
-                title={val?.name}
-                time={val?.startTime}
-                date={val?.startDate}
+                name={val?.name}
+                startTime={val?.startTime}
+                endTime={val?.endTime}
+                startDate={val?.startDate}
                 location={val?.location}
-                image={val?.bannerImage}
+                bannerImage={val?.bannerImage}
                 onEdit={() => {
                   // navigate to edit page
                   navigate(`/manage-events/${val.id}`,{state: { event: val }});
