@@ -5,31 +5,34 @@ import { PiMapPinBold } from "react-icons/pi";
 import { LuPencilLine } from "react-icons/lu";
 import { FiCopy } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
+import { formatDate, formatTimeRange } from "../helpers/dateTimeHelpers";
 
 const EventCard = ({
-  title = "Canvas and Beats",
+  name = "Canvas and Beats",
   location = "Landmark Centre",
-  date = "12 Apr 2025",
-  time = "08:15 AM - 08:30 PM",
+  startDate = "2025-04-12T00:00:00.000Z",
+  startTime = "08:15",
+  endTime = "20:30",
   progress = 50,
   ticketSold = 550,
   totalTicket = 1000,
   onEdit,
   onDuplicate,
   onDelete,
-  image = "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=60",
+  bannerImage = "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=60",
 }: {
-  title?: string;
+  name?: string;
   location?: string;
-  date?: string;
-  time?: string;
+  startDate?: string;
+  startTime?: string;
+  endTime?: string;
   progress?: number;
   ticketSold?: number;
   totalTicket?: number;
   onEdit?: () => void;
   onDuplicate?: () => void;
   onDelete?: () => void;
-  image?: string;
+  bannerImage?: string;
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
@@ -51,6 +54,10 @@ const EventCard = ({
       icon: <AiOutlineDelete />,
     },
   ];
+
+  // Format the date and time for display
+  const formattedDate = formatDate(startDate);
+  const timeDisplay = formatTimeRange(startTime, endTime);
 
   return (
     <div className="relative rounded-[9px] border min-h-fit border-[#E1E1E1] h-[347px] min-w-[180px] w-full hover:shadow-[0px_4px_20px_rgba(0,0,0,0.1)] transition-all duration-300">
@@ -81,14 +88,14 @@ const EventCard = ({
         )}
       </div>
 
-      <div className="h-[150px] rounded-t-[9px] w-full bg-gray-100" ><img src={image} alt={`${title} banner image`} className="w-full h-full object-cover rounded-t-[9px]" /></div>
+      <div className="h-[150px] rounded-t-[9px] w-full bg-gray-100" ><img src={bannerImage} alt={`${name} banner image`} className="w-full h-full object-cover rounded-t-[9px]" /></div>
       <div className="grid">
         <div className="p-[15px] border-b border-[#E1E1E1] grid gap-[12px]">
           <div className="grid gap-[5px]">
             <p className="text-primary text-[12px]">
-              {date} <span className="px-1 text-lightGrey">.</span> {time}
+              {formattedDate} <span className="px-1 text-lightGrey">.</span> {timeDisplay}
             </p>
-            <p className="text-black text-[18px] font-medium">{title}</p>
+            <p className="text-black text-[18px] font-medium">{name}</p>
           </div>
           <div className="flex items-center gap-[6px] text-lightGrey">
             <PiMapPinBold />
