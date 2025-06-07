@@ -203,7 +203,7 @@ const EventSetup = () => {
         <DefaultInput
           id="Category"
           label="Category"
-          placeholder="Festival"
+          placeholder="Select Category"
           classname="!w-full"
           showDropdown
           dropdownOptions={["Festival", "Concert", "Conference"]}
