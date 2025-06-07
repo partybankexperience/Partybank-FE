@@ -12,7 +12,8 @@ const EventSetup = () => {
   const { form, setFormValue, errors } = useEventStore();
   const eventSetupForm = form["Event Setup"] || {};
   const eventSetupErrors = errors["Event Setup"] || {};
-  const [tags, setTags] = useState<string[]>([]);
+  const [tags, setTags] = useState<any[]>([]);
+  const [tagOptions, setTagOptions] = useState<string[]>([]);
   const [showCreateTag, setShowCreateTag] = useState(false);
   const [newTagName, setNewTagName] = useState("");
   const [newTagDescription, setNewTagDescription] = useState("");
@@ -49,14 +50,17 @@ const EventSetup = () => {
         setLoading(true);
         const response = await getTags();
         if (response && response.length > 0) {
+          setTags(response); // Store full tag objects
           const tagNames = response.map((tag: any) => tag.name);
-          setTags([...tagNames, "Other"]);
+          setTagOptions([...tagNames, "Other"]); // Display names in dropdown
         } else {
-          setTags(["Other"]);
+          setTags([]);
+          setTagOptions(["Other"]);
         }
       } catch (error) {
         console.error("Error fetching tags:", error);
-        setTags(["Other"]);
+        setTags([]);
+        setTagOptions(["Other"]);
       } finally {
         setLoading(false);
       }
@@ -70,18 +74,26 @@ const EventSetup = () => {
     setFormValue("Event Setup", "coverImage", imageUrl);
   };
 
-  const handleTagChange = (selectedTag: string) => {
-    console.log("Selected tag:", selectedTag);
-    console.log("Current eventSetupForm.tags:", eventSetupForm.tags);
-    setFormValue("Event Setup", "tags", selectedTag);
-    if (selectedTag === "Other") {
+  const handleTagChange = (selectedTagName: string) => {
+    console.log("Selected tag name:", selectedTagName);
+    
+    if (selectedTagName === "Other") {
+      setFormValue("Event Setup", "tags", "Other");
+      setFormValue("Event Setup", "selectedTagName", selectedTagName);
       setShowCreateTag(true);
     } else {
+      // Find the tag object by name and store its ID
+      const selectedTag = tags.find((tag: any) => tag.name === selectedTagName);
+      if (selectedTag) {
+        setFormValue("Event Setup", "tags", selectedTag.id); // Store tag ID
+        setFormValue("Event Setup", "selectedTagName", selectedTagName); // Store name for display
+      }
       setShowCreateTag(false);
       // Reset the new tag fields when not selecting "Other"
       setNewTagName("");
       setNewTagDescription("");
     }
+    console.log("Updated eventSetupForm.tags:", eventSetupForm.tags);
   };
 
   // const handleCreateTag = async () => {
@@ -154,8 +166,10 @@ const EventSetup = () => {
   
 
   console.log("EventSetup form data:", eventSetupForm);
-  console.log("Current tags state:", tags);
-  console.log("Current eventSetupForm.tags:", eventSetupForm.tags);
+  console.log("Current tag options:", tagOptions);
+  console.log("Full tags data:", tags);
+  console.log("Selected tag ID:", eventSetupForm.tags);
+  console.log("Selected tag name:", eventSetupForm.selectedTagName);
   console.log("Should show create tag inputs:", eventSetupForm.tags === "Other");
 
   return (
@@ -203,12 +217,12 @@ const EventSetup = () => {
         <DefaultInput
           id="Tags"
           label="Tags"
-          value={eventSetupForm.tags || ""}
+          value={eventSetupForm.selectedTagName || ""}
           setValue={handleTagChange}
           placeholder={loading ? "Loading tags..." : "Select Tag"}
           classname="!w-full"
           showDropdown
-          dropdownOptions={tags}
+          dropdownOptions={tagOptions}
           disabled={loading}
           required
           helperText={eventSetupErrors.tags || ""}
