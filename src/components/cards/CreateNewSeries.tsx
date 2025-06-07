@@ -30,47 +30,6 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
     setCoverImage("");
   };
 
-  const handleCreateSeries = async () => {
-    if (!seriesName.trim() || !description.trim()) {
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      const user = Storage.getItem("user");
-      const userId = user?.id;
-
-      if (!userId) {
-        console.error("User ID not found");
-        setIsLoading(false);
-        return;
-      }
-
-      const response = await createSeries(
-        seriesName,
-        userId,
-        description,
-        coverImage || "https://images.unsplash.com/photo-1485872299829-c673f5194813?q=80&w=2054&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-      );
-
-      console.log("Series created:", response);
-
-      // Call the callback function to update parent component
-      if (onSeriesCreated) {
-        onSeriesCreated(response.data);
-      }
-
-      // Reset form and close modal
-      resetForm();
-      setIsModalOpen(false);
-    } catch (error) {
-      console.error("Error creating series:", error);
-      // TODO: Show error message to user
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -172,6 +131,7 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
             className="!w-full md:!w-[9rem] md:!mx-auto border"
             onClick={() => {
                 setIsModalOpen(false);
+                resetForm();
             }}
           >
             Cancel

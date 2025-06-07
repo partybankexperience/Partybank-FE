@@ -34,7 +34,8 @@ export type endPointlistTypes = {
     getTags: endpointTypes;
     createTicket: endpointTypes;
     deleteTicket: endpointTypes;
-    getEventsById: endpointTypes
+    getEventsById: endpointTypes;
+    getEvents: endpointTypes;
 };
 
 export type urlPropTypes = {

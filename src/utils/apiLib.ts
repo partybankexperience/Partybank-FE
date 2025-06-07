@@ -116,6 +116,12 @@ export const endPoints: endPointlistTypes = {
         headers,
         auth: true,
     },
+    getEvents: {
+        url: "/events",
+        method: "GET",
+        headers,
+        auth: true,
+    },
     createTag:{
         url: "/tags",
         method: "POST",

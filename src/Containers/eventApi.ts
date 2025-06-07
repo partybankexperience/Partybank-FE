@@ -29,7 +29,12 @@ const createEvent = async (
 
   return response;
 };
-
+const getEvents=async (): Promise<any> =>{
+  const response = await apiCall({
+    name: "getEvents",
+  });
+  return response;
+}
 const createTicket = async (
   eventId: string,
   name: string,
@@ -104,4 +109,4 @@ const getEventsById =async (id: string): Promise<any> =>{
   });
   return response;
 }
-export { createEvent,createTicket,deleteTicket,createTag ,getTags,getEventsById}
+export { createEvent,createTicket,deleteTicket,createTag ,getTags,getEventsById,getEvents}

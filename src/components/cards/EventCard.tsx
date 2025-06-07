@@ -17,6 +17,7 @@ const EventCard = ({
   onEdit,
   onDuplicate,
   onDelete,
+  image = "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=60",
 }: {
   title?: string;
   location?: string;
@@ -28,6 +29,7 @@ const EventCard = ({
   onEdit?: () => void;
   onDuplicate?: () => void;
   onDelete?: () => void;
+  image?: string;
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
@@ -79,7 +81,7 @@ const EventCard = ({
         )}
       </div>
 
-      <div className="h-[150px] rounded-t-[9px] w-full bg-gray-100" />
+      <div className="h-[150px] rounded-t-[9px] w-full bg-gray-100" ><img src={image} alt={`${title} banner image`} className="w-full h-full object-cover rounded-t-[9px]" /></div>
       <div className="grid">
         <div className="p-[15px] border-b border-[#E1E1E1] grid gap-[12px]">
           <div className="grid gap-[5px]">
