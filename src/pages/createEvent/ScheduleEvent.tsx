@@ -230,7 +230,7 @@ const ScheduleEvent = () => {
               )}
             </div>
           </>
-        )}</div>
+        )}
       </div>
     </div>
   );
