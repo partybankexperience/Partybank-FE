@@ -10,6 +10,8 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { RiInboxArchiveLine } from "react-icons/ri";
 import TicketsCard from "../../../components/cards/TicketCard";
 import { useNavigate, useParams } from "react-router";
+import { getEventsById } from "../../../Containers/eventApi";
+import { useEffect } from "react";
 
 const Overview = () => {
   const navigate=useNavigate()
@@ -54,6 +56,20 @@ const Overview = () => {
     { label: "Series", value: "My Series" },
     { label: "Organizer’s Contact Number", value: "+234  704 3946 3386" },
   ];
+
+  async function getEvent() {
+    try {
+      const res= await getEventsById(id as string);
+      console.log(res);
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getEvent();
+  }, [id])
+  
   return (
     <div className="grid">
       <h1 className="text-black text-[1.6rem] font-medium">Overview</h1>

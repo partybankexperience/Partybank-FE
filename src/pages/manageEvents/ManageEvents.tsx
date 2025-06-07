@@ -74,7 +74,7 @@ const ManageEvents = () => {
             />
           ))
         ) : (
-          <div className="col-span-full text-center text-gray-500 py-8">
+          <div className="m-auto  text-center text-gray-500 py-8 ">
             No {activeTab.toLowerCase()} events found.
           </div>
         )}
