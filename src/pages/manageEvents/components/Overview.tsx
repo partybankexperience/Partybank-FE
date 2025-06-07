@@ -121,7 +121,11 @@ const Overview = () => {
       setLoading(true);
       const res= await getEventsById(id as string);
       setEventData(res);
-      
+      if (res.currentStage !=="reviewPublish") {
+        navigate('/dashboard/create-event',{state: { event: res }});
+        setLoading(false);
+        return;
+      }
       // Extract tickets from the response
       if (res && res.tickets && Array.isArray(res.tickets)) {
         setTickets(res.tickets);
