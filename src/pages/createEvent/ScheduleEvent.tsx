@@ -27,7 +27,7 @@ const ScheduleEvent = () => {
   const handleInputChange = (key: string, value: any) => {
     setFormValue("Schedule & Location", key, value);
   };
-
+console.log(showLocation,'location')
   const handleLocationSelect = (location: any) => {
     // Extract address components and format them according to the required structure
     const addressParts = location.name.split(', ');
