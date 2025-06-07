@@ -179,9 +179,7 @@ console.log(showLocation,'location')
           <h2 className="text-black text-[1.2rem]">Location</h2>
           <div className="flex items-center gap-4">
             <SlideToggle
-              checked={showLocation}
-              onChange={setShowLocation}
-              label=""
+              toggle={setShowLocation}
             />
             <span className="text-black text-[1rem]">
               {showLocation ? "Location will be provided" : "Location TBA (To Be Announced)"}
