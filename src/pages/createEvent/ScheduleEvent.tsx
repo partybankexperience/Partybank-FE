@@ -10,7 +10,10 @@ import SlideToggle from "../../components/inputs/SlideToggle";
 import "leaflet/dist/leaflet.css";
 
 const ScheduleEvent = () => {
-  const eventType = ["Single day", "Multiple Day"];
+  const eventType = [
+    { label: "Single day", value: "single-day" },
+    { label: "Multiple Day", value: "multi-day" }
+  ];
   const { form, setFormValue, errors } = useEventStore();
   const scheduleEventForm = form["Schedule & Location"] || {};
   const scheduleEventErrors = errors["Schedule & Location"] || {};
@@ -88,13 +91,13 @@ console.log(showLocation,'location')
           className="grid md:flex gap-4 md:gap-[2.5rem]"
           ref={eventTypeRef}
         >
-          {eventType.map((label, idx) => (
+          {eventType.map((option, idx) => (
             <RadioButton
               key={`option${idx}`}
-              label={label}
-              value={label}
+              label={option.label}
+              value={option.value}
               name="eventType"
-              checked={selected === label}
+              checked={selected === option.value}
               onChange={(val) => {
                 handleInputChange("eventType", val);
               }}
@@ -154,7 +157,7 @@ console.log(showLocation,'location')
         </div>
 
         {/* Only show end date if Multiple Day */}
-        {selected === "Multiple Day" && (
+        {selected === "multi-day" && (
           <div className="grid md:grid-cols-[1fr_.5fr_.5fr] gap-[20px]">
             <DefaultInput
               type="date"

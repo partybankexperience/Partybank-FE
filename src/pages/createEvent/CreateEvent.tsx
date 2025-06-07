@@ -188,7 +188,7 @@ const goNext = async () => {
           formData.endDate, 
           formData.startTime, 
           formData.endTime, 
-          formData.showLocation ? "false" : "true", // isLocationTBA
+          !formData.showLocation, // isLocationTBA - boolean
           formData.venueName, 
           formData.address
         );
