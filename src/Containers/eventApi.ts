@@ -1,10 +1,19 @@
 import { apiCall } from "../utils/axiosFormat";
 
+interface Address {
+  street?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  country?: string;
+  // Add more fields as needed
+}
+
 const createEvent = async (
   name: string,
   description: string,
   bannerImage: string,
-  tags: string[],
+  tags: any[],
   phone: string,
   category: string,
   seriesId?: string // optional
@@ -32,6 +41,7 @@ const createEvent = async (
 const getEvents=async (): Promise<any> =>{
   const response = await apiCall({
     name: "getEvents",
+    alert: false
   });
   return response;
 }
@@ -92,6 +102,7 @@ const createTag = async (name: string,description:string): Promise<any> =>{
   const response = await apiCall({
     name: "createTag",
     data: payload,
+    alert: false
   });
   return response;
 }
@@ -99,14 +110,33 @@ const createTag = async (name: string,description:string): Promise<any> =>{
 const getTags = async (): Promise<any> =>{
   const response = await apiCall({
     name: "getTags",
+    alert: false
   });
   return response;
 }
 const getEventsById =async (id: string): Promise<any> =>{
   const response = await apiCall({
     name: "getEventsById",
-    urlExtra: `/${id}`
+    urlExtra: `/${id}`,
+    alert: false
   });
   return response;
 }
-export { createEvent,createTicket,deleteTicket,createTag ,getTags,getEventsById,getEvents}
+const getScheduleandLocation = async (id:string,eventType: string,startDate:string,endDate:string,startTime:string,endTime:string,isLocationTBA:string,venueName?:string,address?: Address): Promise<any> => {
+  const response = await apiCall({
+    name: "getEventsById",
+    urlExtra: `/${id}/schedule-location`,
+    data: {
+      eventType,
+      startDate,
+      endDate,
+      startTime,
+      endTime,
+      isLocationTBA,
+      venueName,
+      address
+    },
+  });
+  return response;
+}
+export { createEvent,createTicket,deleteTicket,createTag ,getTags,getEventsById,getEvents,getScheduleandLocation}

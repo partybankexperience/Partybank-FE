@@ -21,10 +21,10 @@ const EventSetup = () => {
   const [seriesLoading, setSeriesLoading] = useState(true);
   const [loading, setLoading] = useState(true);
 
-  const nameRef = useRef<HTMLInputElement>(null);
-  const categoryRef = useRef<HTMLInputElement>(null);
-  const tagsRef = useRef<HTMLInputElement>(null);
-  const contactNumberRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<any>(null);
+  const categoryRef = useRef<any>(null);
+  const tagsRef = useRef<any>(null);
+  const contactNumberRef = useRef<any>(null);
 
   useEffect(() => {
     const fetchSeries = async () => {
@@ -84,28 +84,28 @@ const EventSetup = () => {
     }
   };
 
-  const handleCreateTag = async () => {
-    if (!newTagName.trim()) return;
+  // const handleCreateTag = async () => {
+  //   if (!newTagName.trim()) return;
 
-    try {
-      setIsCreatingTag(true);
-      await createTag(newTagName, newTagDescription || "");
+  //   try {
+  //     setIsCreatingTag(true);
+  //     await createTag(newTagName, newTagDescription || "");
 
-      // Add the new tag to the tags array and select it
-      const updatedTags = [...tags.filter(tag => tag !== "Other"), newTagName, "Other"];
-      setTags(updatedTags);
-      setFormValue("Event Setup", "tags", newTagName);
+  //     // Add the new tag to the tags array and select it
+  //     const updatedTags = [...tags.filter(tag => tag !== "Other"), newTagName, "Other"];
+  //     setTags(updatedTags);
+  //     setFormValue("Event Setup", "tags", newTagName);
 
-      // Reset form and hide create tag section
-      setNewTagName("");
-      setNewTagDescription("");
-      setShowCreateTag(false);
-    } catch (error) {
-      console.error("Error creating tag:", error);
-    } finally {
-      setIsCreatingTag(false);
-    }
-  };
+  //     // Reset form and hide create tag section
+  //     setNewTagName("");
+  //     setNewTagDescription("");
+  //     setShowCreateTag(false);
+  //   } catch (error) {
+  //     console.error("Error creating tag:", error);
+  //   } finally {
+  //     setIsCreatingTag(false);
+  //   }
+  // };
   const options: Options = useMemo(() => ({
     placeholder: "Type here...",
     spellChecker: false,
@@ -151,6 +151,7 @@ const EventSetup = () => {
       delete (window as any).validateEventSetup;
     };
   }, [eventSetupForm]);
+  
 
   console.log("EventSetup form data:", eventSetupForm);
   console.log("Current tags state:", tags);
@@ -220,21 +221,26 @@ const EventSetup = () => {
           <DefaultInput
             id="newTagName"
             label="Create New Tag"
-            value={newTagName}
-            setValue={setNewTagName}
+            // value={newTagName}
+            // setValue={setNewTagName}
+            value={eventSetupForm.newTagName || ""}
+          setValue={(value: string) => handleInputChange("newTagName", value)}
             placeholder="Enter new tag name"
             classname="!w-full"
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && newTagName.trim()) {
-                handleCreateTag();
-              }
-            }}
+            // onKeyDown={(e:any) => {
+            //   if (e.key === 'Enter' && newTagName.trim()) {
+
+            //     handleCreateTag();
+            //   }
+            // }}
           />
           <DefaultInput
             id="newTagDescription"
             label="Tag Description (Optional)"
-            value={newTagDescription}
-            setValue={setNewTagDescription}
+            value={eventSetupForm.newTagDescription || ""}
+          setValue={(value: string) => handleInputChange("newTagDescription", value)}
+            // value={newTagDescription}
+            // setValue={setNewTagDescription}
             placeholder="Enter tag description"
             classname="!w-full"
           />

@@ -26,6 +26,7 @@ type?: "text" | "password" | "email"|"tel"|"date"|"time";
   inputRef?: React.RefObject<HTMLInputElement>;
   setExternalError?: (hasError: boolean) => void;
   classname?: string;
+  onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>
 };
 
 const DefaultInput = ({
@@ -47,7 +48,8 @@ const DefaultInput = ({
   setValue,
   inputRef,
   setExternalError,
-  classname=''
+  classname='',
+  onKeyDown
 }: DefaultInputProps) => {
   // const [value, setValue] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -182,6 +184,7 @@ const DefaultInput = ({
     aria-describedby={`${id}-helper`}
     aria-invalid={hasError}
     className={`${baseStyle} ${paddingLeft} ${paddingRight} ${style}`}
+    onKeyDown={onKeyDown}
   />
 )}
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">

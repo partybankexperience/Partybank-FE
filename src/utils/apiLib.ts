@@ -151,5 +151,11 @@ export const endPoints: endPointlistTypes = {
         method: "GET",
         headers,
         auth: true,
-    }
+    },
+    getScheduleandLocation: {
+        url: "/events",
+        method: "POST",
+        headers,
+        auth: true,
+    },
 };

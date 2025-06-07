@@ -17,7 +17,7 @@ const createSeries = async (name: String, userId: String, description: String, c
 const getSeries =async (): Promise<any> =>{
   const response = await apiCall({
     name: "getSeries",
-    
+    alert: false
   });
   return response;
 }

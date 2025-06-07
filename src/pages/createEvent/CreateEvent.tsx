@@ -5,7 +5,7 @@ import CreateEventLayout from "../../components/layouts/CreateEventLayout"
 import CreateTicketComponent from "../../components/pages/CreateTicketComponent"
 import { stages, useEventStore } from "../../stores/useEventStore"
 import { validateStage } from "../../utils/eventValidation"
-import { createEvent } from "../../Containers/eventApi"
+import { createEvent, createTag, getScheduleandLocation } from "../../Containers/eventApi"
 import Accessibility from "./Accessibility"
 import EventSetup from "./EventSetup"
 import Guest from "./Guest"
@@ -13,6 +13,7 @@ import Notification from "./Notification"
 import Review from "./Review"
 import ScheduleEvent from "./ScheduleEvent"
 import { useState, useEffect } from "react";
+import { Storage } from "../../stores/InAppStorage"
 
 
 const CreateEvent = () => {
@@ -21,109 +22,183 @@ const CreateEvent = () => {
   const { stage, setStage, form, errors, setError, clearStageErrors, clearEventStorage, setFormValue } = useEventStore()
     const currentIndex = stages.indexOf(stage)
     const navigate = useNavigate()
+    const eventId = Storage.getItem("eventId") || null;
 
-  const handleCreateEvent = async (eventSetupData: any) => {
-    try {
-      const response = await createEvent(
-        eventSetupData.name,
-        eventSetupData.description,
-        eventSetupData.coverImage || "",
-        [eventSetupData.tags],
-        eventSetupData.contactNumber,
-        eventSetupData.category,
-        eventSetupData.seriesId || undefined
-      );
+// const goNext = async () => {
+//     const formData = form[stage] || {}
 
-      // Store the created event ID for later use
-      setFormValue("Event Setup", "eventId", response.id);
+//     // Handle validation for Event Setup stage
+//     if (stage === "Event Setup") {
+//       // Validate required fields directly
+//       const errors: Record<string, string> = {};
 
-      console.log("Event created successfully:", response);
-      setIsCreatingEvent(false); // Reset loading state on success
-      return true;
-    } catch (error) {
-      console.error("Error creating event:", error);
-      errorAlert("Error", "Failed to create event. Please try again.");
-      setIsCreatingEvent(false); // Reset loading state on error
-      return false;
-    }
-  };
+//       if (!formData.name || formData.name.trim() === "") {
+//         errors.name = "Event Name is required";
+//       }
+//       if (!formData.category || formData.category.trim() === "") {
+//         errors.category = "Category is required";
+//       }
+//       if (!formData.tags || formData.tags.trim() === "") {
+//         errors.tags = "Tag is required";
+//       }
+//       if (!formData.contactNumber || formData.contactNumber.trim() === "") {
+//         errors.contactNumber = "Contact Number is required";
+//       }
+//       if (!formData.description || formData.description.trim() === "") {
+//         errors.description = "Event Description is required";
+//       }
 
+//       console.log(errors, 'errors in event setup')
+//       // Set errors if any exist
+//       if (Object.keys(errors).length > 0) {
+//         Object.entries(errors).forEach(([field, error]) => {
+//           setError(stage, field, error);
+//         });
+
+//         // Trigger validation in EventSetup component to show errors
+//         const validationFn = (window as any).validateEventSetup;
+//         if (typeof validationFn === 'function') {
+//           validationFn();
+//         }
+//         return;
+//       }
+
+//       // Clear errors if validation passes
+//       clearStageErrors(stage);
+
+//       // Set loading state only when making API call
+//       setIsCreatingEvent(true);
+
+//       // Create the event if validation passes
+//       const success = await handleCreateEvent(formData);
+//       console.log(success, 'success in event creation')
+//       if (!success) {
+//         setIsCreatingEvent(true);
+//         return; // Stop if event creation fails
+//       }
+      
+//       // Move to next stage after successful event creation
+//       if (currentIndex < stages.length - 1) {
+//         setStage(stages[currentIndex + 1]);
+//       }
+//       return; // Important: return here to prevent further execution
+//     } else {
+//       // For other stages, use the validation rules
+//       const { isValid, errors } = validateStage(stage, formData)
+
+//       if (!isValid) {
+//         // Set errors for the current stage
+//         Object.entries(errors).forEach(([field, error]) => {
+//           setError(stage, field, error)
+//         })
+//         return
+//       }
+
+//       // Clear errors if validation passes
+//       clearStageErrors(stage)
+//     }
+
+//     // Stage advancement for other stages (not Event Setup)
+//     if (currentIndex < stages.length - 1) {
+//       setStage(stages[currentIndex + 1])
+//     }
+//   }
 const goNext = async () => {
-    const formData = form[stage] || {}
+  try {
+    const formData = form[stage] || {};
 
-    // Handle validation for Event Setup stage
     if (stage === "Event Setup") {
-      // Validate required fields directly
       const errors: Record<string, string> = {};
 
-      if (!formData.name || formData.name.trim() === "") {
-        errors.name = "Event Name is required";
-      }
-      if (!formData.category || formData.category.trim() === "") {
-        errors.category = "Category is required";
-      }
-      if (!formData.tags || formData.tags.trim() === "") {
-        errors.tags = "Tag is required";
-      }
-      if (!formData.contactNumber || formData.contactNumber.trim() === "") {
-        errors.contactNumber = "Contact Number is required";
-      }
-      if (!formData.description || formData.description.trim() === "") {
-        errors.description = "Event Description is required";
-      }
+      if (!formData.name?.trim()) errors.name = "Event Name is required";
+      if (!formData.category?.trim()) errors.category = "Category is required";
+      if (!formData.tags?.trim()) errors.tags = "Tag is required";
+      if (!formData.contactNumber?.trim()) errors.contactNumber = "Contact Number is required";
+      if (!formData.description?.trim()) errors.description = "Event Description is required";
 
-      // Set errors if any exist
       if (Object.keys(errors).length > 0) {
-        Object.entries(errors).forEach(([field, error]) => {
-          setError(stage, field, error);
-        });
-
-        // Trigger validation in EventSetup component to show errors
+        Object.entries(errors).forEach(([field, error]) => setError(stage, field, error));
         const validationFn = (window as any).validateEventSetup;
-        if (typeof validationFn === 'function') {
-          validationFn();
-        }
+        if (typeof validationFn === "function") validationFn();
         return;
       }
 
-      // Clear errors if validation passes
       clearStageErrors(stage);
-
-      // Set loading state only when making API call
       setIsCreatingEvent(true);
 
-      // Create the event if validation passes
-      const success = await handleCreateEvent(formData);
-      if (!success) {
-        return; // Stop if event creation fails
+      let finalTagId: string | null = null;
+
+      // ✅ If "Other", create new tag and use the returned ID
+      if (formData.tags === "Other") {
+        const newTagName = formData.newTagName.trim();
+        const newTagDescription = formData.newTagDescription?.trim() || "";
+        if (!newTagName) {
+          errorAlert("Error", "Tag name is required");
+          setIsCreatingEvent(false);
+          return;
+        }
+        try {
+          const res = await createTag(newTagName, newTagDescription);
+          finalTagId = res.tagId;
+        } catch (err) {
+          console.error("Tag creation failed", err);
+          errorAlert("Error", "Failed to create tag.");
+          setIsCreatingEvent(false);
+          return;
+        }
+      } else {
+        // If not "Other", use selected tag ID (e.g., from a dropdown or existing value)
+        finalTagId = formData.selectedTags || formData.tags; // whichever one holds the tag ID
       }
-      
-      // Move to next stage after successful event creation
+
+      const success = await createEvent(formData.name,
+         formData.description,
+         formData.coverImage || "",
+         [finalTagId],
+         formData.contactNumber,
+        formData.category,
+       formData.seriesId || undefined);
+      setIsCreatingEvent(false);
+
+      Storage.setItem("eventId", success.eventId);
+
+      if (!success) {
+        setError(stage, "general", "Failed to create event. Please try again.");
+        return;
+      }
       if (currentIndex < stages.length - 1) {
         setStage(stages[currentIndex + 1]);
       }
-      return; // Important: return here to prevent further execution
-    } else {
-      // For other stages, use the validation rules
-      const { isValid, errors } = validateStage(stage, formData)
-
-      if (!isValid) {
-        // Set errors for the current stage
-        Object.entries(errors).forEach(([field, error]) => {
-          setError(stage, field, error)
-        })
-        return
+      return;
+    }
+    if(stage === "Schedule & Location") {
+      try {
+        const res= await getScheduleandLocation(eventId, formData.startDate, formData.endDate, formData.startTime, formData.endTime, formData.timezone, formData.location, formData.address);
+        console.log(res, 'Schedule & Location response');
+      } catch (error) {
+        console.error("Error in Schedule & Location stage:", error);
+        setError(stage, "general", "An unexpected error occurred. Please try again.");
+        return;
+        
       }
-
-      // Clear errors if validation passes
-      clearStageErrors(stage)
     }
-
-    // Stage advancement for other stages (not Event Setup)
+    // Handle other stages
+    const { isValid, errors } = validateStage(stage, formData);
+    if (!isValid) {
+      Object.entries(errors).forEach(([field, error]) => setError(stage, field, error));
+      return;
+    }
+    clearStageErrors(stage);
     if (currentIndex < stages.length - 1) {
-      setStage(stages[currentIndex + 1])
+      setStage(stages[currentIndex + 1]);
     }
+  } catch (error) {
+    setIsCreatingEvent(false);
+    console.error("Error in goNext:", error);
+    setError(stage, "general", "An unexpected error occurred. Please try again.");
   }
+};
+
 
   const goBack = () => {
     if (currentIndex > 0) {

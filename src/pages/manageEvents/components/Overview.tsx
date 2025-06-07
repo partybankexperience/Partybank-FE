@@ -17,7 +17,7 @@ import { formatDate, formatTimeRange } from "../../../components/helpers/dateTim
 const Overview = () => {
   const navigate=useNavigate()
   const {id}=useParams()
-  const [eventData, setEventData] = useState(null);
+  const [eventData, setEventData] = useState<any>(null);
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   // const location = [

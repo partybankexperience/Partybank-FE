@@ -36,6 +36,7 @@ export type endPointlistTypes = {
     deleteTicket: endpointTypes;
     getEventsById: endpointTypes;
     getEvents: endpointTypes;
+    getScheduleandLocation: endpointTypes;
 };
 
 export type urlPropTypes = {
@@ -44,4 +45,5 @@ export type urlPropTypes = {
     data?: any;
     params?: any;
     action?: (data: any) => any;
+    alert?: boolean;
 };

@@ -13,6 +13,7 @@ export const apiCall = ({
   data = {},
   params = {},
   action = () => undefined,
+  alert=true
 }: urlPropTypes) => {
   return new Promise((res, rej) => {
     const theName = name as keyof typeof endPoints;
@@ -34,23 +35,24 @@ export const apiCall = ({
       .then(async (r) => {
         const returned = await action(r.data);
         console.log(r, "Response Data:", returned);
-        if (r.data.respCode === "00" || r.status === 200) {
-          successAlert(
-            "Success",
-            r?.data?.message || "Request completed successfully."
-          );
-          res(r.data.respBody || r.data);
-        } else {
-          console.error("Response Error:", r);
-          errorAlert("Oops!", r.data.respMessage || "Something went wrong.");
-        }
+        res(r.data.respBody || r.data)
+        if (alert) {
+        successAlert(
+          "Success",
+          r?.data?.message || "Request completed successfully."
+        );}
+        // if (r.data.respCode === "00" || r.status === 200) {
+        //   res(r.data.respBody || r.data);
+        // } else {
+        //   console.error("Response Error:", r);
+        //   errorAlert("Oops!", r.data.respMessage || "Something went wrong.");
+        // }
       })
       .catch((err) => {
         // Check if the error response is 401
         if (err.response?.status === 401) {
           // Clear token and redirect with state to trigger notification
-          Storage.removeItem("token");
-          Storage.removeItem("user");
+          Storage.clearItem()
           // Use history.pushState for navigation without refresh
           window.history.pushState(null, '', '/?state=notAuthenticated');
           // Dispatch a popstate event to trigger navigation
