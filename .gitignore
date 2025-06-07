@@ -23,3 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 src/utils/api.env.ts
+
+# Ignore SSH keys
+id_ed25519_newgithub
+id_ed25519_newgithub.pub
+id_rsa
+id_rsa.pub

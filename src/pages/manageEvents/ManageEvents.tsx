@@ -30,7 +30,7 @@ const ManageEvents = () => {
 
     switch (activeTab) {
       case "Active":
-        return events.filter((event: any) => event.status === "active");
+        return events.filter((event: any) => event.status === "published");
       case "Upcoming":
         return events.filter((event: any) => event.status === "upcoming");
       case "Past":

@@ -56,7 +56,6 @@ const Overview = () => {
     if (!eventData) return [];
 
     return [
-      { label: "Internal ID", value: eventData.id || "N/A" },
       { label: "Category", value: eventData.category || "N/A" },
       { label: "Tags", value: Array.isArray(eventData.tags) ? eventData.tags.join(", ") : (eventData.tags || "N/A") },
       { label: "Series", value: eventData.seriesName || "N/A" },
