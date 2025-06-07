@@ -120,9 +120,7 @@ const Overview = () => {
     try {
       setLoading(true);
       const res= await getEventsById(id as string);
-      setEventData(res.data);
-      console.log(res.data);
-      console.log(eventData);
+      setEventData(res);
     } catch (error) {
       console.log(error)
     } finally {
