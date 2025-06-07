@@ -12,7 +12,7 @@ import TicketsCard from "../../../components/cards/TicketCard";
 import { useNavigate, useParams } from "react-router";
 import { getEventsById } from "../../../Containers/eventApi";
 import { useEffect, useState } from "react";
-import { formatDate, formatTimeRange } from "../../../helper";
+import { formatDate, formatTimeRange } from "../../../components/helpers/dateTimeHelpers";
 
 const Overview = () => {
   const navigate=useNavigate()
