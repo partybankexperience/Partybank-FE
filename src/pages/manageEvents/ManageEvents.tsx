@@ -7,24 +7,43 @@ import { getEvents } from "../../Containers/eventApi";
 
 const ManageEvents = () => {
   const [activeTab, setActiveTab] = useState("Active");
-  const card = [1, 2, 3, 4];
   const navigate = useNavigate();
-  const [events, setevents] = useState([])
+  const [events, setEvents] = useState([]);
 
   async function getAllEvent() {
     try {
-      const res=await getEvents()
-      console.log(res)
-      setevents(res)
+      const res = await getEvents();
+      console.log(res);
+      setEvents(res);
     } catch (error) {
       console.error("Error fetching events:", error);
-      
     }
   }
+
   useEffect(() => {
     getAllEvent();
-  }, [])
-  
+  }, []);
+
+  // Filter events based on status
+  const getFilteredEvents = () => {
+    if (!events || events.length === 0) return [];
+
+    switch (activeTab) {
+      case "Active":
+        return events.filter((event: any) => event.status === "active");
+      case "Upcoming":
+        return events.filter((event: any) => event.status === "upcoming");
+      case "Past":
+        return events.filter((event: any) => event.status === "past");
+      case "Drafts":
+        return events.filter((event: any) => event.status === "draft");
+      default:
+        return events;
+    }
+  };
+
+  const filteredEvents = getFilteredEvents();
+
   return (
     <div className="min-h-[80vh] bg-white rounded-md p-[1.3vw]">
       <Tabs
@@ -36,30 +55,29 @@ const ManageEvents = () => {
 
       <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[20px]">
         <CreateNewEvent />
-        {activeTab === "Active" && (
-          <>
-            {events.map((val:any, index) => (
-              <EventCard
-                key={index}
-                progress={50}
-                name={val?.name}
-                startTime={val?.startTime}
-                endTime={val?.endTime}
-                startDate={val?.startDate}
-                location={val?.location}
-                bannerImage={val?.bannerImage}
-                onEdit={() => {
-                  // navigate to edit page
-                  navigate(`/manage-events/${val.id}`,{state: { event: val }});
-                }}
-                onDuplicate={() => console.log("Duplicate clicked")}
-                onDelete={() => console.log("Delete clicked")}
-              />
-            ))}
-          </>
+        {filteredEvents.length > 0 ? (
+          filteredEvents.map((val: any, index) => (
+            <EventCard
+              key={val.id || index}
+              progress={50}
+              name={val?.name}
+              startTime={val?.startTime}
+              endTime={val?.endTime}
+              startDate={val?.startDate}
+              location={val?.location}
+              bannerImage={val?.bannerImage}
+              onEdit={() => {
+                navigate(`/manage-events/${val.id}`, { state: { event: val } });
+              }}
+              onDuplicate={() => console.log("Duplicate clicked")}
+              onDelete={() => console.log("Delete clicked")}
+            />
+          ))
+        ) : (
+          <div className="col-span-full text-center text-gray-500 py-8">
+            No {activeTab.toLowerCase()} events found.
+          </div>
         )}
-        {activeTab === "Upcoming" && <p>Showing Upcoming Events</p>}
-        {activeTab === "Past" && <p>Showing Past Events</p>}
       </div>
     </div>
   );
