@@ -1,17 +1,82 @@
-import { useState } from "react";
+
+import { useState, useEffect, useRef } from "react";
 import RadioButton from "../../components/inputs/RadioButton";
 import DefaultInput from "../../components/inputs/DefaultInput";
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import { FaRegClock } from "react-icons/fa";
 import { MapWithAutocomplete } from "../../components/map/Map";
 import { useEventStore } from "../../stores/useEventStore";
+import SlideToggle from "../../components/inputs/SlideToggle";
 
 const ScheduleEvent = () => {
-//   const [selected, setSelected] = useState("");
   const eventType = ["Single day", "Multiple Day"];
-  const { form, setFormValue } = useEventStore();
+  const { form, setFormValue, errors } = useEventStore();
   const scheduleEventForm = form["Schedule & Location"] || {};
+  const scheduleEventErrors = errors["Schedule & Location"] || {};
   const selected = scheduleEventForm.eventType || "";
+  const [showLocation, setShowLocation] = useState(false);
+
+  const eventTypeRef = useRef<any>(null);
+  const startDateRef = useRef<any>(null);
+  const endDateRef = useRef<any>(null);
+  const startTimeRef = useRef<any>(null);
+  const endTimeRef = useRef<any>(null);
+  const venueNameRef = useRef<any>(null);
+
+  const handleInputChange = (key: string, value: any) => {
+    setFormValue("Schedule & Location", key, value);
+  };
+
+  const handleLocationSelect = (location: any) => {
+    // Extract address components and format them according to the required structure
+    const addressParts = location.name.split(', ');
+    const address = {
+      country: addressParts[addressParts.length - 1] || "",
+      state: addressParts[addressParts.length - 2] || "",
+      city: addressParts[addressParts.length - 3] || "",
+      street: addressParts.slice(0, -3).join(', ') || addressParts[0] || "",
+      postalCode: "" // This would need to be extracted from a more detailed geocoding response
+    };
+
+    setFormValue("Schedule & Location", "selectedLocation", location);
+    setFormValue("Schedule & Location", "address", address);
+    setFormValue("Schedule & Location", "coordinates", {
+      lat: location.lat,
+      lon: location.lon
+    });
+  };
+
+  const validateForm = () => {
+    // Focus on first error from store
+    if (Object.keys(scheduleEventErrors).length > 0) {
+      setTimeout(() => {
+        if (scheduleEventErrors.eventType && eventTypeRef.current) {
+          eventTypeRef.current.focus();
+        } else if (scheduleEventErrors.startDate && startDateRef.current) {
+          startDateRef.current.focus();
+        } else if (scheduleEventErrors.endDate && endDateRef.current) {
+          endDateRef.current.focus();
+        } else if (scheduleEventErrors.startTime && startTimeRef.current) {
+          startTimeRef.current.focus();
+        } else if (scheduleEventErrors.endTime && endTimeRef.current) {
+          endTimeRef.current.focus();
+        } else if (scheduleEventErrors.venueName && venueNameRef.current) {
+          venueNameRef.current.focus();
+        }
+      }, 100);
+    }
+
+    return Object.keys(scheduleEventErrors).length === 0;
+  };
+
+  // Export validation function for external use
+  useEffect(() => {
+    (window as any).validateScheduleEvent = validateForm;
+    return () => {
+      delete (window as any).validateScheduleEvent;
+    };
+  }, [scheduleEventForm]);
+
   return (
     <div>
       <div className="grid gap-[20px]">
@@ -20,6 +85,7 @@ const ScheduleEvent = () => {
           role="radiogroup"
           aria-label="Select an option"
           className="grid md:flex gap-4 md:gap-[2.5rem]"
+          ref={eventTypeRef}
         >
           {eventType.map((label, idx) => (
             <RadioButton
@@ -29,11 +95,15 @@ const ScheduleEvent = () => {
               name="eventType"
               checked={selected === label}
               onChange={(val) => {
-                // setSelected(val);
-                setFormValue("Schedule & Location", "eventType", val);
+                handleInputChange("eventType", val);
               }}
             />
           ))}
+          {scheduleEventErrors.eventType && (
+            <p className="text-[13px] text-red-500 mt-1">
+              {scheduleEventErrors.eventType}
+            </p>
+          )}
         </div>
 
         {/* Date & Time Section */}
@@ -43,34 +113,46 @@ const ScheduleEvent = () => {
             id="startDate"
             label="Start Date"
             value={scheduleEventForm.startDate || ""}
-            setValue={(val: any) => setFormValue("Schedule & Location", "startDate", val)}
+            setValue={(val: any) => handleInputChange("startDate", val)}
             placeholder="12/04/2025"
             classname="!w-full"
             rightContent={<MdOutlineCalendarMonth className="text-black text-[1rem]" />}
+            required
+            helperText={scheduleEventErrors.startDate || ""}
+            style={scheduleEventErrors.startDate ? "border-red-500" : ""}
+            inputRef={startDateRef}
           />
           <DefaultInput
             type="time"
             id="startTime"
             label="Start Time"
             value={scheduleEventForm.startTime || ""}
-            setValue={(val: any) => setFormValue("Schedule & Location", "startTime", val)}
+            setValue={(val: any) => handleInputChange("startTime", val)}
             placeholder="08:00 AM"
             classname="!w-full"
             rightContent={<FaRegClock className="text-black text-[1rem]" />}
+            required
+            helperText={scheduleEventErrors.startTime || ""}
+            style={scheduleEventErrors.startTime ? "border-red-500" : ""}
+            inputRef={startTimeRef}
           />
           <DefaultInput
             type="time"
             id="endTime"
             label="End Time"
             value={scheduleEventForm.endTime || ""}
-            setValue={(val: any) => setFormValue("Schedule & Location", "endTime", val)}
+            setValue={(val: any) => handleInputChange("endTime", val)}
             placeholder="08:00 PM"
             classname="!w-full"
             rightContent={<FaRegClock className="text-black text-[1rem]" />}
+            required
+            helperText={scheduleEventErrors.endTime || ""}
+            style={scheduleEventErrors.endTime ? "border-red-500" : ""}
+            inputRef={endTimeRef}
           />
         </div>
 
-        {/* Only show if Multiple Day */}
+        {/* Only show end date if Multiple Day */}
         {selected === "Multiple Day" && (
           <div className="grid md:grid-cols-[1fr_.5fr_.5fr] gap-[20px]">
             <DefaultInput
@@ -78,54 +160,74 @@ const ScheduleEvent = () => {
               id="endDate"
               label="End Date"
               value={scheduleEventForm.endDate || ""}
-              setValue={(val: any) => setFormValue("Schedule & Location", "endDate", val)}
+              setValue={(val: any) => handleInputChange("endDate", val)}
               placeholder="13/04/2025"
               classname="!w-full"
               rightContent={<MdOutlineCalendarMonth className="text-black text-[1rem]" />}
+              required
+              helperText={scheduleEventErrors.endDate || ""}
+              style={scheduleEventErrors.endDate ? "border-red-500" : ""}
+              inputRef={endDateRef}
             />
-            <DefaultInput
-              type="time"
-              id="multiStartTime"
-              label="Start Time "
-              value={scheduleEventForm.multiStartTime || ""}
-              setValue={(val: any) => setFormValue("Schedule & Location", "multiStartTime", val)}
-              placeholder="08:00 AM"
-              classname="!w-full"
-              rightContent={<FaRegClock className="text-black text-[1rem]" />}
-            />
-            <DefaultInput
-              type="time"
-              id="multiEndTime"
-              label="End Time "
-              value={scheduleEventForm.multiEndTime || ""}
-              setValue={(val: any) => setFormValue("Schedule & Location", "multiEndTime", val)}
-              placeholder="08:00 PM"
-              classname="!w-full"
-              rightContent={<FaRegClock className="text-black text-[1rem]" />}
-            />
+            <div className="md:col-span-2"></div>
           </div>
         )}
 
-        {/* Venue Info */}
-        <DefaultInput
-          id="venueName"
-          label="Venue Name"
-          value={scheduleEventForm.venueName || ""}
-          setValue={(val: any) => setFormValue("Schedule & Location", "venueName", val)}
-          placeholder="e.g., Landmark Centre"
-          classname="!w-full"
-        />
-        <DefaultInput
-          id="address"
-          label="Event Address"
-          value={scheduleEventForm.address || ""}
-          setValue={(val: any) => setFormValue("Schedule & Location", "address", val)}
-          placeholder="Enter full location details"
-          classname="!w-full"
-        />
+        {/* Location Toggle */}
+        <div className="grid gap-[10px]">
+          <h2 className="text-black text-[1.2rem]">Location</h2>
+          <div className="flex items-center gap-4">
+            <SlideToggle
+              checked={showLocation}
+              onChange={setShowLocation}
+              label=""
+            />
+            <span className="text-black text-[1rem]">
+              {showLocation ? "Location will be provided" : "Location TBA (To Be Announced)"}
+            </span>
+          </div>
+        </div>
 
-        {/* Map Autocomplete */}
-        <MapWithAutocomplete />
+        {/* Show venue and location inputs only if location toggle is on */}
+        {showLocation && (
+          <>
+            <DefaultInput
+              id="venueName"
+              label="Venue Name"
+              value={scheduleEventForm.venueName || ""}
+              setValue={(val: any) => handleInputChange("venueName", val)}
+              placeholder="e.g., Landmark Centre"
+              classname="!w-full"
+              required
+              helperText={scheduleEventErrors.venueName || ""}
+              style={scheduleEventErrors.venueName ? "border-red-500" : ""}
+              inputRef={venueNameRef}
+            />
+
+            {/* Map Autocomplete */}
+            <div className="grid gap-2">
+              <label className="text-black text-[1rem] font-semibold">
+                Event Location
+              </label>
+              <MapWithAutocomplete onSelect={handleLocationSelect} />
+              {scheduleEventForm.selectedLocation && (
+                <div className="mt-2 p-3 bg-gray-50 rounded-md">
+                  <p className="text-sm text-gray-700">
+                    <strong>Selected Location:</strong> {scheduleEventForm.selectedLocation.name}
+                  </p>
+                  {scheduleEventForm.address && (
+                    <div className="text-xs text-gray-600 mt-1">
+                      <p>Street: {scheduleEventForm.address.street}</p>
+                      <p>City: {scheduleEventForm.address.city}</p>
+                      <p>State: {scheduleEventForm.address.state}</p>
+                      <p>Country: {scheduleEventForm.address.country}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

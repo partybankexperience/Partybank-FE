@@ -173,13 +173,30 @@ const goNext = async () => {
     }
     if(stage === "Schedule & Location") {
       try {
-        const res= await getScheduleandLocation(eventId, formData.startDate, formData.endDate, formData.startTime, formData.endTime, formData.timezone, formData.location, formData.address);
+        // Validate Schedule & Location stage
+        const { isValid, errors } = validateStage(stage, formData);
+        if (!isValid) {
+          Object.entries(errors).forEach(([field, error]) => setError(stage, field, error));
+          return;
+        }
+        clearStageErrors(stage);
+
+        const res= await getScheduleandLocation(
+          eventId, 
+          formData.eventType,
+          formData.startDate, 
+          formData.endDate, 
+          formData.startTime, 
+          formData.endTime, 
+          formData.showLocation ? "false" : "true", // isLocationTBA
+          formData.venueName, 
+          formData.address
+        );
         console.log(res, 'Schedule & Location response');
       } catch (error) {
         console.error("Error in Schedule & Location stage:", error);
         setError(stage, "general", "An unexpected error occurred. Please try again.");
         return;
-        
       }
     }
     // Handle other stages

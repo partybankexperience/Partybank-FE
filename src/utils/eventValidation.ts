@@ -12,7 +12,16 @@ export const validationRules = {
   'Schedule & Location': {
     eventType: { required: true, message: 'Event type is required' },
     startDate: { required: true, message: 'Start date is required' },
-    venueName: { required: true, message: 'Venue name is required' },
+    startTime: { required: true, message: 'Start time is required' },
+    endTime: { required: true, message: 'End time is required' },
+    endDate: { 
+      required: (formData: any) => formData.eventType === 'Multiple Day', 
+      message: 'End date is required for multiple day events' 
+    },
+    venueName: { 
+      required: (formData: any) => formData.showLocation !== false, 
+      message: 'Venue name is required when location is provided' 
+    },
   },
   'Tickets Create': {
     // At least one ticket should be created
@@ -39,7 +48,12 @@ export const validateStage = (stage: string, formData: Record<string, any>) => {
   Object.entries(rules).forEach(([field, rule]) => {
     const value = formData[field]
     
-    if (rule.required) {
+    // Handle conditional required fields
+    const isRequired = typeof rule.required === 'function' 
+      ? rule.required(formData) 
+      : rule.required;
+    
+    if (isRequired) {
       if (!value || value === '' || (Array.isArray(value) && value.length === 0)) {
         errors[field] = rule.message
         isValid = false
