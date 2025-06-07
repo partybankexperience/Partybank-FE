@@ -122,6 +122,7 @@ const Overview = () => {
       const res= await getEventsById(id as string);
       setEventData(res.data);
       console.log(res.data);
+      console.log(eventData);
     } catch (error) {
       console.log(error)
     } finally {
