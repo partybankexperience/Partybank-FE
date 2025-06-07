@@ -7,6 +7,7 @@ import { FaRegClock } from "react-icons/fa";
 import { MapWithAutocomplete } from "../../components/map/Map";
 import { useEventStore } from "../../stores/useEventStore";
 import SlideToggle from "../../components/inputs/SlideToggle";
+import "leaflet/dist/leaflet.css";
 
 const ScheduleEvent = () => {
   const eventType = ["Single day", "Multiple Day"];
@@ -209,7 +210,9 @@ const ScheduleEvent = () => {
               <label className="text-black text-[1rem] font-semibold">
                 Event Location
               </label>
-              <MapWithAutocomplete onSelect={handleLocationSelect} />
+              <div className="w-full min-h-[400px]">
+                <MapWithAutocomplete onSelect={handleLocationSelect} />
+              </div>
               {scheduleEventForm.selectedLocation && (
                 <div className="mt-2 p-3 bg-gray-50 rounded-md">
                   <p className="text-sm text-gray-700">
@@ -227,7 +230,7 @@ const ScheduleEvent = () => {
               )}
             </div>
           </>
-        )}
+        )}</div>
       </div>
     </div>
   );
