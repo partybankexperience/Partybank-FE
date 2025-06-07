@@ -124,7 +124,7 @@ const getEventsById =async (id: string): Promise<any> =>{
 }
 const getScheduleandLocation = async (id:string,eventType: string,startDate:string,endDate:string,startTime:string,endTime:string,isLocationTBA:string,venueName?:string,address?: Address): Promise<any> => {
   const response = await apiCall({
-    name: "getEventsById",
+    name: "getScheduleandLocation",
     urlExtra: `/${id}/schedule-location`,
     data: {
       eventType,
