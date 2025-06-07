@@ -61,10 +61,8 @@ const Login = () => {
       navigate("/dashboard");
     } catch (error) {
       console.log(error);
-    setisLoading(false);
-    } finally{
-    setisLoading(false);
-      
+    } finally {
+      setisLoading(false);
     }
 
     // Handle sign-in logic here
