@@ -121,7 +121,7 @@ const Overview = () => {
       setLoading(true);
       const res= await getEventsById(id as string);
       setEventData(res);
-      if (res.currentStage !=="reviewPublish") {
+      if (res.currentStep !=="reviewPublish") {
         navigate('/dashboard/create-event',{state: { event: res }});
         setLoading(false);
         return;
