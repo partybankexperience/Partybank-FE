@@ -77,11 +77,9 @@ const Login = () => {
       await LoginWithGoogle();
     } catch (error) {
       console.log(error);
-    setisLoading(false);
-
+    } finally {
+      setisGoogleLoading(false);
     }
-    setisGoogleLoading(false);
-
   }
   return (
     <LoginLayout>
