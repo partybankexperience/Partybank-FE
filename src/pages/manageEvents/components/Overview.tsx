@@ -18,6 +18,7 @@ const Overview = () => {
   const navigate=useNavigate()
   const {id}=useParams()
   const [eventData, setEventData] = useState(null);
+  const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   // const location = [
   //   { icon: <GrLocation className="text-primary" />, name: "Landmark Centre" },
@@ -121,6 +122,13 @@ const Overview = () => {
       setLoading(true);
       const res= await getEventsById(id as string);
       setEventData(res);
+      
+      // Extract tickets from the response
+      if (res && res.tickets && Array.isArray(res.tickets)) {
+        setTickets(res.tickets);
+      } else if (res && res.data && res.data.tickets && Array.isArray(res.data.tickets)) {
+        setTickets(res.data.tickets);
+      }
     } catch (error) {
       console.log(error)
     } finally {
@@ -212,27 +220,23 @@ const Overview = () => {
               </DefaultButton>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3  gap-[20px] ">
-              <TicketsCard
-                title="At the Gate"
-                availability="Limited"
-                capacity="1,000"
-                price="₦10,000"
-                buttonOptions={buttonOptions}
-              />
-              <TicketsCard
-                title="Regular"
-                availability="Limited"
-                capacity="1,000"
-                price="₦10,000"
-                buttonOptions={buttonOptions}
-              />
-              <TicketsCard
-                title="Table for 3"
-                availability="Limited"
-                capacity="1,000"
-                price="₦10,000"
-                buttonOptions={buttonOptions}
-              />
+              {tickets.length > 0 ? (
+                tickets.map((ticket: any, index: number) => (
+                  <TicketsCard
+                    key={ticket.id || index}
+                    title={ticket.name || "Unnamed Ticket"}
+                    availability={ticket.isSoldOut ? "Sold Out" : ticket.stock > 0 ? "Available" : "Limited"}
+                    capacity={ticket.stock?.toString() || "N/A"}
+                    price={ticket.type === "free" ? "Free" : `₦${ticket.price?.toLocaleString() || "0"}`}
+                    buttonOptions={buttonOptions}
+                  />
+                ))
+              ) : (
+                <div className="col-span-full text-center text-gray-500 py-8">
+                  <p>No tickets found for this event.</p>
+                  <p className="text-sm mt-2">Create your first ticket to get started.</p>
+                </div>
+              )}
             </div>
           </div>
           <div className="p-[1.25rem] border border-[#EDEDED] rounded-lg">
