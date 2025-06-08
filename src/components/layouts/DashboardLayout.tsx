@@ -200,7 +200,7 @@ const DashboardLayout = ({ children }: any) => {
                     if (currentPath.includes('/create-event') && eventId) {
                       // Clear eventId when navigating away from create event
                       Storage.removeItem("eventId");
-                      navigate('/dashboard/manage-events');
+                      navigate('/manage-events');
                     } else {
                       navigate(-1);
                     }
