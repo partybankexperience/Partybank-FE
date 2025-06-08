@@ -90,7 +90,7 @@ const CreateEvent = () => {
 //         setIsCreatingEvent(true);
 //         return; // Stop if event creation fails
 //       }
-      
+
 //       // Move to next stage after successful event creation
 //       if (currentIndex < stages.length - 1) {
 //         setStage(stages[currentIndex + 1]);
@@ -166,14 +166,14 @@ const goNext = async () => {
       }
 
       let success;
-      
+
       if (eventId) {
         // Check if data has changed before calling edit endpoint
         const dataHasChanged = hasFormDataChanged(formData, originalFormData);
         console.log("Data has changed:", dataHasChanged);
         console.log("Current data:", formData);
         console.log("Original data:", originalFormData);
-        
+
         if (!dataHasChanged) {
           console.log("No changes detected, skipping API call");
           setIsCreatingEvent(false);
@@ -182,7 +182,7 @@ const goNext = async () => {
           }
           return;
         }
-        
+
         // Edit existing event
         console.log("Editing existing event with ID:", eventId);
         success = await editEvent(
@@ -195,7 +195,7 @@ const goNext = async () => {
           formData.category,
           formData.seriesId || undefined
         );
-        
+
         // Update original form data after successful edit
         if (success) {
           setOriginalFormData(JSON.parse(JSON.stringify(formData)));
@@ -212,13 +212,13 @@ const goNext = async () => {
           formData.category,
           formData.seriesId || undefined
         );
-        
+
         if (success && success.eventId) {
           Storage.setItem("eventId", success.eventId);
           setOriginalFormData(JSON.parse(JSON.stringify(formData)));
         }
       }
-      
+
       setIsCreatingEvent(false);
 
       if (!success) {
@@ -305,7 +305,7 @@ const goNext = async () => {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       window.removeEventListener('popstate', handlePopState);
-      
+
       // Use conditional clear - only clears if no eventId exists
       conditionalClearStorage();
     };
