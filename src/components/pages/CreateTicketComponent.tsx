@@ -123,6 +123,17 @@ const CreateTicketComponent = () => {
             placeholder="Enter sold target"
             classname="!w-full"
           />
+          {getValue("ticketCategory") === "option2" && (
+            <DefaultInput
+              id="numberOfPeople"
+              label="Number of people"
+              value={getValue("numberOfPeople")}
+              setValue={(v:any) => handleChange("numberOfPeople", v)}
+              placeholder="Enter number of people"
+              classname="!w-full"
+              type="number"
+            />
+          )}
         </div>
       </div>
 
