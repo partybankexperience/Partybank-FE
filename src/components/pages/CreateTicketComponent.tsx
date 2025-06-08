@@ -107,14 +107,16 @@ const CreateTicketComponent = () => {
             dropdownOptions={["1", "2", "3"]}
             showDropdown
           />
-          <DefaultInput
-            id="price"
-            label="Price"
-            value={getValue("price")}
-            setValue={(v:any) => handleChange("price", v)}
-            placeholder="Enter price"
-            classname="!w-full"
-          />
+          {getValue("ticketType") === "Paid" && (
+            <DefaultInput
+              id="price"
+              label="Price"
+              value={getValue("price")}
+              setValue={(v:any) => handleChange("price", v)}
+              placeholder="Enter price"
+              classname="!w-full"
+            />
+          )}
           <DefaultInput
             id="soldTarget"
             label="Sold Target"
