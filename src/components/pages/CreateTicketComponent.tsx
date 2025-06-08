@@ -6,7 +6,7 @@ import { useLocation } from "react-router-dom";
 import RadioButton from "../inputs/RadioButton";
 import { useEventStore } from "../../stores/useEventStore";
 import { NumericFormat } from 'react-number-format';
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaTrash } from 'react-icons/fa';
 
 const CreateTicketComponent = () => {
   const location = useLocation();
@@ -45,6 +45,14 @@ const CreateTicketComponent = () => {
   const addPerk = () => {
     const perks = getValue("perks") || [""];
     handleChange("perks", [...perks, ""]);
+  };
+
+  const deletePerk = (index: number) => {
+    const perks = getValue("perks") || [""];
+    if (perks.length > 1) {
+      const updatedPerks = perks.filter((_, i) => i !== index);
+      handleChange("perks", updatedPerks);
+    }
   };
 
   return (
@@ -239,16 +247,28 @@ const CreateTicketComponent = () => {
             placeholder="Enter perk here"
             classname="!w-full"
             rightContent={
-              index === (getValue("perks") || [""]).length - 1 ? (
-                <button
-                  type="button"
-                  onClick={addPerk}
-                  className="text-primary hover:text-purple transition-colors"
-                  aria-label="Add another perk"
-                >
-                  <FaPlus />
-                </button>
-              ) : null
+              <div className="flex items-center gap-2">
+                {(getValue("perks") || [""]).length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => deletePerk(index)}
+                    className="text-red-500 hover:text-red-700 transition-colors"
+                    aria-label="Delete this perk"
+                  >
+                    <FaTrash />
+                  </button>
+                )}
+                {index === (getValue("perks") || [""]).length - 1 && (
+                  <button
+                    type="button"
+                    onClick={addPerk}
+                    className="text-primary hover:text-purple transition-colors"
+                    aria-label="Add another perk"
+                  >
+                    <FaPlus />
+                  </button>
+                )}
+              </div>
             }
           />
         ))}
