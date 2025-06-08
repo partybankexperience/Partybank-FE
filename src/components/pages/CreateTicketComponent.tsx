@@ -77,6 +77,26 @@ const CreateTicketComponent = () => {
       </div>
 
       <div className="grid gap-[15px]">
+        <h2 className="text-black text-[1.2rem] font-bold">Ticket Availability</h2>
+        <div className="grid md:flex gap-4 md:gap-[2.5rem]">
+          <RadioButton
+            label="Limited"
+            value="limited"
+            name="ticket-availability"
+            checked={getValue("ticketAvailability") === "limited"}
+            onChange={() => handleChange("ticketAvailability", "limited")}
+          />
+          <RadioButton
+            label="Unlimited"
+            value="unlimited"
+            name="ticket-availability"
+            checked={getValue("ticketAvailability") === "unlimited"}
+            onChange={() => handleChange("ticketAvailability", "unlimited")}
+          />
+        </div>
+      </div>
+
+      <div className="grid gap-[15px]">
         <h2 className="text-black text-[1.2rem] font-bold">Ticket Details</h2>
         <div className="grid gap-[15px] md:grid-cols-2">
           <DefaultInput
@@ -97,16 +117,17 @@ const CreateTicketComponent = () => {
             dropdownOptions={["1", "2", "3"]}
             showDropdown
           />
-          <DefaultInput
-            id="stockAvailability"
-            label="Stock Availability"
-            value={getValue("stockAvailability")}
-            setValue={(v:any) => handleChange("stockAvailability", v)}
-            placeholder="1"
-            classname="!w-full"
-            dropdownOptions={["1", "2", "3"]}
-            showDropdown
-          />
+          {getValue("ticketAvailability") === "limited" && (
+            <DefaultInput
+              id="stockAvailability"
+              label="Stock Availability"
+              value={getValue("stockAvailability")}
+              setValue={(v:any) => handleChange("stockAvailability", v)}
+              placeholder="Enter stock quantity"
+              classname="!w-full"
+              type="number"
+            />
+          )}
           {getValue("ticketType") === "Paid" && (
             <DefaultInput
               id="price"
