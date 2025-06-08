@@ -117,7 +117,7 @@ export const useEventStore = create<EventData>()(
       },
       prefillEventData: (eventData: any) => {
         const form: Record<string, any> = {};
-        
+
         // Map backend data to Event Setup stage
         form['Event Setup'] = {
           name: eventData.name || '',
@@ -140,13 +140,20 @@ export const useEventStore = create<EventData>()(
         // Map backend data to Schedule & Location stage
         form['Schedule & Location'] = {
           eventType: eventData.eventType || '',
-          startDate: eventData.startDate ? new Date(eventData.startDate).toISOString().split('T')[0] : '',
-          endDate: eventData.endDate ? new Date(eventData.endDate).toISOString().split('T')[0] : '',
+          startDate: eventData.startDate || '',
+          endDate: eventData.endDate || '',
           startTime: eventData.startTime || '',
           endTime: eventData.endTime || '',
-          showLocation: !eventData.isLocationTBA,
-          venueName: eventData.venueName || '',
-          address: eventData.address || '',
+          venueName: eventData.venueName || eventData.location || '',
+          selectedLocation: eventData.selectedLocation || (eventData.venueName ? {
+            name: eventData.venueName,
+            lat: eventData.coordinates?.lat || 0,
+            lon: eventData.coordinates?.lon || 0
+          } : null),
+          address: eventData.address || null,
+          coordinates: eventData.coordinates || null,
+          showLocation: !!(eventData.venueName || eventData.location || eventData.selectedLocation),
+          isLocationTBA: !(eventData.venueName || eventData.location || eventData.selectedLocation),
         };
 
         // Map backend data to Accessibility stage

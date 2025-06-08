@@ -18,7 +18,14 @@ const ScheduleEvent = () => {
   const scheduleEventForm = form["Schedule & Location"] || {};
   const scheduleEventErrors = errors["Schedule & Location"] || {};
   const selected = scheduleEventForm.eventType || "";
-  const [showLocation, setShowLocation] = useState(scheduleEventForm.showLocation || false);
+  const [showLocation, setShowLocation] = useState(() => {
+    // Determine initial state based on existing data
+    if (scheduleEventForm.showLocation !== undefined) {
+      return scheduleEventForm.showLocation;
+    }
+    // If there's venue name or location data, show location should be true
+    return !!(scheduleEventForm.venueName || scheduleEventForm.selectedLocation || scheduleEventForm.address);
+  });
 
   const eventTypeRef = useRef<any>(null);
   const startDateRef = useRef<any>(null);
@@ -27,12 +34,19 @@ const ScheduleEvent = () => {
   const endTimeRef = useRef<any>(null);
   const venueNameRef = useRef<any>(null);
 
-  // Sync showLocation state with form data
+  // Sync showLocation state with form data and existing location info
   useEffect(() => {
     if (scheduleEventForm.showLocation !== undefined) {
       setShowLocation(scheduleEventForm.showLocation);
+    } else {
+      // Auto-enable location if there's existing location data
+      const hasLocationData = !!(scheduleEventForm.venueName || scheduleEventForm.selectedLocation || scheduleEventForm.address);
+      if (hasLocationData && !showLocation) {
+        setShowLocation(true);
+        setFormValue("Schedule & Location", "showLocation", true);
+      }
     }
-  }, [scheduleEventForm.showLocation]);
+  }, [scheduleEventForm.showLocation, scheduleEventForm.venueName, scheduleEventForm.selectedLocation, scheduleEventForm.address]);
 
   const handleInputChange = (key: string, value: any) => {
     setFormValue("Schedule & Location", key, value);
@@ -234,7 +248,15 @@ const ScheduleEvent = () => {
                 Event Location
               </label>
               <div className="w-full min-h-[400px]">
-                <MapWithAutocomplete onSelect={handleLocationSelect} />
+                <MapWithAutocomplete 
+                  onSelect={handleLocationSelect}
+                  defaultCenter={
+                    scheduleEventForm.coordinates 
+                      ? [scheduleEventForm.coordinates.lat, scheduleEventForm.coordinates.lon]
+                      : undefined
+                  }
+                  prefilledLocation={scheduleEventForm.selectedLocation}
+                />
               </div>
               {scheduleEventForm.selectedLocation && (
                 <div className="mt-2 p-3 bg-gray-50 rounded-md">

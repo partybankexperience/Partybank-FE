@@ -1,11 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const SlideToggle = ({toggle}:any) => {
-  const [isOn, setIsOn] = useState(false);
+interface SlideToggleProps {
+  toggle: (value: boolean) => void;
+  isChecked?: boolean;
+}
+
+const SlideToggle = ({ toggle, isChecked = false }: SlideToggleProps) => {
+  const [isOn, setIsOn] = useState(isChecked);
+
+  // Update local state when isChecked prop changes
+  useEffect(() => {
+    setIsOn(isChecked);
+  }, [isChecked]);
+
+  const handleToggle = () => {
+    const newState = !isOn;
+    setIsOn(newState);
+    toggle(newState);
+  };
 
   return (
     <button
-      onClick={() => {setIsOn(!isOn) ; toggle(!isOn)}}
+      onClick={handleToggle}
       className={`relative w-[45px] h-[26px] rounded-full px-[2px] cursor-pointer py-[3px] transition-colors duration-300 ${
         isOn ? "bg-red" : "bg-gray-400"
       }`}

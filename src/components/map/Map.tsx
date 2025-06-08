@@ -12,6 +12,7 @@ interface Suggestion {
 interface Props {
   defaultCenter?: LatLngExpression;
   onSelect?: (location: Suggestion) => void;
+  prefilledLocation?: Suggestion;
 }
 
 const MapUpdater = ({ position }: { position: LatLngExpression }) => {
@@ -25,10 +26,15 @@ const MapUpdater = ({ position }: { position: LatLngExpression }) => {
 export const MapWithAutocomplete: React.FC<Props> = ({
   defaultCenter = [45.4215, -75.6995], // Ottawa
   onSelect,
+  prefilledLocation,
 }) => {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(prefilledLocation?.name || "");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
-  const [selectedPos, setSelectedPos] = useState<LatLngExpression>(defaultCenter);
+  const [selectedPos, setSelectedPos] = useState<LatLngExpression>(
+    prefilledLocation 
+      ? [prefilledLocation.lat, prefilledLocation.lon]
+      : defaultCenter
+  );
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const fetchSuggestions = async (q: string) => {
