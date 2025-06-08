@@ -10,7 +10,7 @@ interface TicketSidebarProps {
 }
 
 const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSidebarProps) => {
-  const { form } = useEventStore();
+  const { form, setFormValue } = useEventStore();
   const currentTicket = form["Tickets Create"];
   const tickets = currentTicket?.tickets || [];
   const ticketName = currentTicket?.ticketName;
@@ -21,18 +21,92 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
     tickets;
 
   const handleAddNewTicket = () => {
+    // Save current ticket if there's data
+    if (ticketName) {
+      const newTicket = {
+        id: Date.now().toString(),
+        name: ticketName,
+        type: currentTicket.ticketType,
+        price: currentTicket.price,
+        category: currentTicket.ticketCategory,
+        purchaseLimit: currentTicket.purchaseLimit,
+        stockAvailability: currentTicket.stockAvailability,
+        soldTarget: currentTicket.soldTarget,
+        numberOfPeople: currentTicket.numberOfPeople,
+        perks: currentTicket.perks
+      };
+
+      const updatedTickets = [...tickets, newTicket];
+      setFormValue("Tickets Create", "tickets", updatedTickets);
+    }
+
+    // Clear form for new ticket
+    setFormValue("Tickets Create", "ticketName", "");
+    setFormValue("Tickets Create", "ticketType", "");
+    setFormValue("Tickets Create", "ticketCategory", "");
+    setFormValue("Tickets Create", "price", "");
+    setFormValue("Tickets Create", "purchaseLimit", "");
+    setFormValue("Tickets Create", "stockAvailability", "");
+    setFormValue("Tickets Create", "soldTarget", "");
+    setFormValue("Tickets Create", "numberOfPeople", "");
+    setFormValue("Tickets Create", "perks", [""]);
+    setFormValue("Tickets Create", "ticketAvailability", "");
+
     onAddTicket?.();
   };
 
   const handleEditTicket = (ticketId: string) => {
+    if (ticketId === 'current') {
+      // Already editing current ticket
+      return;
+    }
+
+    // Find the ticket to edit
+    const ticketToEdit = tickets.find((ticket: any) => ticket.id === ticketId);
+    if (ticketToEdit) {
+      // Populate form with ticket data
+      setFormValue("Tickets Create", "ticketName", ticketToEdit.name);
+      setFormValue("Tickets Create", "ticketType", ticketToEdit.type);
+      setFormValue("Tickets Create", "ticketCategory", ticketToEdit.category);
+      setFormValue("Tickets Create", "price", ticketToEdit.price);
+      setFormValue("Tickets Create", "purchaseLimit", ticketToEdit.purchaseLimit);
+      setFormValue("Tickets Create", "stockAvailability", ticketToEdit.stockAvailability);
+      setFormValue("Tickets Create", "soldTarget", ticketToEdit.soldTarget);
+      setFormValue("Tickets Create", "numberOfPeople", ticketToEdit.numberOfPeople);
+      setFormValue("Tickets Create", "perks", ticketToEdit.perks || [""]);
+
+      // Remove ticket from saved tickets array
+      const updatedTickets = tickets.filter((ticket: any) => ticket.id !== ticketId);
+      setFormValue("Tickets Create", "tickets", updatedTickets);
+    }
+
     onEditTicket?.(ticketId);
   };
 
   const handleDeleteTicket = (ticketId: string) => {
+    if (ticketId === 'current') {
+      // Clear current form
+      setFormValue("Tickets Create", "ticketName", "");
+      setFormValue("Tickets Create", "ticketType", "");
+      setFormValue("Tickets Create", "ticketCategory", "");
+      setFormValue("Tickets Create", "price", "");
+      setFormValue("Tickets Create", "purchaseLimit", "");
+      setFormValue("Tickets Create", "stockAvailability", "");
+      setFormValue("Tickets Create", "soldTarget", "");
+      setFormValue("Tickets Create", "numberOfPeople", "");
+      setFormValue("Tickets Create", "perks", [""]);
+      setFormValue("Tickets Create", "ticketAvailability", "");
+    } else {
+      // Remove ticket from saved tickets array
+      const updatedTickets = tickets.filter((ticket: any) => ticket.id !== ticketId);
+      setFormValue("Tickets Create", "tickets", updatedTickets);
+    }
+
     if (allTickets.length <= 1) {
       alert("At least one ticket type must be created");
       return;
     }
+
     onDeleteTicket?.(ticketId);
   };
 

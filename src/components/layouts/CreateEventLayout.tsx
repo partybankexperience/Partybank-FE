@@ -47,11 +47,7 @@ const CreateEventLayout = ({ children }: any) => {
           {children}
         </div>
         {stage === "Tickets Create" && (
-          <TicketSidebar 
-            onAddTicket={() => console.log("Add new ticket")}
-            onEditTicket={(ticketId) => console.log("Edit ticket:", ticketId)}
-            onDeleteTicket={(ticketId) => console.log("Delete ticket:", ticketId)}
-          />
+          <TicketSidebar />
         )}
 
       </div>
