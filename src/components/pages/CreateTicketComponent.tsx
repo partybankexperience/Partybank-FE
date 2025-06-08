@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 import RadioButton from "../inputs/RadioButton";
 import { useEventStore } from "../../stores/useEventStore";
 import { NumericFormat } from 'react-number-format';
+import { FaPlus } from 'react-icons/fa';
 
 const CreateTicketComponent = () => {
   const location = useLocation();
@@ -32,6 +33,18 @@ const CreateTicketComponent = () => {
 
   const getValue = (key: string) => {
     return form[currentStage]?.[key] || "";
+  };
+
+  const updatePerk = (index: number, value: any) => {
+    const perks = getValue("perks") || [""];
+    const updatedPerks = [...perks];
+    updatedPerks[index] = value;
+    handleChange("perks", updatedPerks);
+  };
+
+  const addPerk = () => {
+    const perks = getValue("perks") || [""];
+    handleChange("perks", [...perks, ""]);
   };
 
   return (
@@ -216,14 +229,29 @@ const CreateTicketComponent = () => {
         <h2 className="text-black text-[1.2rem] font-bold">
           Ticket Perks <span className="text-[#A7A5A6] text-[.8rem] font-light">(Optional)</span>
         </h2>
-        <DefaultInput
-          id="perks"
-          label="What extra benefits come with tickets"
-          value={getValue("perks")}
-          setValue={(v:any) => handleChange("perks", v)}
-          placeholder="Enter perks here"
-          classname="!w-full"
-        />
+        {(getValue("perks") || [""]).map((perk: string, index: number) => (
+          <DefaultInput
+            key={index}
+            id={`perks-${index}`}
+            label={index === 0 ? "What extra benefits come with tickets" : `Perk ${index + 1}`}
+            value={perk}
+            setValue={(v: any) => updatePerk(index, v)}
+            placeholder="Enter perk here"
+            classname="!w-full"
+            rightContent={
+              index === (getValue("perks") || [""]).length - 1 ? (
+                <button
+                  type="button"
+                  onClick={addPerk}
+                  className="text-primary hover:text-purple transition-colors"
+                  aria-label="Add another perk"
+                >
+                  <FaPlus />
+                </button>
+              ) : null
+            }
+          />
+        ))}
       </div>
 
       {showButtons && (
