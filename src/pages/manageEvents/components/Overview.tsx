@@ -128,6 +128,10 @@ const Overview = () => {
       if (res.currentStep !== "reviewPublish") {
         // Store the event ID for editing
         Storage.setItem("eventId", res.id);
+        
+        // Track that we came from Overview page for proper back navigation
+        Storage.setItem("editEventSource", "overview");
+        Storage.setItem("sourceEventId", res.id);
 
         // Prefill form data using the store method
         prefillEventData(res);
