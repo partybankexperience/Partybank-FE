@@ -19,7 +19,7 @@ export const validationRules = {
       message: 'End date is required for multiple day events' 
     },
     venueName: { 
-      required: (formData: any) => formData.showLocation !== false, 
+      required: (formData: any) => formData.showLocation === true, 
       message: 'Venue name is required when location is provided' 
     },
   },

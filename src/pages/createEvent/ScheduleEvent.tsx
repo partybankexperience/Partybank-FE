@@ -18,7 +18,7 @@ const ScheduleEvent = () => {
   const scheduleEventForm = form["Schedule & Location"] || {};
   const scheduleEventErrors = errors["Schedule & Location"] || {};
   const selected = scheduleEventForm.eventType || "";
-  const [showLocation, setShowLocation] = useState(false);
+  const [showLocation, setShowLocation] = useState(scheduleEventForm.showLocation || false);
 
   const eventTypeRef = useRef<any>(null);
   const startDateRef = useRef<any>(null);
@@ -27,10 +27,28 @@ const ScheduleEvent = () => {
   const endTimeRef = useRef<any>(null);
   const venueNameRef = useRef<any>(null);
 
+  // Sync showLocation state with form data
+  useEffect(() => {
+    if (scheduleEventForm.showLocation !== undefined) {
+      setShowLocation(scheduleEventForm.showLocation);
+    }
+  }, [scheduleEventForm.showLocation]);
+
   const handleInputChange = (key: string, value: any) => {
     setFormValue("Schedule & Location", key, value);
   };
-console.log(showLocation,'location')
+
+  const handleLocationToggle = (value: boolean) => {
+    setShowLocation(value);
+    setFormValue("Schedule & Location", "showLocation", value);
+    // Clear location-related fields when toggling off
+    if (!value) {
+      setFormValue("Schedule & Location", "venueName", "");
+      setFormValue("Schedule & Location", "selectedLocation", null);
+      setFormValue("Schedule & Location", "address", null);
+      setFormValue("Schedule & Location", "coordinates", null);
+    }
+  };
   const handleLocationSelect = (location: any) => {
     // Extract address components and format them according to the required structure
     const addressParts = location.name.split(', ');
@@ -70,6 +88,9 @@ console.log(showLocation,'location')
       }, 100);
     }
 
+    // Store the current location state for validation
+    setFormValue("Schedule & Location", "isLocationTBA", !showLocation);
+    
     return Object.keys(scheduleEventErrors).length === 0;
   };
 
@@ -182,7 +203,8 @@ console.log(showLocation,'location')
           <h2 className="text-black text-[1.2rem]">Location</h2>
           <div className="flex items-center gap-4">
             <SlideToggle
-              toggle={setShowLocation}
+              toggle={handleLocationToggle}
+              isChecked={showLocation}
             />
             <span className="text-black text-[1rem]">
               {showLocation ? "Location will be provided" : "Location TBA (To Be Announced)"}
