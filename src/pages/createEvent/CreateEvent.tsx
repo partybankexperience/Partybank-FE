@@ -279,19 +279,9 @@ const goNext = async () => {
   const goBack = () => {
     if (currentIndex > 0) {
       setStage(stages[currentIndex - 1])
-    } else {
-      // If we're at the first stage and came from Overview, go back to manage events
-      const editSource = Storage.getItem("editEventSource");
-      const sourceEventId = Storage.getItem("sourceEventId");
-      
-      if (editSource === "overview" && sourceEventId) {
-        // Clear the tracking flags
-        Storage.removeItem("editEventSource");
-        Storage.removeItem("sourceEventId");
-        
-        // Navigate back to manage events page
-        navigate('/dashboard/manage-events');
-      }
+    } else if (eventId) {
+      // If editing an existing event, go back to manage events
+      navigate('/dashboard/manage-events');
     }
   }
 
@@ -322,11 +312,10 @@ const goNext = async () => {
       // Use conditional clear - only clears if no eventId exists
       conditionalClearStorage();
       
-      // Clean up navigation tracking if leaving create event completely
+      // Clean up eventId if leaving create event completely
       const currentPath = window.location.pathname;
       if (!currentPath.includes('/create-event')) {
-        Storage.removeItem("editEventSource");
-        Storage.removeItem("sourceEventId");
+        Storage.removeItem("eventId");
       }
     };
   }, [clearEventStorage]);
@@ -348,7 +337,7 @@ const goNext = async () => {
 
     {/* Buttons at the bottom */}
     <div className="flex gap-3 mt-auto justify-center pt-6">
-      {currentIndex > 0 && (
+      {(currentIndex > 0 || eventId) && (
         <DefaultButton variant="secondary" onClick={goBack} className="border !bg-white">
           Back
         </DefaultButton>
@@ -364,9 +353,8 @@ const goNext = async () => {
   <DefaultButton variant="primary" onClick={() => {
     // Clear storage when publishing event (completing the flow)
     clearEventStorage();
-    // Clear navigation tracking flags
-    Storage.removeItem("editEventSource");
-    Storage.removeItem("sourceEventId");
+    // Clear eventId
+    Storage.removeItem("eventId");
     navigate("/dashboard");
   }}>
   Publish Event

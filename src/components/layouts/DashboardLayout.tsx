@@ -35,7 +35,7 @@ const DashboardLayout = ({ children }: any) => {
     "payout-management/settings": "Settings",
     "profile": "Profile",
   };
-  
+
 
   const navItems = [
     { name: "Dashboard", path: "/dashboard", icon: <MdDashboard /> },
@@ -65,11 +65,11 @@ const DashboardLayout = ({ children }: any) => {
         return subPageTitles[pattern];
       }
     }
-  
+
     // Fallback to nav item name or path
     return currentNavItem?.name || "Dashboard";
   };
-  
+
   const currentNavItem = navItems.find((item) =>
     currentPath.startsWith(item.path)
   );
@@ -117,7 +117,7 @@ const DashboardLayout = ({ children }: any) => {
               </div>
             );
           })}
-          
+
           {/* Settings and Logout buttons */}
           <div className="border-t border-gray-200 pt-4 mt-4">
             <button
@@ -191,7 +191,21 @@ const DashboardLayout = ({ children }: any) => {
           <div className={`flex gap-[15px] items-center ${showBackButton ? "block" : "hidden md:block"}`}>
             {showBackButton && (
               <button
-                onClick={() =>{if(section!==null)setSection(null); else navigate(-1)}}
+                onClick={() => {
+                  if(section !== null) {
+                    setSection(null);
+                  } else {
+                    // Check if we're editing an event and should go back to manage events
+                    const eventId = Storage.getItem("eventId");
+                    if (currentPath.includes('/create-event') && eventId) {
+                      // Clear eventId when navigating away from create event
+                      Storage.removeItem("eventId");
+                      navigate('/dashboard/manage-events');
+                    } else {
+                      navigate(-1);
+                    }
+                  }
+                }}
                 aria-label="Go back"
                 className="text-[20px] text-black hover:text-primary"
               >
