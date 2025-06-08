@@ -25,6 +25,7 @@ interface EventData {
   clearForm: (stage: string) => void;
   resetEventStore: () => void;
   clearEventStorage: () => void;
+  conditionalClearStorage: () => void;
   prefillEventData: (eventData: any) => void;
   mapBackendStepToFrontend: (backendStep: string) => string;
 }
@@ -101,6 +102,18 @@ export const useEventStore = create<EventData>()(
           errors: {},
           stage: 'Event Setup',
         }));
+      },
+      conditionalClearStorage: () => {
+        // Only clear if there's no eventId in storage (new event creation)
+        const eventId = localStorage.getItem("eventId");
+        if (!eventId) {
+          localStorage.removeItem("event-creation-storage");
+          set(() => ({
+            form: {},
+            errors: {},
+            stage: 'Event Setup',
+          }));
+        }
       },
       prefillEventData: (eventData: any) => {
         const form: Record<string, any> = {};

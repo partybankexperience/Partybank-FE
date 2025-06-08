@@ -20,7 +20,7 @@ const CreateEvent = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isCreatingEvent, setIsCreatingEvent] = useState(false);
   const [originalFormData, setOriginalFormData] = useState<any>(null);
-  const { stage, setStage, form, errors, setError, clearStageErrors, clearEventStorage, setFormValue } = useEventStore()
+  const { stage, setStage, form, errors, setError, clearStageErrors, clearEventStorage, conditionalClearStorage, setFormValue } = useEventStore()
     const currentIndex = stages.indexOf(stage)
     const navigate = useNavigate()
     const eventId = Storage.getItem("eventId") || null;
@@ -283,9 +283,31 @@ const goNext = async () => {
   }
 
     useEffect(() => {
-    // Clear event storage when component unmounts (user leaves the page)
+    // Only clear event storage when user navigates away from create event flow
+    // Don't clear on page reload if there's an eventId
+    const handleBeforeUnload = () => {
+      // This only triggers when user closes browser/tab, not when navigating within app
+      // Form data will be preserved by zustand persist
+    };
+
+    const handlePopState = () => {
+      // This triggers when user uses browser back/forward buttons
+      // Clear storage only if navigating completely away from create event
+      const currentPath = window.location.pathname;
+      if (!currentPath.includes('/create-event')) {
+        clearEventStorage();
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('popstate', handlePopState);
+
     return () => {
-      clearEventStorage();
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('popstate', handlePopState);
+      
+      // Use conditional clear - only clears if no eventId exists
+      conditionalClearStorage();
     };
   }, [clearEventStorage]);
   return (
@@ -319,7 +341,11 @@ const goNext = async () => {
           : "Next"}
       </DefaultButton>
 ):(
-  <DefaultButton variant="primary" onClick={() => navigate("/dashboard")}>
+  <DefaultButton variant="primary" onClick={() => {
+    // Clear storage when publishing event (completing the flow)
+    clearEventStorage();
+    navigate("/dashboard");
+  }}>
   Publish Event
 </DefaultButton>
 )}
