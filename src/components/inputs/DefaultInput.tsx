@@ -203,7 +203,7 @@ const DefaultInput = ({
             </span>
           )}
 
-          {rightContent && type !== "password" && !showDropdown && (
+          {rightContent && type !== "password" && type !== "date" && type !== "time" && !showDropdown && (
             <span className="text-neutralDark text-[14px]">{rightContent}</span>
           )}
           {/* {showDropdown && (
