@@ -1,9 +1,9 @@
 import { ToastContainer } from "react-toastify";
 import { stages, useEventStore } from "../../stores/useEventStore";
-import { PiPlus } from "react-icons/pi";
+import TicketSidebar from "../pages/TicketSidebar";
 
 const CreateEventLayout = ({ children }: any) => {
-  const { stage ,form, setFormValue} = useEventStore();
+  const { stage } = useEventStore();
 
   const currentIndex = stages.indexOf(stage);
   return (
@@ -46,37 +46,13 @@ const CreateEventLayout = ({ children }: any) => {
         <div className="md:my-[30px] p-[2rem] bg-[#F8F9F9] rounded-md h-full min-h-[calc(100vh-16rem)]">
           {children}
         </div>
-        {stage === "Tickets Create" && (() => {
-  const currentTicket = form["Tickets Create"];
-  const ticketName = currentTicket?.ticketName;
-
-  const handleAddNewTicket = () => {
-    console.log("Add new ticket");
-  };
-
-  return (
-    <div className="md:my-[30px] h-fit p-[1.5rem] bg-[#F8F9F9] rounded-md">
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-black font-medium">Tickets</h3>
-        <button
-          onClick={handleAddNewTicket}
-          className="flex items-center gap-1 px-2 py-1 bg-primary text-white rounded text-sm hover:bg-purple transition-colors"
-        >
-          <PiPlus />
-          Add
-        </button>
-      </div>
-
-      {ticketName ? (
-        <div className="bg-white p-2 rounded border">
-          <p className="text-sm font-medium">{ticketName}</p>
-        </div>
-      ) : (
-        <p className="text-sm text-gray-500">No ticket created</p>
-      )}
-    </div>
-  );
-})()}
+        {stage === "Tickets Create" && (
+          <TicketSidebar 
+            onAddTicket={() => console.log("Add new ticket")}
+            onEditTicket={(ticketId) => console.log("Edit ticket:", ticketId)}
+            onDeleteTicket={(ticketId) => console.log("Delete ticket:", ticketId)}
+          />
+        )}
 
       </div>
     </div>
