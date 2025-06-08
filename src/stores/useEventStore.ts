@@ -25,6 +25,8 @@ interface EventData {
   clearForm: (stage: string) => void;
   resetEventStore: () => void;
   clearEventStorage: () => void;
+  prefillEventData: (eventData: any) => void;
+  mapBackendStepToFrontend: (backendStep: string) => string;
 }
 
 export const useEventStore = create<EventData>()(
@@ -109,9 +111,17 @@ export const useEventStore = create<EventData>()(
           description: eventData.description || '',
           coverImage: eventData.bannerImage || '',
           category: eventData.category || '',
-          tags: eventData.tags || '',
+          // Handle tags - if it's an array, get the first tag's ID, otherwise use the value
+          tags: eventData.tags && Array.isArray(eventData.tags) && eventData.tags.length > 0 
+            ? eventData.tags[0].id || eventData.tags[0] 
+            : eventData.tags || '',
+          selectedTags: eventData.tags && Array.isArray(eventData.tags) && eventData.tags.length > 0 
+            ? eventData.tags[0].id || eventData.tags[0] 
+            : eventData.tags || '',
           contactNumber: eventData.phone || '',
           seriesId: eventData.seriesId || '',
+          // Add series name for display if available
+          seriesName: eventData.series?.name || '',
         };
 
         // Map backend data to Schedule & Location stage

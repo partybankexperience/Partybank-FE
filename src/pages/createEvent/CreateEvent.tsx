@@ -33,10 +33,10 @@ const CreateEvent = () => {
 
   // Store original form data when component mounts if editing
   useEffect(() => {
-    if (eventId && form["Event Setup"]) {
+    if (eventId && form["Event Setup"] && !originalFormData) {
       setOriginalFormData(JSON.parse(JSON.stringify(form["Event Setup"])));
     }
-  }, [eventId, form]);
+  }, [eventId, form["Event Setup"], originalFormData]);
 
 // const goNext = async () => {
 //     const formData = form[stage] || {}
@@ -169,7 +169,13 @@ const goNext = async () => {
       
       if (eventId) {
         // Check if data has changed before calling edit endpoint
-        if (!hasFormDataChanged(formData, originalFormData)) {
+        const dataHasChanged = hasFormDataChanged(formData, originalFormData);
+        console.log("Data has changed:", dataHasChanged);
+        console.log("Current data:", formData);
+        console.log("Original data:", originalFormData);
+        
+        if (!dataHasChanged) {
+          console.log("No changes detected, skipping API call");
           setIsCreatingEvent(false);
           if (currentIndex < stages.length - 1) {
             setStage(stages[currentIndex + 1]);
@@ -178,6 +184,7 @@ const goNext = async () => {
         }
         
         // Edit existing event
+        console.log("Editing existing event with ID:", eventId);
         success = await editEvent(
           eventId,
           formData.name,
@@ -188,8 +195,14 @@ const goNext = async () => {
           formData.category,
           formData.seriesId || undefined
         );
+        
+        // Update original form data after successful edit
+        if (success) {
+          setOriginalFormData(JSON.parse(JSON.stringify(formData)));
+        }
       } else {
         // Create new event
+        console.log("Creating new event");
         success = await createEvent(
           formData.name,
           formData.description,
@@ -199,7 +212,11 @@ const goNext = async () => {
           formData.category,
           formData.seriesId || undefined
         );
-        Storage.setItem("eventId", success.eventId);
+        
+        if (success && success.eventId) {
+          Storage.setItem("eventId", success.eventId);
+          setOriginalFormData(JSON.parse(JSON.stringify(formData)));
+        }
       }
       
       setIsCreatingEvent(false);
