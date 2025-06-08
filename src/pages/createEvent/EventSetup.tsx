@@ -33,6 +33,14 @@ const EventSetup = () => {
         setSeriesLoading(true);
         const response = await getSeries();
         setSeries(response || []);
+        
+        // If there's a prefilled series ID, find and set the corresponding name
+        if (eventSetupForm.seriesId && response && response.length > 0) {
+          const matchedSeries = response.find((seriesItem: any) => seriesItem.id === eventSetupForm.seriesId);
+          if (matchedSeries) {
+            setFormValue("Event Setup", "seriesName", matchedSeries.name);
+          }
+        }
       } catch (error) {
         console.error("Error fetching series:", error);
         setSeries([]);
@@ -42,7 +50,7 @@ const EventSetup = () => {
     };
 
     fetchSeries();
-  }, []);
+  }, [eventSetupForm.seriesId]);
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -53,6 +61,14 @@ const EventSetup = () => {
           setTags(response); // Store full tag objects
           const tagNames = response.map((tag: any) => tag.name);
           setTagOptions([...tagNames, "Other"]); // Display names in dropdown
+          
+          // If there's a prefilled tag ID, find and set the corresponding name
+          if (eventSetupForm.tags && eventSetupForm.tags !== "Other") {
+            const matchedTag = response.find((tag: any) => tag.id === eventSetupForm.tags);
+            if (matchedTag) {
+              setFormValue("Event Setup", "selectedTagName", matchedTag.name);
+            }
+          }
         } else {
           setTags([]);
           setTagOptions(["Other"]);
@@ -67,7 +83,7 @@ const EventSetup = () => {
     };
 
     fetchTags();
-  }, []);
+  }, [eventSetupForm.tags]);
 
   const handleImage = (imageUrl: string) => {
     console.log("Uploaded image URL:", imageUrl);

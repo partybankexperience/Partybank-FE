@@ -311,7 +311,7 @@ const goNext = async () => {
 
       // Use conditional clear - only clears if no eventId exists
       conditionalClearStorage();
-      
+
       // Clean up eventId if leaving create event completely
       const currentPath = window.location.pathname;
       if (!currentPath.includes('/create-event')) {
