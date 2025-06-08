@@ -150,14 +150,15 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
                   >
                     <FaEdit className="text-xs" />
                   </button>
-                  <button
-                    onClick={() => handleDeleteTicket(ticket.id || index.toString())}
-                    className="p-1 text-gray-400 hover:text-red-500 rounded transition-colors"
-                    title="Delete ticket"
-                    disabled={allTickets.length <= 1}
-                  >
-                    <FaTrash className={`text-xs ${allTickets.length <= 1 ? 'opacity-30 cursor-not-allowed' : ''}`} />
-                  </button>
+                  {allTickets.length > 1 && (
+                    <button
+                      onClick={() => handleDeleteTicket(ticket.id || index.toString())}
+                      className="p-1 text-gray-400 hover:text-red-500 rounded transition-colors"
+                      title="Delete ticket"
+                    >
+                      <FaTrash className="text-xs" />
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
