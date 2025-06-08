@@ -181,7 +181,6 @@ const CreateTicketComponent = () => {
             placeholder="12/04/2025"
             classname="!w-full"
             type="date"
-            rightContent={<MdOutlineCalendarMonth className="text-black text-[1rem]" />}
           />
           <DefaultInput
             id="startTime"
@@ -191,7 +190,6 @@ const CreateTicketComponent = () => {
             placeholder="08:00"
             classname="!w-full"
             type="time"
-            rightContent={<FaRegClock className="text-black text-[1rem]" />}
           />
           <DefaultInput
             id="salesEnd"
@@ -201,7 +199,6 @@ const CreateTicketComponent = () => {
             placeholder="16/04/2025"
             classname="!w-full"
             type="date"
-            rightContent={<MdOutlineCalendarMonth className="text-black text-[1rem]" />}
           />
           <DefaultInput
             id="endTime"
@@ -211,7 +208,6 @@ const CreateTicketComponent = () => {
             placeholder="18:00"
             classname="!w-full"
             type="time"
-            rightContent={<FaRegClock className="text-black text-[1rem]" />}
           />
         </div>
       </div>
