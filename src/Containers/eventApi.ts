@@ -122,7 +122,7 @@ const getEventsById =async (id: string): Promise<any> =>{
   });
   return response;
 }
-const getScheduleandLocation = async (id:string,eventType: string,startDate:string,endDate:string,startTime:string,endTime:string,isLocationTBA:boolean,venueName?:string,address?: Address): Promise<any> => {
+const getScheduleandLocation = async (id:string,eventType: string,startDate:string,startTime:string,endTime:string,isLocationTBA:boolean,venueName?:string,address?: Address,endDate?:string): Promise<any> => {
   const response = await apiCall({
     name: "getScheduleandLocation",
     urlExtra: `/${id}/schedule-location`,

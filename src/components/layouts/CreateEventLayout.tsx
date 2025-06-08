@@ -1,11 +1,11 @@
 import { ToastContainer } from "react-toastify";
 import { stages, useEventStore } from "../../stores/useEventStore";
+import { PiPlus } from "react-icons/pi";
 
 const CreateEventLayout = ({ children }: any) => {
-  const { stage } = useEventStore();
+  const { stage ,form, setFormValue} = useEventStore();
 
   const currentIndex = stages.indexOf(stage);
-
   return (
     <div className="md:py-[20px] bg-white rounded-md min-h-screen">
       <ToastContainer />
@@ -42,10 +42,22 @@ const CreateEventLayout = ({ children }: any) => {
         </div>
       </div>
 
-      <div className="md:px-[11rem]">
+      <div className="md:justify-center flex gap-[20px]">
         <div className="md:my-[30px] p-[2rem] bg-[#F8F9F9] rounded-md h-full min-h-[calc(100vh-16rem)]">
           {children}
         </div>
+        {stage === "Tickets Create" && (() => {
+  return (
+    <div className="md:my-[30px] h-fit p-[2rem] bg-[#F8F9F9] rounded-md">
+      <p className="">Add another Ticket</p>
+      <div className="border flex gap-2">
+      {form["Tickets Create"]?.ticketName}
+<PiPlus/>
+      </div>
+    </div>
+  );
+})()}
+
       </div>
     </div>
   );

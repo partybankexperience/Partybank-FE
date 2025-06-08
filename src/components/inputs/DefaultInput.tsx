@@ -15,7 +15,7 @@ type DefaultInputProps = {
   helperText?: string;
   helperLink?: string;
   disabled?: boolean;
-type?: "text" | "password" | "email"|"tel"|"date"|"time";
+type?: "text" | "password" | "email"|"tel"|"date"|"time"|"number";
   leftContent?: React.ReactNode | string;
   rightContent?: React.ReactNode | string;
   showDropdown?: boolean;

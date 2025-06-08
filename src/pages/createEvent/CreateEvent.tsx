@@ -38,85 +38,6 @@ const CreateEvent = () => {
     }
   }, [eventId, form["Event Setup"], originalFormData]);
 
-// const goNext = async () => {
-//     const formData = form[stage] || {}
-
-//     // Handle validation for Event Setup stage
-//     if (stage === "Event Setup") {
-//       // Validate required fields directly
-//       const errors: Record<string, string> = {};
-
-//       if (!formData.name || formData.name.trim() === "") {
-//         errors.name = "Event Name is required";
-//       }
-//       if (!formData.category || formData.category.trim() === "") {
-//         errors.category = "Category is required";
-//       }
-//       if (!formData.tags || formData.tags.trim() === "") {
-//         errors.tags = "Tag is required";
-//       }
-//       if (!formData.contactNumber || formData.contactNumber.trim() === "") {
-//         errors.contactNumber = "Contact Number is required";
-//       }
-//       if (!formData.description || formData.description.trim() === "") {
-//         errors.description = "Event Description is required";
-//       }
-
-//       console.log(errors, 'errors in event setup')
-//       // Set errors if any exist
-//       if (Object.keys(errors).length > 0) {
-//         Object.entries(errors).forEach(([field, error]) => {
-//           setError(stage, field, error);
-//         });
-
-//         // Trigger validation in EventSetup component to show errors
-//         const validationFn = (window as any).validateEventSetup;
-//         if (typeof validationFn === 'function') {
-//           validationFn();
-//         }
-//         return;
-//       }
-
-//       // Clear errors if validation passes
-//       clearStageErrors(stage);
-
-//       // Set loading state only when making API call
-//       setIsCreatingEvent(true);
-
-//       // Create the event if validation passes
-//       const success = await handleCreateEvent(formData);
-//       console.log(success, 'success in event creation')
-//       if (!success) {
-//         setIsCreatingEvent(true);
-//         return; // Stop if event creation fails
-//       }
-
-//       // Move to next stage after successful event creation
-//       if (currentIndex < stages.length - 1) {
-//         setStage(stages[currentIndex + 1]);
-//       }
-//       return; // Important: return here to prevent further execution
-//     } else {
-//       // For other stages, use the validation rules
-//       const { isValid, errors } = validateStage(stage, formData)
-
-//       if (!isValid) {
-//         // Set errors for the current stage
-//         Object.entries(errors).forEach(([field, error]) => {
-//           setError(stage, field, error)
-//         })
-//         return
-//       }
-
-//       // Clear errors if validation passes
-//       clearStageErrors(stage)
-//     }
-
-//     // Stage advancement for other stages (not Event Setup)
-//     if (currentIndex < stages.length - 1) {
-//       setStage(stages[currentIndex + 1])
-//     }
-//   }
 const goNext = async () => {
   try {
     const formData = form[stage] || {};
@@ -244,12 +165,12 @@ const goNext = async () => {
           eventId, 
           formData.eventType,
           formData.startDate, 
-          formData.endDate, 
           formData.startTime, 
           formData.endTime, 
           !formData.showLocation, // isLocationTBA - boolean
           formData.venueName, 
-          formData.address
+          formData.address!==''&&formData.address,
+          formData.endDate!==''&&formData.endDate, 
         );
         console.log(res, 'Schedule & Location response');
       } catch (error) {

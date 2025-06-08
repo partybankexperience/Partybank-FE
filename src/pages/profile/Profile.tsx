@@ -123,13 +123,13 @@ const Profile = () => {
         <div className="flex gap-[4rem] items-center">
             <div className="flex gap-[20px] items-center">
                <p className="text-black font-bold whitespace-nowrap">Preferences & Notifications</p>
-               <SlideToggle toggle={() => settoggle(!toggle)} defaultChecked={toggle} />
+               <SlideToggle toggle={() => settoggle(!toggle)} isChecked={toggle} />
             </div>
 
             <div className="grid w-full grid-cols-[2fr_1.2fr_1.2fr] gap-[40px] ">
             <div className="flex gap-[20px] items-center">
                <p className="text-black font-bold whitespace-nowrap">Receive SMS Alerts</p>
-               <SlideToggle toggle={() => settoggle(!toggle)} defaultChecked={toggle} />
+               <SlideToggle toggle={() => settoggle(!toggle)} isChecked={toggle} />
             </div>
                 {preferenceInfo.map((item, index) => (
                     <div key={index} className={`grid gap-1 `}>

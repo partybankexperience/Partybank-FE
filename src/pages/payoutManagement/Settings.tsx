@@ -68,7 +68,7 @@ const Settings = () => {
       <div>
         <SlideToggle
           toggle={() => settoggle(!toggle)}
-          defaultChecked={toggle}
+          isChecked={toggle}
         />
       </div>
     </div>

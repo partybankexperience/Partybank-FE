@@ -1,7 +1,5 @@
-import { MdOutlineCalendarMonth } from "react-icons/md";
 import DefaultButton from "../buttons/DefaultButton";
 import DefaultInput from "../inputs/DefaultInput";
-import { FaRegClock } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import RadioButton from "../inputs/RadioButton";
 import { useEventStore } from "../../stores/useEventStore";
@@ -50,12 +48,14 @@ const CreateTicketComponent = () => {
   const deletePerk = (index: number) => {
     const perks = getValue("perks") || [""];
     if (perks.length > 1) {
-      const updatedPerks = perks.filter((_, i) => i !== index);
+      const updatedPerks = perks.filter((_:any, i:any) => i !== index);
       handleChange("perks", updatedPerks);
     }
   };
 
   return (
+    <div className="flex gap-[20px]">
+    
     <div className="grid gap-[2.5rem] mt-[20px]">
       <div className="grid gap-[15px]">
         <h2 className="text-black text-[1.2rem] font-bold">Ticket Category</h2>
@@ -81,6 +81,7 @@ const CreateTicketComponent = () => {
         </div>
       </div>
 
+<div className="grid md:flex justify-between gap-[15px]">
       <div className="grid gap-[15px]">
         <h2 className="text-black text-[1.2rem] font-bold">Ticket Type</h2>
         <div className="grid md:flex gap-4 md:gap-[2.5rem]">
@@ -116,6 +117,8 @@ const CreateTicketComponent = () => {
           />
         </div>
       </div>
+
+</div>
 
       <div className="grid gap-[15px]">
         <h2 className="text-black text-[1.2rem] font-bold">Ticket Details</h2>
@@ -284,6 +287,8 @@ const CreateTicketComponent = () => {
           </DefaultButton>
         </div>
       )}
+    </div>
+
     </div>
   );
 };
