@@ -27,6 +27,35 @@ const CreateTicketComponent = () => {
 
   const handleChange = (key: string, value: any) => {
     setFormValue(currentStage, key, value);
+    
+    // Auto-save current ticket data to the tickets array
+    const currentTicketData = form[currentStage];
+    const activeIndex = currentTicketData?.activeTicketIndex || 0;
+    const tickets = currentTicketData?.tickets || [];
+    
+    if (currentTicketData?.ticketName) {
+      const updatedTicket = {
+        id: tickets[activeIndex]?.id || `ticket-${Date.now()}`,
+        name: key === 'ticketName' ? value : currentTicketData.ticketName,
+        type: key === 'ticketType' ? value : currentTicketData.ticketType,
+        price: key === 'price' ? value : currentTicketData.price,
+        category: key === 'ticketCategory' ? value : currentTicketData.ticketCategory,
+        purchaseLimit: key === 'purchaseLimit' ? value : currentTicketData.purchaseLimit,
+        stockAvailability: key === 'stockAvailability' ? value : currentTicketData.stockAvailability,
+        soldTarget: key === 'soldTarget' ? value : currentTicketData.soldTarget,
+        numberOfPeople: key === 'numberOfPeople' ? value : currentTicketData.numberOfPeople,
+        perks: key === 'perks' ? value : currentTicketData.perks,
+        ticketAvailability: key === 'ticketAvailability' ? value : currentTicketData.ticketAvailability,
+        salesStart: key === 'salesStart' ? value : currentTicketData.salesStart,
+        startTime: key === 'startTime' ? value : currentTicketData.startTime,
+        salesEnd: key === 'salesEnd' ? value : currentTicketData.salesEnd,
+        endTime: key === 'endTime' ? value : currentTicketData.endTime
+      };
+
+      const updatedTickets = [...tickets];
+      updatedTickets[activeIndex] = updatedTicket;
+      setFormValue(currentStage, "tickets", updatedTickets);
+    }
   };
 
   const getValue = (key: string) => {

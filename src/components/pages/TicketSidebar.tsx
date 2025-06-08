@@ -13,34 +13,46 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
   const { form, setFormValue } = useEventStore();
   const currentTicket = form["Tickets Create"];
   const tickets = currentTicket?.tickets || [];
-  const ticketName = currentTicket?.ticketName;
+  const activeTicketIndex = currentTicket?.activeTicketIndex || 0;
 
-  // If there's a current ticket being created/edited, include it in the list
-  const allTickets = ticketName ? 
-    [...tickets, { id: 'current', name: ticketName, type: currentTicket.ticketType, price: currentTicket.price }] : 
-    tickets;
+  // Create array of all ticket forms (saved + current active one)
+  const allTicketForms = [
+    ...tickets,
+    // Always have at least one form
+    ...(tickets.length === 0 ? [{ 
+      id: `ticket-${Date.now()}`, 
+      name: "", 
+      type: "", 
+      price: "", 
+      category: "",
+      purchaseLimit: "",
+      stockAvailability: "",
+      soldTarget: "",
+      numberOfPeople: "",
+      perks: [""]
+    }] : [])
+  ];
 
   const handleAddNewTicket = () => {
-    // Save current ticket if there's data
-    if (ticketName) {
-      const newTicket = {
-        id: Date.now().toString(),
-        name: ticketName,
-        type: currentTicket.ticketType,
-        price: currentTicket.price,
-        category: currentTicket.ticketCategory,
-        purchaseLimit: currentTicket.purchaseLimit,
-        stockAvailability: currentTicket.stockAvailability,
-        soldTarget: currentTicket.soldTarget,
-        numberOfPeople: currentTicket.numberOfPeople,
-        perks: currentTicket.perks
-      };
+    // Add a new empty ticket form
+    const newTicket = {
+      id: `ticket-${Date.now()}`,
+      name: "",
+      type: "",
+      price: "",
+      category: "",
+      purchaseLimit: "",
+      stockAvailability: "",
+      soldTarget: "",
+      numberOfPeople: "",
+      perks: [""]
+    };
 
-      const updatedTickets = [...tickets, newTicket];
-      setFormValue("Tickets Create", "tickets", updatedTickets);
-    }
+    const updatedTickets = [...tickets, newTicket];
+    setFormValue("Tickets Create", "tickets", updatedTickets);
+    setFormValue("Tickets Create", "activeTicketIndex", updatedTickets.length - 1);
 
-    // Clear form for new ticket
+    // Clear the main form for the new ticket
     setFormValue("Tickets Create", "ticketName", "");
     setFormValue("Tickets Create", "ticketType", "");
     setFormValue("Tickets Create", "ticketCategory", "");
@@ -55,37 +67,52 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
     onAddTicket?.();
   };
 
-  const handleEditTicket = (ticketId: string) => {
-    if (ticketId === 'current') {
-      // Already editing current ticket
+  const handleEditTicket = (ticketIndex: number) => {
+    // Switch to the selected ticket form
+    setFormValue("Tickets Create", "activeTicketIndex", ticketIndex);
+    
+    const ticketToEdit = allTicketForms[ticketIndex];
+    if (ticketToEdit) {
+      // Populate main form with the selected ticket's data
+      setFormValue("Tickets Create", "ticketName", ticketToEdit.name || "");
+      setFormValue("Tickets Create", "ticketType", ticketToEdit.type || "");
+      setFormValue("Tickets Create", "ticketCategory", ticketToEdit.category || "");
+      setFormValue("Tickets Create", "price", ticketToEdit.price || "");
+      setFormValue("Tickets Create", "purchaseLimit", ticketToEdit.purchaseLimit || "");
+      setFormValue("Tickets Create", "stockAvailability", ticketToEdit.stockAvailability || "");
+      setFormValue("Tickets Create", "soldTarget", ticketToEdit.soldTarget || "");
+      setFormValue("Tickets Create", "numberOfPeople", ticketToEdit.numberOfPeople || "");
+      setFormValue("Tickets Create", "perks", ticketToEdit.perks || [""]);
+      setFormValue("Tickets Create", "ticketAvailability", ticketToEdit.ticketAvailability || "");
+    }
+
+    onEditTicket?.(ticketToEdit.id);
+  };
+
+  const handleDeleteTicket = (ticketIndex: number) => {
+    if (allTicketForms.length <= 1) {
+      alert("At least one ticket type must be created");
       return;
     }
 
-    // Find the ticket to edit
-    const ticketToEdit = tickets.find((ticket: any) => ticket.id === ticketId);
-    if (ticketToEdit) {
-      // Populate form with ticket data
-      setFormValue("Tickets Create", "ticketName", ticketToEdit.name);
-      setFormValue("Tickets Create", "ticketType", ticketToEdit.type);
-      setFormValue("Tickets Create", "ticketCategory", ticketToEdit.category);
-      setFormValue("Tickets Create", "price", ticketToEdit.price);
-      setFormValue("Tickets Create", "purchaseLimit", ticketToEdit.purchaseLimit);
-      setFormValue("Tickets Create", "stockAvailability", ticketToEdit.stockAvailability);
-      setFormValue("Tickets Create", "soldTarget", ticketToEdit.soldTarget);
-      setFormValue("Tickets Create", "numberOfPeople", ticketToEdit.numberOfPeople);
-      setFormValue("Tickets Create", "perks", ticketToEdit.perks || [""]);
+    // Remove the ticket from the array
+    const updatedTickets = tickets.filter((_, index) => index !== ticketIndex);
+    setFormValue("Tickets Create", "tickets", updatedTickets);
+    
+    // Adjust active index if necessary
+    const newActiveIndex = ticketIndex === activeTicketIndex 
+      ? Math.max(0, activeTicketIndex - 1)
+      : activeTicketIndex > ticketIndex 
+        ? activeTicketIndex - 1 
+        : activeTicketIndex;
+    
+    setFormValue("Tickets Create", "activeTicketIndex", newActiveIndex);
 
-      // Remove ticket from saved tickets array
-      const updatedTickets = tickets.filter((ticket: any) => ticket.id !== ticketId);
-      setFormValue("Tickets Create", "tickets", updatedTickets);
-    }
-
-    onEditTicket?.(ticketId);
-  };
-
-  const handleDeleteTicket = (ticketId: string) => {
-    if (ticketId === 'current') {
-      // Clear current form
+    // Load the new active ticket data
+    if (updatedTickets.length > 0) {
+      handleEditTicket(newActiveIndex);
+    } else {
+      // Clear form if no tickets left
       setFormValue("Tickets Create", "ticketName", "");
       setFormValue("Tickets Create", "ticketType", "");
       setFormValue("Tickets Create", "ticketCategory", "");
@@ -96,18 +123,9 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
       setFormValue("Tickets Create", "numberOfPeople", "");
       setFormValue("Tickets Create", "perks", [""]);
       setFormValue("Tickets Create", "ticketAvailability", "");
-    } else {
-      // Remove ticket from saved tickets array
-      const updatedTickets = tickets.filter((ticket: any) => ticket.id !== ticketId);
-      setFormValue("Tickets Create", "tickets", updatedTickets);
     }
 
-    if (allTickets.length <= 1) {
-      alert("At least one ticket type must be created");
-      return;
-    }
-
-    onDeleteTicket?.(ticketId);
+    onDeleteTicket?.(allTicketForms[ticketIndex].id);
   };
 
   return (
@@ -124,35 +142,42 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
       </div>
 
       <div className="space-y-2">
-        {allTickets.length > 0 ? (
-          allTickets.map((ticket, index) => (
+        {allTicketForms.length > 0 ? (
+          allTicketForms.map((ticket, index) => (
             <div
               key={ticket.id || index}
-              className="bg-white p-3 rounded border hover:border-primary/30 transition-colors"
+              className={`bg-white p-3 rounded border transition-colors ${
+                index === activeTicketIndex 
+                  ? 'border-primary bg-primary/5' 
+                  : 'border-gray-200 hover:border-primary/30'
+              }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-black truncate">
-                    {ticket.name || "Unnamed Ticket"}
+                    {ticket.name || `Ticket ${index + 1}`}
                   </p>
                   {ticket.type && (
                     <p className="text-xs text-gray-500">
-                      {ticket.type === "free" ? "Free" : `₦${ticket.price?.toLocaleString() || "0"}`}
+                      {ticket.type === "Free" ? "Free" : `₦${ticket.price?.toLocaleString() || "0"}`}
                     </p>
+                  )}
+                  {index === activeTicketIndex && (
+                    <p className="text-xs text-primary font-medium">Currently editing</p>
                   )}
                 </div>
 
                 <div className="flex items-center gap-1 ml-2">
                   <button
-                    onClick={() => handleEditTicket(ticket.id || index.toString())}
+                    onClick={() => handleEditTicket(index)}
                     className="p-1 text-gray-400 hover:text-primary rounded transition-colors"
                     title="Edit ticket"
                   >
                     <FaEdit className="text-xs" />
                   </button>
-                  {allTickets.length > 1 && (
+                  {allTicketForms.length > 1 && (
                     <button
-                      onClick={() => handleDeleteTicket(ticket.id || index.toString())}
+                      onClick={() => handleDeleteTicket(index)}
                       className="p-1 text-gray-400 hover:text-red-500 rounded transition-colors"
                       title="Delete ticket"
                     >
@@ -170,10 +195,10 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
         )}
       </div>
 
-      {allTickets.length > 0 && (
+      {allTicketForms.length > 0 && (
         <div className="mt-3 pt-3 border-t border-gray-200">
           <p className="text-xs text-gray-500 text-center">
-            {allTickets.length} ticket{allTickets.length !== 1 ? 's' : ''} created
+            {allTicketForms.length} ticket{allTicketForms.length !== 1 ? 's' : ''} • Editing: {activeTicketIndex + 1}
           </p>
         </div>
       )}
