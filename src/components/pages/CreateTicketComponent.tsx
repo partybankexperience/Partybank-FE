@@ -108,11 +108,11 @@ const CreateTicketComponent = () => {
             showDropdown
           />
           <DefaultInput
-            id="totalCapacity"
-            label="Total Capacity"
-            value={getValue("totalCapacity")}
-            setValue={(v:any) => handleChange("totalCapacity", v)}
-            placeholder="Enter capacity"
+            id="price"
+            label="Price"
+            value={getValue("price")}
+            setValue={(v:any) => handleChange("price", v)}
+            placeholder="Enter price"
             classname="!w-full"
           />
           <DefaultInput
