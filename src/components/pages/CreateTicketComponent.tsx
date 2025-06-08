@@ -5,7 +5,7 @@ import { FaRegClock } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import RadioButton from "../inputs/RadioButton";
 import { useEventStore } from "../../stores/useEventStore";
-// import { useEventStore, stages } from "@/store/event-store"; // adjust import as needed
+import { NumericFormat } from 'react-number-format';
 
 const CreateTicketComponent = () => {
   const location = useLocation();
@@ -114,8 +114,7 @@ const CreateTicketComponent = () => {
             setValue={(v:any) => handleChange("purchaseLimit", v)}
             placeholder="1"
             classname="!w-full"
-            dropdownOptions={["1", "2", "3"]}
-            showDropdown
+            type="number"
           />
           {getValue("ticketAvailability") === "limited" && (
             <DefaultInput
@@ -129,14 +128,24 @@ const CreateTicketComponent = () => {
             />
           )}
           {getValue("ticketType") === "Paid" && (
-            <DefaultInput
-              id="price"
-              label="Price"
-              value={getValue("price")}
-              setValue={(v:any) => handleChange("price", v)}
-              placeholder="Enter price"
-              classname="!w-full"
-            />
+            <div className="grid gap-1 w-full relative">
+              <label className="text-[#231F20] text-[16px] font-semibold font-[RedHat]">
+                Price
+              </label>
+              <NumericFormat
+                value={getValue("price")}
+                onValueChange={(values) => {
+                  handleChange("price", values.floatValue || 0);
+                }}
+                thousandSeparator=","
+                prefix="₦"
+                placeholder="₦0.00"
+                className="text-[14px] border-[1px] text-black placeholder:text-neutralDark placeholder:text-[14px] font-[RedHat] rounded-[4px] py-[10px] px-[16px] !w-full bg-white border-neutral hover:border-lightPurple focus:border-lightPurple hover:shadow-[0_0_0_2px_rgba(77,64,85,0.1)] focus:shadow-[0_0_0_2px_rgba(77,64,85,0.1)]"
+                decimalScale={2}
+                fixedDecimalScale
+                allowNegative={false}
+              />
+            </div>
           )}
           <DefaultInput
             id="soldTarget"
@@ -145,6 +154,7 @@ const CreateTicketComponent = () => {
             setValue={(v:any) => handleChange("soldTarget", v)}
             placeholder="Enter sold target"
             classname="!w-full"
+            type="number"
           />
           {getValue("ticketCategory") === "option2" && (
             <DefaultInput
@@ -170,6 +180,7 @@ const CreateTicketComponent = () => {
             setValue={(v:any) => handleChange("salesStart", v)}
             placeholder="12/04/2025"
             classname="!w-full"
+            type="date"
             rightContent={<MdOutlineCalendarMonth className="text-black text-[1rem]" />}
           />
           <DefaultInput
@@ -177,8 +188,9 @@ const CreateTicketComponent = () => {
             label="Start Time"
             value={getValue("startTime")}
             setValue={(v:any) => handleChange("startTime", v)}
-            placeholder="1"
+            placeholder="08:00"
             classname="!w-full"
+            type="time"
             rightContent={<FaRegClock className="text-black text-[1rem]" />}
           />
           <DefaultInput
@@ -188,16 +200,18 @@ const CreateTicketComponent = () => {
             setValue={(v:any) => handleChange("salesEnd", v)}
             placeholder="16/04/2025"
             classname="!w-full"
-            rightContent={<FaRegClock className="text-black text-[1rem]" />}
+            type="date"
+            rightContent={<MdOutlineCalendarMonth className="text-black text-[1rem]" />}
           />
           <DefaultInput
             id="endTime"
             label="End Time"
             value={getValue("endTime")}
             setValue={(v:any) => handleChange("endTime", v)}
-            placeholder="06:00 PM"
+            placeholder="18:00"
             classname="!w-full"
-            rightContent={<MdOutlineCalendarMonth className="text-black text-[1rem]" />}
+            type="time"
+            rightContent={<FaRegClock className="text-black text-[1rem]" />}
           />
         </div>
       </div>
