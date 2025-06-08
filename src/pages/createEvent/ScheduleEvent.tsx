@@ -18,14 +18,7 @@ const ScheduleEvent = () => {
   const scheduleEventForm = form["Schedule & Location"] || {};
   const scheduleEventErrors = errors["Schedule & Location"] || {};
   const selected = scheduleEventForm.eventType || "";
-  const [showLocation, setShowLocation] = useState(() => {
-    // Determine initial state based on existing data
-    if (scheduleEventForm.showLocation !== undefined) {
-      return scheduleEventForm.showLocation;
-    }
-    // If there's venue name or location data, show location should be true
-    return !!(scheduleEventForm.venueName || scheduleEventForm.selectedLocation || scheduleEventForm.address);
-  });
+  const [showLocation, setShowLocation] = useState(false);
 
   const eventTypeRef = useRef<any>(null);
   const startDateRef = useRef<any>(null);
@@ -34,19 +27,30 @@ const ScheduleEvent = () => {
   const endTimeRef = useRef<any>(null);
   const venueNameRef = useRef<any>(null);
 
-  // Sync showLocation state with form data and existing location info
+  // Initialize and sync showLocation state with form data
   useEffect(() => {
+    // Determine initial state based on existing data
+    let shouldShowLocation = false;
+    
     if (scheduleEventForm.showLocation !== undefined) {
-      setShowLocation(scheduleEventForm.showLocation);
+      shouldShowLocation = scheduleEventForm.showLocation;
     } else {
       // Auto-enable location if there's existing location data
-      const hasLocationData = !!(scheduleEventForm.venueName || scheduleEventForm.selectedLocation || scheduleEventForm.address);
-      if (hasLocationData && !showLocation) {
-        setShowLocation(true);
+      shouldShowLocation = !!(scheduleEventForm.venueName || scheduleEventForm.selectedLocation || scheduleEventForm.address);
+      if (shouldShowLocation) {
         setFormValue("Schedule & Location", "showLocation", true);
       }
     }
-  }, [scheduleEventForm.showLocation, scheduleEventForm.venueName, scheduleEventForm.selectedLocation, scheduleEventForm.address]);
+    
+    setShowLocation(shouldShowLocation);
+  }, []);
+
+  // Watch for changes in form data that might affect location visibility
+  useEffect(() => {
+    if (scheduleEventForm.showLocation !== undefined && scheduleEventForm.showLocation !== showLocation) {
+      setShowLocation(scheduleEventForm.showLocation);
+    }
+  }, [scheduleEventForm.showLocation]);
 
   const handleInputChange = (key: string, value: any) => {
     setFormValue("Schedule & Location", key, value);

@@ -28,13 +28,19 @@ export const MapWithAutocomplete: React.FC<Props> = ({
   onSelect,
   prefilledLocation,
 }) => {
-  const [query, setQuery] = useState(prefilledLocation?.name || "");
+  const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
-  const [selectedPos, setSelectedPos] = useState<LatLngExpression>(
-    prefilledLocation 
-      ? [prefilledLocation.lat, prefilledLocation.lon]
-      : defaultCenter
-  );
+  const [selectedPos, setSelectedPos] = useState<LatLngExpression>(defaultCenter);
+
+  // Initialize with prefilled data
+  useEffect(() => {
+    if (prefilledLocation) {
+      setQuery(prefilledLocation.name);
+      setSelectedPos([prefilledLocation.lat, prefilledLocation.lon]);
+    } else if (defaultCenter) {
+      setSelectedPos(defaultCenter);
+    }
+  }, [prefilledLocation, defaultCenter]);
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const fetchSuggestions = async (q: string) => {
