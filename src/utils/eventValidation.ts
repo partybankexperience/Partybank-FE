@@ -28,7 +28,9 @@ export const validationRules = {
     tickets: { required: true, message: 'At least one ticket is required' },
   },
   'Accessibility': {
-    // These might be optional but we can add rules if needed
+    eventVisibility: { required: true, message: 'Event visibility is required' },
+    wheelchairAccess: { required: true, message: 'Wheelchair accessibility selection is required' },
+    parkingAvailable: { required: true, message: 'Parking availability selection is required' },
   },
   'Notifications': {
     // These might be optional but we can add rules if needed

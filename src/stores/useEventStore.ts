@@ -158,10 +158,11 @@ export const useEventStore = create<EventData>()(
 
         // Map backend data to Accessibility stage
         form['Accessibility'] = {
-          minAge: eventData.minAge || 18,
-          wheelchairAccessible: eventData.wheelchairAccessible || false,
-          parkingAvailable: eventData.parkingAvailable || false,
-          attendeesCoverFees: eventData.attendeesCoverFees || false,
+          eventVisibility: eventData.visibility || '',
+          wheelchairAccess: eventData.wheelchairAccessible ? 'Yes' : 'No',
+          parkingAvailable: eventData.parkingAvailable ? 'Yes' : 'No',
+          transferCharges: eventData.attendeesCoverFees || false,
+          minAge: eventData.minAge?.toString() || '',
         };
 
         // Map tickets if any
