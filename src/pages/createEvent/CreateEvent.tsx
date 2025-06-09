@@ -363,38 +363,40 @@ const goNext = async () => {
         return;
       }
     }
-    case "Accessibility":
-          try {
-            if (!eventId) {
-              throw new Error("Event ID is required for accessibility settings");
-            }
+    
+    if (stage === "Accessibility") {
+      try {
+        if (!eventId) {
+          throw new Error("Event ID is required for accessibility settings");
+        }
 
-            const accessibilityData = form["Accessibility"];
+        const accessibilityData = form["Accessibility"];
 
-            // Convert form data to match backend expectations
-            const payload = {
-              visibility: accessibilityData.eventVisibility === "Public Event" ? "public" : "private",
-              wheelchairAccessible: accessibilityData.wheelchairAccess === "Yes",
-              parkingAvailable: accessibilityData.parkingAvailable === "Yes",
-              attendeesCoverFees: accessibilityData.transferCharges || false,
-              minAge: accessibilityData.minAge ? parseInt(accessibilityData.minAge) : null,
-            };
+        // Convert form data to match backend expectations
+        const payload = {
+          visibility: accessibilityData.eventVisibility === "Public Event" ? "public" : "private",
+          wheelchairAccessible: accessibilityData.wheelchairAccess === "Yes",
+          parkingAvailable: accessibilityData.parkingAvailable === "Yes",
+          attendeesCoverFees: accessibilityData.transferCharges || false,
+          minAge: accessibilityData.minAge ? parseInt(accessibilityData.minAge) : null,
+        };
 
-            const response = await accessibility(
-              eventId,
-              payload.wheelchairAccessible,
-              payload.parkingAvailable,
-              payload.attendeesCoverFees,
-              payload.minAge?.toString() || '',
-              payload.visibility as 'private' | 'public'
-            );
+        const response = await accessibility(
+          eventId,
+          payload.wheelchairAccessible,
+          payload.parkingAvailable,
+          payload.attendeesCoverFees,
+          payload.minAge?.toString() || '',
+          payload.visibility as 'private' | 'public'
+        );
 
-            console.log("Accessibility updated successfully:", response);
-          } catch (error) {
-            console.error("Error updating accessibility:", error);
-            throw error;
-          }
-          break;
+        console.log("Accessibility updated successfully:", response);
+      } catch (error) {
+        console.error("Error updating accessibility:", error);
+        setError(stage, "general", "An unexpected error occurred while updating accessibility settings.");
+        return;
+      }
+    }
     // Handle other stages
     const { isValid, errors } = validateStage(stage, formData);
     if (!isValid) {
