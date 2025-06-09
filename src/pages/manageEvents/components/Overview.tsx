@@ -119,44 +119,56 @@ const Overview = () => {
   //   { label: "Organizer’s Contact Number", value: "+234  704 3946 3386" },
   // ];
 
-  async function getEvent() {
-    try {
-      setLoading(true);
-      const res= await getEventsById(id as string);
-      setEventData(res);
-
-      if (res.currentStep !== "reviewPublish") {
-        // Store the event ID for editing
-        Storage.setItem("eventId", res.id);
-
-        // Prefill form data using the store method
-        prefillEventData(res);
-
-        // Map backend step to frontend stage and set it
-        const frontendStage = mapBackendStepToFrontend(res.currentStep);
-        setStage(frontendStage);
-
-        // Navigate to create event page
-        navigate('/dashboard/create-event');
-        setLoading(false);
-        return;
-      }
-
-      // Extract tickets from the response
-      if (res && res.tickets && Array.isArray(res.tickets)) {
-        setTickets(res.tickets);
-      } else if (res && res.data && res.data.tickets && Array.isArray(res.data.tickets)) {
-        setTickets(res.data.tickets);
-      }
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setLoading(false);
-    }
-  }
-
   useEffect(() => {
-    getEvent();
+    let isMounted = true;
+
+    async function getEvent() {
+      try {
+        setLoading(true);
+        const res = await getEventsById(id as string);
+
+        if (!isMounted) return;
+
+        setEventData(res);
+
+        if (res.currentStep !== "reviewPublish") {
+          // Store the event ID for editing
+          Storage.setItem("eventId", res.id);
+
+          // Prefill form data using the store method
+          prefillEventData(res);
+
+          // Map backend step to frontend stage and set it
+          const frontendStage = mapBackendStepToFrontend(res.currentStep);
+          setStage(frontendStage);
+
+          // Navigate to create event page
+          navigate('/dashboard/create-event');
+          return;
+        }
+
+        // Extract tickets from the response
+        if (res && res.tickets && Array.isArray(res.tickets)) {
+          setTickets(res.tickets);
+        } else if (res && res.data && res.data.tickets && Array.isArray(res.data.tickets)) {
+          setTickets(res.data.tickets);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    }
+
+    if (id) {
+      getEvent();
+    }
+
+    return () => {
+      isMounted = false;
+    };
   }, [id])
 
   if (loading) {
