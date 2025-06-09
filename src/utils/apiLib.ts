@@ -164,4 +164,34 @@ export const endPoints: endPointlistTypes = {
         headers,
         auth: true,
     },
+    deleteEvent: {
+        url: "/events",
+        method: "DELETE",
+        headers,
+        auth: true,
+    },
+    duplicateEvent: {
+        url: "/events",
+        method: "POST",
+        headers,
+        auth: true,
+    },
+    accessibility: {
+        url: "/events",
+        method: "PATCH",
+        headers,
+        auth: true,
+    },
+    notification: {
+        url: "/events",
+        method: "PATCH",
+        headers,
+        auth: true,
+    },
+    publishEvent: {
+        url: "/events",
+        method: "PATCH",
+        headers,
+        auth: true,
+    },
 };

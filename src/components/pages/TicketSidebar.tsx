@@ -96,7 +96,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
     }
 
     // Remove the ticket from the array
-    const updatedTickets = tickets.filter((_, index) => index !== ticketIndex);
+    const updatedTickets = tickets.filter((_:any, index:any) => index !== ticketIndex);
     setFormValue("Tickets Create", "tickets", updatedTickets);
     
     // Adjust active index if necessary

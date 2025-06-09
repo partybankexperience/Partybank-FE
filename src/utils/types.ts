@@ -38,6 +38,12 @@ export type endPointlistTypes = {
     getEvents: endpointTypes;
     getScheduleandLocation: endpointTypes;
     editEvent: endpointTypes;
+    deleteEvent: endpointTypes;
+    duplicateEvent: endpointTypes;
+    notification: endpointTypes;
+    // duplicateTicket: endpointTypes;
+    accessibility: endpointTypes;
+    publishEvent: endpointTypes;
 };
 
 export type urlPropTypes = {

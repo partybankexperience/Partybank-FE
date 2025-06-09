@@ -45,55 +45,7 @@ const getEvents=async (): Promise<any> =>{
   });
   return response;
 }
-const createTicket = async (
-  eventId: string,
-  name: string,
-  category: "single" | "group" | string,
-  type: "paid" | "free" | string,
-  price: number,
-  purchaseLimit: number,
-  stock: number,
-  soldTarget: number,
-  salesStart: string, // ISO format
-  salesEnd: string,   // ISO format
-  startTime: string,  // "HH:mm"
-  endTime: string,    // "HH:mm"
-  perks: string[],
-  isHidden: boolean,
-  isSoldOut: boolean
-): Promise<any> => {
-  const payload = {
-    eventId,
-    name,
-    category,
-    type,
-    price,
-    purchaseLimit,
-    stock,
-    soldTarget,
-    salesStart,
-    salesEnd,
-    startTime,
-    endTime,
-    perks,
-    isHidden,
-    isSoldOut,
-  };
 
-  const response = await apiCall({
-    name: "createTicket",
-    data: payload,
-  });
-
-  return response;
-};
-const deleteTicket = async (id: string): Promise<any> =>{
-  const response = await apiCall({
-    name: "deleteTicket",
-    urlExtra: `/${id}`
-  });    
-  return response;
-}
 const createTag = async (name: string,description:string): Promise<any> =>{
   const payload = {
     name,
@@ -171,4 +123,55 @@ const editEvent = async (
   return response;
 };
 
-export { createEvent,createTicket,deleteTicket,createTag ,getTags,getEventsById,getEvents,getScheduleandLocation,editEvent}
+const deleteEvent = async (id: string): Promise<any> => {
+  const response = await apiCall({
+    name: "deleteEvent",
+    urlExtra: `/${id}`,
+  });
+  return response;
+};
+
+const duplicateEvent = async (id: string,includeTicket:Boolean,includeTags:Boolean,name:string): Promise<any> => {
+  const response = await apiCall({
+    name: "duplicateEvent",
+    urlExtra: `/${id}/duplicate`,
+    params: {
+      includeTicket,
+      includeTags
+    },
+    data: {
+      name
+    }
+  });
+  return response;
+};
+
+const accessibility = async (id: string, wheelchairAccessible:boolean,parkingAvailable:boolean,attendeesCoverFees:boolean,minAge:string,visibility:'private'|'public'): Promise<any> => {
+  const response = await apiCall({
+    name: "accessibility",
+    urlExtra: `/${id}/accessibility`,
+    data: {
+     wheelchairAccessible, parkingAvailable, attendeesCoverFees, minAge, visibility
+    },
+  });
+  return response;
+};
+const publishEvent = async (id: string): Promise<any> => {
+  const response = await apiCall({
+    name: "publishEvent",
+    urlExtra: `/${id}/publish`,
+  });
+  return response;
+};  
+const notification = async (id: string, notifyOnTicketSale: boolean): Promise<any> => {
+  const response = await apiCall({
+    name: "notification",
+    urlExtra: `/${id}/notification`,
+    data: {
+      notifyOnTicketSale,
+    },
+  });
+  return response;
+};
+
+export { createEvent,createTag ,getTags,getEventsById,getEvents,getScheduleandLocation,editEvent,deleteEvent,duplicateEvent,accessibility,publishEvent,notification };
