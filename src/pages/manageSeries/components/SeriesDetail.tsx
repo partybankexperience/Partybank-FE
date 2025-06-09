@@ -21,6 +21,17 @@ interface SeriesData {
   userId: string;
   createdAt: string;
   updatedAt: string;
+  events?: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    bannerImage: string;
+    startDate: string;
+    endDate: string | null;
+    startTime: string;
+    endTime: string;
+    status: string;
+  }>;
 }
 
 const SeriesDetail = () => {
@@ -38,26 +49,7 @@ const SeriesDetail = () => {
     const [editedDescription, setEditedDescription] = useState('');
     const [isSaving, setIsSaving] = useState(false);
 
-    const mockEvents = [
-        {
-          id: 1,
-          name: "Canvas and Beats",
-          description: "Canvas & Beats is an innovative event that seamlessly blends.",
-          imageUrl: "",
-        },
-        {
-          id: 2,
-          name: "Tech Flow Summit",
-          description: "A forward-thinking event exploring AI and emerging tech trends.",
-          imageUrl: "",
-        },
-        {
-          id: 3,
-          name: "Green Earth Expo",
-          description: "An eco-friendly event promoting sustainability and innovation.",
-          imageUrl: "",
-        },
-    ];
+    const events = seriesData?.events || [];
 
     useEffect(() => {
         const fetchSeriesData = async () => {
@@ -262,16 +254,37 @@ const SeriesDetail = () => {
                     </DefaultButton>
                 </div>
                 <div className="grid gap-[20px]">
-                    {mockEvents.map((event) => (
-                        <div key={event.id} className="flex gap-[20px] items-center py-[20px] border-b border-[#E1E1E1]">
-                            <CgLayoutGridSmall className="text-black text-[2rem]" />
-                            <div className="rounded-md h-[5.9rem] w-[9.6rem] bg-almostBlack"></div>
-                            <div className="grid gap-2">
-                                <p className="text-black text-[1rem]">{event.name}</p>
-                                <p className="text-lightGrey text-[.8rem]">{event.description}</p>
+                    {events.length > 0 ? (
+                        events.map((event) => (
+                            <div key={event.id} className="flex gap-[20px] items-center py-[20px] border-b border-[#E1E1E1]">
+                                <CgLayoutGridSmall className="text-black text-[2rem]" />
+                                <div className="rounded-md h-[5.9rem] w-[9.6rem] bg-almostBlack overflow-hidden">
+                                    <img 
+                                        src={event.bannerImage} 
+                                        alt={event.name}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                                <div className="grid gap-2 flex-1">
+                                    <p className="text-black text-[1rem] font-medium">{event.name}</p>
+                                    <p className="text-lightGrey text-[.8rem]">
+                                        {formatDate(event.startDate)} • {event.startTime} - {event.endTime}
+                                    </p>
+                                    <span className={`text-[.75rem] px-2 py-1 rounded-full w-fit ${
+                                        event.status === 'published' 
+                                            ? 'bg-green-100 text-green-700' 
+                                            : 'bg-yellow-100 text-yellow-700'
+                                    }`}>
+                                        {event.status}
+                                    </span>
+                                </div>
                             </div>
+                        ))
+                    ) : (
+                        <div className="text-center text-lightGrey py-8">
+                            No events found in this series
                         </div>
-                    ))}
+                    )}
                 </div>
             </div>
             <Modal
