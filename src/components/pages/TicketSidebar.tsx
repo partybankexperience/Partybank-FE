@@ -68,6 +68,34 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
   };
 
   const handleEditTicket = (ticketIndex: number) => {
+    // Save current form data to the current ticket before switching
+    const currentData = {
+      name: currentTicket.ticketName || "",
+      type: currentTicket.ticketType || "",
+      category: currentTicket.ticketCategory || "",
+      price: currentTicket.price || "",
+      purchaseLimit: currentTicket.purchaseLimit || "",
+      stockAvailability: currentTicket.stockAvailability || "",
+      soldTarget: currentTicket.soldTarget || "",
+      numberOfPeople: currentTicket.numberOfPeople || "",
+      perks: currentTicket.perks || [""],
+      ticketAvailability: currentTicket.ticketAvailability || "",
+      salesStart: currentTicket.salesStart || "",
+      startTime: currentTicket.startTime || "",
+      salesEnd: currentTicket.salesEnd || "",
+      endTime: currentTicket.endTime || ""
+    };
+
+    // Update current ticket in tickets array if it has data
+    if (currentData.name || currentData.type) {
+      const updatedTickets = [...tickets];
+      updatedTickets[activeTicketIndex] = {
+        ...currentData,
+        id: tickets[activeTicketIndex]?.id || `ticket-${Date.now()}`
+      };
+      setFormValue("Tickets Create", "tickets", updatedTickets);
+    }
+
     // Switch to the selected ticket form
     setFormValue("Tickets Create", "activeTicketIndex", ticketIndex);
     
@@ -84,6 +112,10 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
       setFormValue("Tickets Create", "numberOfPeople", ticketToEdit.numberOfPeople || "");
       setFormValue("Tickets Create", "perks", ticketToEdit.perks || [""]);
       setFormValue("Tickets Create", "ticketAvailability", ticketToEdit.ticketAvailability || "");
+      setFormValue("Tickets Create", "salesStart", ticketToEdit.salesStart || "");
+      setFormValue("Tickets Create", "startTime", ticketToEdit.startTime || "");
+      setFormValue("Tickets Create", "salesEnd", ticketToEdit.salesEnd || "");
+      setFormValue("Tickets Create", "endTime", ticketToEdit.endTime || "");
     }
 
     onEditTicket?.(ticketToEdit.id);

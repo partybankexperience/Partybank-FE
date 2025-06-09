@@ -179,6 +179,177 @@ const goNext = async () => {
         return;
       }
     }
+    if (stage === "Tickets Create") {
+      try {
+        const tickets = formData.tickets || [];
+        const activeIndex = formData.activeTicketIndex || 0;
+
+        // Build current ticket object from form data
+        const currentTicket = {
+          name: formData.ticketName?.trim() || "",
+          type: formData.ticketType || "",
+          category: formData.ticketCategory || "",
+          price: formData.price || "",
+          purchaseLimit: formData.purchaseLimit || "",
+          stockAvailability: formData.stockAvailability || "",
+          soldTarget: formData.soldTarget || "",
+          numberOfPeople: formData.numberOfPeople || "",
+          perks: formData.perks || [""],
+          ticketAvailability: formData.ticketAvailability || "",
+          salesStart: formData.salesStart || "",
+          startTime: formData.startTime || "",
+          salesEnd: formData.salesEnd || "",
+          endTime: formData.endTime || ""
+        };
+
+        // Validate current ticket if it has a name or any filled fields
+        const hasCurrentTicketData = currentTicket.name || currentTicket.type || currentTicket.category || 
+                                   currentTicket.price || currentTicket.purchaseLimit || currentTicket.salesStart;
+
+        if (hasCurrentTicketData) {
+          // Validate current ticket required fields
+          if (!currentTicket.name) {
+            setError(stage, "ticketName", "Ticket name is required");
+            return;
+          }
+          if (!currentTicket.type) {
+            setError(stage, "ticketType", "Ticket type is required");
+            return;
+          }
+          if (!currentTicket.category) {
+            setError(stage, "ticketCategory", "Ticket category is required");
+            return;
+          }
+          if (currentTicket.type === "Paid" && (!currentTicket.price || Number(currentTicket.price) <= 0)) {
+            setError(stage, "price", "Price is required for paid tickets");
+            return;
+          }
+          if (!currentTicket.salesStart) {
+            setError(stage, "salesStart", "Sales start date is required");
+            return;
+          }
+          if (!currentTicket.startTime) {
+            setError(stage, "startTime", "Start time is required");
+            return;
+          }
+          if (!currentTicket.salesEnd) {
+            setError(stage, "salesEnd", "Sales end date is required");
+            return;
+          }
+          if (!currentTicket.endTime) {
+            setError(stage, "endTime", "End time is required");
+            return;
+          }
+          if (!currentTicket.purchaseLimit) {
+            setError(stage, "purchaseLimit", "Purchase limit is required");
+            return;
+          }
+          if (currentTicket.ticketAvailability === "limited" && (!currentTicket.stockAvailability || Number(currentTicket.stockAvailability) <= 0)) {
+            setError(stage, "stockAvailability", "Stock availability is required for limited tickets");
+            return;
+          }
+          if (currentTicket.category === "option2" && (!currentTicket.numberOfPeople || Number(currentTicket.numberOfPeople) <= 0)) {
+            setError(stage, "numberOfPeople", "Number of people is required for group tickets");
+            return;
+          }
+
+          clearStageErrors(stage);
+
+          // Save current ticket to the tickets array
+          let updatedTickets = [...tickets];
+          updatedTickets[activeIndex] = {
+            ...currentTicket,
+            id: tickets[activeIndex]?.id || `ticket-${Date.now()}`
+          };
+          setFormValue("Tickets Create", "tickets", updatedTickets);
+
+          // Create/update ticket via API
+          try {
+            const categoryMap: { [key: string]: string } = {
+              "option1": "single",
+              "option2": "group"
+            };
+
+            const salesStartISO = `${currentTicket.salesStart}T${currentTicket.startTime}:00Z`;
+            const salesEndISO = `${currentTicket.salesEnd}T${currentTicket.endTime}:00Z`;
+
+            await createTicket(
+              eventId as string,
+              currentTicket.name,
+              categoryMap[currentTicket.category] || currentTicket.category,
+              currentTicket.type.toLowerCase(),
+              currentTicket.type === "Paid" ? Number(currentTicket.price) : 0,
+              Number(currentTicket.purchaseLimit),
+              currentTicket.ticketAvailability === "limited" ? Number(currentTicket.stockAvailability) : 999999,
+              Number(currentTicket.soldTarget) || 0,
+              salesStartISO,
+              salesEndISO,
+              currentTicket.startTime,
+              currentTicket.endTime,
+              Array.isArray(currentTicket.perks) ? currentTicket.perks.filter(perk => perk && perk.trim()) : [],
+              false,
+              false
+            );
+          } catch (error) {
+            console.error("Error creating ticket:", error);
+            setError(stage, "general", `Failed to create ticket: ${currentTicket.name}`);
+            return;
+          }
+
+          // Check if there are more incomplete tickets to work on
+          const allTicketForms = updatedTickets.length > 0 ? updatedTickets : [{}];
+          let nextIncompleteIndex = -1;
+
+          for (let i = 0; i < allTicketForms.length; i++) {
+            if (i !== activeIndex) {
+              const ticket = allTicketForms[i];
+              if (!ticket.name || !ticket.type || !ticket.category) {
+                nextIncompleteIndex = i;
+                break;
+              }
+            }
+          }
+
+          // If there's another incomplete ticket, switch to it
+          if (nextIncompleteIndex !== -1) {
+            const nextTicket = allTicketForms[nextIncompleteIndex];
+            setFormValue("Tickets Create", "activeTicketIndex", nextIncompleteIndex);
+
+            // Load the next ticket's data into the form
+            setFormValue("Tickets Create", "ticketName", nextTicket.name || "");
+            setFormValue("Tickets Create", "ticketType", nextTicket.type || "");
+            setFormValue("Tickets Create", "ticketCategory", nextTicket.category || "");
+            setFormValue("Tickets Create", "price", nextTicket.price || "");
+            setFormValue("Tickets Create", "purchaseLimit", nextTicket.purchaseLimit || "");
+            setFormValue("Tickets Create", "stockAvailability", nextTicket.stockAvailability || "");
+            setFormValue("Tickets Create", "soldTarget", nextTicket.soldTarget || "");
+            setFormValue("Tickets Create", "numberOfPeople", nextTicket.numberOfPeople || "");
+            setFormValue("Tickets Create", "perks", nextTicket.perks || [""]);
+            setFormValue("Tickets Create", "ticketAvailability", nextTicket.ticketAvailability || "");
+            setFormValue("Tickets Create", "salesStart", nextTicket.salesStart || "");
+            setFormValue("Tickets Create", "startTime", nextTicket.startTime || "");
+            setFormValue("Tickets Create", "salesEnd", nextTicket.salesEnd || "");
+            setFormValue("Tickets Create", "endTime", nextTicket.endTime || "");
+
+            return; // Stay on current stage to complete the next ticket
+          }
+        }
+
+        // If no current ticket data and no tickets exist, require at least one
+        const finalTickets = formData.tickets || [];
+        if (finalTickets.length === 0 && !hasCurrentTicketData) {
+          setError(stage, "ticketName", "At least one ticket must be created");
+          return;
+        }
+
+        clearStageErrors(stage);
+
+      } catch (error) {
+        console.error("Error in Tickets Create stage:", error);
+        setError(stage, "general", "An unexpected error occurred while creating tickets.");
+        return;
+      }
+    }
     // Handle other stages
     const { isValid, errors } = validateStage(stage, formData);
     if (!isValid) {
