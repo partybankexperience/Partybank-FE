@@ -161,73 +161,73 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
   };
 
   return (
-    <div className="my-2 md:my-[1.875rem] h-fit p-3 md:p-[1.5rem] bg-[#F8F9F9] rounded-md w-full md:w-[20rem] md:min-w-[20rem] md:max-w-[20rem]">
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-black font-medium text-sm md:text-base">Tickets</h3>
+    <div className="my-2 md:my-[1.875rem] h-fit p-4 md:p-[1.5rem] bg-[#F8F9F9] rounded-md w-full md:w-[20rem] md:min-w-[20rem] md:max-w-[20rem]">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-black font-semibold text-base md:text-base">Tickets</h3>
         <button
           onClick={handleAddNewTicket}
-          className="p-1.5 md:p-2 text-primary hover:bg-primary/10 rounded transition-colors"
+          className="p-2 md:p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors"
           title="Add new ticket"
         >
-          <PiPlus className="text-sm md:text-lg" />
+          <PiPlus className="text-lg md:text-lg" />
         </button>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-3 md:space-y-2">
         {allTicketForms.length > 0 ? (
           allTicketForms.map((ticket, index) => {
             const isSaved = savedTickets.includes(ticket.id || `ticket-${index}`);
             return (
               <div
                 key={ticket.id || index}
-                className={`bg-white p-2 md:p-3 rounded border transition-colors ${
+                className={`bg-white p-3 md:p-3 rounded-lg border transition-colors ${
                   index === activeTicketIndex 
                     ? 'border-primary bg-primary/5' 
                     : 'border-gray-200 hover:border-primary/30'
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex-1 min-w-0 max-w-[8rem] md:max-w-[12rem]">
-                    <div className="flex items-center gap-1 md:gap-2">
-                      <p className="text-xs md:text-sm font-medium text-black truncate overflow-hidden whitespace-nowrap" 
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <p className="text-sm md:text-sm font-semibold text-black truncate" 
                          title={ticket.name || `Ticket ${index + 1}`}>
                         {ticket.name || `Ticket ${index + 1}`}
                       </p>
                       {isSaved && (
-                        <span className="inline-flex items-center px-1 md:px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 flex-shrink-0">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 flex-shrink-0">
                           ✓
                         </span>
                       )}
                     </div>
                     {ticket.type && (
-                      <p className="text-xs text-gray-500 truncate overflow-hidden whitespace-nowrap">
+                      <p className="text-xs text-gray-600 mb-1">
                         {ticket.type === "Free" ? "Free" : `₦${ticket.price?.toLocaleString() || "0"}`}
                       </p>
                     )}
                     {index === activeTicketIndex && !isSaved && (
-                      <p className="text-xs text-primary font-medium truncate overflow-hidden whitespace-nowrap">Currently editing</p>
+                      <p className="text-xs text-primary font-medium">Currently editing</p>
                     )}
                     {index === activeTicketIndex && isSaved && (
-                      <p className="text-xs text-blue-600 font-medium truncate overflow-hidden whitespace-nowrap">Active</p>
+                      <p className="text-xs text-blue-600 font-medium">Active</p>
                     )}
                   </div>
 
                   {!isSaved && (
-                    <div className="flex items-center gap-0.5 md:gap-1 ml-1 md:ml-2 flex-shrink-0">
+                    <div className="flex items-center gap-1 flex-shrink-0">
                       <button
                         onClick={() => handleEditTicket(index)}
-                        className="p-1 text-gray-400 hover:text-primary rounded transition-colors"
+                        className="p-2 text-gray-400 hover:text-primary rounded-lg transition-colors"
                         title="Edit ticket"
                       >
-                        <FaEdit className="text-xs" />
+                        <FaEdit className="text-sm" />
                       </button>
                       {allTicketForms.length > 1 && (
                         <button
                           onClick={() => handleDeleteTicket(index)}
-                          className="p-1 text-gray-400 hover:text-red-500 rounded transition-colors"
+                          className="p-2 text-gray-400 hover:text-red-500 rounded-lg transition-colors"
                           title="Delete ticket"
                         >
-                          <FaTrash className="text-xs" />
+                          <FaTrash className="text-sm" />
                         </button>
                       )}
                     </div>
@@ -237,14 +237,14 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
             );
           })
         ) : (
-          <div className="text-center py-4 text-gray-500">
-            <p className="text-xs md:text-sm">No tickets created</p>
+          <div className="text-center py-6 text-gray-500">
+            <p className="text-sm">No tickets created</p>
           </div>
         )}
       </div>
 
       {allTicketForms.length > 0 && (
-        <div className="mt-3 pt-3 border-t border-gray-200">
+        <div className="mt-4 pt-3 border-t border-gray-200">
           <p className="text-xs text-gray-500 text-center">
             {allTicketForms.length} ticket{allTicketForms.length !== 1 ? 's' : ''} • Active: {activeTicketIndex + 1}
           </p>
