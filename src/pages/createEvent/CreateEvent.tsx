@@ -269,7 +269,7 @@ const goNext = async () => {
           };
           setFormValue("Tickets Create", "tickets", updatedTickets);
 
-          // Create/update ticket via API only if not already saved
+          // Create/update ticket via API
           try {
             const categoryMap: { [key: string]: string } = {
               "option1": "single",
@@ -279,23 +279,58 @@ const goNext = async () => {
             const salesStartISO = `${currentTicket.salesStart}T${currentTicket.startTime}:00Z`;
             const salesEndISO = `${currentTicket.salesEnd}T${currentTicket.endTime}:00Z`;
 
-            await createTicket(
-              eventId as string,
-              currentTicket.name,
-              categoryMap[currentTicket.category] || currentTicket.category,
-              currentTicket.type.toLowerCase(),
-              currentTicket.type === "Paid" ? Number(currentTicket.price) : 0,
-              Number(currentTicket.purchaseLimit),
-              currentTicket.ticketAvailability === "limited" ? Number(currentTicket.stockAvailability) : 999999,
-              Number(currentTicket.soldTarget) || 0,
-              salesStartISO,
-              salesEndISO,
-              currentTicket.startTime,
-              currentTicket.endTime,
-              Array.isArray(currentTicket.perks) ? currentTicket.perks.filter(perk => perk && perk.trim()) : [],
-              false,
-              false
-            );
+            const currentTicketInArray = updatedTickets[activeIndex];
+            let response;
+
+            // Check if ticket already has a backend ID (savedTicketId) - if so, edit it
+            if (currentTicketInArray?.savedTicketId) {
+              // Edit existing ticket
+              response = await editTicket(
+                currentTicketInArray.savedTicketId,
+                currentTicket.name,
+                categoryMap[currentTicket.category] || currentTicket.category,
+                currentTicket.type.toLowerCase(),
+                currentTicket.type === "Paid" ? Number(currentTicket.price) : 0,
+                Number(currentTicket.purchaseLimit),
+                currentTicket.ticketAvailability === "limited" ? Number(currentTicket.stockAvailability) : 999999,
+                Number(currentTicket.soldTarget) || 0,
+                salesStartISO,
+                salesEndISO,
+                currentTicket.startTime,
+                currentTicket.endTime,
+                Array.isArray(currentTicket.perks) ? currentTicket.perks.filter(perk => perk && perk.trim()) : [],
+                false,
+                false
+              );
+            } else {
+              // Create new ticket
+              response = await createTicket(
+                eventId as string,
+                currentTicket.name,
+                categoryMap[currentTicket.category] || currentTicket.category,
+                currentTicket.type.toLowerCase(),
+                currentTicket.type === "Paid" ? Number(currentTicket.price) : 0,
+                Number(currentTicket.purchaseLimit),
+                currentTicket.ticketAvailability === "limited" ? Number(currentTicket.stockAvailability) : 999999,
+                Number(currentTicket.soldTarget) || 0,
+                salesStartISO,
+                salesEndISO,
+                currentTicket.startTime,
+                currentTicket.endTime,
+                Array.isArray(currentTicket.perks) ? currentTicket.perks.filter(perk => perk && perk.trim()) : [],
+                false,
+                false
+              );
+
+              // Store the backend ticket ID
+              if (response?.ticketId) {
+                updatedTickets[activeIndex] = {
+                  ...updatedTickets[activeIndex],
+                  savedTicketId: response.ticketId
+                };
+                setFormValue("Tickets Create", "tickets", updatedTickets);
+              }
+            }
 
             // Mark ticket as saved
             const currentSavedTickets = formData.savedTickets || [];
@@ -304,8 +339,8 @@ const goNext = async () => {
               setFormValue("Tickets Create", "savedTickets", [...currentSavedTickets, ticketId]);
             }
           } catch (error) {
-            console.error("Error creating ticket:", error);
-            setError(stage, "general", `Failed to create ticket: ${currentTicket.name}`);
+            console.error("Error creating/updating ticket:", error);
+            setError(stage, "general", `Failed to save ticket: ${currentTicket.name}`);
             return;
           }
 

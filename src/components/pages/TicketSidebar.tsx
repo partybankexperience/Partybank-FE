@@ -1,4 +1,3 @@
-
 import { PiPlus } from "react-icons/pi";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useEventStore } from "../../stores/useEventStore";
@@ -92,7 +91,8 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
       const updatedTickets = [...tickets];
       updatedTickets[activeTicketIndex] = {
         ...currentData,
-        id: tickets[activeTicketIndex]?.id || `ticket-${Date.now()}`
+        id: tickets[activeTicketIndex]?.id || `ticket-${Date.now()}`,
+        savedTicketId: tickets[activeTicketIndex]?.savedTicketId || null
       };
       setFormValue("Tickets Create", "tickets", updatedTickets);
     }
@@ -175,7 +175,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
             <PiPlus className="text-sm" />
           </button>
         </div>
-        
+
         <div className="flex gap-3 overflow-x-auto px-4 pb-2">
           {allTicketForms.map((ticket, index) => {
             const isSaved = savedTickets.includes(ticket.id || `ticket-${index}`);

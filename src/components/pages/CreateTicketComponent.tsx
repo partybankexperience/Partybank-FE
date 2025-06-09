@@ -49,7 +49,8 @@ const CreateTicketComponent = () => {
         salesStart: key === 'salesStart' ? value : currentTicketData.salesStart,
         startTime: key === 'startTime' ? value : currentTicketData.startTime,
         salesEnd: key === 'salesEnd' ? value : currentTicketData.salesEnd,
-        endTime: key === 'endTime' ? value : currentTicketData.endTime
+        endTime: key === 'endTime' ? value : currentTicketData.endTime,
+        savedTicketId: tickets[activeIndex]?.savedTicketId || null
       };
 
       const updatedTickets = [...tickets];
