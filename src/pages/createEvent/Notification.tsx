@@ -1,3 +1,4 @@
+
 import SlideToggle from "../../components/inputs/SlideToggle";
 import { useEventStore } from "../../stores/useEventStore";
 
@@ -14,18 +15,19 @@ const Notification = () => {
   const notificationForm = form[currentStage] || {};
 
   const handleToggleChange = (val: boolean) => {
-    setFormValue(currentStage, "transferChargesToCustomer", val);
+    setFormValue(currentStage, "notifyOnTicketSale", val);
   };
 
   return (
     <div className="grid gap-[15px] mt-[1rem]">
       <div className="flex items-center justify-between w-full">
         <p className="font-bold text-[1rem]">
-          Transfer Event Charges to Customers
+          Notify on Ticket Sale
         </p>
         <SlideToggle
-          toggle={(val:any) => handleToggleChange(val)}
-          defaultValue={notificationForm.transferChargesToCustomer || false}
+          toggle={(val: any) => handleToggleChange(val)}
+          defaultValue={notificationForm.notifyOnTicketSale || false}
+          isChecked={notificationForm.notifyOnTicketSale || false}
         />
       </div>
 
