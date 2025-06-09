@@ -5,7 +5,7 @@ import CreateEventLayout from "../../components/layouts/CreateEventLayout"
 import CreateTicketComponent from "../../components/pages/CreateTicketComponent"
 import { stages, useEventStore } from "../../stores/useEventStore"
 import { validateStage } from "../../utils/eventValidation"
-import { createEvent, editEvent, getScheduleandLocation, accessibility } from "../../Containers/eventApi"
+import { createEvent, editEvent, getScheduleandLocation, accessibility, notification } from "../../Containers/eventApi"
 import { createTicket } from "../../Containers/ticketApi"
 import Accessibility from "./Accessibility"
 import EventSetup from "./EventSetup"
@@ -394,6 +394,27 @@ const goNext = async () => {
       } catch (error) {
         console.error("Error updating accessibility:", error);
         setError(stage, "general", "An unexpected error occurred while updating accessibility settings.");
+        return;
+      }
+    }
+
+    if (stage === "Notifications") {
+      try {
+        if (!eventId) {
+          throw new Error("Event ID is required for notification settings");
+        }
+
+        const notificationData = form["Notifications"];
+        
+        // Convert form data to match backend expectations
+        const notifyOnTicketSale = notificationData.notifyOnTicketSale || false;
+
+        const response = await notification(eventId, notifyOnTicketSale);
+
+        console.log("Notification settings updated successfully:", response);
+      } catch (error) {
+        console.error("Error updating notification settings:", error);
+        setError(stage, "general", "An unexpected error occurred while updating notification settings.");
         return;
       }
     }
