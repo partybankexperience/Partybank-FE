@@ -95,7 +95,7 @@ const EventCard = ({
             <p className="text-primary text-[12px]">
               {formattedDate} <span className="px-1 text-lightGrey">.</span> {timeDisplay}
             </p>
-            <p className="text-black text-[18px] font-medium">{name}</p>
+            <p className="text-black text-[18px] font-medium truncate">{name}</p>
           </div>
           <div className="flex items-center gap-[6px] text-lightGrey">
             <PiMapPinBold />
