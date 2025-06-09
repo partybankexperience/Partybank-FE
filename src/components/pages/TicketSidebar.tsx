@@ -162,11 +162,11 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
   };
 
   return (
-    <div className="w-full md:w-[20rem] md:min-w-[20rem] md:max-w-[20rem] order-last md:order-none">
+    <div className="w-full md:w-[20rem] md:min-w-[20rem] md:max-w-[20rem] order-last md:order-none py-4">
       {/* Mobile: Horizontal scrollable cards */}
       <div className="block md:hidden mb-4">
-        <div className="flex items-center justify-between mb-3 px-4">
-          <h3 className="text-black font-semibold text-sm">Tickets ({allTicketForms.length})</h3>
+        <div className="flex items-center justify-between mb-3 px-4 ">
+          <h3 className="text-black font-semibold text-sm">Add Tickets ({allTicketForms.length})</h3>
           <button
             onClick={handleAddNewTicket}
             className="p-1.5 text-primary hover:bg-primary/10 rounded-lg transition-colors"
@@ -216,7 +216,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
       {/* Desktop: Vertical sidebar */}
       <div className="hidden md:block my-[1.875rem] h-fit p-[1.5rem] bg-[#F8F9F9] rounded-md">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-black font-semibold text-base">Tickets</h3>
+          <h3 className="text-black font-semibold text-base"> Add Tickets</h3>
           <button
             onClick={handleAddNewTicket}
             className="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors"

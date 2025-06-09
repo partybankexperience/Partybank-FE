@@ -23,7 +23,7 @@ const createEvent = async (
     description,
     bannerImage,
     tags,
-    phone,
+    contactPhone:phone,
     category,
   };
 
@@ -86,7 +86,7 @@ const getScheduleandLocation = async (id:string,eventType: string,startDate:stri
       endTime,
       isLocationTBA,
       venueName,
-      address
+      ...(isLocationTBA && address),
     },
   });
   return response;
@@ -166,7 +166,7 @@ const publishEvent = async (id: string): Promise<any> => {
 const notification = async (id: string, notifyOnTicketSale: boolean): Promise<any> => {
   const response = await apiCall({
     name: "notification",
-    urlExtra: `/${id}/notification`,
+    urlExtra: `/${id}/notifications`,
     data: {
       notifyOnTicketSale,
     },
