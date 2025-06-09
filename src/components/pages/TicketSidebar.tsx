@@ -211,24 +211,26 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
                     )}
                   </div>
 
-                  <div className="flex items-center gap-1 ml-2">
-                    <button
-                      onClick={() => handleEditTicket(index)}
-                      className="p-1 text-gray-400 hover:text-primary rounded transition-colors"
-                      title="Edit ticket"
-                    >
-                      <FaEdit className="text-xs" />
-                    </button>
-                    {allTicketForms.length > 1 && (
+                  {!isSaved && (
+                    <div className="flex items-center gap-1 ml-2">
                       <button
-                        onClick={() => handleDeleteTicket(index)}
-                        className="p-1 text-gray-400 hover:text-red-500 rounded transition-colors"
-                        title="Delete ticket"
+                        onClick={() => handleEditTicket(index)}
+                        className="p-1 text-gray-400 hover:text-primary rounded transition-colors"
+                        title="Edit ticket"
                       >
-                        <FaTrash className="text-xs" />
+                        <FaEdit className="text-xs" />
                       </button>
-                    )}
-                  </div>
+                      {allTicketForms.length > 1 && (
+                        <button
+                          onClick={() => handleDeleteTicket(index)}
+                          className="p-1 text-gray-400 hover:text-red-500 rounded transition-colors"
+                          title="Delete ticket"
+                        >
+                          <FaTrash className="text-xs" />
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             );
