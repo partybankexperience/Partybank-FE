@@ -194,4 +194,10 @@ export const endPoints: endPointlistTypes = {
         headers,
         auth: true,
     },
+    editTicket: {
+        url: "/tickets",
+        method: "PATCH",
+        headers,
+        auth: true,
+    }
 };

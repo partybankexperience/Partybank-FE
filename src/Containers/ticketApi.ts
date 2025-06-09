@@ -49,5 +49,28 @@ const deleteTicket = async (id: string): Promise<any> =>{
   });    
   return response;
 }
-
-export {deleteTicket, createTicket};
+const editTicket = async (id: string, name: string, category: "single" | "group" | string, type: "paid" | "free" | string, price: number, purchaseLimit: number, stock: number, sold: number, salesStart: string, salesEnd: string, startTime: string, endTime: string, perks: string[], isHidden: boolean, isSoldOut: boolean): Promise<any> =>{
+  const payload = {
+    name,
+    category,
+    type,
+    price,
+    purchaseLimit,
+    stock,
+    sold,
+    salesStart,
+    salesEnd,
+    startTime,
+    endTime,
+    perks,
+    isHidden,
+    isSoldOut,
+  };
+  const response = await apiCall({
+    name: "editTicket",
+    urlExtra: `/${id}`,
+    data: payload
+  });
+  return response;
+}
+export {deleteTicket, createTicket,editTicket};

@@ -44,6 +44,7 @@ export type endPointlistTypes = {
     // duplicateTicket: endpointTypes;
     accessibility: endpointTypes;
     publishEvent: endpointTypes;
+    editTicket: endpointTypes;
 };
 
 export type urlPropTypes = {
