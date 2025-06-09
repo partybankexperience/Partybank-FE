@@ -3,7 +3,7 @@ import Card from "./components/Card";
 import { BsPeopleFill } from "react-icons/bs";
 import Sales from "./components/Sales";
 import Graph from "./components/Graph";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Dropdown from "../../components/inputs/Dropdown";
 import avatar from "../../assets/images/avatar.png";
 import EventCard from "../../components/cards/EventCard";
@@ -12,10 +12,31 @@ import { useNavigate } from "react-router";
 import { BiSolidCalendarStar } from "react-icons/bi";
 import { FaDollarSign } from "react-icons/fa";
 import { RiPuzzle2Fill } from "react-icons/ri";
+import { getEvents } from "../../Containers/eventApi";
 const Dashboard = () => {
   const [selectedOption, setSelectedOption] = useState("Yearly");
   const [selectedSaleOption, setSelectedSaleOption] = useState("Sales");
+  const [events, setEvents] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const navigate=useNavigate()
+
+  const fetchEvents = async () => {
+    try {
+      setLoading(true);
+      const response = await getEvents();
+      // Get only the first 4 events
+      setEvents(response?.slice(0, 4) || []);
+    } catch (error) {
+      console.error("Error fetching events:", error);
+      setEvents([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
   const sales = [
     {
       image: "",
@@ -129,10 +150,31 @@ const Dashboard = () => {
 <button className="text-primary text-[16px] cursor-pointer hover:text-deepRed flex gap-[12.5px] items-center" onClick={()=>navigate('/manage-events')}>See all Events <IoIosArrowForward /></button>
             </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[20px] mt-[19px]">
-                <EventCard/>
-                <EventCard/>
-                <EventCard/>
-                <EventCard/>
+                {loading ? (
+                  <div className="col-span-full text-center text-grey400">Loading events...</div>
+                ) : events.length > 0 ? (
+                  events.map((event, index) => (
+                    <EventCard
+                      key={event.id || index}
+                      name={event.name}
+                      startTime={event.startTime}
+                      endTime={event.endTime}
+                      startDate={event.startDate}
+                      location={event.location}
+                      bannerImage={event.bannerImage}
+                      progress={50} // You can calculate this based on tickets sold vs total tickets
+                      ticketSold={event.ticketsSold || 0}
+                      totalTicket={event.totalTickets || 0}
+                      onEdit={() => {
+                        navigate(`/manage-events/${event.id}`, { state: { event } });
+                      }}
+                      onDuplicate={() => console.log("Duplicate clicked")}
+                      onDelete={() => console.log("Delete clicked")}
+                    />
+                  ))
+                ) : (
+                  <div className="col-span-full text-center text-grey400">No events found.</div>
+                )}
               </div>
         </section>
       </div>
