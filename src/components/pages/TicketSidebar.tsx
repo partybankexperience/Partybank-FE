@@ -14,6 +14,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
   const currentTicket = form["Tickets Create"];
   const tickets = currentTicket?.tickets || [];
   const activeTicketIndex = currentTicket?.activeTicketIndex || 0;
+  const savedTickets = currentTicket?.savedTickets || []; // Track which tickets have been saved
 
   // Create array of all ticket forms (saved + current active one)
   const allTicketForms = [
@@ -175,29 +176,42 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
 
       <div className="space-y-2">
         {allTicketForms.length > 0 ? (
-          allTicketForms.map((ticket, index) => (
-            <div
-              key={ticket.id || index}
-              className={`bg-white p-3 rounded border transition-colors ${
-                index === activeTicketIndex 
-                  ? 'border-primary bg-primary/5' 
-                  : 'border-gray-200 hover:border-primary/30'
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-black truncate">
-                    {ticket.name || `Ticket ${index + 1}`}
-                  </p>
-                  {ticket.type && (
-                    <p className="text-xs text-gray-500">
-                      {ticket.type === "Free" ? "Free" : `₦${ticket.price?.toLocaleString() || "0"}`}
-                    </p>
-                  )}
-                  {index === activeTicketIndex && (
-                    <p className="text-xs text-primary font-medium">Currently editing</p>
-                  )}
-                </div>
+          allTicketForms.map((ticket, index) => {
+            const isSaved = savedTickets.includes(ticket.id || `ticket-${index}`);
+            return (
+              <div
+                key={ticket.id || index}
+                className={`bg-white p-3 rounded border transition-colors ${
+                  index === activeTicketIndex 
+                    ? 'border-primary bg-primary/5' 
+                    : 'border-gray-200 hover:border-primary/30'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-medium text-black truncate">
+                        {ticket.name || `Ticket ${index + 1}`}
+                      </p>
+                      {isSaved && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                          ✓ Saved
+                        </span>
+                      )}
+                    </div>
+                    {ticket.type && (
+                      <p className="text-xs text-gray-500">
+                        {ticket.type === "Free" ? "Free" : `₦${ticket.price?.toLocaleString() || "0"}`}
+                      </p>
+                    )}
+                    {index === activeTicketIndex && !isSaved && (
+                      <p className="text-xs text-primary font-medium">Currently editing</p>
+                    )}
+                    {index === activeTicketIndex && isSaved && (
+                      <p className="text-xs text-amber-600 font-medium">Editing saved ticket</p>
+                    )}
+                  </div>
+            )}
 
                 <div className="flex items-center gap-1 ml-2">
                   <button

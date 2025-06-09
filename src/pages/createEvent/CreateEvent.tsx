@@ -291,6 +291,13 @@ const goNext = async () => {
               false,
               false
             );
+
+            // Mark ticket as saved
+            const currentSavedTickets = formData.savedTickets || [];
+            const ticketId = updatedTickets[activeIndex].id;
+            if (!currentSavedTickets.includes(ticketId)) {
+              setFormValue("Tickets Create", "savedTickets", [...currentSavedTickets, ticketId]);
+            }
           } catch (error) {
             console.error("Error creating ticket:", error);
             setError(stage, "general", `Failed to create ticket: ${currentTicket.name}`);
