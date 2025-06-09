@@ -161,7 +161,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
   };
 
   return (
-    <div className="md:my-[30px] h-fit p-[1.5rem] bg-[#F8F9F9] rounded-md">
+    <div className="md:my-[1.875rem] h-fit p-[1.5rem] bg-[#F8F9F9] rounded-md w-[20rem] min-w-[20rem] max-w-[20rem]">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-black font-medium">Tickets</h3>
         <button
@@ -187,32 +187,33 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex-1 min-w-0">
+                  <div className="flex-1 min-w-0 max-w-[12rem]">
                     <div className="flex items-center gap-2">
-                      <p className="text-sm font-medium text-black truncate">
+                      <p className="text-sm font-medium text-black truncate overflow-hidden whitespace-nowrap" 
+                         title={ticket.name || `Ticket ${index + 1}`}>
                         {ticket.name || `Ticket ${index + 1}`}
                       </p>
                       {isSaved && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 flex-shrink-0">
                           ✓ Saved
                         </span>
                       )}
                     </div>
                     {ticket.type && (
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-gray-500 truncate overflow-hidden whitespace-nowrap">
                         {ticket.type === "Free" ? "Free" : `₦${ticket.price?.toLocaleString() || "0"}`}
                       </p>
                     )}
                     {index === activeTicketIndex && !isSaved && (
-                      <p className="text-xs text-primary font-medium">Currently editing</p>
+                      <p className="text-xs text-primary font-medium truncate overflow-hidden whitespace-nowrap">Currently editing</p>
                     )}
                     {index === activeTicketIndex && isSaved && (
-                      <p className="text-xs text-amber-600 font-medium">Editing saved ticket</p>
+                      <p className="text-xs text-amber-600 font-medium truncate overflow-hidden whitespace-nowrap">Editing saved ticket</p>
                     )}
                   </div>
 
                   {!isSaved && (
-                    <div className="flex items-center gap-1 ml-2">
+                    <div className="flex items-center gap-1 ml-2 flex-shrink-0">
                       <button
                         onClick={() => handleEditTicket(index)}
                         className="p-1 text-gray-400 hover:text-primary rounded transition-colors"
