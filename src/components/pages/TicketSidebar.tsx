@@ -1,4 +1,3 @@
-
 import { PiPlus } from "react-icons/pi";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useEventStore } from "../../stores/useEventStore";
@@ -99,7 +98,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
 
     // Switch to the selected ticket form
     setFormValue("Tickets Create", "activeTicketIndex", ticketIndex);
-    
+
     const ticketToEdit = allTicketForms[ticketIndex];
     if (ticketToEdit) {
       // Populate main form with the selected ticket's data
@@ -131,14 +130,14 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
     // Remove the ticket from the array
     const updatedTickets = tickets.filter((_:any, index:any) => index !== ticketIndex);
     setFormValue("Tickets Create", "tickets", updatedTickets);
-    
+
     // Adjust active index if necessary
     const newActiveIndex = ticketIndex === activeTicketIndex 
       ? Math.max(0, activeTicketIndex - 1)
       : activeTicketIndex > ticketIndex 
         ? activeTicketIndex - 1 
         : activeTicketIndex;
-    
+
     setFormValue("Tickets Create", "activeTicketIndex", newActiveIndex);
 
     // Load the new active ticket data
@@ -211,29 +210,29 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
                       <p className="text-xs text-amber-600 font-medium">Editing saved ticket</p>
                     )}
                   </div>
-            )}
 
-                <div className="flex items-center gap-1 ml-2">
-                  <button
-                    onClick={() => handleEditTicket(index)}
-                    className="p-1 text-gray-400 hover:text-primary rounded transition-colors"
-                    title="Edit ticket"
-                  >
-                    <FaEdit className="text-xs" />
-                  </button>
-                  {allTicketForms.length > 1 && (
+                  <div className="flex items-center gap-1 ml-2">
                     <button
-                      onClick={() => handleDeleteTicket(index)}
-                      className="p-1 text-gray-400 hover:text-red-500 rounded transition-colors"
-                      title="Delete ticket"
+                      onClick={() => handleEditTicket(index)}
+                      className="p-1 text-gray-400 hover:text-primary rounded transition-colors"
+                      title="Edit ticket"
                     >
-                      <FaTrash className="text-xs" />
+                      <FaEdit className="text-xs" />
                     </button>
-                  )}
+                    {allTicketForms.length > 1 && (
+                      <button
+                        onClick={() => handleDeleteTicket(index)}
+                        className="p-1 text-gray-400 hover:text-red-500 rounded transition-colors"
+                        title="Delete ticket"
+                      >
+                        <FaTrash className="text-xs" />
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            );
+          })
         ) : (
           <div className="text-center py-4 text-gray-500">
             <p className="text-sm">No tickets created</p>
