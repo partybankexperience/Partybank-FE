@@ -184,6 +184,7 @@ const goNext = async () => {
       try {
         const tickets = formData.tickets || [];
         const activeIndex = formData.activeTicketIndex || 0;
+        const savedTickets = formData.savedTickets || [];
 
         // Build current ticket object from form data
         const currentTicket = {
@@ -203,11 +204,15 @@ const goNext = async () => {
           endTime: formData.endTime || ""
         };
 
+        // Check if current ticket is already saved
+        const currentTicketId = tickets[activeIndex]?.id || `ticket-${activeIndex}`;
+        const isCurrentTicketSaved = savedTickets.includes(currentTicketId);
+
         // Validate current ticket if it has a name or any filled fields
         const hasCurrentTicketData = currentTicket.name || currentTicket.type || currentTicket.category || 
                                    currentTicket.price || currentTicket.purchaseLimit || currentTicket.salesStart;
 
-        if (hasCurrentTicketData) {
+        if (hasCurrentTicketData && !isCurrentTicketSaved) {
           // Validate current ticket required fields
           if (!currentTicket.name) {
             setError(stage, "ticketName", "Ticket name is required");
@@ -264,7 +269,7 @@ const goNext = async () => {
           };
           setFormValue("Tickets Create", "tickets", updatedTickets);
 
-          // Create/update ticket via API
+          // Create/update ticket via API only if not already saved
           try {
             const categoryMap: { [key: string]: string } = {
               "option1": "single",
