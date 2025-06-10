@@ -322,4 +322,3 @@ const CreateTicketComponent = () => {
 };
 
 export default CreateTicketComponent;
-```
