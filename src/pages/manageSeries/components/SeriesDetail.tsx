@@ -249,7 +249,10 @@ const SeriesDetail = () => {
                         className="!w-fit"
                         icon={<FaPlus className="text-[.8rem] text-white" />}
                         variant="primary"
-                        onClick={() => navigate('/dashboard/create-event',{state:id})}
+                        onClick={() => {
+                            console.log("Navigating to create event with series ID:", id);
+                            navigate('/dashboard/create-event',{state: {seriesId: id}});
+                        }}
                     >
                         Add Events to Series
                     </DefaultButton>

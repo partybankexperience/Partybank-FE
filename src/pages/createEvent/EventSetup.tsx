@@ -35,14 +35,18 @@ const EventSetup = () => {
       try {
         setSeriesLoading(true);
         const response = await getSeries();
+        console.log("Fetched series data:", response);
         setSeries(response || []);
 
         // If there's a prefilled series ID, find and set the corresponding name
         if (eventSetupForm.seriesId && response && response.length > 0) {
+          console.log("Looking for series with ID:", eventSetupForm.seriesId);
           const matchedSeries = response.find((seriesItem: any) => seriesItem.id === eventSetupForm.seriesId);
+          console.log("Matched series:", matchedSeries);
           if (matchedSeries) {
             setFormValue("Event Setup", "seriesName", matchedSeries.name);
 						setSelectedSeriesName(matchedSeries.name);
+            console.log("Set series name to:", matchedSeries.name);
           }
         }
       } catch (error) {
@@ -55,7 +59,10 @@ const EventSetup = () => {
 
 		// Check for seriesId from navigation state
 		const seriesIdFromNavigation = location.state?.seriesId;
+    console.log("Location state:", location.state);
+    console.log("Series ID from navigation:", seriesIdFromNavigation);
 		if (seriesIdFromNavigation) {
+      console.log("Setting series ID from navigation:", seriesIdFromNavigation);
 			setFormValue("Event Setup", "seriesId", seriesIdFromNavigation);
 		}
 
@@ -197,6 +204,10 @@ const EventSetup = () => {
   console.log("Selected tag ID:", eventSetupForm.tags);
   console.log("Selected tag name:", eventSetupForm.selectedTagName);
   console.log("Should show create tag inputs:", eventSetupForm.tags === "Other");
+  console.log("Series ID in form:", eventSetupForm.seriesId);
+  console.log("Series name in form:", eventSetupForm.seriesName);
+  console.log("Selected series name state:", selectedSeriesName);
+  console.log("All series data:", series);
 
   return (
     <div className="grid gap-[20px]">
