@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router";
+import { Route, Routes, useLocation } from "react-router";
 import { useEffect } from "react";
 import Login from "./pages/onboarding/Login";
 import Signup from "./pages/onboarding/Signup";
@@ -25,9 +25,16 @@ import ForgotPassword from "./pages/onboarding/forgotPassword/ForgotPassword";
 import NotFound from "./pages/NotFound";
 
 const App = () => {
+  const location = useLocation();
+
   useEffect(() => {
     console.log("App component loaded successfully");
   }, []);
+
+  // Scroll to top when route changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   return (
     <>
