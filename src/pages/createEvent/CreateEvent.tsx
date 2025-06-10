@@ -311,7 +311,8 @@ const goNext = async () => {
                 currentTicket.endTime,
                 Array.isArray(currentTicket.perks) ? currentTicket.perks.filter(perk => perk && perk.trim()) : [],
                 false,
-                false
+                false,
+                eventId as string
               );
             } else {
               // Create new ticket
