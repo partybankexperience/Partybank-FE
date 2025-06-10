@@ -265,8 +265,14 @@ const EventSetup = () => {
           id="name"
           label="Event Name"
           value={eventSetupForm.name || ""}
-          setValue={(value: string) => handleInputChange("name", value)}
-          onBlur={handleNameBlur}
+          setValue={(value: string) => {
+            console.log("Name input changed:", value);
+            handleInputChange("name", value);
+          }}
+          onBlur={() => {
+            console.log("onBlur event triggered on name input");
+            handleNameBlur();
+          }}
           placeholder="Enter event name"
           required
           helperText={eventSetupErrors.name || ""}
