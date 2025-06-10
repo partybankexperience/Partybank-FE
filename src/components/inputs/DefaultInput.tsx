@@ -102,10 +102,13 @@ const DefaultInput = ({
     }
   }, [value]);
 
-  const handleBlur = () => {
+  const handleBlur = (e: any) => {
     setTouched(true);
     setError(validate());
-    
+    if (onBlur) {
+      onBlur(e);
+    }
+
   };
 
   const baseStyle = `text-[14px] border-[1px] text-black placeholder:text-neutralDark placeholder:text-[14px] font-[RedHat] rounded-[4px] py-[10px] px-[16px] md:w-[20rem] flex items-center ${classname}
@@ -155,7 +158,7 @@ const DefaultInput = ({
     disabled={disabled}
     value={value}
     onChange={(e) => setValue(e.target.value)}
-    onBlur={handleBlur}
+    onBlur={(e) => handleBlur(e as any)}
     aria-describedby={`${id}-helper`}
     aria-invalid={hasError}
     className={`${baseStyle} ${paddingLeft} pr-[40px] ${style} appearance-none cursor-pointer`}
@@ -183,7 +186,7 @@ const DefaultInput = ({
     disabled={disabled}
     value={value}
     onChange={(e) => setValue(e.target.value)}
-    onBlur={handleBlur}
+    onBlur={(e) => handleBlur(e as any)}
     aria-describedby={`${id}-helper`}
     aria-invalid={hasError}
     className={`${baseStyle} ${paddingLeft} ${paddingRight} ${style}`}
