@@ -154,20 +154,20 @@ const DashboardLayout = ({ children }: any) => {
           <img
             src={logo}
             alt="PartyBank Logo"
-            className="md:w-[126px] m-auto "
+            className="md:w-[4rem] m-auto "
           />
         </button>
-        <nav className="flex flex-col gap-[20px] mt-[50px]">
+        <nav className="flex flex-col gap-[.1rem] mt-[50px]">
           {navItems.map((item, index) => {
             const isActive = currentPath.startsWith(item.path);
 
             return (
               <div key={index} className="flex h-full">
                 {isActive && (
-                  <div className="w-[10px] h-full py-[30px] bg-primary rounded-r-lg" />
+                  <div className="w-[5px] h-full py-[1rem] bg-primary rounded-r-lg" />
                 )}
                 <li
-                  className={`flex items-center gap-[12px] font-medium text-[.9rem] cursor-pointer hover:text-primary p-[1rem] ${
+                  className={`flex items-center gap-[12px] font-medium text-[.8rem] cursor-pointer hover:text-primary p-[1rem] ${
                     isActive ? "text-white" : "text-[#A9ABAE]"
                   }`}
                   onClick={() => navigate(item.path)}

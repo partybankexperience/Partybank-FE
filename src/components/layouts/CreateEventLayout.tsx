@@ -43,16 +43,16 @@ const CreateEventLayout = ({ children }: any) => {
       </div>
 
       <div className={` ${stage=== "Tickets Create"?'md:px-[3rem]':'md:px-[11rem]'}`}>
-        <div className="flex gap-[20px]">
+        <div className="grid md:flex gap-[20px]">
           
           <div className="flex-1 md:my-[30px] p-[2rem] bg-[#F8F9F9] rounded-md h-full ">
             {children}
           </div>
           
-        </div>
         {stage === "Tickets Create" && (
           <TicketSidebar />
         )}
+        </div>
       </div>
     </div>
   );
