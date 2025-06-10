@@ -181,25 +181,34 @@ const EventSetup = () => {
   };
 
   const handleNameBlur = async () => {
+    console.log("handleNameBlur called");
     const eventName = eventSetupForm.name?.trim();
+    console.log("Event name:", eventName);
+    
     if (!eventName || eventName.length < 3) {
+      console.log("Event name too short or empty, skipping API call");
       setSimilarEvents([]);
       setShowSimilarEventsMessage(false);
       return;
     }
 
     try {
+      console.log("Starting similar event check...");
       setCheckingSimilarEvents(true);
       // Use current date as default for the API call
       const currentDate = new Date().toISOString().split('T')[0];
+      console.log("Calling checkSimilarEvent API with:", eventName, currentDate);
       const response = await checkSimilarEvent(eventName, currentDate);
+      console.log("Similar event API response:", response);
       
       if (response && response.similarEventExists) {
         setSimilarEvents(response.similarEvents || []);
         setShowSimilarEventsMessage(true);
+        console.log("Similar events found:", response.similarEvents);
       } else {
         setSimilarEvents([]);
         setShowSimilarEventsMessage(false);
+        console.log("No similar events found");
       }
     } catch (error) {
       console.error("Error checking similar events:", error);
