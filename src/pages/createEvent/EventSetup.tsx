@@ -7,6 +7,7 @@ import { useEventStore } from "../../stores/useEventStore";
 import { getTags, createTag } from "../../Containers/eventApi";
 import type { Options } from "easymde";
 import { getSeries } from "../../Containers/seriesApi";
+import { useLocation } from "react-router-dom";
 
 const EventSetup = () => {
   const { form, setFormValue, errors } = useEventStore();
@@ -21,6 +22,8 @@ const EventSetup = () => {
   const [series, setSeries] = useState<any[]>([]);
   const [seriesLoading, setSeriesLoading] = useState(true);
   const [loading, setLoading] = useState(true);
+	const location = useLocation();
+  const [selectedSeriesName, setSelectedSeriesName] = useState<string>("");
 
   const nameRef = useRef<any>(null);
   const categoryRef = useRef<any>(null);
@@ -33,12 +36,13 @@ const EventSetup = () => {
         setSeriesLoading(true);
         const response = await getSeries();
         setSeries(response || []);
-        
+
         // If there's a prefilled series ID, find and set the corresponding name
         if (eventSetupForm.seriesId && response && response.length > 0) {
           const matchedSeries = response.find((seriesItem: any) => seriesItem.id === eventSetupForm.seriesId);
           if (matchedSeries) {
             setFormValue("Event Setup", "seriesName", matchedSeries.name);
+						setSelectedSeriesName(matchedSeries.name);
           }
         }
       } catch (error) {
@@ -49,8 +53,14 @@ const EventSetup = () => {
       }
     };
 
+		// Check for seriesId from navigation state
+		const seriesIdFromNavigation = location.state?.seriesId;
+		if (seriesIdFromNavigation) {
+			setFormValue("Event Setup", "seriesId", seriesIdFromNavigation);
+		}
+
     fetchSeries();
-  }, [eventSetupForm.seriesId]);
+  }, [eventSetupForm.seriesId, location.state?.seriesId, setFormValue, location]);
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -61,7 +71,7 @@ const EventSetup = () => {
           setTags(response); // Store full tag objects
           const tagNames = response.map((tag: any) => tag.name);
           setTagOptions([...tagNames, "Other"]); // Display names in dropdown
-          
+
           // If there's a prefilled tag ID, find and set the corresponding name
           if (eventSetupForm.tags && eventSetupForm.tags !== "Other") {
             const matchedTag = response.find((tag: any) => tag.id === eventSetupForm.tags);
@@ -92,7 +102,7 @@ const EventSetup = () => {
 
   const handleTagChange = (selectedTagName: string) => {
     console.log("Selected tag name:", selectedTagName);
-    
+
     if (selectedTagName === "Other") {
       setFormValue("Event Setup", "tags", "Other");
       setFormValue("Event Setup", "selectedTagName", selectedTagName);
@@ -179,7 +189,7 @@ const EventSetup = () => {
       delete (window as any).validateEventSetup;
     };
   }, [eventSetupForm]);
-  
+
 
   console.log("EventSetup form data:", eventSetupForm);
   console.log("Current tag options:", tagOptions);
@@ -276,21 +286,38 @@ const EventSetup = () => {
           />
         </>
       )}
-      <DefaultInput
-        id="eventSetupSeries"
-        label="Series"
-        value={eventSetupForm.seriesName || ""}
-        setValue={(selectedSeriesName: string) => {
-          const selectedSeries = series.find((seriesItem: any) => seriesItem.name === selectedSeriesName);
-          setFormValue("Event Setup", "seriesName", selectedSeriesName);
-          setFormValue("Event Setup", "seriesId", selectedSeries ? selectedSeries.id : null);
-        }}
-        placeholder={seriesLoading ? "Loading series..." : "Select Series"}
-        classname="!w-full"
-        showDropdown
-        dropdownOptions={series.map((seriesItem: any) => seriesItem.name)}
-        disabled={seriesLoading}
-      />
+			{eventSetupForm.seriesId ? (
+				// Show selected series statement when series ID exists
+				<>
+					<label htmlFor="eventSetupSeries">
+						<p className="text-black ">Series</p>
+					</label>
+					<div>
+						{selectedSeriesName ? (
+							<p>Selected Series: {selectedSeriesName}</p>
+						) : (
+							<p>Loading series name...</p>
+						)}
+					</div>
+				</>
+			) : (
+				<DefaultInput
+					id="eventSetupSeries"
+					label="Series"
+					value={eventSetupForm.seriesName || ""}
+					setValue={(selectedSeriesName: string) => {
+						const selectedSeries = series.find((seriesItem: any) => seriesItem.name === selectedSeriesName);
+						setFormValue("Event Setup", "seriesName", selectedSeriesName);
+						setFormValue("Event Setup", "seriesId", selectedSeries ? selectedSeries.id : null);
+						setSelectedSeriesName(selectedSeriesName);
+					}}
+					placeholder={seriesLoading ? "Loading series..." : "Select Series"}
+					classname="!w-full"
+					showDropdown
+					dropdownOptions={series.map((seriesItem: any) => seriesItem.name)}
+					disabled={seriesLoading}
+				/>
+			)}
           <DefaultInput
             id="eventSetupContactNumber"
             label="Organizer's Contact Number"
