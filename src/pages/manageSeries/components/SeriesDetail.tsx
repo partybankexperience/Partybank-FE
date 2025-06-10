@@ -148,7 +148,9 @@ const SeriesDetail = () => {
             </div>
         );
     }
-const navigate=useNavigate()
+
+    const navigate = useNavigate();
+
     return (
         <div className="md:bg-white md:rounded-md min-h-[80vh] w-full block md:grid mt-[.6rem] md:p-[25px] md:grid-cols-[2fr_3fr] gap-[20px]">
             <div className="rounded-md md:bg-[#F8F9F9] md:p-[20px] h-fit md:h-full ">
