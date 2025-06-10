@@ -49,7 +49,7 @@ const deleteTicket = async (id: string): Promise<any> =>{
   });    
   return response;
 }
-const editTicket = async (id: string, name: string, category: "single" | "group" | string, type: "paid" | "free" | string, price: number, purchaseLimit: number, stock: number, sold: number, salesStart: string, salesEnd: string, startTime: string, endTime: string, perks: string[], isHidden: boolean, isSoldOut: boolean): Promise<any> =>{
+const editTicket = async (id: string, name: string, category: "single" | "group" | string, type: "paid" | "free" | string, price: number, purchaseLimit: number, stock: number, sold: number, salesStart: string, salesEnd: string, startTime: string, endTime: string, perks: string[], isHidden: boolean, isSoldOut: boolean,eventId:string): Promise<any> =>{
   const payload = {
     name,
     category,
@@ -65,6 +65,7 @@ const editTicket = async (id: string, name: string, category: "single" | "group"
     perks,
     isHidden,
     isSoldOut,
+    eventId
   };
   const response = await apiCall({
     name: "editTicket",
