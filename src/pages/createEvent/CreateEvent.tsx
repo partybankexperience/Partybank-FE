@@ -286,6 +286,13 @@ const goNext = async () => {
             if (currentTicketInArray?.savedTicketId) {
               // Edit existing ticket
               console.log("Editing existing ticket with ID:", currentTicketInArray.savedTicketId);
+              console.log("Complete ticket form data being saved:", {
+                ticketId: currentTicketInArray.savedTicketId,
+                formData: currentTicket,
+                fullTicketData: currentTicketInArray,
+                activeIndex: activeIndex,
+                allTickets: updatedTickets
+              });
               response = await editTicket(
                 currentTicketInArray.savedTicketId,
                 currentTicket.name,
@@ -306,6 +313,12 @@ const goNext = async () => {
             } else {
               // Create new ticket
               console.log("Creating new ticket");
+              console.log("Complete new ticket form data:", {
+                formData: currentTicket,
+                ticketData: currentTicketInArray,
+                activeIndex: activeIndex,
+                eventId: eventId
+              });
               response = await createTicket(
                 eventId as string,
                 currentTicket.name,
@@ -330,6 +343,11 @@ const goNext = async () => {
                   ...updatedTickets[activeIndex],
                   savedTicketId: response.ticketId
                 };
+                console.log("Assigned savedTicketId to new ticket:", {
+                  ticketId: response.ticketId,
+                  updatedTicketData: updatedTickets[activeIndex],
+                  activeIndex: activeIndex
+                });
                 setFormValue("Tickets Create", "tickets", updatedTickets);
               }
             }
