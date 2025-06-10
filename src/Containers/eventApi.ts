@@ -173,5 +173,16 @@ const notification = async (id: string, notifyOnTicketSale: boolean): Promise<an
   });
   return response;
 };
-
-export { createEvent,createTag ,getTags,getEventsById,getEvents,getScheduleandLocation,editEvent,deleteEvent,duplicateEvent,accessibility,publishEvent,notification };
+const checkSimilarEvent =async(name:string, date:string):Promise<any>=>{
+  const response = await apiCall({
+    name: "checkSimilarEvent",
+    params: {
+      name,
+      date
+    },
+    alert: false
+  });  
+  return response;
+}
+  
+export { createEvent,createTag ,getTags,getEventsById,getEvents,getScheduleandLocation,editEvent,deleteEvent,duplicateEvent,accessibility,publishEvent,notification, checkSimilarEvent };

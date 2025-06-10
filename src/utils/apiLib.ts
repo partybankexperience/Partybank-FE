@@ -199,5 +199,11 @@ export const endPoints: endPointlistTypes = {
         method: "PATCH",
         headers,
         auth: true,
+    },
+    checkSimilarEvent:{
+        url: "/events/check-similarity",
+        method: "GET",
+        headers,
+        auth: true,
     }
 };
