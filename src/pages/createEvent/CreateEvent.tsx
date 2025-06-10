@@ -212,7 +212,7 @@ const goNext = async () => {
         const hasCurrentTicketData = currentTicket.name || currentTicket.type || currentTicket.category || 
                                    currentTicket.price || currentTicket.purchaseLimit || currentTicket.salesStart;
 
-        if (hasCurrentTicketData && !isCurrentTicketSaved) {
+        if (hasCurrentTicketData) {
           // Validate current ticket required fields
           if (!currentTicket.name) {
             setError(stage, "ticketName", "Ticket name is required");
@@ -285,6 +285,7 @@ const goNext = async () => {
             // Check if ticket already has a backend ID (savedTicketId) - if so, edit it
             if (currentTicketInArray?.savedTicketId) {
               // Edit existing ticket
+              console.log("Editing existing ticket with ID:", currentTicketInArray.savedTicketId);
               response = await editTicket(
                 currentTicketInArray.savedTicketId,
                 currentTicket.name,
@@ -304,6 +305,7 @@ const goNext = async () => {
               );
             } else {
               // Create new ticket
+              console.log("Creating new ticket");
               response = await createTicket(
                 eventId as string,
                 currentTicket.name,
@@ -332,29 +334,31 @@ const goNext = async () => {
               }
             }
 
-            // Mark ticket as saved (for both new and edited tickets)
-            const currentSavedTickets = formData.savedTickets || [];
-            const ticketId = updatedTickets[activeIndex].id;
-            if (!currentSavedTickets.includes(ticketId)) {
-              setFormValue("Tickets Create", "savedTickets", [...currentSavedTickets, ticketId]);
-            }
+            
           } catch (error) {
             console.error("Error creating/updating ticket:", error);
             setError(stage, "general", `Failed to save ticket: ${currentTicket.name}`);
             return;
           }
 
+          // Update savedTickets list to include current ticket (for both new and edited)
+          const updatedSavedTickets = formData.savedTickets || [];
+          const currentTicketId = updatedTickets[activeIndex]?.id;
+          if (currentTicketId && !updatedSavedTickets.includes(currentTicketId)) {
+            updatedSavedTickets.push(currentTicketId);
+            setFormValue("Tickets Create", "savedTickets", updatedSavedTickets);
+          }
+
           // Check if there are more unsaved tickets to work on
           const allTicketForms = updatedTickets.length > 0 ? updatedTickets : [{}];
-          const currentSavedTickets = formData.savedTickets || [];
           let nextUnsavedIndex = -1;
 
           for (let i = 0; i < allTicketForms.length; i++) {
             if (i !== activeIndex) {
               const ticket = allTicketForms[i];
               const ticketId = ticket.id || `ticket-${i}`;
-              // Check if ticket is not saved (either incomplete or has data but not saved)
-              if (!currentSavedTickets.includes(ticketId) && 
+              // Check if ticket is not saved and has some data
+              if (!updatedSavedTickets.includes(ticketId) && 
                   (ticket.name || ticket.type || ticket.category)) {
                 nextUnsavedIndex = i;
                 break;
