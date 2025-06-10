@@ -187,6 +187,7 @@ const goNext = async () => {
         const savedTickets = formData.savedTickets || [];
 
         // Build current ticket object from form data
+        const existingTicket = tickets[activeIndex] || {};
         const currentTicket = {
           name: formData.ticketName?.trim() || "",
           type: formData.ticketType || "",
@@ -201,7 +202,9 @@ const goNext = async () => {
           salesStart: formData.salesStart || "",
           startTime: formData.startTime || "",
           salesEnd: formData.salesEnd || "",
-          endTime: formData.endTime || ""
+          endTime: formData.endTime || "",
+          savedTicketId: existingTicket.savedTicketId || null,
+          id: existingTicket.id || `ticket-${Date.now()}`
         };
 
         // Check if current ticket is already saved
@@ -264,8 +267,8 @@ const goNext = async () => {
           // Save current ticket to the tickets array
           let updatedTickets = [...tickets];
           updatedTickets[activeIndex] = {
-            ...currentTicket,
-            id: tickets[activeIndex]?.id || `ticket-${Date.now()}`
+            ...existingTicket,
+            ...currentTicket
           };
           setFormValue("Tickets Create", "tickets", updatedTickets);
 
@@ -352,7 +355,7 @@ const goNext = async () => {
               }
             }
 
-            
+
           } catch (error) {
             console.error("Error creating/updating ticket:", error);
             setError(stage, "general", `Failed to save ticket: ${currentTicket.name}`);
@@ -424,7 +427,7 @@ const goNext = async () => {
         return;
       }
     }
-    
+
     if (stage === "Accessibility") {
       try {
         if (!eventId) {
@@ -466,7 +469,7 @@ const goNext = async () => {
         }
 
         const notificationData = form["Notifications"];
-        
+
         // Convert form data to match backend expectations
         const notifyOnTicketSale = notificationData.notifyOnTicketSale || false;
 
