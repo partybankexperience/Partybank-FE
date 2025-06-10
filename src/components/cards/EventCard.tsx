@@ -6,6 +6,7 @@ import { LuPencilLine } from "react-icons/lu";
 import { FiCopy } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { formatDate, formatTimeRange } from "../helpers/dateTimeHelpers";
+import FallbackImage from "../common/FallbackImage";
 
 const EventCard = ({
   name = "Canvas and Beats",
@@ -88,7 +89,14 @@ const EventCard = ({
         )}
       </div>
 
-      <div className="h-[150px] rounded-t-[9px] w-full bg-gray-100" ><img src={bannerImage} alt={`${name} banner image`} className="w-full h-full object-cover rounded-t-[9px]" /></div>
+      <div className="h-[150px] rounded-t-[9px] w-full bg-gray-100" >
+        <FallbackImage 
+          src={bannerImage} 
+          alt={`${name} banner image`} 
+          className="w-full h-full object-cover rounded-t-[9px]"
+          fallbackType="event"
+        />
+      </div>
       <div className="grid">
         <div className="p-[15px] border-b border-[#E1E1E1] grid gap-[12px]">
           <div className="grid gap-[5px]">

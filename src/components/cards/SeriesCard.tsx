@@ -5,6 +5,7 @@ import { HiOutlineDotsVertical } from "react-icons/hi";
 import { LuPencilLine } from "react-icons/lu";
 // import { FiCopy } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
+import FallbackImage from "../common/FallbackImage";
 
 const SeriesCard = ({
   title = "Canvas and Beats",
@@ -78,7 +79,12 @@ const SeriesCard = ({
       </div>
 
       <div className="h-[9.375rem] rounded-t-[9px] w-full bg-gray-100 overflow-hidden" >
-        <img src={imageUrl} alt={title} className="w-full h-full object-cover rounded-t-[9px]"/>
+        <FallbackImage 
+          src={imageUrl} 
+          alt={title} 
+          className="w-full h-full object-cover rounded-t-[9px]"
+          fallbackType="series"
+        />
       </div>
       <div className="flex-1 flex flex-col">
         <div className="grid gap-[8px] p-[20px] flex-1">

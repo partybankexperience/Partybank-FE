@@ -7,6 +7,7 @@ import DefaultInput from "../inputs/DefaultInput";
 import { ImageUploadInput } from "../inputs/ImageInput";
 import { createSeries } from "../../Containers/seriesApi";
 import { Storage } from "../../stores/InAppStorage";
+import FallbackImage from "../common/FallbackImage";
 
 interface CreateNewSeriesProps {
   onSeriesCreated?: (newSeries: any) => void;
