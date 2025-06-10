@@ -249,9 +249,9 @@ const SeriesDetail = () => {
                         className="!w-fit"
                         icon={<FaPlus className="text-[.8rem] text-white" />}
                         variant="primary"
-                        onClick={() => navigate('/add-event',{state:id})}
+                        onClick={() => navigate('/dashboard/create-event',{state:id})}
                     >
-                        Add Event
+                        Add Events to Series
                     </DefaultButton>
                 </div>
                 <div className="grid gap-[20px]">
