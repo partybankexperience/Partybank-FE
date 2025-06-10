@@ -9,28 +9,29 @@ const CreateEventLayout = ({ children }: any) => {
   return (
     <div className="md:py-[20px] bg-white rounded-md min-h-screen">
       <ToastContainer />
-      <div className="rounded-md bg-[#FFF2F4] md:mx-[20px] py-[20px]">
-        <div className="md:px-[7rem] flex justify-between items-center">
+      <div className="rounded-md bg-[#FFF2F4] md:mx-[20px] grid px-auto py-[20px]">
+        <div className=" flex justify-center  gap-1  items-center ">
           {stages.map((label, index) => {
             const isActive = label === stage;
             const isCompleted = stages.indexOf(label) < currentIndex;
 
             return (
-              <div className="flex-1 text-center relative" key={label}>
+              <div className="flex-1 text-center relative min-w-[5rem]" key={label}>
                 <p
-                  className={`hidden md:block text-[.9rem] whitespace-nowrap ${
+                  className={`hidden lg:block text-[.8rem] truncate  mx-auto ${
                     isActive || isCompleted
                       ? "text-black font-semibold"
                       : "text-[#A7A5A6]"
                   }`}
+                  title={label}
                 >
                   {label}
                 </p>
                 <div className="flex justify-center items-center mt-2">
                   <div
-                    className={`w-[14px]  h-[14px] rounded-full border ${isActive?'border-primary':'border-[#E4D9DA]'}  ${
-                       isCompleted && " bg-primary border-primary"
-                    }`}
+                    className={`w-[.7rem] h-[.7rem] rounded-full border ${
+                      isActive ? "border-primary" : "border-[#E4D9DA]"
+                    } ${isCompleted && " bg-primary border-primary"}`}
                   />
                 </div>
                 {index < stages.length - 1 && (
@@ -42,7 +43,8 @@ const CreateEventLayout = ({ children }: any) => {
         </div>
       </div>
 
-      <div className={` ${stage=== "Tickets Create"?'md:px-[3rem]':'md:px-[11rem]'}`}>
+
+      <div className={` ${stage=== "Tickets Create"?'md:px-[3rem]':'md:px-[3rem] lg:px-[11rem]'}`}>
         <div className="grid md:flex gap-[20px]">
           
           <div className="flex-1 md:my-[1.875rem] p-[2rem] bg-[#F8F9F9] rounded-md h-full ">
