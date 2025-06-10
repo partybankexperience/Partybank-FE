@@ -4,19 +4,25 @@ import EventCard from "../../components/cards/EventCard";
 import { useNavigate } from "react-router";
 import Tabs from "../../components/tabs/Tabs";
 import { getEvents } from "../../Containers/eventApi";
+import { EventCardSkeleton } from "../../components/common/LoadingSkeleton";
 
 const ManageEvents = () => {
   const [activeTab, setActiveTab] = useState("Active");
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   async function getAllEvent() {
     try {
+      setLoading(true);
       const res = await getEvents();
       console.log(res);
       setEvents(res);
     } catch (error) {
       console.error("Error fetching events:", error);
+      setEvents([]);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -55,7 +61,11 @@ const ManageEvents = () => {
 
       <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[20px]">
         <CreateNewEvent />
-        {filteredEvents.length > 0 ? (
+        {loading ? (
+          Array.from({ length: 3 }).map((_, index) => (
+            <EventCardSkeleton key={index} />
+          ))
+        ) : filteredEvents.length > 0 ? (
           filteredEvents.map((val: any, index) => (
             <EventCard
               key={val.id || index}
@@ -77,7 +87,7 @@ const ManageEvents = () => {
           <div className="m-auto  text-center text-gray-500 py-8 ">
             No {activeTab.toLowerCase()} events found.
           </div>
-        )}
+        )}</div>
       </div>
     </div>
   );

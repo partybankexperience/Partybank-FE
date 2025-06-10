@@ -9,6 +9,7 @@ import { Modal } from "../../../components/modal/Modal";
 import DefaultInput from "../../../components/inputs/DefaultInput";
 import { getSeriesById, updateSeries } from "../../../Containers/seriesApi";
 import { Storage } from "../../../stores/InAppStorage";
+import { EventCardSkeleton } from "../../../components/common/LoadingSkeleton";
 
 interface SeriesData {
   id: string;
@@ -287,7 +288,19 @@ const SeriesDetail = () => {
                     </DefaultButton>
                 </div>
                 <div className="grid gap-[20px]">
-                    {events.length > 0 ? (
+                    {loading ? (
+                        Array.from({ length: 3 }).map((_, index) => (
+                            <div key={index} className="flex gap-[20px] items-center py-[20px] border-b border-[#E1E1E1]">
+                                <div className="w-8 h-8 bg-gray-200 rounded animate-pulse"></div>
+                                <div className="rounded-md h-[5.9rem] w-[9.6rem] bg-gray-200 animate-pulse"></div>
+                                <div className="grid gap-2 flex-1">
+                                    <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+                                    <div className="h-3 bg-gray-200 rounded w-1/2 animate-pulse"></div>
+                                    <div className="h-6 bg-gray-200 rounded w-16 animate-pulse"></div>
+                                </div>
+                            </div>
+                        ))
+                    ) : events.length > 0 ? (
                         events.map((event) => (
                             <div key={event.id} className="flex gap-[20px] items-center py-[20px] border-b border-[#E1E1E1] cursor-pointer" onClick={()=>navigate(`/manage-events/${event.id}`)}>
                                 <CgLayoutGridSmall className="text-black text-[2rem]" />
