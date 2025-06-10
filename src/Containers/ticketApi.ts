@@ -15,16 +15,17 @@ const createTicket = async (
   endTime: string,    // "HH:mm"
   perks: string[],
   isHidden: boolean,
-  isSoldOut: boolean
+  isSoldOut: boolean,
+  isUnlimited: boolean,
+  numberofPeople?: number,
 ): Promise<any> => {
   const payload = {
     eventId,
     name,
     category,
     type,
-    price,
     purchaseLimit,
-    stock,
+    // stock,
     soldTarget,
     salesStart,
     salesEnd,
@@ -33,8 +34,13 @@ const createTicket = async (
     perks,
     isHidden,
     isSoldOut,
+    isUnlimited,
+    ...(category === 'group' &&  { numberofPeople }),
+    ...(type === 'paid' &&  { price }),
+    ...(isUnlimited &&  { stock }),
   };
 
+  // ...(isLocationTBA && address),
   const response = await apiCall({
     name: "createTicket",
     data: payload,

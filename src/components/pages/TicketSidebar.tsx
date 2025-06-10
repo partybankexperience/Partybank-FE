@@ -164,9 +164,9 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
   };
 
   return (
-    <div className="w-full md:w-[20rem] md:min-w-[20rem] md:max-w-[20rem] order-last md:order-none py-4">
+    <div className="w-full md:w-[20rem] order-last md:order-none ">
       {/* Mobile: Horizontal scrollable cards */}
-      <div className="block md:hidden mb-4">
+      <div className="block md:hidden mb-4 ">
         <div className="flex items-center justify-between mb-3 px-4 ">
           <h3 className="text-black font-semibold text-sm">Add Tickets ({allTicketForms.length})</h3>
           <button
@@ -178,7 +178,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
           </button>
         </div>
 
-        <div className="flex gap-3 overflow-x-auto px-4 pb-2">
+        <div className="flex gap-3  px-4 pb-2 overflow-x-auto max-w-[calc(100vw-2rem)]">
           {allTicketForms.map((ticket, index) => {
             const isSaved = savedTickets.includes(ticket.id || `ticket-${index}`);
             return (
