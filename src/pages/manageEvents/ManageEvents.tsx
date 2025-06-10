@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import CreateNewEvent from "./components/CreateNewEvent";
 import EventCard from "../../components/cards/EventCard";
@@ -17,7 +18,7 @@ const ManageEvents = () => {
       setLoading(true);
       const res = await getEvents();
       console.log(res);
-      setEvents(res);
+      setEvents(res || []);
     } catch (error) {
       console.error("Error fetching events:", error);
       setEvents([]);
@@ -84,10 +85,10 @@ const ManageEvents = () => {
             />
           ))
         ) : (
-          <div className="m-auto  text-center text-gray-500 py-8 ">
+          <div className="m-auto text-center text-gray-500 py-8">
             No {activeTab.toLowerCase()} events found.
           </div>
-        )}</div>
+        )}
       </div>
     </div>
   );
