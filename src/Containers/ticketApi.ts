@@ -33,7 +33,7 @@ const createTicket = async (
     isUnlimited,
     ...(category === 'group' &&  { numberofPeople }),
     ...(type === 'paid' &&  { price }),
-    ...(isUnlimited &&  { stock }),
+    ...(!isUnlimited &&  { stock }),
   };
 
   // ...(isLocationTBA && address),
