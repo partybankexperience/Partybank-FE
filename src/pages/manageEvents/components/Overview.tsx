@@ -8,6 +8,7 @@ import { FaPlus } from "react-icons/fa6";
 import { FiCopy } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { RiInboxArchiveLine } from "react-icons/ri";
+import { FaShare } from "react-icons/fa";
 import TicketsCard from "../../../components/cards/TicketCard";
 import { useNavigate, useParams } from "react-router";
 import { getEventsById } from "../../../Containers/eventApi";
@@ -22,6 +23,7 @@ const Overview = () => {
   const [eventData, setEventData] = useState<any>(null);
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [shareLoading, setShareLoading] = useState(false);
   const { setStage, prefillEventData, mapBackendStepToFrontend } = useEventStore();
   // const location = [
   //   { icon: <GrLocation className="text-primary" />, name: "Landmark Centre" },
@@ -88,6 +90,54 @@ const Overview = () => {
       { label: "Parking Available", value: eventData.parkingAvailable ? "Yes" : "No" },
       { label: "Attendees Cover Fees", value: eventData.attendeesCoverFees ? "Yes" : "No" },
     ];
+  };
+
+  const handleShare = async () => {
+    if (!eventData) return;
+
+    setShareLoading(true);
+    
+    try {
+      // Create the event URL (you can modify this based on your event public URL structure)
+      const eventUrl = `${window.location.origin}/event/${eventData.slug || eventData.id}`;
+      
+      // Try to use the Web Share API first (for mobile devices)
+      if (navigator.share) {
+        await navigator.share({
+          title: eventData.name,
+          text: `Check out this event: ${eventData.name}`,
+          url: eventUrl,
+        });
+      } else {
+        // Fallback to copying to clipboard
+        await navigator.clipboard.writeText(eventUrl);
+        
+        // You can add a toast notification here
+        console.log('Event URL copied to clipboard!');
+        
+        // Optional: Show a temporary feedback
+        const originalText = document.querySelector('[data-share-button]')?.textContent;
+        const shareButton = document.querySelector('[data-share-button]');
+        if (shareButton) {
+          shareButton.textContent = 'Copied!';
+          setTimeout(() => {
+            shareButton.textContent = originalText;
+          }, 2000);
+        }
+      }
+    } catch (error) {
+      console.error('Error sharing:', error);
+      // Fallback: just copy the URL
+      try {
+        const eventUrl = `${window.location.origin}/event/${eventData.slug || eventData.id}`;
+        await navigator.clipboard.writeText(eventUrl);
+        console.log('Event URL copied to clipboard!');
+      } catch (clipboardError) {
+        console.error('Failed to copy to clipboard:', clipboardError);
+      }
+    } finally {
+      setShareLoading(false);
+    }
   };
   const buttonOptions = [
     {
@@ -213,14 +263,26 @@ const Overview = () => {
           <div className="pb-[20px] grid gap-[20px] border-b border-b-[#EDEDED]">
             <div className="flex items-center justify-between h-fit">
               <h2 className="text-[1.3rem] font-bold">{eventData.name || "Untitled Event"}</h2>
-              <DefaultButton
-                variant="tertiary"
-                type="icon-left"
-                className="!w-fit border"
-                icon={<LuPencilLine className="text-primary" />}
-              >
-                Edit
-              </DefaultButton>
+              <div className="flex gap-2">
+                <DefaultButton
+                  variant="tertiary"
+                  type="icon-left"
+                  className="!w-fit border"
+                  icon={<FaShare className="text-primary" />}
+                  onClick={handleShare}
+                  isLoading={shareLoading}
+                >
+                  <span data-share-button>Share</span>
+                </DefaultButton>
+                <DefaultButton
+                  variant="tertiary"
+                  type="icon-left"
+                  className="!w-fit border"
+                  icon={<LuPencilLine className="text-primary" />}
+                >
+                  Edit
+                </DefaultButton>
+              </div>
             </div>
             <p className="text-lightGrey text-[1rem]">
               {eventData.description || "No description available"}
