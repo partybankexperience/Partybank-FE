@@ -182,6 +182,6 @@ const checkSimilarEvent = async(name:string, date:string): Promise<any> => {
     }
   });
   return response;
-}
+};
 
 export { createEvent,createTag ,getTags,getEventsById,getEvents,getScheduleandLocation,editEvent,deleteEvent,duplicateEvent,accessibility,publishEvent,notification,checkSimilarEvent };
