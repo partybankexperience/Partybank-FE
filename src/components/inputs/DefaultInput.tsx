@@ -191,6 +191,7 @@ const DefaultInput = ({
     aria-invalid={hasError}
     className={`${baseStyle} ${paddingLeft} ${paddingRight} ${style}`}
     onKeyDown={onKeyDown}
+    min={type === "date" ? new Date().toISOString().split('T')[0] : undefined}
   />
 )}
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
