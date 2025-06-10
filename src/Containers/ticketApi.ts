@@ -14,10 +14,8 @@ const createTicket = async (
   startTime: string,  // "HH:mm"
   endTime: string,    // "HH:mm"
   perks: string[],
-  isHidden: boolean,
-  isSoldOut: boolean,
   isUnlimited: boolean,
-  numberofPeople?: number,
+  numberofPeople?: number
 ): Promise<any> => {
   const payload = {
     eventId,
@@ -32,8 +30,6 @@ const createTicket = async (
     startTime,
     endTime,
     perks,
-    isHidden,
-    isSoldOut,
     isUnlimited,
     ...(category === 'group' &&  { numberofPeople }),
     ...(type === 'paid' &&  { price }),
@@ -70,8 +66,6 @@ const editTicket = async (
   startTime: string, 
   endTime: string, 
   perks: string[], 
-  isHidden: boolean, 
-  isSoldOut: boolean, 
   isUnlimited: boolean,
   numberofPeople?: number
 ): Promise<any> => {
@@ -87,8 +81,6 @@ const editTicket = async (
     startTime,
     endTime,
     perks,
-    isHidden,
-    isSoldOut,
     isUnlimited,
     ...(category === 'group' && { numberofPeople }),
     ...(type === 'paid' && { price }),

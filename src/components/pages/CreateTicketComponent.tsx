@@ -27,12 +27,12 @@ const CreateTicketComponent = () => {
 
   const handleChange = (key: string, value: any) => {
     setFormValue(currentStage, key, value);
-    
+
     // Auto-save current ticket data to the tickets array
     const currentTicketData = form[currentStage];
     const activeIndex = currentTicketData?.activeTicketIndex || 0;
     const tickets = currentTicketData?.tickets || [];
-    
+
     if (currentTicketData?.ticketName) {
       const existingTicket = tickets[activeIndex] || {};
       const updatedTicket = {
@@ -322,3 +322,4 @@ const CreateTicketComponent = () => {
 };
 
 export default CreateTicketComponent;
+```

@@ -298,6 +298,7 @@ const goNext = async () => {
               });
               response = await editTicket(
                 currentTicketInArray.savedTicketId,
+                eventId as string,
                 currentTicket.name,
                 categoryMap[currentTicket.category] || currentTicket.category,
                 currentTicket.type.toLowerCase(),
@@ -310,9 +311,8 @@ const goNext = async () => {
                 currentTicket.startTime,
                 currentTicket.endTime,
                 Array.isArray(currentTicket.perks) ? currentTicket.perks.filter(perk => perk && perk.trim()) : [],
-                false,
-                false,
-                eventId as string
+                currentTicket.ticketAvailability === "unlimited",
+                currentTicket.category === "option2" ? Number(currentTicket.numberOfPeople) : undefined
               );
             } else {
               // Create new ticket
@@ -337,8 +337,6 @@ const goNext = async () => {
                 currentTicket.startTime,
                 currentTicket.endTime,
                 Array.isArray(currentTicket.perks) ? currentTicket.perks.filter(perk => perk && perk.trim()) : [],
-                false,
-                false,
                 currentTicket.ticketAvailability === "unlimited",
                 currentTicket.category === "option2" ? Number(currentTicket.numberOfPeople) : undefined
               );
