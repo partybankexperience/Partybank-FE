@@ -13,6 +13,7 @@ import { BiSolidCalendarStar } from "react-icons/bi";
 import { FaDollarSign } from "react-icons/fa";
 import { RiPuzzle2Fill } from "react-icons/ri";
 import { getEvents } from "../../Containers/eventApi";
+import { EventCardSkeleton } from "../../components/common/LoadingSkeleton";
 const Dashboard = () => {
   const [selectedOption, setSelectedOption] = useState("Yearly");
   const [selectedSaleOption, setSelectedSaleOption] = useState("Sales");
@@ -151,7 +152,9 @@ const Dashboard = () => {
             </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[20px] mt-[19px]">
                 {loading ? (
-                  <div className="col-span-full text-center text-grey400">Loading events...</div>
+                  Array.from({ length: 4 }).map((_, index) => (
+                    <EventCardSkeleton key={index} />
+                  ))
                 ) : events.length > 0 ? (
                   events.map((event, index) => (
                     <EventCard

@@ -136,8 +136,37 @@ const SeriesDetail = () => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-[80vh]">
-                <div className="text-lightGrey">Loading series data...</div>
+            <div className="md:bg-white md:rounded-md min-h-[80vh] w-full block md:grid mt-[.6rem] md:p-[25px] md:grid-cols-[2fr_3fr] gap-[20px] animate-pulse">
+                <div className="rounded-md md:bg-gray-100 md:p-[20px] h-fit md:h-full">
+                    <div className="rounded-[8px] bg-gray-200 w-full h-[18rem]"></div>
+                    <div className="py-[20px] border-b border-[#E1E1E1]">
+                        <div className="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
+                        <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                    </div>
+                    <div className="py-[20px]">
+                        <div className="h-4 bg-gray-200 rounded w-20 mb-2"></div>
+                        <div className="h-16 bg-gray-200 rounded w-full"></div>
+                    </div>
+                </div>
+                <div className="grid gap-[20px] h-fit">
+                    <div className="flex justify-between items-center">
+                        <div className="h-6 bg-gray-200 rounded w-32"></div>
+                        <div className="h-10 bg-gray-200 rounded w-48"></div>
+                    </div>
+                    <div className="grid gap-[20px]">
+                        {Array.from({ length: 3 }).map((_, index) => (
+                            <div key={index} className="flex gap-[20px] items-center py-[20px] border-b border-[#E1E1E1]">
+                                <div className="w-8 h-8 bg-gray-200 rounded"></div>
+                                <div className="rounded-md h-[5.9rem] w-[9.6rem] bg-gray-200"></div>
+                                <div className="grid gap-2 flex-1">
+                                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                                    <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                                    <div className="h-6 bg-gray-200 rounded w-16"></div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
         );
     }

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import CreateNewSeries from "../../components/cards/CreateNewSeries"
 import SeriesCard from "../../components/cards/SeriesCard"
 import { getSeries, deleteSeries } from "../../Containers/seriesApi"
+import { SeriesCardSkeleton } from "../../components/common/LoadingSkeleton"
 
 const ManageSeries = () => {
   const navigate = useNavigate()
@@ -46,7 +47,9 @@ const ManageSeries = () => {
         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[20px]">
           <CreateNewSeries onSeriesCreated={handleSeriesCreated} />
           {loading ? (
-            <div className="col-span-full text-center text-grey400">Loading series...</div>
+            Array.from({ length: 3 }).map((_, index) => (
+              <SeriesCardSkeleton key={index} />
+            ))
           ) : series.length === 0 ? (
             <div className="col-span-full text-center text-grey400">No series found. Please create one!</div>
           ) : (
