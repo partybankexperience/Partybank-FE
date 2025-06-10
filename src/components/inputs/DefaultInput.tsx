@@ -27,6 +27,7 @@ type?: "text" | "password" | "email"|"tel"|"date"|"time"|"number";
   setExternalError?: (hasError: boolean) => void;
   classname?: string;
   onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>
+  onBlur?: React.FocusEventHandler<HTMLInputElement>
 };
 
 const DefaultInput = ({
@@ -49,7 +50,8 @@ const DefaultInput = ({
   inputRef,
   setExternalError,
   classname='',
-  onKeyDown
+  onKeyDown,
+  onBlur
 }: DefaultInputProps) => {
   // const [value, setValue] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -103,6 +105,7 @@ const DefaultInput = ({
   const handleBlur = () => {
     setTouched(true);
     setError(validate());
+    
   };
 
   const baseStyle = `text-[14px] border-[1px] text-black placeholder:text-neutralDark placeholder:text-[14px] font-[RedHat] rounded-[4px] py-[10px] px-[16px] md:w-[20rem] flex items-center ${classname}
