@@ -4,7 +4,7 @@ import { BiEditAlt } from "react-icons/bi";
 import DefaultButton from "../../../components/buttons/DefaultButton";
 import { CgLayoutGridSmall } from "react-icons/cg";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useNavigation, useParams } from "react-router-dom";
 import { Modal } from "../../../components/modal/Modal";
 import DefaultInput from "../../../components/inputs/DefaultInput";
 import { getSeriesById, updateSeries } from "../../../Containers/seriesApi";
@@ -148,9 +148,9 @@ const SeriesDetail = () => {
             </div>
         );
     }
-
+const navigate=useNavigate()
     return (
-        <div className="md:bg-white md:rounded-md h-[80vh] w-full block md:grid mt-[.6rem] md:p-[25px] md:grid-cols-[2fr_3fr] gap-[20px]">
+        <div className="md:bg-white md:rounded-md min-h-[80vh] w-full block md:grid mt-[.6rem] md:p-[25px] md:grid-cols-[2fr_3fr] gap-[20px]">
             <div className="rounded-md md:bg-[#F8F9F9] md:p-[20px] h-fit md:h-full ">
                 {isInEditMode && (
                     <div className="grid grid-cols-2 gap-3 mb-[20px]">
@@ -256,7 +256,7 @@ const SeriesDetail = () => {
                 <div className="grid gap-[20px]">
                     {events.length > 0 ? (
                         events.map((event) => (
-                            <div key={event.id} className="flex gap-[20px] items-center py-[20px] border-b border-[#E1E1E1]">
+                            <div key={event.id} className="flex gap-[20px] items-center py-[20px] border-b border-[#E1E1E1] cursor-pointer" onClick={()=>navigate(`/events/${event.id}`)}>
                                 <CgLayoutGridSmall className="text-black text-[2rem]" />
                                 <div className="rounded-md h-[5.9rem] w-[9.6rem] bg-almostBlack overflow-hidden">
                                     <img 

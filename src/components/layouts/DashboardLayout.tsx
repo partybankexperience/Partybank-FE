@@ -146,25 +146,25 @@ const DashboardLayout = ({ children }: any) => {
       {/* Desktop Sidebar */}
       <div className="bg-lightdark w-[15rem] hidden md:block fixed top-0 left-0 h-screen z-50 overflow-y-auto">
         <button
-          className="p-[15px] md:p-[20px] border-b border-b-[] grid m-auto cursor-pointer"
-          role="button"
+          className=" grid m-auto cursor-pointer py-[1.5rem]"
+          
           aria-label="Go to dashboard"
           onClick={() => navigate("/dashboard")}
         >
           <img
             src={logo}
             alt="PartyBank Logo"
-            className="w-[3rem] md:w-[4rem] m-auto"
+            className="w-[3rem] md:w-[4rem] mx-auto"
           />
         </button>
-        <nav className="flex flex-col gap-[.1rem] mt-[30px] md:mt-[50px] px-2">
+        <nav className="flex flex-col gap-[.1rem] px-2">
           {navItems.map((item, index) => {
             const isActive = currentPath.startsWith(item.path);
 
             return (
-              <div key={index} className="flex h-full">
+              <div key={index} className="flex h-full  items-center">
                 {isActive && (
-                  <div className="w-[5px] h-full py-[1rem] bg-primary rounded-r-lg" />
+                  <div className="w-[5px] h-full py-[1rem] bg-primary rounded-r-lg  items-center " />
                 )}
                 <li
                   className={`flex items-center gap-[8px] md:gap-[12px] font-medium text-[.7rem] md:text-[.8rem] cursor-pointer hover:text-primary p-[0.8rem] md:p-[1rem] w-full ${
@@ -187,7 +187,7 @@ const DashboardLayout = ({ children }: any) => {
         </nav>
       </div>
       <div className="flex flex-col h-full md:ml-[15rem] w-full max-w-full">
-        <header className="fixed w-full md:w-[calc(100vw-15rem)] md:left-[15rem] inset-x-0 top-0 right-0 bg-white py-[20px] md:py-[25px] px-[4vw] md:px-[2vw] flex justify-between items-center h-fit border-b border-[#ECECEC] z-40">
+        <header className="fixed w-full md:w-[calc(100vw-15rem)] md:left-[15rem] inset-x-0 top-0 right-0 bg-white py-[20px] md:py-[1.2rem] px-[4vw] md:px-[2vw] flex justify-between items-center h-fit border-b border-[#ECECEC] z-40">
           <div className={`flex gap-[10px] md:gap-[15px] items-center min-w-0 flex-1 ${showBackButton ? "block" : "hidden md:block"}`}>
             {showBackButton && (
               <button
@@ -212,7 +212,7 @@ const DashboardLayout = ({ children }: any) => {
                 <FaArrowLeft />
               </button>
             )}
-            <h1 className="text-black block font-bold text-[1.2rem] md:text-[1.5rem] truncate">
+            <h1 className="text-black block font-bold text-[1.2rem] md:text-[1.2rem] truncate">
             {getPageTitle()}
             </h1>
           </div>
