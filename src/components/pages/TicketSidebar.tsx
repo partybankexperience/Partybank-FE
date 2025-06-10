@@ -265,26 +265,24 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
                       )}
                     </div>
 
-                    {!isSaved && (
-                      <div className="flex items-center gap-1 flex-shrink-0">
+                    <div className="flex items-center gap-1 flex-shrink-0">
+                      <button
+                        onClick={() => handleEditTicket(index)}
+                        className="p-2 text-gray-400 hover:text-primary rounded-lg transition-colors"
+                        title="Edit ticket"
+                      >
+                        <FaEdit className="text-sm" />
+                      </button>
+                      {!isSaved && allTicketForms.length > 1 && (
                         <button
-                          onClick={() => handleEditTicket(index)}
-                          className="p-2 text-gray-400 hover:text-primary rounded-lg transition-colors"
-                          title="Edit ticket"
+                          onClick={() => handleDeleteTicket(index)}
+                          className="p-2 text-gray-400 hover:text-red-500 rounded-lg transition-colors"
+                          title="Delete ticket"
                         >
-                          <FaEdit className="text-sm" />
+                          <FaTrash className="text-sm" />
                         </button>
-                        {allTicketForms.length > 1 && (
-                          <button
-                            onClick={() => handleDeleteTicket(index)}
-                            className="p-2 text-gray-400 hover:text-red-500 rounded-lg transition-colors"
-                            title="Delete ticket"
-                          >
-                            <FaTrash className="text-sm" />
-                          </button>
-                        )}
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
               );
