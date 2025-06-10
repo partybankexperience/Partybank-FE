@@ -87,8 +87,6 @@ const CreateTicketComponent = () => {
 
   return (
     <div className="grid gap-[2.5rem] mt-[20px]">
-    
-    <div className="grid gap-[2.5rem] mt-[20px]">
       <div className="grid gap-[15px]">
         <h2 className="text-black text-[1.2rem] font-bold">Ticket Category</h2>
         <div
@@ -309,17 +307,6 @@ const CreateTicketComponent = () => {
         ))}
       </div>
 
-      {showButtons && (
-        <div className="md:mx-auto grid md:flex gap-4">
-          <DefaultButton variant="secondary" className="!w-full md:w-fit border !bg-white">
-            Cancel
-          </DefaultButton>
-          <DefaultButton className="!w-full md:w-fit border whitespace-nowrap">
-            Save Ticket
-          </DefaultButton>
-        </div>
-      )}
-    </div>
       {showButtons && (
         <div className="md:mx-auto grid md:flex gap-4">
           <DefaultButton variant="secondary" className="!w-full md:w-fit border !bg-white">

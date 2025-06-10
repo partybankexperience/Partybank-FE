@@ -338,7 +338,9 @@ const goNext = async () => {
                 currentTicket.endTime,
                 Array.isArray(currentTicket.perks) ? currentTicket.perks.filter(perk => perk && perk.trim()) : [],
                 false,
-                false
+                false,
+                currentTicket.ticketAvailability === "unlimited",
+                currentTicket.category === "option2" ? Number(currentTicket.numberOfPeople) : undefined
               );
 
               // Store the backend ticket ID for new tickets
