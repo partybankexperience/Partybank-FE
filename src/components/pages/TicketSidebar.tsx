@@ -89,10 +89,12 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
     // Update current ticket in tickets array if it has data
     if (currentData.name || currentData.type) {
       const updatedTickets = [...tickets];
+      const currentTicketInArray = tickets[activeTicketIndex] || {};
       updatedTickets[activeTicketIndex] = {
+        ...currentTicketInArray,
         ...currentData,
-        id: tickets[activeTicketIndex]?.id || `ticket-${Date.now()}`,
-        savedTicketId: tickets[activeTicketIndex]?.savedTicketId || null
+        id: currentTicketInArray.id || `ticket-${Date.now()}`,
+        savedTicketId: currentTicketInArray.savedTicketId || null
       };
       setFormValue("Tickets Create", "tickets", updatedTickets);
     }

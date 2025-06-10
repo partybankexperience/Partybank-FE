@@ -34,8 +34,10 @@ const CreateTicketComponent = () => {
     const tickets = currentTicketData?.tickets || [];
     
     if (currentTicketData?.ticketName) {
+      const existingTicket = tickets[activeIndex] || {};
       const updatedTicket = {
-        id: tickets[activeIndex]?.id || `ticket-${Date.now()}`,
+        ...existingTicket,
+        id: existingTicket.id || `ticket-${Date.now()}`,
         name: key === 'ticketName' ? value : currentTicketData.ticketName,
         type: key === 'ticketType' ? value : currentTicketData.ticketType,
         price: key === 'price' ? value : currentTicketData.price,
@@ -50,7 +52,7 @@ const CreateTicketComponent = () => {
         startTime: key === 'startTime' ? value : currentTicketData.startTime,
         salesEnd: key === 'salesEnd' ? value : currentTicketData.salesEnd,
         endTime: key === 'endTime' ? value : currentTicketData.endTime,
-        savedTicketId: tickets[activeIndex]?.savedTicketId || null
+        savedTicketId: existingTicket.savedTicketId || null
       };
 
       const updatedTickets = [...tickets];
