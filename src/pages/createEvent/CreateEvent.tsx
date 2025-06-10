@@ -322,7 +322,7 @@ const goNext = async () => {
                 false
               );
 
-              // Store the backend ticket ID
+              // Store the backend ticket ID for new tickets
               if (response?.ticketId) {
                 updatedTickets[activeIndex] = {
                   ...updatedTickets[activeIndex],
@@ -332,7 +332,7 @@ const goNext = async () => {
               }
             }
 
-            // Mark ticket as saved
+            // Mark ticket as saved (for both new and edited tickets)
             const currentSavedTickets = formData.savedTickets || [];
             const ticketId = updatedTickets[activeIndex].id;
             if (!currentSavedTickets.includes(ticketId)) {
@@ -344,24 +344,28 @@ const goNext = async () => {
             return;
           }
 
-          // Check if there are more incomplete tickets to work on
+          // Check if there are more unsaved tickets to work on
           const allTicketForms = updatedTickets.length > 0 ? updatedTickets : [{}];
-          let nextIncompleteIndex = -1;
+          const currentSavedTickets = formData.savedTickets || [];
+          let nextUnsavedIndex = -1;
 
           for (let i = 0; i < allTicketForms.length; i++) {
             if (i !== activeIndex) {
               const ticket = allTicketForms[i];
-              if (!ticket.name || !ticket.type || !ticket.category) {
-                nextIncompleteIndex = i;
+              const ticketId = ticket.id || `ticket-${i}`;
+              // Check if ticket is not saved (either incomplete or has data but not saved)
+              if (!currentSavedTickets.includes(ticketId) && 
+                  (ticket.name || ticket.type || ticket.category)) {
+                nextUnsavedIndex = i;
                 break;
               }
             }
           }
 
-          // If there's another incomplete ticket, switch to it
-          if (nextIncompleteIndex !== -1) {
-            const nextTicket = allTicketForms[nextIncompleteIndex];
-            setFormValue("Tickets Create", "activeTicketIndex", nextIncompleteIndex);
+          // If there's another unsaved ticket, switch to it
+          if (nextUnsavedIndex !== -1) {
+            const nextTicket = allTicketForms[nextUnsavedIndex];
+            setFormValue("Tickets Create", "activeTicketIndex", nextUnsavedIndex);
 
             // Load the next ticket's data into the form
             setFormValue("Tickets Create", "ticketName", nextTicket.name || "");
