@@ -36,6 +36,7 @@ interface SeriesData {
 
 const SeriesDetail = () => {
     const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [eventName, seteventName] = useState('');
     const [seriesData, setSeriesData] = useState<SeriesData | null>(null);
@@ -148,8 +149,6 @@ const SeriesDetail = () => {
             </div>
         );
     }
-
-    const navigate = useNavigate();
 
     return (
         <div className="md:bg-white md:rounded-md min-h-[80vh] w-full block md:grid mt-[.6rem] md:p-[25px] md:grid-cols-[2fr_3fr] gap-[20px]">
