@@ -249,7 +249,7 @@ const SeriesDetail = () => {
                         className="!w-fit"
                         icon={<FaPlus className="text-[.8rem] text-white" />}
                         variant="primary"
-                        onClick={() => setIsModalOpen(true)}
+                        onClick={() => navigate('/add-event',{state:id})}
                     >
                         Add Event
                     </DefaultButton>
@@ -257,7 +257,7 @@ const SeriesDetail = () => {
                 <div className="grid gap-[20px]">
                     {events.length > 0 ? (
                         events.map((event) => (
-                            <div key={event.id} className="flex gap-[20px] items-center py-[20px] border-b border-[#E1E1E1] cursor-pointer" onClick={()=>navigate(`/events/${event.id}`)}>
+                            <div key={event.id} className="flex gap-[20px] items-center py-[20px] border-b border-[#E1E1E1] cursor-pointer" onClick={()=>navigate(`/manage-events/${event.id}`)}>
                                 <CgLayoutGridSmall className="text-black text-[2rem]" />
                                 <div className="rounded-md h-[5.9rem] w-[9.6rem] bg-almostBlack overflow-hidden">
                                     <img 
