@@ -144,9 +144,9 @@ const DashboardLayout = ({ children }: any) => {
         </div>
       </SidebarModal>
       {/* Desktop Sidebar */}
-      <div className="bg-lightdark md:w-[15rem] hidden md:block md:fixed md:top-0 md:left-0 md:h-screen z-50">
+      <div className="bg-lightdark w-[15rem] hidden md:block fixed top-0 left-0 h-screen z-50 overflow-y-auto">
         <button
-          className="p-[20px] border-b border-b-[] grid m-auto cursor-pointer"
+          className="p-[15px] md:p-[20px] border-b border-b-[] grid m-auto cursor-pointer"
           role="button"
           aria-label="Go to dashboard"
           onClick={() => navigate("/dashboard")}
@@ -154,10 +154,10 @@ const DashboardLayout = ({ children }: any) => {
           <img
             src={logo}
             alt="PartyBank Logo"
-            className="md:w-[4rem] m-auto "
+            className="w-[3rem] md:w-[4rem] m-auto"
           />
         </button>
-        <nav className="flex flex-col gap-[.1rem] mt-[50px]">
+        <nav className="flex flex-col gap-[.1rem] mt-[30px] md:mt-[50px] px-2">
           {navItems.map((item, index) => {
             const isActive = currentPath.startsWith(item.path);
 
@@ -167,28 +167,28 @@ const DashboardLayout = ({ children }: any) => {
                   <div className="w-[5px] h-full py-[1rem] bg-primary rounded-r-lg" />
                 )}
                 <li
-                  className={`flex items-center gap-[12px] font-medium text-[.8rem] cursor-pointer hover:text-primary p-[1rem] ${
+                  className={`flex items-center gap-[8px] md:gap-[12px] font-medium text-[.7rem] md:text-[.8rem] cursor-pointer hover:text-primary p-[0.8rem] md:p-[1rem] w-full ${
                     isActive ? "text-white" : "text-[#A9ABAE]"
                   }`}
                   onClick={() => navigate(item.path)}
                 >
                   <div
-                    className={`text-[1.3rem] ${
+                    className={`text-[1.1rem] md:text-[1.3rem] flex-shrink-0 ${
                       isActive ? "text-primary" : "text-white"
                     }`}
                   >
                     {item.icon}
                   </div>
-                  <a tabIndex={0}>{item.name}</a>
+                  <span className="truncate">{item.name}</span>
                 </li>
               </div>
             );
           })}
         </nav>
       </div>
-      <div className="flex flex-col h-full md:ml-[15rem] w-full">
-        <header className="fixed w-full md:w-[calc(100vw-15rem)] md:left-[15rem] inset-x-0 top-0  right-0 bg-white py-[25px] px-[2vw] flex justify-between items-center h-fit border-b border-[#ECECEC] z-40 ">
-          <div className={`flex gap-[15px] items-center ${showBackButton ? "block" : "hidden md:block"}`}>
+      <div className="flex flex-col h-full md:ml-[15rem] w-full max-w-full">
+        <header className="fixed w-full md:w-[calc(100vw-15rem)] md:left-[15rem] inset-x-0 top-0 right-0 bg-white py-[20px] md:py-[25px] px-[4vw] md:px-[2vw] flex justify-between items-center h-fit border-b border-[#ECECEC] z-40">
+          <div className={`flex gap-[10px] md:gap-[15px] items-center min-w-0 flex-1 ${showBackButton ? "block" : "hidden md:block"}`}>
             {showBackButton && (
               <button
                 onClick={() => {
@@ -207,26 +207,26 @@ const DashboardLayout = ({ children }: any) => {
                   }
                 }}
                 aria-label="Go back"
-                className="text-[20px] text-black hover:text-primary"
+                className="text-[18px] md:text-[20px] text-black hover:text-primary flex-shrink-0"
               >
                 <FaArrowLeft />
               </button>
             )}
-            <h1 className="text-black block font-bold text-[1.5rem]">
+            <h1 className="text-black block font-bold text-[1.2rem] md:text-[1.5rem] truncate">
             {getPageTitle()}
             </h1>
           </div>
           <button
-            className="text-[35px] text-black md:hidden"
+            className="text-[30px] md:text-[35px] text-black md:hidden flex-shrink-0"
             onClick={() => setIsMobileNavOpen(true)}
             aria-label="Open mobile menu"
           >
             <HiOutlineBars3CenterLeft />
           </button>
-          <div className={` gap-[20px] items-center ${showBackButton ? "hidden md:flex" : "flex"}`}>
+          <div className={`gap-[10px] md:gap-[20px] items-center flex-shrink-0 ${showBackButton ? "hidden md:flex" : "flex"}`}>
             <NotificationDropdown />
 
-            <div className="hidden md:block">
+            <div className="hidden lg:block">
               <ProfileDropdown />
             </div>
             <DefaultButton
@@ -234,7 +234,7 @@ const DashboardLayout = ({ children }: any) => {
               icon={<FaPlus />}
               type="icon-left"
               variant="primary"
-              className="hidden md:block"
+              className="hidden lg:block whitespace-nowrap"
               onClick={() => navigate("/dashboard/create-event")}
             >
               Create New Event
@@ -242,14 +242,14 @@ const DashboardLayout = ({ children }: any) => {
             <DefaultButton
               size="small"
               variant="primary"
-              className="!px-[8px] !py-[10px] md:hidden"
+              className="!px-[6px] md:!px-[8px] !py-[8px] md:!py-[10px] lg:hidden whitespace-nowrap text-xs md:text-sm"
               onClick={() => navigate("/dashboard/create-event")}
             >
-              Create New Event
+              Create Event
             </DefaultButton>
           </div>
         </header>
-        <main className="bg-[#f8f9f9] flex-grow p-[2vw] pt-[7.5rem] md:pt-[1.5rem]  md:mt-[5rem] min-h-[90vh]">{children}</main>
+        <main className="bg-[#f8f9f9] flex-grow p-[4vw] md:p-[2vw] pt-[7.5rem] md:pt-[1.5rem] md:mt-[5rem] min-h-[90vh] max-w-full overflow-x-hidden">{children}</main>
       </div>
     </div>
     // </PrivateRoute>
