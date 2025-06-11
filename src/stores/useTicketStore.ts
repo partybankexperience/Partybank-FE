@@ -314,6 +314,10 @@ export const useTicketStore = create<TicketStore>()(
       },
 
       resetTicketStore: () => {
+        // Clear localStorage first
+        localStorage.removeItem("ticket-management-storage");
+        
+        // Reset all state to initial values
         set({
           tickets: [],
           activeTicketIndex: 0,
@@ -334,7 +338,6 @@ export const useTicketStore = create<TicketStore>()(
             endTime: ""
           }
         });
-        localStorage.removeItem("ticket-management-storage");
       }
     }),
     {

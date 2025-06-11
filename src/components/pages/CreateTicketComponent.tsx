@@ -13,11 +13,11 @@ import { successAlert, errorAlert } from "../alerts/ToastService";
 const CreateTicketComponent = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  
+
   // Context Detection
   const isCreateEventContext = location.pathname.includes('/dashboard/create-event');
   const isManageEventsContext = location.pathname.includes('/manage-events') && location.pathname.includes('/create-ticket');
-  
+
   const showButtons = !isCreateEventContext;
 
   // State Management Logic - Context Aware
@@ -25,12 +25,13 @@ const CreateTicketComponent = () => {
   const { 
     setCurrentTicketData, 
     getCurrentTicketData, 
-    saveCurrentDataToActiveTicket 
+    saveCurrentDataToActiveTicket,
+    resetTicketStore 
   } = useTicketStore();
   const currentStage = "Tickets Create";
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   // Event ID Source
   const eventId = isCreateEventContext 
     ? localStorage.getItem("eventId") 
@@ -179,7 +180,7 @@ const CreateTicketComponent = () => {
       const salesStartISO = ticketData.salesStart ? 
         new Date(`${ticketData.salesStart}T${ticketData.startTime || "00:00"}`).toISOString() : 
         new Date().toISOString();
-      
+
       const salesEndISO = ticketData.salesEnd ? 
         new Date(`${ticketData.salesEnd}T${ticketData.endTime || "23:59"}`).toISOString() : 
         new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(); // 30 days from now
@@ -204,11 +205,16 @@ const CreateTicketComponent = () => {
       );
 
       successAlert("Success","Ticket created successfully!");
-      
+
+      // Clear the ticket store state after successful submission
+      if (isManageEventsContext) {
+        resetTicketStore();
+      }
+
       // Navigate back to Overview page
       const slug = location.pathname.split('/')[2]; // Extract slug from path
       navigate(`/manage-events/${slug}`, { state: { id: eventId } });
-      
+
     } catch (error) {
       console.error("Error creating ticket:", error);
       errorAlert("Error","Failed to create ticket. Please try again.");
