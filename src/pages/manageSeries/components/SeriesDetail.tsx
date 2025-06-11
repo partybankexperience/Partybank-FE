@@ -4,7 +4,7 @@ import { BiEditAlt } from "react-icons/bi";
 import DefaultButton from "../../../components/buttons/DefaultButton";
 import { CgLayoutGridSmall } from "react-icons/cg";
 import { useState, useEffect } from "react";
-import { useNavigate, useNavigation, useParams } from "react-router-dom";
+import { useNavigate, useNavigation, useParams, useLocation } from "react-router-dom";
 import { Modal } from "../../../components/modal/Modal";
 import DefaultInput from "../../../components/inputs/DefaultInput";
 import { getSeriesById, updateSeries } from "../../../Containers/seriesApi";
@@ -36,13 +36,17 @@ interface SeriesData {
 }
 
 const SeriesDetail = () => {
-    const { id } = useParams<{ id: string }>();
+    const { slug } = useParams<{ slug: string }>();
     const navigate = useNavigate();
+    const location = useLocation();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [eventName, seteventName] = useState('');
     const [seriesData, setSeriesData] = useState<SeriesData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    
+    // Get ID from navigate state
+    const seriesId = location.state?.id;
 
     // Edit mode states
     const [isEditingName, setIsEditingName] = useState(false);
@@ -55,7 +59,7 @@ const SeriesDetail = () => {
 
     useEffect(() => {
         const fetchSeriesData = async () => {
-            if (!id) {
+            if (!seriesId) {
                 setError("Series ID not found");
                 setLoading(false);
                 return;
@@ -63,7 +67,7 @@ const SeriesDetail = () => {
 
             try {
                 setLoading(true);
-                const response = await getSeriesById(id);
+                const response = await getSeriesById(seriesId);
                 setSeriesData(response);
                 setEditedName(response.name);
                 setEditedDescription(response.description);
@@ -77,7 +81,7 @@ const SeriesDetail = () => {
         };
 
         fetchSeriesData();
-    }, [id]);
+    }, [seriesId]);
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString('en-US', {
@@ -88,7 +92,7 @@ const SeriesDetail = () => {
     };
 
     const handleSaveChanges = async () => {
-        if (!seriesData || !id) return;
+        if (!seriesData || !seriesId) return;
 
         // Store original values in case we need to revert
         const originalName = seriesData.name;
@@ -97,7 +101,7 @@ const SeriesDetail = () => {
         try {
             setIsSaving(true);
 
-            await updateSeries(id, editedName, editedDescription, seriesData.coverImage);
+            await updateSeries(seriesId, editedName, editedDescription, seriesData.coverImage);
 
             // Success: Update local state with new values
             setSeriesData(prev => prev ? {
@@ -280,8 +284,8 @@ const SeriesDetail = () => {
                         icon={<FaPlus className="text-[.8rem] text-white" />}
                         variant="primary"
                         onClick={() => {
-                            console.log("Navigating to create event with series ID:", id);
-                            navigate('/dashboard/create-event',{state: {seriesId: id}});
+                            console.log("Navigating to create event with series ID:", seriesId);
+                            navigate('/dashboard/create-event',{state: {seriesId: seriesId}});
                         }}
                     >
                         Add Events to Series
@@ -302,7 +306,7 @@ const SeriesDetail = () => {
                         ))
                     ) : events.length > 0 ? (
                         events.map((event) => (
-                            <div key={event.id} className="flex gap-[20px] items-center py-[20px] border-b border-[#E1E1E1] cursor-pointer" onClick={()=>navigate(`/manage-events/${event.id}`)}>
+                            <div key={event.id} className="flex gap-[20px] items-center py-[20px] border-b border-[#E1E1E1] cursor-pointer" onClick={()=>navigate(`/manage-events/${event.slug}`, { state: { id: event.id } })}>
                                 <CgLayoutGridSmall className="text-black text-[2rem]" />
                                 <div className="rounded-md h-[5.9rem] w-[9.6rem] bg-almostBlack overflow-hidden">
                                     <img 

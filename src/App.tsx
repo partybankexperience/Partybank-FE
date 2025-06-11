@@ -96,7 +96,7 @@ const App = () => {
           }
         />
         <Route
-          path="/manage-events/:id"
+          path="/manage-events/:slug"
           element={
             <DashboardLayout>
               <EventPage />
@@ -104,7 +104,7 @@ const App = () => {
           }
         />
         <Route
-          path="/manage-events/:id/create-ticket"
+          path="/manage-events/:slug/create-ticket"
           element={
             <DashboardLayout>
               <CreateTicket />
@@ -120,7 +120,7 @@ const App = () => {
           }
         />
         <Route
-          path="/manage-series/:id"
+          path="/manage-series/:slug"
           element={
             <DashboardLayout>
               <SeriesDetail />

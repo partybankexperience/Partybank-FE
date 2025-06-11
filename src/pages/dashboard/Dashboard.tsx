@@ -169,7 +169,7 @@ const Dashboard = () => {
                       ticketSold={event.ticketsSold || 0}
                       totalTicket={event.totalTickets || 0}
                       onEdit={() => {
-                        navigate(`/manage-events/${event.id}`, { state: { event } });
+                        navigate(`/manage-events/${event.slug}`, { state: { id: event.id } });
                       }}
                       onDuplicate={() => console.log("Duplicate clicked")}
                       onDelete={() => console.log("Delete clicked")}

@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import CreateNewEvent from "./components/CreateNewEvent";
 import EventCard from "../../components/cards/EventCard";
@@ -78,7 +77,7 @@ const ManageEvents = () => {
               location={val?.location}
               bannerImage={val?.bannerImage}
               onEdit={() => {
-                navigate(`/manage-events/${val.id}`, { state: { event: val } });
+                navigate(`/manage-events/${val.slug}`, { state: { id: val.id } });
               }}
               onDuplicate={() => console.log("Duplicate clicked")}
               onDelete={() => console.log("Delete clicked")}

@@ -10,7 +10,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { RiInboxArchiveLine } from "react-icons/ri";
 import { FaShare } from "react-icons/fa";
 import TicketsCard from "../../../components/cards/TicketCard";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useLocation } from "react-router";
 import { getEventsById } from "../../../Containers/eventApi";
 import { useEffect, useState } from "react";
 import { formatDate, formatTimeRange } from "../../../components/helpers/dateTimeHelpers";
@@ -19,12 +19,16 @@ import { Storage } from "../../../stores/InAppStorage";
 
 const Overview = () => {
   const navigate=useNavigate()
-  const {id}=useParams()
+  const {slug}=useParams()
+  const location = useLocation();
   const [eventData, setEventData] = useState<any>(null);
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [shareLoading, setShareLoading] = useState(false);
   const { setStage, prefillEventData, mapBackendStepToFrontend } = useEventStore();
+  
+  // Get ID from navigate state
+  const eventId = location.state?.id;
   // const location = [
   //   { icon: <GrLocation className="text-primary" />, name: "Landmark Centre" },
   //   {
@@ -175,7 +179,7 @@ const Overview = () => {
     async function getEvent() {
       try {
         setLoading(true);
-        const res = await getEventsById(id as string);
+        const res = await getEventsById(eventId as string);
 
         if (!isMounted) return;
 
@@ -212,14 +216,14 @@ const Overview = () => {
       }
     }
 
-    if (id) {
+    if (eventId) {
       getEvent();
     }
 
     return () => {
       isMounted = false;
     };
-  }, [id])
+  }, [eventId])
 
   if (loading) {
     return (
@@ -307,7 +311,7 @@ const Overview = () => {
                 type="icon-left"
                 className="!w-fit border"
                 icon={<FaPlus className="text-primary" />}
-                onClick={() => {navigate(`/manage-events/${id}/create-ticket`)}}
+                onClick={() => {navigate(`/manage-events/${slug}/create-ticket`, { state: { id: eventId } })}}
               >
                 Create Ticket
               </DefaultButton>

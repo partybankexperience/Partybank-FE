@@ -58,7 +58,7 @@ const ManageSeries = () => {
                 key={seriesItem.id}
                 title={seriesItem.name}
                 description={seriesItem.description}
-                onEdit={() => navigate(`/manage-series/${seriesItem.id}`)}
+                onEdit={() => navigate(`/manage-series/${seriesItem.slug}`, { state: { id: seriesItem.id } })}
                 onDelete={() => handleSeriesDeleted(seriesItem.id)}
                 imageUrl={seriesItem.coverImage}
               />

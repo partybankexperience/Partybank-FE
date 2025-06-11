@@ -28,10 +28,10 @@ const DashboardLayout = ({ children }: any) => {
   const { section, setSection } = useProfileSectionStore();
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const subPageTitles: Record<string, string> = {
-    "manage-events/:id": "Event Page",
-    "manage-events/:id/create-ticket": "Create Ticket",
+    "manage-events/:slug": "Event Page",
+    "manage-events/:slug/create-ticket": "Create Ticket",
     "dashboard/create-event": "Create Event",
-    "manage-series/:id": "Series Detail",
+    "manage-series/:slug": "Series Detail",
     "payout-management/settings": "Settings",
     "profile": "Profile",
   };
