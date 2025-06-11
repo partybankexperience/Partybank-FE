@@ -12,14 +12,14 @@ interface TicketSidebarProps {
 
 const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSidebarProps) => {
   const location = useLocation();
-  
+
   // Context Detection
   const isCreateEventContext = location.pathname.includes('/dashboard/create-event');
   const isManageEventsContext = location.pathname.includes('/manage-events') && location.pathname.includes('/create-ticket');
-  
+
   // Event Store (Create Event Context)
   const { form, setFormValue } = useEventStore();
-  
+
   // Ticket Store (Manage Events Context)
   const { 
     tickets: manageTickets, 
@@ -50,7 +50,13 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
       stockAvailability: "",
       soldTarget: "",
       numberOfPeople: "",
-      perks: [""]
+      perks: [""],
+      ticketAvailability: "",
+      salesStart: "",
+      startTime: "",
+      salesEnd: "",
+      endTime: "",
+      isSaved: false
     }] : [])
   ] : [
     ...tickets,
@@ -70,7 +76,8 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
       salesStart: getCurrentTicketData("salesStart") || "",
       startTime: getCurrentTicketData("startTime") || "",
       salesEnd: getCurrentTicketData("salesEnd") || "",
-      endTime: getCurrentTicketData("endTime") || ""
+      endTime: getCurrentTicketData("endTime") || "",
+      isSaved: false
     }] : [])
   ];
 
@@ -87,7 +94,13 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
         stockAvailability: "",
         soldTarget: "",
         numberOfPeople: "",
-        perks: [""]
+        perks: [""],
+        ticketAvailability: "",
+        salesStart: "",
+        startTime: "",
+        salesEnd: "",
+        endTime: "",
+        isSaved: false
       };
 
       const updatedTickets = [...tickets, newTicket];
@@ -366,3 +379,4 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
 };
 
 export default TicketSidebar;
+```

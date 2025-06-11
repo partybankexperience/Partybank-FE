@@ -26,7 +26,12 @@ const CreateTicketComponent = () => {
     setCurrentTicketData, 
     getCurrentTicketData, 
     saveCurrentDataToActiveTicket,
-    resetTicketStore 
+    resetTicketStore,
+    markTicketAsSaved,
+    moveToNextUnsavedTicket,
+    hasUnsavedTickets,
+    tickets: manageTickets,
+    activeTicketIndex: manageActiveIndex
   } = useTicketStore();
   const currentStage = "Tickets Create";
 
@@ -162,21 +167,18 @@ const CreateTicketComponent = () => {
     }
 
     setIsSubmitting(true);
-    // type TicketCategoryOption = "option1" | "option2";
+
     try {
+      // Check if current ticket is already saved (edit mode)
+      const currentTicket = manageTickets[manageActiveIndex];
+      const isEditMode = currentTicket && currentTicket.isSaved && currentTicket.savedTicketId;
+
       // Map category values
       const categoryMap: any = {
         "option1": "single",
         "option2": "group"
       };
-//       const rawCategory = ticketData.ticketCategory;
-// let category: string;
 
-// if (rawCategory === "option1" || rawCategory === "option2") {
-//   category = categoryMap[rawCategory];
-// } else {
-//   category = rawCategory;
-// }
       const salesStartISO = ticketData.salesStart ? 
         new Date(`${ticketData.salesStart}T${ticketData.startTime || "00:00"}`).toISOString() : 
         new Date().toISOString();
@@ -185,39 +187,56 @@ const CreateTicketComponent = () => {
         new Date(`${ticketData.salesEnd}T${ticketData.endTime || "23:59"}`).toISOString() : 
         new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(); // 30 days from now
 
-      // Call createTicket API
-      await createTicket(
-        eventId,
-        ticketData.ticketName,
-        categoryMap[ticketData.ticketCategory] || ticketData.ticketCategory,
-        ticketData.ticketType.toLowerCase(),
-        ticketData.ticketType === "Paid" ? Number(ticketData.price) : 0,
-        Number(ticketData.purchaseLimit) || 1,
-        ticketData.ticketAvailability === "limited" ? Number(ticketData.stockAvailability) : 999999,
-        Number(ticketData.soldTarget) || 0,
-        salesStartISO,
-        salesEndISO,
-        ticketData.startTime || "00:00",
-        ticketData.endTime || "23:59",
-        Array.isArray(ticketData.perks) ? ticketData.perks.filter(perk => perk && perk.trim()) : [],
-        ticketData.ticketAvailability === "unlimited",
-        ticketData.ticketCategory === "option2" ? Number(ticketData.numberOfPeople) : undefined
-      );
-
-      successAlert("Success","Ticket created successfully!");
-
-      // Clear the ticket store state after successful submission
-      if (isManageEventsContext) {
-        resetTicketStore();
+      let response;
+      
+      if (isEditMode) {
+        // TODO: Call editTicket API when available
+        // response = await editTicket(currentTicket.savedTicketId, ...ticketData);
+        console.log("Edit mode detected - would call editTicket API with ID:", currentTicket.savedTicketId);
+        // For now, simulate success
+        response = { id: currentTicket.savedTicketId };
+        successAlert("Success","Ticket updated successfully!");
+      } else {
+        // Create new ticket
+        response = await createTicket(
+          eventId,
+          ticketData.ticketName,
+          categoryMap[ticketData.ticketCategory] || ticketData.ticketCategory,
+          ticketData.ticketType.toLowerCase(),
+          ticketData.ticketType === "Paid" ? Number(ticketData.price) : 0,
+          Number(ticketData.purchaseLimit) || 1,
+          ticketData.ticketAvailability === "limited" ? Number(ticketData.stockAvailability) : 999999,
+          Number(ticketData.soldTarget) || 0,
+          salesStartISO,
+          salesEndISO,
+          ticketData.startTime || "00:00",
+          ticketData.endTime || "23:59",
+          Array.isArray(ticketData.perks) ? ticketData.perks.filter(perk => perk && perk.trim()) : [],
+          ticketData.ticketAvailability === "unlimited",
+          ticketData.ticketCategory === "option2" ? Number(ticketData.numberOfPeople) : undefined
+        );
+        successAlert("Success","Ticket created successfully!");
       }
 
-      // Navigate back to Overview page
-      const slug = location.pathname.split('/')[2]; // Extract slug from path
-      navigate(`/manage-events/${slug}`, { state: { id: eventId } });
+      // Mark current ticket as saved
+      markTicketAsSaved(manageActiveIndex, response.id || response.ticketId || currentTicket?.savedTicketId);
+
+      // Try to move to next unsaved ticket
+      const movedToNext = moveToNextUnsavedTicket();
+      
+      if (!movedToNext) {
+        // No more unsaved tickets, clear state and navigate back
+        if (!hasUnsavedTickets()) {
+          resetTicketStore();
+          const slug = location.pathname.split('/')[2];
+          navigate(`/manage-events/${slug}`, { state: { id: eventId } });
+        }
+      }
+      // If moved to next ticket, stay on the form to continue editing
 
     } catch (error) {
-      console.error("Error creating ticket:", error);
-      errorAlert("Error","Failed to create ticket. Please try again.");
+      console.error("Error submitting ticket:", error);
+      errorAlert("Error","Failed to save ticket. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

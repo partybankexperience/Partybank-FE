@@ -19,6 +19,7 @@ interface TicketData {
   salesEnd: string;
   endTime: string;
   savedTicketId?: string | null;
+  isSaved?: boolean; // Track if ticket is saved to backend
 }
 
 interface TicketStore {
@@ -35,6 +36,11 @@ interface TicketStore {
   resetTicketStore: () => void;
   // Save current form data to active ticket
   saveCurrentDataToActiveTicket: () => void;
+  // Multi-ticket flow management
+  markTicketAsSaved: (ticketIndex: number, savedTicketId: string) => void;
+  getNextUnsavedTicket: () => number | null;
+  hasUnsavedTickets: () => boolean;
+  moveToNextUnsavedTicket: () => boolean;
 }
 
 export const useTicketStore = create<TicketStore>()(
@@ -338,6 +344,44 @@ export const useTicketStore = create<TicketStore>()(
             endTime: ""
           }
         });
+      },
+
+      markTicketAsSaved: (ticketIndex: number, savedTicketId: string) => {
+        set(state => {
+          const updatedTickets = [...state.tickets];
+          if (updatedTickets[ticketIndex]) {
+            updatedTickets[ticketIndex] = {
+              ...updatedTickets[ticketIndex],
+              savedTicketId,
+              isSaved: true
+            };
+          }
+          return { tickets: updatedTickets };
+        });
+      },
+
+      getNextUnsavedTicket: () => {
+        const state = get();
+        for (let i = 0; i < state.tickets.length; i++) {
+          if (!state.tickets[i].isSaved) {
+            return i;
+          }
+        }
+        return null;
+      },
+
+      hasUnsavedTickets: () => {
+        const state = get();
+        return state.tickets.some(ticket => !ticket.isSaved);
+      },
+
+      moveToNextUnsavedTicket: () => {
+        const nextIndex = get().getNextUnsavedTicket();
+        if (nextIndex !== null) {
+          get().setActiveTicket(nextIndex);
+          return true;
+        }
+        return false;
       }
     }),
     {
