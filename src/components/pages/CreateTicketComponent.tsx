@@ -3,6 +3,7 @@ import DefaultInput from "../inputs/DefaultInput";
 import { useLocation, useNavigate } from "react-router-dom";
 import RadioButton from "../inputs/RadioButton";
 import { useEventStore } from "../../stores/useEventStore";
+import { useTicketStore } from "../../stores/useTicketStore";
 import { NumericFormat } from 'react-number-format';
 import { FaPlus, FaTrash } from 'react-icons/fa';
 import { createTicket } from "../../Containers/ticketApi";
@@ -19,27 +20,14 @@ const CreateTicketComponent = () => {
   
   const showButtons = !isCreateEventContext;
 
-  // State Management Logic
+  // State Management Logic - Context Aware
   const { form, setFormValue } = useEventStore();
+  const { 
+    setCurrentTicketData, 
+    getCurrentTicketData, 
+    saveCurrentDataToActiveTicket 
+  } = useTicketStore();
   const currentStage = "Tickets Create";
-  
-  // Local state for Manage Events Context
-  const [localTicketData, setLocalTicketData] = useState({
-    ticketCategory: "",
-    ticketType: "",
-    ticketAvailability: "",
-    ticketName: "",
-    purchaseLimit: "",
-    stockAvailability: "",
-    price: "",
-    soldTarget: "",
-    numberOfPeople: "",
-    perks: [""],
-    salesStart: "",
-    startTime: "",
-    salesEnd: "",
-    endTime: ""
-  });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   
@@ -97,11 +85,10 @@ const CreateTicketComponent = () => {
         setFormValue(currentStage, "tickets", updatedTickets);
       }
     } else if (isManageEventsContext) {
-      // Manage Events Context: Use local component state
-      setLocalTicketData(prev => ({
-        ...prev,
-        [key]: value
-      }));
+      // Manage Events Context: Use useTicketStore
+      setCurrentTicketData(key, value);
+      // Auto-save to active ticket for real-time sidebar sync
+      saveCurrentDataToActiveTicket();
     }
   };
 
@@ -109,7 +96,7 @@ const CreateTicketComponent = () => {
     if (isCreateEventContext) {
       return form[currentStage]?.[key] || "";
     } else if (isManageEventsContext) {
-      return localTicketData[key] || "";
+      return getCurrentTicketData(key) || "";
     }
     return "";
   };
@@ -141,16 +128,34 @@ const CreateTicketComponent = () => {
       return;
     }
 
+    // Get current ticket data from store
+    const ticketData = {
+      ticketName: getCurrentTicketData("ticketName"),
+      ticketType: getCurrentTicketData("ticketType"),
+      ticketCategory: getCurrentTicketData("ticketCategory"),
+      price: getCurrentTicketData("price"),
+      purchaseLimit: getCurrentTicketData("purchaseLimit"),
+      stockAvailability: getCurrentTicketData("stockAvailability"),
+      soldTarget: getCurrentTicketData("soldTarget"),
+      numberOfPeople: getCurrentTicketData("numberOfPeople"),
+      perks: getCurrentTicketData("perks"),
+      ticketAvailability: getCurrentTicketData("ticketAvailability"),
+      salesStart: getCurrentTicketData("salesStart"),
+      startTime: getCurrentTicketData("startTime"),
+      salesEnd: getCurrentTicketData("salesEnd"),
+      endTime: getCurrentTicketData("endTime")
+    };
+
     // Validation
-    if (!localTicketData.ticketName) {
+    if (!ticketData.ticketName) {
       errorAlert("Ticket name is required");
       return;
     }
-    if (!localTicketData.ticketType) {
+    if (!ticketData.ticketType) {
       errorAlert("Ticket type is required");
       return;
     }
-    if (!localTicketData.ticketCategory) {
+    if (!ticketData.ticketCategory) {
       errorAlert("Ticket category is required");
       return;
     }
@@ -165,31 +170,31 @@ const CreateTicketComponent = () => {
       };
 
       // Format dates to ISO
-      const salesStartISO = localTicketData.salesStart ? 
-        new Date(`${localTicketData.salesStart}T${localTicketData.startTime || "00:00"}`).toISOString() : 
+      const salesStartISO = ticketData.salesStart ? 
+        new Date(`${ticketData.salesStart}T${ticketData.startTime || "00:00"}`).toISOString() : 
         new Date().toISOString();
       
-      const salesEndISO = localTicketData.salesEnd ? 
-        new Date(`${localTicketData.salesEnd}T${localTicketData.endTime || "23:59"}`).toISOString() : 
+      const salesEndISO = ticketData.salesEnd ? 
+        new Date(`${ticketData.salesEnd}T${ticketData.endTime || "23:59"}`).toISOString() : 
         new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(); // 30 days from now
 
       // Call createTicket API
       await createTicket(
         eventId,
-        localTicketData.ticketName,
-        categoryMap[localTicketData.ticketCategory] || localTicketData.ticketCategory,
-        localTicketData.ticketType.toLowerCase(),
-        localTicketData.ticketType === "Paid" ? Number(localTicketData.price) : 0,
-        Number(localTicketData.purchaseLimit) || 1,
-        localTicketData.ticketAvailability === "limited" ? Number(localTicketData.stockAvailability) : 999999,
-        Number(localTicketData.soldTarget) || 0,
+        ticketData.ticketName,
+        categoryMap[ticketData.ticketCategory] || ticketData.ticketCategory,
+        ticketData.ticketType.toLowerCase(),
+        ticketData.ticketType === "Paid" ? Number(ticketData.price) : 0,
+        Number(ticketData.purchaseLimit) || 1,
+        ticketData.ticketAvailability === "limited" ? Number(ticketData.stockAvailability) : 999999,
+        Number(ticketData.soldTarget) || 0,
         salesStartISO,
         salesEndISO,
-        localTicketData.startTime || "00:00",
-        localTicketData.endTime || "23:59",
-        Array.isArray(localTicketData.perks) ? localTicketData.perks.filter(perk => perk && perk.trim()) : [],
-        localTicketData.ticketAvailability === "unlimited",
-        localTicketData.ticketCategory === "option2" ? Number(localTicketData.numberOfPeople) : undefined
+        ticketData.startTime || "00:00",
+        ticketData.endTime || "23:59",
+        Array.isArray(ticketData.perks) ? ticketData.perks.filter(perk => perk && perk.trim()) : [],
+        ticketData.ticketAvailability === "unlimited",
+        ticketData.ticketCategory === "option2" ? Number(ticketData.numberOfPeople) : undefined
       );
 
       successAlert("Ticket created successfully!");

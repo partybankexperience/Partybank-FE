@@ -1,6 +1,8 @@
 import { PiPlus } from "react-icons/pi";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useEventStore } from "../../stores/useEventStore";
+import { useTicketStore } from "../../stores/useTicketStore";
+import { useLocation } from "react-router-dom";
 
 interface TicketSidebarProps {
   onAddTicket?: () => void;
@@ -9,14 +11,33 @@ interface TicketSidebarProps {
 }
 
 const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSidebarProps) => {
+  const location = useLocation();
+  
+  // Context Detection
+  const isCreateEventContext = location.pathname.includes('/dashboard/create-event');
+  const isManageEventsContext = location.pathname.includes('/manage-events') && location.pathname.includes('/create-ticket');
+  
+  // Event Store (Create Event Context)
   const { form, setFormValue } = useEventStore();
-  const currentTicket = form["Tickets Create"];
-  const tickets = currentTicket?.tickets || [];
-  const activeTicketIndex = currentTicket?.activeTicketIndex || 0;
-  const savedTickets = currentTicket?.savedTickets || []; // Track which tickets have been saved
+  
+  // Ticket Store (Manage Events Context)
+  const { 
+    tickets: manageTickets, 
+    activeTicketIndex: manageActiveIndex, 
+    addTicket: manageAddTicket,
+    deleteTicket: manageDeleteTicket,
+    setActiveTicket: manageSetActiveTicket,
+    getCurrentTicketData
+  } = useTicketStore();
+
+  // Context-aware data
+  const currentTicket = isCreateEventContext ? form["Tickets Create"] : null;
+  const tickets = isCreateEventContext ? (currentTicket?.tickets || []) : manageTickets;
+  const activeTicketIndex = isCreateEventContext ? (currentTicket?.activeTicketIndex || 0) : manageActiveIndex;
+  const savedTickets = isCreateEventContext ? (currentTicket?.savedTickets || []) : []; // Track which tickets have been saved
 
   // Create array of all ticket forms (saved + current active one)
-  const allTicketForms = [
+  const allTicketForms = isCreateEventContext ? [
     ...tickets,
     // Always have at least one form
     ...(tickets.length === 0 ? [{ 
@@ -31,123 +52,49 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
       numberOfPeople: "",
       perks: [""]
     }] : [])
+  ] : [
+    ...tickets,
+    // For manage events, show current form data as well
+    ...(tickets.length === 0 ? [{
+      id: `ticket-${Date.now()}`,
+      name: getCurrentTicketData("ticketName") || "",
+      type: getCurrentTicketData("ticketType") || "",
+      price: getCurrentTicketData("price") || "",
+      category: getCurrentTicketData("ticketCategory") || "",
+      purchaseLimit: getCurrentTicketData("purchaseLimit") || "",
+      stockAvailability: getCurrentTicketData("stockAvailability") || "",
+      soldTarget: getCurrentTicketData("soldTarget") || "",
+      numberOfPeople: getCurrentTicketData("numberOfPeople") || "",
+      perks: getCurrentTicketData("perks") || [""],
+      ticketAvailability: getCurrentTicketData("ticketAvailability") || "",
+      salesStart: getCurrentTicketData("salesStart") || "",
+      startTime: getCurrentTicketData("startTime") || "",
+      salesEnd: getCurrentTicketData("salesEnd") || "",
+      endTime: getCurrentTicketData("endTime") || ""
+    }] : [])
   ];
 
   const handleAddNewTicket = () => {
-    // Add a new empty ticket form
-    const newTicket = {
-      id: `ticket-${Date.now()}`,
-      name: "",
-      type: "",
-      price: "",
-      category: "",
-      purchaseLimit: "",
-      stockAvailability: "",
-      soldTarget: "",
-      numberOfPeople: "",
-      perks: [""]
-    };
-
-    const updatedTickets = [...tickets, newTicket];
-    setFormValue("Tickets Create", "tickets", updatedTickets);
-    setFormValue("Tickets Create", "activeTicketIndex", updatedTickets.length - 1);
-
-    // Clear the main form for the new ticket
-    setFormValue("Tickets Create", "ticketName", "");
-    setFormValue("Tickets Create", "ticketType", "");
-    setFormValue("Tickets Create", "ticketCategory", "");
-    setFormValue("Tickets Create", "price", "");
-    setFormValue("Tickets Create", "purchaseLimit", "");
-    setFormValue("Tickets Create", "stockAvailability", "");
-    setFormValue("Tickets Create", "soldTarget", "");
-    setFormValue("Tickets Create", "numberOfPeople", "");
-    setFormValue("Tickets Create", "perks", [""]);
-    setFormValue("Tickets Create", "ticketAvailability", "");
-
-    onAddTicket?.();
-  };
-
-  const handleEditTicket = (ticketIndex: number) => {
-    // Save current form data to the current ticket before switching
-    const currentData = {
-      name: currentTicket.ticketName || "",
-      type: currentTicket.ticketType || "",
-      category: currentTicket.ticketCategory || "",
-      price: currentTicket.price || "",
-      purchaseLimit: currentTicket.purchaseLimit || "",
-      stockAvailability: currentTicket.stockAvailability || "",
-      soldTarget: currentTicket.soldTarget || "",
-      numberOfPeople: currentTicket.numberOfPeople || "",
-      perks: currentTicket.perks || [""],
-      ticketAvailability: currentTicket.ticketAvailability || "",
-      salesStart: currentTicket.salesStart || "",
-      startTime: currentTicket.startTime || "",
-      salesEnd: currentTicket.salesEnd || "",
-      endTime: currentTicket.endTime || ""
-    };
-
-    // Update current ticket in tickets array if it has data
-    if (currentData.name || currentData.type) {
-      const updatedTickets = [...tickets];
-      const currentTicketInArray = tickets[activeTicketIndex] || {};
-      updatedTickets[activeTicketIndex] = {
-        ...currentTicketInArray,
-        ...currentData,
-        id: currentTicketInArray.id || `ticket-${Date.now()}`,
-        savedTicketId: currentTicketInArray.savedTicketId || null
+    if (isCreateEventContext) {
+      // Create Event Context: Use existing logic
+      const newTicket = {
+        id: `ticket-${Date.now()}`,
+        name: "",
+        type: "",
+        price: "",
+        category: "",
+        purchaseLimit: "",
+        stockAvailability: "",
+        soldTarget: "",
+        numberOfPeople: "",
+        perks: [""]
       };
+
+      const updatedTickets = [...tickets, newTicket];
       setFormValue("Tickets Create", "tickets", updatedTickets);
-    }
+      setFormValue("Tickets Create", "activeTicketIndex", updatedTickets.length - 1);
 
-    // Switch to the selected ticket form
-    setFormValue("Tickets Create", "activeTicketIndex", ticketIndex);
-
-    const ticketToEdit = allTicketForms[ticketIndex];
-    if (ticketToEdit) {
-      // Populate main form with the selected ticket's data
-      setFormValue("Tickets Create", "ticketName", ticketToEdit.name || "");
-      setFormValue("Tickets Create", "ticketType", ticketToEdit.type || "");
-      setFormValue("Tickets Create", "ticketCategory", ticketToEdit.category || "");
-      setFormValue("Tickets Create", "price", ticketToEdit.price || "");
-      setFormValue("Tickets Create", "purchaseLimit", ticketToEdit.purchaseLimit || "");
-      setFormValue("Tickets Create", "stockAvailability", ticketToEdit.stockAvailability || "");
-      setFormValue("Tickets Create", "soldTarget", ticketToEdit.soldTarget || "");
-      setFormValue("Tickets Create", "numberOfPeople", ticketToEdit.numberOfPeople || "");
-      setFormValue("Tickets Create", "perks", ticketToEdit.perks || [""]);
-      setFormValue("Tickets Create", "ticketAvailability", ticketToEdit.ticketAvailability || "");
-      setFormValue("Tickets Create", "salesStart", ticketToEdit.salesStart || "");
-      setFormValue("Tickets Create", "startTime", ticketToEdit.startTime || "");
-      setFormValue("Tickets Create", "salesEnd", ticketToEdit.salesEnd || "");
-      setFormValue("Tickets Create", "endTime", ticketToEdit.endTime || "");
-    }
-
-    onEditTicket?.(ticketToEdit.id);
-  };
-
-  const handleDeleteTicket = (ticketIndex: number) => {
-    if (allTicketForms.length <= 1) {
-      alert("At least one ticket type must be created");
-      return;
-    }
-
-    // Remove the ticket from the array
-    const updatedTickets = tickets.filter((_:any, index:any) => index !== ticketIndex);
-    setFormValue("Tickets Create", "tickets", updatedTickets);
-
-    // Adjust active index if necessary
-    const newActiveIndex = ticketIndex === activeTicketIndex 
-      ? Math.max(0, activeTicketIndex - 1)
-      : activeTicketIndex > ticketIndex 
-        ? activeTicketIndex - 1 
-        : activeTicketIndex;
-
-    setFormValue("Tickets Create", "activeTicketIndex", newActiveIndex);
-
-    // Load the new active ticket data
-    if (updatedTickets.length > 0) {
-      handleEditTicket(newActiveIndex);
-    } else {
-      // Clear form if no tickets left
+      // Clear the main form for the new ticket
       setFormValue("Tickets Create", "ticketName", "");
       setFormValue("Tickets Create", "ticketType", "");
       setFormValue("Tickets Create", "ticketCategory", "");
@@ -158,6 +105,116 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
       setFormValue("Tickets Create", "numberOfPeople", "");
       setFormValue("Tickets Create", "perks", [""]);
       setFormValue("Tickets Create", "ticketAvailability", "");
+    } else if (isManageEventsContext) {
+      // Manage Events Context: Use ticket store
+      manageAddTicket();
+    }
+
+    onAddTicket?.();
+  };
+
+  const handleEditTicket = (ticketIndex: number) => {
+    if (isCreateEventContext) {
+      // Create Event Context: Use existing logic
+      const currentData = {
+        name: currentTicket.ticketName || "",
+        type: currentTicket.ticketType || "",
+        category: currentTicket.ticketCategory || "",
+        price: currentTicket.price || "",
+        purchaseLimit: currentTicket.purchaseLimit || "",
+        stockAvailability: currentTicket.stockAvailability || "",
+        soldTarget: currentTicket.soldTarget || "",
+        numberOfPeople: currentTicket.numberOfPeople || "",
+        perks: currentTicket.perks || [""],
+        ticketAvailability: currentTicket.ticketAvailability || "",
+        salesStart: currentTicket.salesStart || "",
+        startTime: currentTicket.startTime || "",
+        salesEnd: currentTicket.salesEnd || "",
+        endTime: currentTicket.endTime || ""
+      };
+
+      // Update current ticket in tickets array if it has data
+      if (currentData.name || currentData.type) {
+        const updatedTickets = [...tickets];
+        const currentTicketInArray = tickets[activeTicketIndex] || {};
+        updatedTickets[activeTicketIndex] = {
+          ...currentTicketInArray,
+          ...currentData,
+          id: currentTicketInArray.id || `ticket-${Date.now()}`,
+          savedTicketId: currentTicketInArray.savedTicketId || null
+        };
+        setFormValue("Tickets Create", "tickets", updatedTickets);
+      }
+
+      // Switch to the selected ticket form
+      setFormValue("Tickets Create", "activeTicketIndex", ticketIndex);
+
+      const ticketToEdit = allTicketForms[ticketIndex];
+      if (ticketToEdit) {
+        // Populate main form with the selected ticket's data
+        setFormValue("Tickets Create", "ticketName", ticketToEdit.name || "");
+        setFormValue("Tickets Create", "ticketType", ticketToEdit.type || "");
+        setFormValue("Tickets Create", "ticketCategory", ticketToEdit.category || "");
+        setFormValue("Tickets Create", "price", ticketToEdit.price || "");
+        setFormValue("Tickets Create", "purchaseLimit", ticketToEdit.purchaseLimit || "");
+        setFormValue("Tickets Create", "stockAvailability", ticketToEdit.stockAvailability || "");
+        setFormValue("Tickets Create", "soldTarget", ticketToEdit.soldTarget || "");
+        setFormValue("Tickets Create", "numberOfPeople", ticketToEdit.numberOfPeople || "");
+        setFormValue("Tickets Create", "perks", ticketToEdit.perks || [""]);
+        setFormValue("Tickets Create", "ticketAvailability", ticketToEdit.ticketAvailability || "");
+        setFormValue("Tickets Create", "salesStart", ticketToEdit.salesStart || "");
+        setFormValue("Tickets Create", "startTime", ticketToEdit.startTime || "");
+        setFormValue("Tickets Create", "salesEnd", ticketToEdit.salesEnd || "");
+        setFormValue("Tickets Create", "endTime", ticketToEdit.endTime || "");
+      }
+    } else if (isManageEventsContext) {
+      // Manage Events Context: Use ticket store
+      manageSetActiveTicket(ticketIndex);
+    }
+
+    const ticketToEdit = allTicketForms[ticketIndex];
+    onEditTicket?.(ticketToEdit?.id);
+  };
+
+  const handleDeleteTicket = (ticketIndex: number) => {
+    if (allTicketForms.length <= 1) {
+      alert("At least one ticket type must be created");
+      return;
+    }
+
+    if (isCreateEventContext) {
+      // Create Event Context: Use existing logic
+      const updatedTickets = tickets.filter((_:any, index:any) => index !== ticketIndex);
+      setFormValue("Tickets Create", "tickets", updatedTickets);
+
+      // Adjust active index if necessary
+      const newActiveIndex = ticketIndex === activeTicketIndex 
+        ? Math.max(0, activeTicketIndex - 1)
+        : activeTicketIndex > ticketIndex 
+          ? activeTicketIndex - 1 
+          : activeTicketIndex;
+
+      setFormValue("Tickets Create", "activeTicketIndex", newActiveIndex);
+
+      // Load the new active ticket data
+      if (updatedTickets.length > 0) {
+        handleEditTicket(newActiveIndex);
+      } else {
+        // Clear form if no tickets left
+        setFormValue("Tickets Create", "ticketName", "");
+        setFormValue("Tickets Create", "ticketType", "");
+        setFormValue("Tickets Create", "ticketCategory", "");
+        setFormValue("Tickets Create", "price", "");
+        setFormValue("Tickets Create", "purchaseLimit", "");
+        setFormValue("Tickets Create", "stockAvailability", "");
+        setFormValue("Tickets Create", "soldTarget", "");
+        setFormValue("Tickets Create", "numberOfPeople", "");
+        setFormValue("Tickets Create", "perks", [""]);
+        setFormValue("Tickets Create", "ticketAvailability", "");
+      }
+    } else if (isManageEventsContext) {
+      // Manage Events Context: Use ticket store
+      manageDeleteTicket(ticketIndex);
     }
 
     onDeleteTicket?.(allTicketForms[ticketIndex].id);
