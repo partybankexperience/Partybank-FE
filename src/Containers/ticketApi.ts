@@ -31,7 +31,7 @@ const createTicket = async (
     endTime,
     perks,
     isUnlimited,
-    ...(category === 'group' &&  { numberofPeople }),
+    ...(category === 'group' &&  { groupSize:numberofPeople }),
     ...(type === 'paid' &&  { price }),
     ...(!isUnlimited &&  { stock }),
   };
@@ -74,7 +74,7 @@ const createTicketByEventId = async (
     endTime,
     perks,
     isUnlimited,
-    ...(category === 'group' &&  { numberofPeople }),
+    ...(category === 'group' &&  { groupSize:numberofPeople }),
     ...(type === 'paid' &&  { price }),
     ...(!isUnlimited &&  { stock }),
   };
