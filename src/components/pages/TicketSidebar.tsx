@@ -379,4 +379,3 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
 };
 
 export default TicketSidebar;
-```
