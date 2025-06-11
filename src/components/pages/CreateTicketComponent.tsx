@@ -188,7 +188,7 @@ const CreateTicketComponent = () => {
         new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(); // 30 days from now
 
       let response;
-      
+
       if (isEditMode) {
         // TODO: Call editTicket API when available
         // response = await editTicket(currentTicket.savedTicketId, ...ticketData);
@@ -223,7 +223,7 @@ const CreateTicketComponent = () => {
 
       // Try to move to next unsaved ticket
       const movedToNext = moveToNextUnsavedTicket();
-      
+
       if (!movedToNext) {
         // No more unsaved tickets, clear state and navigate back
         if (!hasUnsavedTickets()) {

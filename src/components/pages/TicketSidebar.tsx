@@ -34,7 +34,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
   const currentTicket = isCreateEventContext ? form["Tickets Create"] : null;
   const tickets = isCreateEventContext ? (currentTicket?.tickets || []) : manageTickets;
   const activeTicketIndex = isCreateEventContext ? (currentTicket?.activeTicketIndex || 0) : manageActiveIndex;
-  const savedTickets = isCreateEventContext ? (currentTicket?.savedTickets || []) : []; // Track which tickets have been saved
+  const savedTickets = isCreateEventContext ? (currentTicket?.savedTickets || []) : []; // Track which tickets have been saved in create event context
 
   // Create array of all ticket forms (saved + current active one)
   const allTicketForms = isCreateEventContext ? [
@@ -250,7 +250,9 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
 
         <div className="flex gap-3  px-4 pb-2 overflow-x-auto max-w-[calc(100vw-2rem)]">
           {allTicketForms.map((ticket, index) => {
-            const isSaved = savedTickets.includes(ticket.id || `ticket-${index}`);
+            const isSaved = isCreateEventContext 
+              ? savedTickets.includes(ticket.id || `ticket-${index}`)
+              : ticket.isSaved || false;
             return (
               <div
                 key={ticket.id || index}
@@ -301,7 +303,9 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
         <div className="space-y-2">
           {allTicketForms.length > 0 ? (
             allTicketForms.map((ticket, index) => {
-              const isSaved = savedTickets.includes(ticket.id || `ticket-${index}`);
+              const isSaved = isCreateEventContext 
+                ? savedTickets.includes(ticket.id || `ticket-${index}`)
+                : ticket.isSaved || false;
               return (
                 <div
                   key={ticket.id || index}
@@ -345,7 +349,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
                       >
                         <FaEdit className="text-sm" />
                       </button>
-                      {!isSaved && allTicketForms.length > 1 && (
+                      {allTicketForms.length > 1 && !isSaved && (
                         <button
                           onClick={() => handleDeleteTicket(index)}
                           className="p-2 text-gray-400 hover:text-red-500 rounded-lg transition-colors"
