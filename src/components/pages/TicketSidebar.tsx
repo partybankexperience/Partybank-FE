@@ -117,20 +117,20 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
     if (isCreateEventContext) {
       // Create Event Context: Use existing logic
       const currentData = {
-        name: currentTicket.ticketName || "",
-        type: currentTicket.ticketType || "",
-        category: currentTicket.ticketCategory || "",
-        price: currentTicket.price || "",
-        purchaseLimit: currentTicket.purchaseLimit || "",
-        stockAvailability: currentTicket.stockAvailability || "",
-        soldTarget: currentTicket.soldTarget || "",
-        numberOfPeople: currentTicket.numberOfPeople || "",
-        perks: currentTicket.perks || [""],
-        ticketAvailability: currentTicket.ticketAvailability || "",
-        salesStart: currentTicket.salesStart || "",
-        startTime: currentTicket.startTime || "",
-        salesEnd: currentTicket.salesEnd || "",
-        endTime: currentTicket.endTime || ""
+        name: currentTicket?.ticketName || "",
+        type: currentTicket?.ticketType || "",
+        category: currentTicket?.ticketCategory || "",
+        price: currentTicket?.price || "",
+        purchaseLimit: currentTicket?.purchaseLimit || "",
+        stockAvailability: currentTicket?.stockAvailability || "",
+        soldTarget: currentTicket?.soldTarget || "",
+        numberOfPeople: currentTicket?.numberOfPeople || "",
+        perks: currentTicket?.perks || [""],
+        ticketAvailability: currentTicket?.ticketAvailability || "",
+        salesStart: currentTicket?.salesStart || "",
+        startTime: currentTicket?.startTime || "",
+        salesEnd: currentTicket?.salesEnd || "",
+        endTime: currentTicket?.endTime || ""
       };
 
       // Update current ticket in tickets array if it has data

@@ -83,7 +83,7 @@ const createTicketByEventId = async (
   const response = await apiCall({
     name: "createTicketByEventId",
     data: payload,
-    extraUrl: `/${eventId}/creation/tickets`
+    urlExtra: `/${eventId}/creation/tickets`
   });
 
   return response;

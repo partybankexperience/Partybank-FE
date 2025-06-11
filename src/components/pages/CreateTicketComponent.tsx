@@ -124,7 +124,7 @@ const CreateTicketComponent = () => {
   // Form Submission Logic for Manage Events Context
   const handleManageEventsSubmit = async () => {
     if (!eventId) {
-      errorAlert("Event ID not found");
+      errorAlert("Error","Event ID not found");
       return;
     }
 
@@ -148,28 +148,34 @@ const CreateTicketComponent = () => {
 
     // Validation
     if (!ticketData.ticketName) {
-      errorAlert("Ticket name is required");
+      errorAlert("Error","Ticket name is required");
       return;
     }
     if (!ticketData.ticketType) {
-      errorAlert("Ticket type is required");
+      errorAlert("Error","Ticket type is required");
       return;
     }
     if (!ticketData.ticketCategory) {
-      errorAlert("Ticket category is required");
+      errorAlert("Error","Ticket category is required");
       return;
     }
 
     setIsSubmitting(true);
-
+    // type TicketCategoryOption = "option1" | "option2";
     try {
       // Map category values
-      const categoryMap = {
+      const categoryMap: any = {
         "option1": "single",
         "option2": "group"
       };
+//       const rawCategory = ticketData.ticketCategory;
+// let category: string;
 
-      // Format dates to ISO
+// if (rawCategory === "option1" || rawCategory === "option2") {
+//   category = categoryMap[rawCategory];
+// } else {
+//   category = rawCategory;
+// }
       const salesStartISO = ticketData.salesStart ? 
         new Date(`${ticketData.salesStart}T${ticketData.startTime || "00:00"}`).toISOString() : 
         new Date().toISOString();
@@ -197,7 +203,7 @@ const CreateTicketComponent = () => {
         ticketData.ticketCategory === "option2" ? Number(ticketData.numberOfPeople) : undefined
       );
 
-      successAlert("Ticket created successfully!");
+      successAlert("Success","Ticket created successfully!");
       
       // Navigate back to Overview page
       const slug = location.pathname.split('/')[2]; // Extract slug from path
@@ -205,7 +211,7 @@ const CreateTicketComponent = () => {
       
     } catch (error) {
       console.error("Error creating ticket:", error);
-      errorAlert("Failed to create ticket. Please try again.");
+      errorAlert("Error","Failed to create ticket. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

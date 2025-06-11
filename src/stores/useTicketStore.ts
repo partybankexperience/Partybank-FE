@@ -170,26 +170,27 @@ export const useTicketStore = create<TicketStore>()(
         set(state => {
           // Save current data to current active ticket before switching
           const currentData = state.currentTicketData;
-          if (currentData.ticketName || currentData.ticketType) {
+          //error for the ticketName, ticketType, ticketCategory not being in the ticketdata
+          if (currentData?.ticketName || currentData?.ticketType) {
             const updatedTickets = [...state.tickets];
             const currentTicket = updatedTickets[state.activeTicketIndex];
             if (currentTicket) {
               updatedTickets[state.activeTicketIndex] = {
                 ...currentTicket,
-                name: currentData.ticketName || "",
-                type: currentData.ticketType || "",
-                category: currentData.ticketCategory || "",
-                price: currentData.price || "",
-                purchaseLimit: currentData.purchaseLimit || "",
-                stockAvailability: currentData.stockAvailability || "",
-                soldTarget: currentData.soldTarget || "",
-                numberOfPeople: currentData.numberOfPeople || "",
-                perks: currentData.perks || [""],
-                ticketAvailability: currentData.ticketAvailability || "",
-                salesStart: currentData.salesStart || "",
-                startTime: currentData.startTime || "",
-                salesEnd: currentData.salesEnd || "",
-                endTime: currentData.endTime || ""
+                name: currentData?.ticketName || "",
+                type: currentData?.ticketType || "",
+                category: currentData?.ticketCategory || "",
+                price: currentData?.price || "",
+                purchaseLimit: currentData?.purchaseLimit || "",
+                stockAvailability: currentData?.stockAvailability || "",
+                soldTarget: currentData?.soldTarget || "",
+                numberOfPeople: currentData?.numberOfPeople || "",
+                perks: currentData?.perks || [""],
+                ticketAvailability: currentData?.ticketAvailability || "",
+                salesStart: currentData?.salesStart || "",
+                startTime: currentData?.startTime || "",
+                salesEnd: currentData?.salesEnd || "",
+                endTime: currentData?.endTime || ""
               };
             }
 
@@ -253,7 +254,7 @@ export const useTicketStore = create<TicketStore>()(
           }
         }));
       },
-
+//error -Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Partial<TicketData>'.
       getCurrentTicketData: (key: string) => {
         const state = get();
         return state.currentTicketData[key] || "";

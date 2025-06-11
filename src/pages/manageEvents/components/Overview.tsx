@@ -120,8 +120,8 @@ const Overview = () => {
         console.log('Event URL copied to clipboard!');
         
         // Optional: Show a temporary feedback
-        const originalText = document.querySelector('[data-share-button]')?.textContent;
         const shareButton = document.querySelector('[data-share-button]');
+        const originalText = shareButton?.textContent ?? "";
         if (shareButton) {
           shareButton.textContent = 'Copied!';
           setTimeout(() => {
