@@ -6,7 +6,7 @@ import CreateTicketComponent from "../../components/pages/CreateTicketComponent"
 import { stages, useEventStore } from "../../stores/useEventStore"
 import { validateStage } from "../../utils/eventValidation"
 import { createEvent, editEvent, getScheduleandLocation, accessibility, notification, createTag } from "../../Containers/eventApi"
-import { createTicket, editTicket } from "../../Containers/ticketApi"
+import { editTicket,createTicketByEventId } from "../../Containers/ticketApi"
 import Accessibility from "./Accessibility"
 import EventSetup from "./EventSetup"
 import Guest from "./Guest"
@@ -323,7 +323,7 @@ const goNext = async () => {
                 activeIndex: activeIndex,
                 eventId: eventId
               });
-              response = await createTicket(
+              response = await createTicketByEventId(
                 eventId as string,
                 currentTicket.name,
                 categoryMap[currentTicket.category] || currentTicket.category,

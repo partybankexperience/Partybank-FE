@@ -200,6 +200,12 @@ export const endPoints: endPointlistTypes = {
         headers,
         auth: true,
     },
+    createTicketByEventId: {
+        url: "/events",
+        method: "POST",
+        headers,
+        auth: true,
+    },
     checkSimilarEvent:{
         url: "/events/check-similarity",
         method: "GET",

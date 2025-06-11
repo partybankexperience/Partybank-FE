@@ -44,6 +44,50 @@ const createTicket = async (
 
   return response;
 };
+const createTicketByEventId = async (
+  eventId: string,
+  name: string,
+  category: "single" | "group" | string,
+  type: "paid" | "free" | string,
+  price: number,
+  purchaseLimit: number,
+  stock: number,
+  soldTarget: number,
+  salesStart: string, // ISO format
+  salesEnd: string,   // ISO format
+  startTime: string,  // "HH:mm"
+  endTime: string,    // "HH:mm"
+  perks: string[],
+  isUnlimited: boolean,
+  numberofPeople?: number
+): Promise<any> => {
+  const payload = {
+    name,
+    category,
+    type,
+    purchaseLimit,
+    // stock,
+    soldTarget,
+    salesStart,
+    salesEnd,
+    startTime,
+    endTime,
+    perks,
+    isUnlimited,
+    ...(category === 'group' &&  { numberofPeople }),
+    ...(type === 'paid' &&  { price }),
+    ...(!isUnlimited &&  { stock }),
+  };
+
+  // ...(isLocationTBA && address),
+  const response = await apiCall({
+    name: "createTicketByEventId",
+    data: payload,
+    extraUrl: `/${eventId}/creation/tickets`
+  });
+
+  return response;
+};
 const deleteTicket = async (id: string): Promise<any> =>{
   const response = await apiCall({
     name: "deleteTicket",
@@ -93,4 +137,4 @@ const editTicket = async (
   });
   return response;
 }
-export {deleteTicket, createTicket,editTicket};
+export {deleteTicket, createTicket,editTicket,createTicketByEventId};

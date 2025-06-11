@@ -46,6 +46,7 @@ export type endPointlistTypes = {
     publishEvent: endpointTypes;
     editTicket: endpointTypes;
     checkSimilarEvent:endpointTypes;
+    createTicketByEventId:endpointTypes
 };
 
 export type urlPropTypes = {
