@@ -291,7 +291,7 @@ const SeriesDetail = () => {
                         Add Events to Series
                     </DefaultButton>
                 </div>
-                <div className="grid gap-[20px]">
+                <div className="grid gap-[20px] md:max-h-[70vh] md:overflow-y-auto ">
                     {loading ? (
                         Array.from({ length: 3 }).map((_, index) => (
                             <div key={index} className="flex gap-[20px] items-center py-[20px] border-b border-[#E1E1E1]">

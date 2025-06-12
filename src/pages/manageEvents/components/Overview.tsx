@@ -263,7 +263,7 @@ const Overview = () => {
             className="rounded-[10px]  h-[170px] md:h-[350px] w-full object-cover overflow-hidden"
           />
         </div>
-        <div className="grid gap-[20px] h-fit">
+        <div className="grid gap-[20px] h-fit md:max-h-[60vh] md:overflow-y-auto">
           <div className="pb-[20px] grid gap-[20px] border-b border-b-[#EDEDED]">
             <div className="flex items-center justify-between h-fit">
               <h2 className="text-[1.3rem] font-bold">{eventData.name || "Untitled Event"}</h2>
@@ -316,7 +316,7 @@ const Overview = () => {
                 Create Ticket
               </DefaultButton>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3  gap-[20px] ">
+            <div className="flex gap-[20px] overflow-x-auto">
               {tickets.length > 0 ? (
                 tickets.map((ticket: any, index: number) => (
                   <TicketsCard
