@@ -42,23 +42,3 @@ export const formatDateTime = (dateString: string, startTime: string, endTime?: 
     full: `${formattedDate} ${timeDisplay}`
   };
 };
-
-// Convert ISO date string to yyyy-MM-dd format for date inputs
-export const isoToDateInput = (isoString: string) => {
-  if (!isoString) return '';
-  const date = new Date(isoString);
-  return date.toISOString().split('T')[0];
-};
-
-// Convert ISO date string to HH:mm format for time inputs
-export const isoToTimeInput = (isoString: string) => {
-  if (!isoString) return '';
-  const date = new Date(isoString);
-  return date.toTimeString().slice(0, 5);
-};
-
-// Convert date input (yyyy-MM-dd) and time input (HH:mm) to ISO string
-export const dateTimeToISO = (dateInput: string, timeInput: string = '00:00') => {
-  if (!dateInput) return '';
-  return new Date(`${dateInput}T${timeInput}`).toISOString();
-};
