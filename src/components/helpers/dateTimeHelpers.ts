@@ -42,3 +42,16 @@ export const formatDateTime = (dateString: string, startTime: string, endTime?: 
     full: `${formattedDate} ${timeDisplay}`
   };
 };
+
+// Convert ISO date string to yyyy-MM-dd format for date inputs
+export const convertISOToDateInput = (isoString: string) => {
+  if (!isoString) return '';
+  const date = new Date(isoString);
+  return date.toISOString().split('T')[0];
+};
+
+// Convert yyyy-MM-dd format to ISO string for backend
+export const convertDateInputToISO = (dateString: string, timeString: string = '00:00') => {
+  if (!dateString) return '';
+  return new Date(`${dateString}T${timeString}`).toISOString();
+};
