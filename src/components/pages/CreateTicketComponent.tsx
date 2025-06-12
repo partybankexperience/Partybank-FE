@@ -389,8 +389,10 @@ const CreateTicketComponent = () => {
               <div 
                 className="w-full h-[44px] border-[1px] border-neutral rounded-[4px] px-[16px] py-[10px] cursor-pointer flex items-center gap-3 hover:border-lightPurple focus:border-lightPurple"
                 onClick={() => {
-                  const colorPicker = document.getElementById(`colorPicker-${Math.random()}`);
-                  if (colorPicker) colorPicker.style.display = colorPicker.style.display === 'block' ? 'none' : 'block';
+                  const colorPicker = document.getElementById('ticket-color-picker');
+                  if (colorPicker) {
+                    colorPicker.style.display = colorPicker.style.display === 'block' ? 'none' : 'block';
+                  }
                 }}
               >
                 <div 
@@ -402,17 +404,17 @@ const CreateTicketComponent = () => {
                 </span>
               </div>
               <div 
-                id={`colorPicker-${Math.random()}`}
+                id="ticket-color-picker"
                 className="absolute top-full left-0 z-50 mt-2"
                 style={{ display: 'none' }}
               >
-                <div className="fixed inset-0" onClick={(e) => {
-                  const target = e.target as HTMLElement;
-                  if (target.classList.contains('fixed')) {
-                    const colorPicker = document.querySelector('[id^="colorPicker-"]') as HTMLElement;
+                <div 
+                  className="fixed inset-0 bg-transparent" 
+                  onClick={() => {
+                    const colorPicker = document.getElementById('ticket-color-picker');
                     if (colorPicker) colorPicker.style.display = 'none';
-                  }
-                }}></div>
+                  }}
+                ></div>
                 <div className="relative">
                   <SketchPicker
                     color={getValue("color") || '#3B82F6'}
