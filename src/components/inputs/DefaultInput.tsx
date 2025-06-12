@@ -59,33 +59,31 @@ const DefaultInput = ({
   const [touched, setTouched] = useState(false);
   const internalRef = useRef<HTMLInputElement>(null);
   const inputType = type === "password" && showPassword ? "text" : type;
-  const stringValue = value?.toString() || '';
-  const isFilled = stringValue.trim().length > 0;
+  const isFilled = value.trim().length > 0;
   const hasError = !!error;
 
   const validate = () => {
     if (disabled) return null;
-    const stringValue = value?.toString() || '';
-    if (required && stringValue.trim() === "") return "This field is required.";
-    if (type === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(stringValue))
+    if (required && value.trim() === "") return "This field is required.";
+    if (type === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
       return "Please enter a valid email.";
     if (type === "password") {
-      if (stringValue.length < 8) {
+      if (value.length < 8) {
         return "Password must be at least 8 characters.";
       }
 
       // Check for a mix of letters (both uppercase and lowercase)
-      if (!/[a-z]/.test(stringValue) || !/[A-Z]/.test(stringValue)) {
+      if (!/[a-z]/.test(value) || !/[A-Z]/.test(value)) {
         return "Password must contain a mix of uppercase and lowercase letters.";
       }
 
       // Check for numbers
-      if (!/\d/.test(stringValue)) {
+      if (!/\d/.test(value)) {
         return "Password must contain at least one number.";
       }
 
       // Check for symbols
-      if (!/[!@#$%^&*(),.?":{}|<>]/.test(stringValue)) {
+      if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
         return "Password must contain at least one special character.";
       }
     }
