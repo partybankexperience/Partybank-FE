@@ -175,6 +175,11 @@ const CreateTicketComponent = () => {
       return convertISOToDateInput(value);
     }
     
+    // Handle boolean values properly
+    if (key === 'isUnlimited' && typeof value === 'boolean') {
+      return value;
+    }
+    
     return value;
   };
 
@@ -360,16 +365,16 @@ const CreateTicketComponent = () => {
         <div className="grid md:flex gap-4 md:gap-[2.5rem]">
           <RadioButton
             label="Limited"
-            value={false}
+            value="false"
             name="ticket-availability"
-            checked={getValue("isUnlimited") === false}
+            checked={getValue("isUnlimited") === false || getValue("isUnlimited") === "false"}
             onChange={() => handleChange("isUnlimited", false)}
           />
           <RadioButton
             label="Unlimited"
-            value={true}
+            value="true"
             name="ticket-availability"
-            checked={getValue("isUnlimited") === true}
+            checked={getValue("isUnlimited") === true || getValue("isUnlimited") === "true"}
             onChange={() => handleChange("isUnlimited", true)}
           />
         </div>
@@ -383,7 +388,7 @@ const CreateTicketComponent = () => {
           <DefaultInput
             id="name"
             label="Ticket Name"
-            value={getValue("name")}
+            value={getValue("name") || ""}
             setValue={(v:any) => handleChange("name", v)}
             placeholder="Enter ticket name"
             classname="!w-full"
@@ -391,17 +396,17 @@ const CreateTicketComponent = () => {
           <DefaultInput
             id="purchaseLimit"
             label="Purchase Limit"
-            value={getValue("purchaseLimit")}
+            value={getValue("purchaseLimit") || ""}
             setValue={(v:any) => handleChange("purchaseLimit", v)}
             placeholder="1"
             classname="!w-full"
             type="number"
           />
-          {getValue("isUnlimited") === false && (
+          {(getValue("isUnlimited") === false || getValue("isUnlimited") === "false") && (
             <DefaultInput
               id="totalStock"
               label="Stock Availability"
-              value={getValue("totalStock")}
+              value={getValue("totalStock") || ""}
               setValue={(v:any) => handleChange("totalStock", v)}
               placeholder="Enter stock quantity"
               classname="!w-full"
@@ -414,7 +419,7 @@ const CreateTicketComponent = () => {
                 Price
               </label>
               <NumericFormat
-                value={getValue("price")}
+                value={getValue("price") || 0}
                 onValueChange={(values) => {
                   handleChange("price", values.floatValue || 0);
                 }}
@@ -431,7 +436,7 @@ const CreateTicketComponent = () => {
           <DefaultInput
             id="soldTarget"
             label="Sold Target"
-            value={getValue("soldTarget")}
+            value={getValue("soldTarget") || ""}
             setValue={(v:any) => handleChange("soldTarget", v)}
             placeholder="Enter sold target"
             classname="!w-full"
@@ -441,7 +446,7 @@ const CreateTicketComponent = () => {
             <DefaultInput
               id="groupSize"
               label="Number of people"
-              value={getValue("groupSize")}
+              value={getValue("groupSize") || ""}
               setValue={(v:any) => handleChange("groupSize", v)}
               placeholder="Enter number of people"
               classname="!w-full"

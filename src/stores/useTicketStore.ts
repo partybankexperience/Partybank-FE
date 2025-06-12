@@ -7,12 +7,12 @@ interface TicketData {
   id: string;
   name: string;
   type: string;
-  price: string;
+  price: number | string;
   category: string;
-  purchaseLimit: string;
-  totalStock: string;
-  soldTarget: string;
-  groupSize: string;
+  purchaseLimit: number | string;
+  totalStock: number | string;
+  soldTarget: number | string;
+  groupSize: number | string;
   perks: string[];
   isUnlimited: boolean;
   salesStart: string;
