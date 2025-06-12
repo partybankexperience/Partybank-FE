@@ -186,12 +186,7 @@ const CreateTicketComponent = () => {
     
     if (key === 'ticketAvailability') {
       // Backend sends isUnlimited boolean, we need to map to "limited"/"unlimited"
-      let isUnlimited;
-      if (isCreateEventContext) {
-        isUnlimited = form[currentStage]?.['isUnlimited'];
-      } else if (isManageEventsContext) {
-        isUnlimited = getCurrentTicketData('isUnlimited');
-      }
+      const isUnlimited = getCurrentTicketData('isUnlimited');
       if (isUnlimited === true) return 'unlimited';
       if (isUnlimited === false) return 'limited';
     }
