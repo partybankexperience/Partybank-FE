@@ -182,6 +182,10 @@ const CreateTicketComponent = () => {
       return getCurrentTicketData('totalStock') || value;
     }
     
+    if (key === 'numberOfPeople') {
+      return getCurrentTicketData('groupSize') || value;
+    }
+    
     if (key === 'ticketCategory') {
       const category = getCurrentTicketData('category') || value;
       if (category === 'single') return 'option1';
