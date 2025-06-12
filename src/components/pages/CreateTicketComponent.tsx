@@ -160,21 +160,24 @@ const CreateTicketComponent = () => {
   };
 
   const updatePerk = (index: number, value: any) => {
-    const perks = getValue("perks") || [""];
-    const updatedPerks = [...perks];
+    const perks = getValue("perks");
+    const perksArray = Array.isArray(perks) && perks.length > 0 ? perks : [""];
+    const updatedPerks = [...perksArray];
     updatedPerks[index] = value;
     handleChange("perks", updatedPerks);
   };
 
   const addPerk = () => {
-    const perks = getValue("perks") || [""];
-    handleChange("perks", [...perks, ""]);
+    const perks = getValue("perks");
+    const perksArray = Array.isArray(perks) && perks.length > 0 ? perks : [""];
+    handleChange("perks", [...perksArray, ""]);
   };
 
   const deletePerk = (index: number) => {
-    const perks = getValue("perks") || [""];
-    if (perks.length > 1) {
-      const updatedPerks = perks.filter((_:any, i:any) => i !== index);
+    const perks = getValue("perks");
+    const perksArray = Array.isArray(perks) && perks.length > 0 ? perks : [""];
+    if (perksArray.length > 1) {
+      const updatedPerks = perksArray.filter((_:any, i:any) => i !== index);
       handleChange("perks", updatedPerks);
     }
   };
@@ -488,41 +491,46 @@ const CreateTicketComponent = () => {
         <h2 className="text-black text-[1.2rem] font-bold">
           Ticket Perks <span className="text-[#A7A5A6] text-[.8rem] font-light">(Optional)</span>
         </h2>
-        {(getValue("perks") || [""]).map((perk: string, index: number) => (
-          <DefaultInput
-            key={index}
-            id={`perks-${index}`}
-            label={index === 0 ? "What extra benefits come with tickets" : `Perk ${index + 1}`}
-            value={perk}
-            setValue={(v: any) => updatePerk(index, v)}
-            placeholder="Enter perk here"
-            classname="!w-full"
-            rightContent={
-              <div className="flex items-center gap-2">
-                {(getValue("perks") || [""]).length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => deletePerk(index)}
-                    className="text-red-500 hover:text-red-700 transition-colors"
-                    aria-label="Delete this perk"
-                  >
-                    <FaTrash />
-                  </button>
-                )}
-                {index === (getValue("perks") || [""]).length - 1 && (
-                  <button
-                    type="button"
-                    onClick={addPerk}
-                    className="text-primary hover:text-purple transition-colors"
-                    aria-label="Add another perk"
-                  >
-                    <FaPlus />
-                  </button>
-                )}
-              </div>
-            }
-          />
-        ))}
+        {(() => {
+          const perks = getValue("perks");
+          const perksArray = Array.isArray(perks) && perks.length > 0 ? perks : [""];
+          
+          return perksArray.map((perk: string, index: number) => (
+            <DefaultInput
+              key={`perk-${index}`}
+              id={`perks-${index}`}
+              label={index === 0 ? "What extra benefits come with tickets" : `Perk ${index + 1}`}
+              value={perk || ""}
+              setValue={(v: any) => updatePerk(index, v)}
+              placeholder="Enter perk here"
+              classname="!w-full"
+              rightContent={
+                <div className="flex items-center gap-2">
+                  {perksArray.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => deletePerk(index)}
+                      className="text-red-500 hover:text-red-700 transition-colors"
+                      aria-label="Delete this perk"
+                    >
+                      <FaTrash />
+                    </button>
+                  )}
+                  {index === perksArray.length - 1 && (
+                    <button
+                      type="button"
+                      onClick={addPerk}
+                      className="text-primary hover:text-purple transition-colors"
+                      aria-label="Add another perk"
+                    >
+                      <FaPlus />
+                    </button>
+                  )}
+                </div>
+              }
+            />
+          ));
+        })()}
       </div>
 
       {showButtons && (
