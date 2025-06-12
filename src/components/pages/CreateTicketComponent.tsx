@@ -1,3 +1,4 @@
+
 import DefaultButton from "../buttons/DefaultButton";
 import DefaultInput from "../inputs/DefaultInput";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -105,7 +106,7 @@ const CreateTicketComponent = () => {
       extraText: "This will allow multiple entries to the event",
     },
   ];
-  const ticketType = ["Free", "Paid"];
+  const ticketType = ["free", "paid"];
 
   const handleChange = (key: string, value: any) => {
     // Convert date input values to ISO format for storage
@@ -126,25 +127,26 @@ const CreateTicketComponent = () => {
       const activeIndex = currentTicketData?.activeTicketIndex || 0;
       const tickets = currentTicketData?.tickets || [];
 
-      if (currentTicketData?.ticketName) {
+      if (currentTicketData?.name) {
         const existingTicket = tickets[activeIndex] || {};
         const updatedTicket = {
           ...existingTicket,
           id: existingTicket.id || `ticket-${Date.now()}`,
-          name: key === 'ticketName' ? value : currentTicketData.ticketName,
-          type: key === 'ticketType' ? value : currentTicketData.ticketType,
+          name: key === 'name' ? value : currentTicketData.name,
+          type: key === 'type' ? value : currentTicketData.type,
           price: key === 'price' ? value : currentTicketData.price,
-          category: key === 'ticketCategory' ? value : currentTicketData.ticketCategory,
+          category: key === 'category' ? value : currentTicketData.category,
           purchaseLimit: key === 'purchaseLimit' ? value : currentTicketData.purchaseLimit,
-          stockAvailability: key === 'stockAvailability' ? value : currentTicketData.stockAvailability,
+          totalStock: key === 'totalStock' ? value : currentTicketData.totalStock,
           soldTarget: key === 'soldTarget' ? value : currentTicketData.soldTarget,
-          numberOfPeople: key === 'numberOfPeople' ? value : currentTicketData.numberOfPeople,
+          groupSize: key === 'groupSize' ? value : currentTicketData.groupSize,
           perks: key === 'perks' ? value : currentTicketData.perks,
-          ticketAvailability: key === 'ticketAvailability' ? value : currentTicketData.ticketAvailability,
+          isUnlimited: key === 'isUnlimited' ? value : currentTicketData.isUnlimited,
           salesStart: key === 'salesStart' ? processedValue : currentTicketData.salesStart,
           startTime: key === 'startTime' ? value : currentTicketData.startTime,
           salesEnd: key === 'salesEnd' ? processedValue : currentTicketData.salesEnd,
           endTime: key === 'endTime' ? value : currentTicketData.endTime,
+          color: key === 'color' ? value : currentTicketData.color,
           savedTicketId: existingTicket.savedTicketId || null
         };
 
@@ -171,40 +173,6 @@ const CreateTicketComponent = () => {
     // Convert ISO dates to date input format for date fields
     if ((key === 'salesStart' || key === 'salesEnd') && value && value.includes('T')) {
       return convertISOToDateInput(value);
-    }
-    
-    // Map backend field names to frontend field names
-    if (key === 'ticketName') {
-      return getCurrentTicketData('name') || value;
-    }
-    
-    if (key === 'stockAvailability') {
-      return getCurrentTicketData('totalStock') || value;
-    }
-    
-    if (key === 'numberOfPeople') {
-      return getCurrentTicketData('groupSize') || value;
-    }
-    
-    if (key === 'ticketCategory') {
-      const category = getCurrentTicketData('category') || value;
-      if (category === 'single') return 'option1';
-      if (category === 'group') return 'option2';
-      return value;
-    }
-    
-    if (key === 'ticketType') {
-      const type = getCurrentTicketData('type') || value;
-      if (type === 'free') return 'Free';
-      if (type === 'paid') return 'Paid';
-      return value;
-    }
-    
-    if (key === 'ticketAvailability') {
-      const isUnlimited = getCurrentTicketData('isUnlimited');
-      if (isUnlimited === true) return 'unlimited';
-      if (isUnlimited === false) return 'limited';
-      return value;
     }
     
     return value;
@@ -240,18 +208,18 @@ const CreateTicketComponent = () => {
       return;
     }
 
-    // Get current ticket data from store
+    // Get current ticket data from store using backend field names
     const ticketData = {
-      ticketName: getCurrentTicketData("ticketName"),
-      ticketType: getCurrentTicketData("ticketType"),
-      ticketCategory: getCurrentTicketData("ticketCategory"),
+      name: getCurrentTicketData("name"),
+      type: getCurrentTicketData("type"),
+      category: getCurrentTicketData("category"),
       price: getCurrentTicketData("price"),
       purchaseLimit: getCurrentTicketData("purchaseLimit"),
-      stockAvailability: getCurrentTicketData("stockAvailability"),
+      totalStock: getCurrentTicketData("totalStock"),
       soldTarget: getCurrentTicketData("soldTarget"),
-      numberOfPeople: getCurrentTicketData("numberOfPeople"),
+      groupSize: getCurrentTicketData("groupSize"),
       perks: getCurrentTicketData("perks"),
-      ticketAvailability: getCurrentTicketData("ticketAvailability"),
+      isUnlimited: getCurrentTicketData("isUnlimited"),
       salesStart: getCurrentTicketData("salesStart"),
       startTime: getCurrentTicketData("startTime"),
       salesEnd: getCurrentTicketData("salesEnd"),
@@ -260,15 +228,15 @@ const CreateTicketComponent = () => {
     };
 
     // Validation
-    if (!ticketData.ticketName) {
+    if (!ticketData.name) {
       errorAlert("Error","Ticket name is required");
       return;
     }
-    if (!ticketData.ticketType) {
+    if (!ticketData.type) {
       errorAlert("Error","Ticket type is required");
       return;
     }
-    if (!ticketData.ticketCategory) {
+    if (!ticketData.category) {
       errorAlert("Error","Ticket category is required");
       return;
     }
@@ -279,12 +247,6 @@ const CreateTicketComponent = () => {
       // Check if current ticket is already saved (edit mode)
       const currentTicket = manageTickets[manageActiveIndex];
       const isEditMode = currentTicket && currentTicket.isSaved && currentTicket.savedTicketId;
-
-      // Map category values
-      const categoryMap: any = {
-        "option1": "single",
-        "option2": "group"
-      };
 
       const salesStartISO = ticketData.salesStart ? 
         new Date(`${ticketData.salesStart}T${ticketData.startTime || "00:00"}`).toISOString() : 
@@ -307,20 +269,20 @@ const CreateTicketComponent = () => {
         // Create new ticket
         response = await createTicket(
           eventId,
-          ticketData.ticketName,
-          categoryMap[ticketData.ticketCategory] || ticketData.ticketCategory,
-          ticketData.ticketType.toLowerCase(),
-          ticketData.ticketType === "Paid" ? Number(ticketData.price) : 0,
+          ticketData.name,
+          ticketData.category,
+          ticketData.type,
+          ticketData.type === "paid" ? Number(ticketData.price) : 0,
           Number(ticketData.purchaseLimit) || 1,
-          ticketData.ticketAvailability === "limited" ? Number(ticketData.stockAvailability) : 999999,
+          ticketData.isUnlimited ? 999999 : Number(ticketData.totalStock),
           Number(ticketData.soldTarget) || 0,
           salesStartISO,
           salesEndISO,
           ticketData.startTime || "00:00",
           ticketData.endTime || "23:59",
           Array.isArray(ticketData.perks) ? ticketData.perks.filter(perk => perk && perk.trim()) : [],
-          ticketData.ticketAvailability === "unlimited",
-          ticketData.ticketCategory === "option2" ? Number(ticketData.numberOfPeople) : undefined,
+          ticketData.isUnlimited || false,
+          ticketData.category === "group" ? Number(ticketData.groupSize) : undefined,
           ticketData.color
         );
         successAlert("Success","Ticket created successfully!");
@@ -360,15 +322,15 @@ const CreateTicketComponent = () => {
           className="grid md:flex gap-4"
         >
           {label.map((lab, idx) => {
-            const val = `option${idx + 1}`;
+            const val = idx === 0 ? "single" : "group";
             return (
               <RadioButton
                 key={val}
                 label={lab.name}
                 value={val}
                 name="ticket-category"
-                checked={getValue("ticketCategory") === val}
-                onChange={() => handleChange("ticketCategory", val)}
+                checked={getValue("category") === val}
+                onChange={() => handleChange("category", val)}
                 extraText={lab.extraText}
               />
             );
@@ -383,11 +345,11 @@ const CreateTicketComponent = () => {
           {ticketType.map((type) => (
             <RadioButton
               key={type}
-              label={type}
+              label={type.charAt(0).toUpperCase() + type.slice(1)}
               value={type}
               name="ticket-type"
-              checked={getValue("ticketType") === type}
-              onChange={() => handleChange("ticketType", type)}
+              checked={getValue("type") === type}
+              onChange={() => handleChange("type", type)}
             />
           ))}
         </div>
@@ -398,17 +360,17 @@ const CreateTicketComponent = () => {
         <div className="grid md:flex gap-4 md:gap-[2.5rem]">
           <RadioButton
             label="Limited"
-            value="limited"
+            value={false}
             name="ticket-availability"
-            checked={getValue("ticketAvailability") === "limited"}
-            onChange={() => handleChange("ticketAvailability", "limited")}
+            checked={getValue("isUnlimited") === false}
+            onChange={() => handleChange("isUnlimited", false)}
           />
           <RadioButton
             label="Unlimited"
-            value="unlimited"
+            value={true}
             name="ticket-availability"
-            checked={getValue("ticketAvailability") === "unlimited"}
-            onChange={() => handleChange("ticketAvailability", "unlimited")}
+            checked={getValue("isUnlimited") === true}
+            onChange={() => handleChange("isUnlimited", true)}
           />
         </div>
       </div>
@@ -419,10 +381,10 @@ const CreateTicketComponent = () => {
         <h2 className="text-black text-[1.2rem] font-bold">Ticket Details</h2>
         <div className="grid gap-[15px] md:grid-cols-2">
           <DefaultInput
-            id="ticketName"
+            id="name"
             label="Ticket Name"
-            value={getValue("ticketName")}
-            setValue={(v:any) => handleChange("ticketName", v)}
+            value={getValue("name")}
+            setValue={(v:any) => handleChange("name", v)}
             placeholder="Enter ticket name"
             classname="!w-full"
           />
@@ -435,18 +397,18 @@ const CreateTicketComponent = () => {
             classname="!w-full"
             type="number"
           />
-          {getValue("ticketAvailability") === "limited" && (
+          {getValue("isUnlimited") === false && (
             <DefaultInput
-              id="stockAvailability"
+              id="totalStock"
               label="Stock Availability"
-              value={getValue("stockAvailability")}
-              setValue={(v:any) => handleChange("stockAvailability", v)}
+              value={getValue("totalStock")}
+              setValue={(v:any) => handleChange("totalStock", v)}
               placeholder="Enter stock quantity"
               classname="!w-full"
               type="number"
             />
           )}
-          {getValue("ticketType") === "Paid" && (
+          {getValue("type") === "paid" && (
             <div className="grid gap-1 w-full relative">
               <label className="text-[#231F20] text-[16px] font-semibold font-[RedHat]">
                 Price
@@ -475,19 +437,19 @@ const CreateTicketComponent = () => {
             classname="!w-full"
             type="number"
           />
-          {getValue("ticketCategory") === "option2" && (
+          {getValue("category") === "group" && (
             <DefaultInput
-              id="numberOfPeople"
+              id="groupSize"
               label="Number of people"
-              value={getValue("numberOfPeople")}
-              setValue={(v:any) => handleChange("numberOfPeople", v)}
+              value={getValue("groupSize")}
+              setValue={(v:any) => handleChange("groupSize", v)}
               placeholder="Enter number of people"
               classname="!w-full"
               type="number"
             />
           )}
           <ColorPickerInput
-            id="ticketColor"
+            id="color"
             label="Ticket Color (Optional)"
             value={getValue("color")}
             setValue={(v: string) => handleChange("color", v)}

@@ -1,4 +1,5 @@
 
+
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -9,15 +10,16 @@ interface TicketData {
   price: string;
   category: string;
   purchaseLimit: string;
-  stockAvailability: string;
+  totalStock: string;
   soldTarget: string;
-  numberOfPeople: string;
+  groupSize: string;
   perks: string[];
-  ticketAvailability: string;
+  isUnlimited: boolean;
   salesStart: string;
   startTime: string;
   salesEnd: string;
   endTime: string;
+  color: string | null;
   savedTicketId?: string | null;
   isSaved?: boolean; // Track if ticket is saved to backend
 }
@@ -49,20 +51,21 @@ export const useTicketStore = create<TicketStore>()(
       tickets: [],
       activeTicketIndex: 0,
       currentTicketData: {
-        ticketCategory: "",
-        ticketType: "",
-        ticketAvailability: "",
-        ticketName: "",
+        category: "",
+        type: "",
+        isUnlimited: false,
+        name: "",
         purchaseLimit: "",
-        stockAvailability: "",
+        totalStock: "",
         price: "",
         soldTarget: "",
-        numberOfPeople: "",
+        groupSize: "",
         perks: [""],
         salesStart: "",
         startTime: "",
         salesEnd: "",
-        endTime: ""
+        endTime: "",
+        color: null
       },
 
       addTicket: () => {
@@ -73,35 +76,37 @@ export const useTicketStore = create<TicketStore>()(
           price: "",
           category: "",
           purchaseLimit: "",
-          stockAvailability: "",
+          totalStock: "",
           soldTarget: "",
-          numberOfPeople: "",
+          groupSize: "",
           perks: [""],
-          ticketAvailability: "",
+          isUnlimited: false,
           salesStart: "",
           startTime: "",
           salesEnd: "",
-          endTime: ""
+          endTime: "",
+          color: null
         };
 
         set(state => ({
           tickets: [...state.tickets, newTicket],
           activeTicketIndex: state.tickets.length,
           currentTicketData: {
-            ticketCategory: "",
-            ticketType: "",
-            ticketAvailability: "",
-            ticketName: "",
+            category: "",
+            type: "",
+            isUnlimited: false,
+            name: "",
             purchaseLimit: "",
-            stockAvailability: "",
+            totalStock: "",
             price: "",
             soldTarget: "",
-            numberOfPeople: "",
+            groupSize: "",
             perks: [""],
             salesStart: "",
             startTime: "",
             salesEnd: "",
-            endTime: ""
+            endTime: "",
+            color: null
           }
         }));
       },
@@ -133,35 +138,37 @@ export const useTicketStore = create<TicketStore>()(
           // Load new active ticket data
           const activeTicket = updatedTickets[newActiveIndex];
           const newCurrentData = activeTicket ? {
-            ticketCategory: activeTicket.category,
-            ticketType: activeTicket.type,
-            ticketAvailability: activeTicket.ticketAvailability,
-            ticketName: activeTicket.name,
+            category: activeTicket.category,
+            type: activeTicket.type,
+            isUnlimited: activeTicket.isUnlimited,
+            name: activeTicket.name,
             purchaseLimit: activeTicket.purchaseLimit,
-            stockAvailability: activeTicket.stockAvailability,
+            totalStock: activeTicket.totalStock,
             price: activeTicket.price,
             soldTarget: activeTicket.soldTarget,
-            numberOfPeople: activeTicket.numberOfPeople,
+            groupSize: activeTicket.groupSize,
             perks: activeTicket.perks,
             salesStart: activeTicket.salesStart,
             startTime: activeTicket.startTime,
             salesEnd: activeTicket.salesEnd,
-            endTime: activeTicket.endTime
+            endTime: activeTicket.endTime,
+            color: activeTicket.color
           } : {
-            ticketCategory: "",
-            ticketType: "",
-            ticketAvailability: "",
-            ticketName: "",
+            category: "",
+            type: "",
+            isUnlimited: false,
+            name: "",
             purchaseLimit: "",
-            stockAvailability: "",
+            totalStock: "",
             price: "",
             soldTarget: "",
-            numberOfPeople: "",
+            groupSize: "",
             perks: [""],
             salesStart: "",
             startTime: "",
             salesEnd: "",
-            endTime: ""
+            endTime: "",
+            color: null
           };
 
           return {
@@ -176,46 +183,48 @@ export const useTicketStore = create<TicketStore>()(
         set(state => {
           // Save current data to current active ticket before switching
           const currentData = state.currentTicketData;
-          if ((currentData as any)?.ticketName || (currentData as any)?.ticketType) {
+          if ((currentData as any)?.name || (currentData as any)?.type) {
             const updatedTickets = [...state.tickets];
             const currentTicket = updatedTickets[state.activeTicketIndex];
             if (currentTicket) {
               updatedTickets[state.activeTicketIndex] = {
                 ...currentTicket,
-                name: (currentData as any)?.ticketName || "",
-                type: (currentData as any)?.ticketType || "",
-                category: (currentData as any)?.ticketCategory || "",
+                name: (currentData as any)?.name || "",
+                type: (currentData as any)?.type || "",
+                category: (currentData as any)?.category || "",
                 price: (currentData as any)?.price || "",
                 purchaseLimit: (currentData as any)?.purchaseLimit || "",
-                stockAvailability: (currentData as any)?.stockAvailability || "",
+                totalStock: (currentData as any)?.totalStock || "",
                 soldTarget: (currentData as any)?.soldTarget || "",
-                numberOfPeople: (currentData as any)?.numberOfPeople || "",
+                groupSize: (currentData as any)?.groupSize || "",
                 perks: (currentData as any)?.perks || [""],
-                ticketAvailability: (currentData as any)?.ticketAvailability || "",
+                isUnlimited: (currentData as any)?.isUnlimited || false,
                 salesStart: (currentData as any)?.salesStart || "",
                 startTime: (currentData as any)?.startTime || "",
                 salesEnd: (currentData as any)?.salesEnd || "",
-                endTime: (currentData as any)?.endTime || ""
+                endTime: (currentData as any)?.endTime || "",
+                color: (currentData as any)?.color || null
               };
             }
 
             // Load selected ticket data
             const selectedTicket = updatedTickets[ticketIndex];
             const newCurrentData = selectedTicket ? {
-              ticketCategory: selectedTicket.category,
-              ticketType: selectedTicket.type,
-              ticketAvailability: selectedTicket.ticketAvailability,
-              ticketName: selectedTicket.name,
+              category: selectedTicket.category,
+              type: selectedTicket.type,
+              isUnlimited: selectedTicket.isUnlimited,
+              name: selectedTicket.name,
               purchaseLimit: selectedTicket.purchaseLimit,
-              stockAvailability: selectedTicket.stockAvailability,
+              totalStock: selectedTicket.totalStock,
               price: selectedTicket.price,
               soldTarget: selectedTicket.soldTarget,
-              numberOfPeople: selectedTicket.numberOfPeople,
+              groupSize: selectedTicket.groupSize,
               perks: selectedTicket.perks,
               salesStart: selectedTicket.salesStart,
               startTime: selectedTicket.startTime,
               salesEnd: selectedTicket.salesEnd,
-              endTime: selectedTicket.endTime
+              endTime: selectedTicket.endTime,
+              color: selectedTicket.color
             } : state.currentTicketData;
 
             return {
@@ -228,20 +237,21 @@ export const useTicketStore = create<TicketStore>()(
           // If no current data, just switch
           const selectedTicket = state.tickets[ticketIndex];
           const newCurrentData = selectedTicket ? {
-            ticketCategory: selectedTicket.category,
-            ticketType: selectedTicket.type,
-            ticketAvailability: selectedTicket.ticketAvailability,
-            ticketName: selectedTicket.name,
+            category: selectedTicket.category,
+            type: selectedTicket.type,
+            isUnlimited: selectedTicket.isUnlimited,
+            name: selectedTicket.name,
             purchaseLimit: selectedTicket.purchaseLimit,
-            stockAvailability: selectedTicket.stockAvailability,
+            totalStock: selectedTicket.totalStock,
             price: selectedTicket.price,
             soldTarget: selectedTicket.soldTarget,
-            numberOfPeople: selectedTicket.numberOfPeople,
+            groupSize: selectedTicket.groupSize,
             perks: selectedTicket.perks,
             salesStart: selectedTicket.salesStart,
             startTime: selectedTicket.startTime,
             salesEnd: selectedTicket.salesEnd,
-            endTime: selectedTicket.endTime
+            endTime: selectedTicket.endTime,
+            color: selectedTicket.color
           } : state.currentTicketData;
 
           return {
@@ -259,7 +269,7 @@ export const useTicketStore = create<TicketStore>()(
           }
         }));
       },
-//error -Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Partial<TicketData>'.
+
       getCurrentTicketData: (key: string) => {
         const state = get();
         return (state.currentTicketData as any)[key] || "";
@@ -268,7 +278,7 @@ export const useTicketStore = create<TicketStore>()(
       saveCurrentDataToActiveTicket: () => {
         set(state => {
           const currentData = state.currentTicketData;
-          if (!(currentData as any).ticketName) return state;
+          if (!(currentData as any).name) return state;
 
           const updatedTickets = [...state.tickets];
           const activeTicket = updatedTickets[state.activeTicketIndex] || {
@@ -278,33 +288,35 @@ export const useTicketStore = create<TicketStore>()(
             price: "",
             category: "",
             purchaseLimit: "",
-            stockAvailability: "",
+            totalStock: "",
             soldTarget: "",
-            numberOfPeople: "",
+            groupSize: "",
             perks: [""],
-            ticketAvailability: "",
+            isUnlimited: false,
             salesStart: "",
             startTime: "",
             salesEnd: "",
-            endTime: ""
+            endTime: "",
+            color: null
           };
 
           updatedTickets[state.activeTicketIndex] = {
             ...activeTicket,
-            name: (currentData as any).ticketName || "",
-            type: (currentData as any).ticketType || "",
-            category: (currentData as any).ticketCategory || "",
+            name: (currentData as any).name || "",
+            type: (currentData as any).type || "",
+            category: (currentData as any).category || "",
             price: (currentData as any).price || "",
             purchaseLimit: (currentData as any).purchaseLimit || "",
-            stockAvailability: (currentData as any).stockAvailability || "",
+            totalStock: (currentData as any).totalStock || "",
             soldTarget: (currentData as any).soldTarget || "",
-            numberOfPeople: (currentData as any).numberOfPeople || "",
+            groupSize: (currentData as any).groupSize || "",
             perks: (currentData as any).perks || [""],
-            ticketAvailability: (currentData as any).ticketAvailability || "",
+            isUnlimited: (currentData as any).isUnlimited || false,
             salesStart: (currentData as any).salesStart || "",
             startTime: (currentData as any).startTime || "",
             salesEnd: (currentData as any).salesEnd || "",
-            endTime: (currentData as any).endTime || ""
+            endTime: (currentData as any).endTime || "",
+            color: (currentData as any).color || null
           };
 
           // If this is the first ticket and tickets array was empty
@@ -328,20 +340,21 @@ export const useTicketStore = create<TicketStore>()(
           tickets: [],
           activeTicketIndex: 0,
           currentTicketData: {
-            ticketCategory: "",
-            ticketType: "",
-            ticketAvailability: "",
-            ticketName: "",
+            category: "",
+            type: "",
+            isUnlimited: false,
+            name: "",
             purchaseLimit: "",
-            stockAvailability: "",
+            totalStock: "",
             price: "",
             soldTarget: "",
-            numberOfPeople: "",
+            groupSize: "",
             perks: [""],
             salesStart: "",
             startTime: "",
             salesEnd: "",
-            endTime: ""
+            endTime: "",
+            color: null
           }
         });
       },
@@ -389,3 +402,4 @@ export const useTicketStore = create<TicketStore>()(
     }
   )
 )
+
