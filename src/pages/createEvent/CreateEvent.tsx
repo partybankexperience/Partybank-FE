@@ -196,7 +196,7 @@ const goNext = async () => {
           purchaseLimit: formData.purchaseLimit || "",
           stockAvailability: formData.stockAvailability || "",
           soldTarget: formData.soldTarget || "",
-          numberOfPeople: formData.numberOfPeople || "",
+          groupSize: formData.groupSize || "",
           perks: formData.perks || [""],
           ticketAvailability: formData.ticketAvailability || "",
           salesStart: formData.salesStart || "",
@@ -257,8 +257,8 @@ const goNext = async () => {
             setError(stage, "stockAvailability", "Stock availability is required for limited tickets");
             return;
           }
-          if (currentTicket.category === "option2" && (!currentTicket.numberOfPeople || Number(currentTicket.numberOfPeople) <= 0)) {
-            setError(stage, "numberOfPeople", "Number of people is required for group tickets");
+          if (currentTicket.category === "option2" && (!currentTicket.groupSize || Number(currentTicket.groupSize) <= 0)) {
+            setError(stage, "groupSize", "Number of people is required for group tickets");
             return;
           }
 
@@ -312,7 +312,7 @@ const goNext = async () => {
                 currentTicket.endTime,
                 Array.isArray(currentTicket.perks) ? currentTicket.perks.filter(perk => perk && perk.trim()) : [],
                 currentTicket.ticketAvailability === "unlimited",
-                currentTicket.category === "option2" ? Number(currentTicket.numberOfPeople) : undefined
+                currentTicket.category === "option2" ? Number(currentTicket.groupSize) : undefined
               );
             } else {
               // Create new ticket
@@ -338,7 +338,7 @@ const goNext = async () => {
                 currentTicket.endTime,
                 Array.isArray(currentTicket.perks) ? currentTicket.perks.filter(perk => perk && perk.trim()) : [],
                 currentTicket.ticketAvailability === "unlimited",
-                currentTicket.category === "option2" ? Number(currentTicket.numberOfPeople) : undefined
+                currentTicket.category === "option2" ? Number(currentTicket.groupSize) : undefined
               );
 
               // Store the backend ticket ID for new tickets
@@ -401,7 +401,7 @@ const goNext = async () => {
             setFormValue("Tickets Create", "purchaseLimit", nextTicket.purchaseLimit || "");
             setFormValue("Tickets Create", "stockAvailability", nextTicket.stockAvailability || "");
             setFormValue("Tickets Create", "soldTarget", nextTicket.soldTarget || "");
-            setFormValue("Tickets Create", "numberOfPeople", nextTicket.numberOfPeople || "");
+            setFormValue("Tickets Create", "groupSize", nextTicket.groupSize || "");
             setFormValue("Tickets Create", "perks", nextTicket.perks || [""]);
             setFormValue("Tickets Create", "ticketAvailability", nextTicket.ticketAvailability || "");
             setFormValue("Tickets Create", "salesStart", nextTicket.salesStart || "");

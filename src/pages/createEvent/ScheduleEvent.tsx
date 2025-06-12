@@ -230,21 +230,21 @@ const ScheduleEvent = () => {
           </div>
         </div>
 
+        <DefaultInput
+          id="venueName"
+          label="Venue Name"
+          value={scheduleEventForm.venueName || ""}
+          setValue={(val: any) => handleInputChange("venueName", val)}
+          placeholder="e.g., Landmark Centre"
+          classname="!w-full"
+          required
+          helperText={scheduleEventErrors.venueName || ""}
+          style={scheduleEventErrors.venueName ? "border-red-500" : ""}
+          inputRef={venueNameRef}
+        />
         {/* Show venue and location inputs only if location toggle is on */}
         {showLocation && (
           <>
-            <DefaultInput
-              id="venueName"
-              label="Venue Name"
-              value={scheduleEventForm.venueName || ""}
-              setValue={(val: any) => handleInputChange("venueName", val)}
-              placeholder="e.g., Landmark Centre"
-              classname="!w-full"
-              required
-              helperText={scheduleEventErrors.venueName || ""}
-              style={scheduleEventErrors.venueName ? "border-red-500" : ""}
-              inputRef={venueNameRef}
-            />
 
             {/* Map Autocomplete */}
             <div className="grid gap-2">

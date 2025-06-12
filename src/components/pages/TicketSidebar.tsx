@@ -49,7 +49,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
       purchaseLimit: "",
       stockAvailability: "",
       soldTarget: "",
-      numberOfPeople: "",
+      groupSize: "",
       perks: [""],
       ticketAvailability: "",
       salesStart: "",
@@ -70,7 +70,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
       purchaseLimit: getCurrentTicketData("purchaseLimit") || "",
       stockAvailability: getCurrentTicketData("stockAvailability") || "",
       soldTarget: getCurrentTicketData("soldTarget") || "",
-      numberOfPeople: getCurrentTicketData("numberOfPeople") || "",
+      groupSize: getCurrentTicketData("groupSize") || "",
       perks: getCurrentTicketData("perks") || [""],
       ticketAvailability: getCurrentTicketData("ticketAvailability") || "",
       salesStart: getCurrentTicketData("salesStart") || "",
@@ -93,7 +93,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
         purchaseLimit: "",
         stockAvailability: "",
         soldTarget: "",
-        numberOfPeople: "",
+        groupSize: "",
         perks: [""],
         ticketAvailability: "",
         salesStart: "",
@@ -115,7 +115,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
       setFormValue("Tickets Create", "purchaseLimit", "");
       setFormValue("Tickets Create", "stockAvailability", "");
       setFormValue("Tickets Create", "soldTarget", "");
-      setFormValue("Tickets Create", "numberOfPeople", "");
+      setFormValue("Tickets Create", "groupSize", "");
       setFormValue("Tickets Create", "perks", [""]);
       setFormValue("Tickets Create", "ticketAvailability", "");
     } else if (isManageEventsContext) {
@@ -137,7 +137,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
         purchaseLimit: currentTicket?.purchaseLimit || "",
         stockAvailability: currentTicket?.stockAvailability || "",
         soldTarget: currentTicket?.soldTarget || "",
-        numberOfPeople: currentTicket?.numberOfPeople || "",
+        groupSize: currentTicket?.groupSize || "",
         perks: currentTicket?.perks || [""],
         ticketAvailability: currentTicket?.ticketAvailability || "",
         salesStart: currentTicket?.salesStart || "",
@@ -172,7 +172,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
         setFormValue("Tickets Create", "purchaseLimit", ticketToEdit.purchaseLimit || "");
         setFormValue("Tickets Create", "stockAvailability", ticketToEdit.stockAvailability || "");
         setFormValue("Tickets Create", "soldTarget", ticketToEdit.soldTarget || "");
-        setFormValue("Tickets Create", "numberOfPeople", ticketToEdit.numberOfPeople || "");
+        setFormValue("Tickets Create", "groupSize", ticketToEdit.groupSize || "");
         setFormValue("Tickets Create", "perks", ticketToEdit.perks || [""]);
         setFormValue("Tickets Create", "ticketAvailability", ticketToEdit.ticketAvailability || "");
         setFormValue("Tickets Create", "salesStart", ticketToEdit.salesStart || "");
@@ -221,7 +221,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
         setFormValue("Tickets Create", "purchaseLimit", "");
         setFormValue("Tickets Create", "stockAvailability", "");
         setFormValue("Tickets Create", "soldTarget", "");
-        setFormValue("Tickets Create", "numberOfPeople", "");
+        setFormValue("Tickets Create", "groupSize", "");
         setFormValue("Tickets Create", "perks", [""]);
         setFormValue("Tickets Create", "ticketAvailability", "");
       }

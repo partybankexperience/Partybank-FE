@@ -11,7 +11,7 @@ interface TicketData {
   purchaseLimit: string;
   stockAvailability: string;
   soldTarget: string;
-  numberOfPeople: string;
+  groupSize: string;
   perks: string[];
   ticketAvailability: string;
   salesStart: string;
@@ -57,7 +57,7 @@ export const useTicketStore = create<TicketStore>()(
         stockAvailability: "",
         price: "",
         soldTarget: "",
-        numberOfPeople: "",
+        groupSize: "",
         perks: [""],
         salesStart: "",
         startTime: "",
@@ -75,7 +75,7 @@ export const useTicketStore = create<TicketStore>()(
           purchaseLimit: "",
           stockAvailability: "",
           soldTarget: "",
-          numberOfPeople: "",
+          groupSize: "",
           perks: [""],
           ticketAvailability: "",
           salesStart: "",
@@ -96,7 +96,7 @@ export const useTicketStore = create<TicketStore>()(
             stockAvailability: "",
             price: "",
             soldTarget: "",
-            numberOfPeople: "",
+            groupSize: "",
             perks: [""],
             salesStart: "",
             startTime: "",
@@ -141,7 +141,7 @@ export const useTicketStore = create<TicketStore>()(
             stockAvailability: activeTicket.stockAvailability,
             price: activeTicket.price,
             soldTarget: activeTicket.soldTarget,
-            numberOfPeople: activeTicket.numberOfPeople,
+            groupSize: activeTicket.groupSize,
             perks: activeTicket.perks,
             salesStart: activeTicket.salesStart,
             startTime: activeTicket.startTime,
@@ -156,7 +156,7 @@ export const useTicketStore = create<TicketStore>()(
             stockAvailability: "",
             price: "",
             soldTarget: "",
-            numberOfPeople: "",
+            groupSize: "",
             perks: [""],
             salesStart: "",
             startTime: "",
@@ -189,7 +189,7 @@ export const useTicketStore = create<TicketStore>()(
                 purchaseLimit: (currentData as any)?.purchaseLimit || "",
                 stockAvailability: (currentData as any)?.stockAvailability || "",
                 soldTarget: (currentData as any)?.soldTarget || "",
-                numberOfPeople: (currentData as any)?.numberOfPeople || "",
+                groupSize: (currentData as any)?.groupSize || "",
                 perks: (currentData as any)?.perks || [""],
                 ticketAvailability: (currentData as any)?.ticketAvailability || "",
                 salesStart: (currentData as any)?.salesStart || "",
@@ -210,7 +210,7 @@ export const useTicketStore = create<TicketStore>()(
               stockAvailability: selectedTicket.stockAvailability,
               price: selectedTicket.price,
               soldTarget: selectedTicket.soldTarget,
-              numberOfPeople: selectedTicket.numberOfPeople,
+              groupSize: selectedTicket.groupSize,
               perks: selectedTicket.perks,
               salesStart: selectedTicket.salesStart,
               startTime: selectedTicket.startTime,
@@ -236,7 +236,7 @@ export const useTicketStore = create<TicketStore>()(
             stockAvailability: selectedTicket.stockAvailability,
             price: selectedTicket.price,
             soldTarget: selectedTicket.soldTarget,
-            numberOfPeople: selectedTicket.numberOfPeople,
+            groupSize: selectedTicket.groupSize,
             perks: selectedTicket.perks,
             salesStart: selectedTicket.salesStart,
             startTime: selectedTicket.startTime,
@@ -280,7 +280,7 @@ export const useTicketStore = create<TicketStore>()(
             purchaseLimit: "",
             stockAvailability: "",
             soldTarget: "",
-            numberOfPeople: "",
+            groupSize: "",
             perks: [""],
             ticketAvailability: "",
             salesStart: "",
@@ -298,7 +298,7 @@ export const useTicketStore = create<TicketStore>()(
             purchaseLimit: (currentData as any).purchaseLimit || "",
             stockAvailability: (currentData as any).stockAvailability || "",
             soldTarget: (currentData as any).soldTarget || "",
-            numberOfPeople: (currentData as any).numberOfPeople || "",
+            groupSize: (currentData as any).groupSize || "",
             perks: (currentData as any).perks || [""],
             ticketAvailability: (currentData as any).ticketAvailability || "",
             salesStart: (currentData as any).salesStart || "",
@@ -324,6 +324,7 @@ export const useTicketStore = create<TicketStore>()(
         localStorage.removeItem("ticket-management-storage");
         
         // Reset all state to initial values
+        //error -'Object literal may only specify known properties, and 'ticketCategory' does not exist in type 'Partial<TicketData>'.
         set({
           tickets: [],
           activeTicketIndex: 0,
@@ -336,7 +337,7 @@ export const useTicketStore = create<TicketStore>()(
             stockAvailability: "",
             price: "",
             soldTarget: "",
-            numberOfPeople: "",
+            groupSize: "",
             perks: [""],
             salesStart: "",
             startTime: "",

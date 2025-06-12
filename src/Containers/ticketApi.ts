@@ -15,7 +15,7 @@ const createTicket = async (
   endTime: string,    // "HH:mm"
   perks: string[],
   isUnlimited: boolean,
-  numberofPeople?: number,
+  groupSize?: number,
   color?: string
 ): Promise<any> => {
   const payload = {
@@ -32,7 +32,7 @@ const createTicket = async (
     endTime,
     perks,
     isUnlimited,
-    ...(category === 'group' &&  { groupSize:numberofPeople }),
+    ...(category === 'group' &&  { groupSize:groupSize }),
     ...(type === 'paid' &&  { price }),
     ...(!isUnlimited &&  { stock }),
     ...(color && { color }),
@@ -61,7 +61,7 @@ const createTicketByEventId = async (
   endTime: string,    // "HH:mm"
   perks: string[],
   isUnlimited: boolean,
-  numberofPeople?: number,
+  groupSize?: number,
   color?: string
 ): Promise<any> => {
   const payload = {
@@ -77,7 +77,7 @@ const createTicketByEventId = async (
     endTime,
     perks,
     isUnlimited,
-    ...(category === 'group' &&  { groupSize:numberofPeople }),
+    ...(category === 'group' &&  { groupSize:groupSize }),
     ...(type === 'paid' &&  { price }),
     ...(!isUnlimited &&  { stock }),
     ...(color && { color }),
@@ -115,7 +115,7 @@ const editTicket = async (
   endTime: string, 
   perks: string[], 
   isUnlimited: boolean,
-  numberofPeople?: number,
+  groupSize?: number,
   color?: string
 ): Promise<any> => {
   const payload = {
@@ -131,7 +131,7 @@ const editTicket = async (
     endTime,
     perks,
     isUnlimited,
-    ...(category === 'group' && { numberofPeople }),
+    ...(category === 'group' && { groupSize }),
     ...(type === 'paid' && { price }),
     ...(isUnlimited && { stock }),
     ...(color && { color }),

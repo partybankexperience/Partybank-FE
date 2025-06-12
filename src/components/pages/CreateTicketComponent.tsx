@@ -9,59 +9,11 @@ import { FaPlus, FaTrash } from 'react-icons/fa';
 import { createTicket } from "../../Containers/ticketApi";
 import { useState } from "react";
 import { successAlert, errorAlert } from "../alerts/ToastService";
-import { SketchPicker } from 'react-color';
 import { convertISOToDateInput, convertDateInputToISO } from '../helpers/dateTimeHelpers';
+import ColorPickerInput from "../inputs/ColorPickerInput";
 
-// New ColorPickerInput component
-const ColorPickerInput = ({ id, label, value, setValue, classname }: any) => {
-  const [displayColorPicker, setDisplayColorPicker] = useState(false);
 
-  const handleClick = () => {
-    setDisplayColorPicker(!displayColorPicker);
-  };
 
-  const handleClose = () => {
-    setDisplayColorPicker(false);
-  };
-
-  const handleChange = (color: any) => {
-    setValue(color.hex);
-  };
-
-  return (
-    <div className="grid gap-1 w-full relative">
-      <label className="text-[#231F20] text-[16px] font-semibold font-[RedHat]">
-        {label} <span className="text-[#A7A5A6] text-[.8rem] font-light">(Optional)</span>
-      </label>
-      <div className="relative">
-        <div
-          className={`w-full h-[44px] border-[1px] border-neutral rounded-[4px] px-[16px] py-[10px] cursor-pointer flex items-center gap-3 hover:border-lightPurple focus:border-lightPurple bg-white ${classname}`}
-          onClick={handleClick}
-        >
-          <div
-            className="w-6 h-6 border border-gray-300 rounded"
-            style={{ backgroundColor: value || '#3B82F6' }}
-          ></div>
-          <span className="text-[14px] text-black font-[RedHat]">
-            {value || '#3B82F6'}
-          </span>
-        </div>
-        {displayColorPicker ? (
-          <div className="absolute top-full left-0 z-50 mt-2">
-            <div className="fixed inset-0" onClick={handleClose}></div>
-            <div className="relative">
-              <SketchPicker
-                color={value || '#3B82F6'}
-                onChange={handleChange}
-                disableAlpha={true}
-              />
-            </div>
-          </div>
-        ) : null}
-      </div>
-    </div>
-  );
-};
 
 const CreateTicketComponent = () => {
   const location = useLocation();
@@ -138,7 +90,7 @@ const CreateTicketComponent = () => {
           purchaseLimit: key === 'purchaseLimit' ? value : currentTicketData.purchaseLimit,
           stockAvailability: key === 'stockAvailability' ? value : currentTicketData.stockAvailability,
           soldTarget: key === 'soldTarget' ? value : currentTicketData.soldTarget,
-          numberOfPeople: key === 'numberOfPeople' ? value : currentTicketData.numberOfPeople,
+          groupSize: key === 'groupSize' ? value : currentTicketData.groupSize,
           perks: key === 'perks' ? value : currentTicketData.perks,
           ticketAvailability: key === 'ticketAvailability' ? value : currentTicketData.ticketAvailability,
           salesStart: key === 'salesStart' ? processedValue : currentTicketData.salesStart,
@@ -182,7 +134,7 @@ const CreateTicketComponent = () => {
       return getCurrentTicketData('totalStock') || value;
     }
     
-    if (key === 'numberOfPeople') {
+    if (key === 'groupSize') {
       return getCurrentTicketData('groupSize') || value;
     }
     
@@ -249,7 +201,7 @@ const CreateTicketComponent = () => {
       purchaseLimit: getCurrentTicketData("purchaseLimit"),
       stockAvailability: getCurrentTicketData("stockAvailability"),
       soldTarget: getCurrentTicketData("soldTarget"),
-      numberOfPeople: getCurrentTicketData("numberOfPeople"),
+      groupSize: getCurrentTicketData("groupSize"),
       perks: getCurrentTicketData("perks"),
       ticketAvailability: getCurrentTicketData("ticketAvailability"),
       salesStart: getCurrentTicketData("salesStart"),
@@ -312,15 +264,15 @@ const CreateTicketComponent = () => {
           ticketData.ticketType.toLowerCase(),
           ticketData.ticketType === "Paid" ? Number(ticketData.price) : 0,
           Number(ticketData.purchaseLimit) || 1,
-          ticketData.ticketAvailability === "limited" ? Number(ticketData.stockAvailability) : 999999,
+          ticketData.ticketAvailability === "limited" ? Number(ticketData.stockAvailability) : 0,
           Number(ticketData.soldTarget) || 0,
           salesStartISO,
           salesEndISO,
           ticketData.startTime || "00:00",
           ticketData.endTime || "23:59",
           Array.isArray(ticketData.perks) ? ticketData.perks.filter(perk => perk && perk.trim()) : [],
-          ticketData.ticketAvailability === "unlimited",
-          ticketData.ticketCategory === "option2" ? Number(ticketData.numberOfPeople) : undefined,
+          ticketData.ticketAvailability === "unlimited"? true : false,
+          Number(ticketData.groupSize)|| 1,
           ticketData.color
         );
         successAlert("Success","Ticket created successfully!");
@@ -477,10 +429,10 @@ const CreateTicketComponent = () => {
           />
           {getValue("ticketCategory") === "option2" && (
             <DefaultInput
-              id="numberOfPeople"
+              id="groupSize"
               label="Number of people"
-              value={getValue("numberOfPeople")}
-              setValue={(v:any) => handleChange("numberOfPeople", v)}
+              value={getValue("groupSize")}
+              setValue={(v:any) => handleChange("groupSize", v)}
               placeholder="Enter number of people"
               classname="!w-full"
               type="number"
@@ -488,7 +440,7 @@ const CreateTicketComponent = () => {
           )}
           <ColorPickerInput
             id="ticketColor"
-            label="Ticket Color (Optional)"
+            label="Ticket Color"
             value={getValue("color")}
             setValue={(v: string) => handleChange("color", v)}
             classname="!w-full"
