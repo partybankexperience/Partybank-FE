@@ -13,7 +13,7 @@ interface TicketData {
   soldTarget: string;
   groupSize: string;
   perks: string[];
-  ticketAvailability: string;
+  isUnlimited: boolean;
   salesStart: string;
   startTime: string;
   salesEnd: string;
@@ -51,7 +51,7 @@ export const useTicketStore = create<TicketStore>()(
       currentTicketData: {
         ticketCategory: "",
         ticketType: "",
-        ticketAvailability: "",
+        isUnlimited: false,
         ticketName: "",
         purchaseLimit: "",
         stockAvailability: "",
@@ -77,7 +77,7 @@ export const useTicketStore = create<TicketStore>()(
           soldTarget: "",
           groupSize: "",
           perks: [""],
-          ticketAvailability: "",
+          isUnlimited: false,
           salesStart: "",
           startTime: "",
           salesEnd: "",
@@ -90,7 +90,7 @@ export const useTicketStore = create<TicketStore>()(
           currentTicketData: {
             ticketCategory: "",
             ticketType: "",
-            ticketAvailability: "",
+            isUnlimited: false,
             ticketName: "",
             purchaseLimit: "",
             stockAvailability: "",
@@ -135,7 +135,7 @@ export const useTicketStore = create<TicketStore>()(
           const newCurrentData = activeTicket ? {
             ticketCategory: activeTicket.category,
             ticketType: activeTicket.type,
-            ticketAvailability: activeTicket.ticketAvailability,
+            isUnlimited: activeTicket.isUnlimited,
             ticketName: activeTicket.name,
             purchaseLimit: activeTicket.purchaseLimit,
             stockAvailability: activeTicket.stockAvailability,
@@ -150,7 +150,7 @@ export const useTicketStore = create<TicketStore>()(
           } : {
             ticketCategory: "",
             ticketType: "",
-            ticketAvailability: "",
+            isUnlimited: false,
             ticketName: "",
             purchaseLimit: "",
             stockAvailability: "",
@@ -191,7 +191,7 @@ export const useTicketStore = create<TicketStore>()(
                 soldTarget: (currentData as any)?.soldTarget || "",
                 groupSize: (currentData as any)?.groupSize || "",
                 perks: (currentData as any)?.perks || [""],
-                ticketAvailability: (currentData as any)?.ticketAvailability || "",
+                isUnlimited: (currentData as any)?.isUnlimited || "",
                 salesStart: (currentData as any)?.salesStart || "",
                 startTime: (currentData as any)?.startTime || "",
                 salesEnd: (currentData as any)?.salesEnd || "",
@@ -204,7 +204,7 @@ export const useTicketStore = create<TicketStore>()(
             const newCurrentData = selectedTicket ? {
               ticketCategory: selectedTicket.category,
               ticketType: selectedTicket.type,
-              ticketAvailability: selectedTicket.ticketAvailability,
+              isUnlimited: selectedTicket.isUnlimited,
               ticketName: selectedTicket.name,
               purchaseLimit: selectedTicket.purchaseLimit,
               stockAvailability: selectedTicket.stockAvailability,
@@ -230,7 +230,7 @@ export const useTicketStore = create<TicketStore>()(
           const newCurrentData = selectedTicket ? {
             ticketCategory: selectedTicket.category,
             ticketType: selectedTicket.type,
-            ticketAvailability: selectedTicket.ticketAvailability,
+            isUnlimited: selectedTicket.isUnlimited,
             ticketName: selectedTicket.name,
             purchaseLimit: selectedTicket.purchaseLimit,
             stockAvailability: selectedTicket.stockAvailability,
@@ -282,7 +282,7 @@ export const useTicketStore = create<TicketStore>()(
             soldTarget: "",
             groupSize: "",
             perks: [""],
-            ticketAvailability: "",
+            isUnlimited: false,
             salesStart: "",
             startTime: "",
             salesEnd: "",
@@ -300,7 +300,7 @@ export const useTicketStore = create<TicketStore>()(
             soldTarget: (currentData as any).soldTarget || "",
             groupSize: (currentData as any).groupSize || "",
             perks: (currentData as any).perks || [""],
-            ticketAvailability: (currentData as any).ticketAvailability || "",
+            isUnlimited: (currentData as any).isUnlimited || "",
             salesStart: (currentData as any).salesStart || "",
             startTime: (currentData as any).startTime || "",
             salesEnd: (currentData as any).salesEnd || "",
@@ -331,7 +331,7 @@ export const useTicketStore = create<TicketStore>()(
           currentTicketData: {
             ticketCategory: "",
             ticketType: "",
-            ticketAvailability: "",
+            isUnlimited: false,
             ticketName: "",
             purchaseLimit: "",
             stockAvailability: "",

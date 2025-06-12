@@ -198,7 +198,7 @@ const goNext = async () => {
           soldTarget: formData.soldTarget || "",
           groupSize: formData.groupSize || "",
           perks: formData.perks || [""],
-          ticketAvailability: formData.ticketAvailability || "",
+          isUnlimited: formData.isUnlimited || "",
           salesStart: formData.salesStart || "",
           startTime: formData.startTime || "",
           salesEnd: formData.salesEnd || "",
@@ -253,7 +253,7 @@ const goNext = async () => {
             setError(stage, "purchaseLimit", "Purchase limit is required");
             return;
           }
-          if (currentTicket.ticketAvailability === "limited" && (!currentTicket.stockAvailability || Number(currentTicket.stockAvailability) <= 0)) {
+          if (currentTicket.isUnlimited === "limited" && (!currentTicket.stockAvailability || Number(currentTicket.stockAvailability) <= 0)) {
             setError(stage, "stockAvailability", "Stock availability is required for limited tickets");
             return;
           }
@@ -304,14 +304,14 @@ const goNext = async () => {
                 currentTicket.type.toLowerCase(),
                 currentTicket.type === "Paid" ? Number(currentTicket.price) : 0,
                 Number(currentTicket.purchaseLimit),
-                currentTicket.ticketAvailability === "limited" ? Number(currentTicket.stockAvailability) : 999999,
+                currentTicket.isUnlimited === "limited" ? Number(currentTicket.stockAvailability) : 999999,
                 Number(currentTicket.soldTarget) || 0,
                 salesStartISO,
                 salesEndISO,
                 currentTicket.startTime,
                 currentTicket.endTime,
                 Array.isArray(currentTicket.perks) ? currentTicket.perks.filter(perk => perk && perk.trim()) : [],
-                currentTicket.ticketAvailability === "unlimited",
+                currentTicket.isUnlimited === "unlimited",
                 currentTicket.category === "option2" ? Number(currentTicket.groupSize) : undefined
               );
             } else {
@@ -330,14 +330,14 @@ const goNext = async () => {
                 currentTicket.type.toLowerCase(),
                 currentTicket.type === "Paid" ? Number(currentTicket.price) : 0,
                 Number(currentTicket.purchaseLimit),
-                currentTicket.ticketAvailability === "limited" ? Number(currentTicket.stockAvailability) : 999999,
+                currentTicket.isUnlimited === "limited" ? Number(currentTicket.stockAvailability) : 999999,
                 Number(currentTicket.soldTarget) || 0,
                 salesStartISO,
                 salesEndISO,
                 currentTicket.startTime,
                 currentTicket.endTime,
                 Array.isArray(currentTicket.perks) ? currentTicket.perks.filter(perk => perk && perk.trim()) : [],
-                currentTicket.ticketAvailability === "unlimited",
+                currentTicket.isUnlimited === "unlimited",
                 currentTicket.category === "option2" ? Number(currentTicket.groupSize) : undefined
               );
 
@@ -403,7 +403,7 @@ const goNext = async () => {
             setFormValue("Tickets Create", "soldTarget", nextTicket.soldTarget || "");
             setFormValue("Tickets Create", "groupSize", nextTicket.groupSize || "");
             setFormValue("Tickets Create", "perks", nextTicket.perks || [""]);
-            setFormValue("Tickets Create", "ticketAvailability", nextTicket.ticketAvailability || "");
+            setFormValue("Tickets Create", "isUnlimited", nextTicket.isUnlimited || "");
             setFormValue("Tickets Create", "salesStart", nextTicket.salesStart || "");
             setFormValue("Tickets Create", "startTime", nextTicket.startTime || "");
             setFormValue("Tickets Create", "salesEnd", nextTicket.salesEnd || "");

@@ -51,7 +51,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
       soldTarget: "",
       groupSize: "",
       perks: [""],
-      ticketAvailability: "",
+      isUnlimited: "",
       salesStart: "",
       startTime: "",
       salesEnd: "",
@@ -72,7 +72,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
       soldTarget: getCurrentTicketData("soldTarget") || "",
       groupSize: getCurrentTicketData("groupSize") || "",
       perks: getCurrentTicketData("perks") || [""],
-      ticketAvailability: getCurrentTicketData("ticketAvailability") || "",
+      isUnlimited: getCurrentTicketData("isUnlimited") || "",
       salesStart: getCurrentTicketData("salesStart") || "",
       startTime: getCurrentTicketData("startTime") || "",
       salesEnd: getCurrentTicketData("salesEnd") || "",
@@ -95,7 +95,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
         soldTarget: "",
         groupSize: "",
         perks: [""],
-        ticketAvailability: "",
+        isUnlimited: "",
         salesStart: "",
         startTime: "",
         salesEnd: "",
@@ -117,7 +117,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
       setFormValue("Tickets Create", "soldTarget", "");
       setFormValue("Tickets Create", "groupSize", "");
       setFormValue("Tickets Create", "perks", [""]);
-      setFormValue("Tickets Create", "ticketAvailability", "");
+      setFormValue("Tickets Create", "isUnlimited", "");
     } else if (isManageEventsContext) {
       // Manage Events Context: Use ticket store
       manageAddTicket();
@@ -139,7 +139,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
         soldTarget: currentTicket?.soldTarget || "",
         groupSize: currentTicket?.groupSize || "",
         perks: currentTicket?.perks || [""],
-        ticketAvailability: currentTicket?.ticketAvailability || "",
+        isUnlimited: currentTicket?.isUnlimited || "",
         salesStart: currentTicket?.salesStart || "",
         startTime: currentTicket?.startTime || "",
         salesEnd: currentTicket?.salesEnd || "",
@@ -174,7 +174,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
         setFormValue("Tickets Create", "soldTarget", ticketToEdit.soldTarget || "");
         setFormValue("Tickets Create", "groupSize", ticketToEdit.groupSize || "");
         setFormValue("Tickets Create", "perks", ticketToEdit.perks || [""]);
-        setFormValue("Tickets Create", "ticketAvailability", ticketToEdit.ticketAvailability || "");
+        setFormValue("Tickets Create", "isUnlimited", ticketToEdit.isUnlimited || "");
         setFormValue("Tickets Create", "salesStart", ticketToEdit.salesStart || "");
         setFormValue("Tickets Create", "startTime", ticketToEdit.startTime || "");
         setFormValue("Tickets Create", "salesEnd", ticketToEdit.salesEnd || "");
@@ -223,7 +223,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
         setFormValue("Tickets Create", "soldTarget", "");
         setFormValue("Tickets Create", "groupSize", "");
         setFormValue("Tickets Create", "perks", [""]);
-        setFormValue("Tickets Create", "ticketAvailability", "");
+        setFormValue("Tickets Create", "isUnlimited", "");
       }
     } else if (isManageEventsContext) {
       // Manage Events Context: Use ticket store

@@ -58,6 +58,7 @@ const CreateTicketComponent = () => {
     },
   ];
   const ticketType = ["Free", "Paid"];
+  const availabilityType = ["Limited", "Unlimited"];
 
   const handleChange = (key: string, value: any) => {
     // Convert date input values to ISO format for storage
@@ -92,7 +93,7 @@ const CreateTicketComponent = () => {
           soldTarget: key === 'soldTarget' ? value : currentTicketData.soldTarget,
           groupSize: key === 'groupSize' ? value : currentTicketData.groupSize,
           perks: key === 'perks' ? value : currentTicketData.perks,
-          ticketAvailability: key === 'ticketAvailability' ? value : currentTicketData.ticketAvailability,
+          isUnlimited: key === 'isUnlimited' ? value : currentTicketData.isUnlimited,
           salesStart: key === 'salesStart' ? processedValue : currentTicketData.salesStart,
           startTime: key === 'startTime' ? value : currentTicketData.startTime,
           salesEnd: key === 'salesEnd' ? processedValue : currentTicketData.salesEnd,
@@ -152,10 +153,10 @@ const CreateTicketComponent = () => {
       return value;
     }
     
-    if (key === 'ticketAvailability') {
+    if (key === 'isUnlimited') {
       const isUnlimited = getCurrentTicketData('isUnlimited');
-      if (isUnlimited === true) return 'unlimited';
-      if (isUnlimited === false) return 'limited';
+      if (isUnlimited === true) return true;
+      if (isUnlimited === false) return false;
       return value;
     }
     
@@ -348,20 +349,27 @@ const CreateTicketComponent = () => {
       <div className="grid gap-[15px]">
         <h2 className="text-black text-[1.2rem] font-bold">Ticket Availability</h2>
         <div className="grid md:flex gap-4 md:gap-[2.5rem]">
-          <RadioButton
-            label="Limited"
-            value="limited"
-            name="ticket-availability"
-            checked={getValue("ticketAvailability") === "limited"}
-            onChange={() => handleChange("isUnlimited", false)}
-          />
-          <RadioButton
+        {availabilityType.map((availability) => {
+  const isUnlimited = availability === "Unlimited";
+  return (
+    <RadioButton
+      key={availability}
+      label={availability}
+      value={availability}
+      name="ticket-availability"
+      checked={getValue("isUnlimited") === isUnlimited}
+      onChange={() => handleChange("isUnlimited", isUnlimited)}
+    />
+  );
+})}
+
+          {/* <RadioButton
             label="Unlimited"
             value="unlimited"
             name="ticket-availability"
-            checked={getValue("ticketAvailability") === "unlimited"}
+            checked={getValue("isUnlimited") === "unlimited"}
             onChange={() => handleChange("isUnlimited", true)}
-          />
+          /> */}
         </div>
       </div>
 
@@ -387,7 +395,7 @@ const CreateTicketComponent = () => {
             classname="!w-full"
             type="number"
           />
-          {getValue("ticketAvailability") === "limited" && (
+          {getValue("isUnlimited") === "limited" && (
             <DefaultInput
               id="stockAvailability"
               label="Stock Availability"
