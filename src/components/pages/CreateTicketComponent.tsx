@@ -9,6 +9,7 @@ import { FaPlus, FaTrash } from 'react-icons/fa';
 import { createTicket } from "../../Containers/ticketApi";
 import { useState } from "react";
 import { successAlert, errorAlert } from "../alerts/ToastService";
+import { SketchPicker } from 'react-color';
 
 const CreateTicketComponent = () => {
   const location = useLocation();
@@ -149,7 +150,8 @@ const CreateTicketComponent = () => {
       salesStart: getCurrentTicketData("salesStart"),
       startTime: getCurrentTicketData("startTime"),
       salesEnd: getCurrentTicketData("salesEnd"),
-      endTime: getCurrentTicketData("endTime")
+      endTime: getCurrentTicketData("endTime"),
+      color: getCurrentTicketData("color")
     };
 
     // Validation
@@ -213,7 +215,8 @@ const CreateTicketComponent = () => {
           ticketData.endTime || "23:59",
           Array.isArray(ticketData.perks) ? ticketData.perks.filter(perk => perk && perk.trim()) : [],
           ticketData.ticketAvailability === "unlimited",
-          ticketData.ticketCategory === "option2" ? Number(ticketData.numberOfPeople) : undefined
+          ticketData.ticketCategory === "option2" ? Number(ticketData.numberOfPeople) : undefined,
+          ticketData.color
         );
         successAlert("Success","Ticket created successfully!");
       }
@@ -378,6 +381,48 @@ const CreateTicketComponent = () => {
               type="number"
             />
           )}
+          <div className="grid gap-1 w-full relative">
+            <label className="text-[#231F20] text-[16px] font-semibold font-[RedHat]">
+              Ticket Color <span className="text-[#A7A5A6] text-[.8rem] font-light">(Optional)</span>
+            </label>
+            <div className="relative">
+              <div 
+                className="w-full h-[44px] border-[1px] border-neutral rounded-[4px] px-[16px] py-[10px] cursor-pointer flex items-center gap-3 hover:border-lightPurple focus:border-lightPurple"
+                onClick={() => {
+                  const colorPicker = document.getElementById(`colorPicker-${Math.random()}`);
+                  if (colorPicker) colorPicker.style.display = colorPicker.style.display === 'block' ? 'none' : 'block';
+                }}
+              >
+                <div 
+                  className="w-6 h-6 border border-gray-300 rounded"
+                  style={{ backgroundColor: getValue("color") || '#3B82F6' }}
+                ></div>
+                <span className="text-[14px] text-black font-[RedHat]">
+                  {getValue("color") || '#3B82F6'}
+                </span>
+              </div>
+              <div 
+                id={`colorPicker-${Math.random()}`}
+                className="absolute top-full left-0 z-50 mt-2"
+                style={{ display: 'none' }}
+              >
+                <div className="fixed inset-0" onClick={(e) => {
+                  const target = e.target as HTMLElement;
+                  if (target.classList.contains('fixed')) {
+                    const colorPicker = document.querySelector('[id^="colorPicker-"]') as HTMLElement;
+                    if (colorPicker) colorPicker.style.display = 'none';
+                  }
+                }}></div>
+                <div className="relative">
+                  <SketchPicker
+                    color={getValue("color") || '#3B82F6'}
+                    onChange={(color) => handleChange("color", color.hex)}
+                    disableAlpha={true}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

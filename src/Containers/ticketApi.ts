@@ -15,7 +15,8 @@ const createTicket = async (
   endTime: string,    // "HH:mm"
   perks: string[],
   isUnlimited: boolean,
-  numberofPeople?: number
+  numberofPeople?: number,
+  color?: string
 ): Promise<any> => {
   const payload = {
     eventId,
@@ -34,6 +35,7 @@ const createTicket = async (
     ...(category === 'group' &&  { groupSize:numberofPeople }),
     ...(type === 'paid' &&  { price }),
     ...(!isUnlimited &&  { stock }),
+    ...(color && { color }),
   };
 
   // ...(isLocationTBA && address),
@@ -59,7 +61,8 @@ const createTicketByEventId = async (
   endTime: string,    // "HH:mm"
   perks: string[],
   isUnlimited: boolean,
-  numberofPeople?: number
+  numberofPeople?: number,
+  color?: string
 ): Promise<any> => {
   const payload = {
     name,
@@ -77,6 +80,7 @@ const createTicketByEventId = async (
     ...(category === 'group' &&  { groupSize:numberofPeople }),
     ...(type === 'paid' &&  { price }),
     ...(!isUnlimited &&  { stock }),
+    ...(color && { color }),
   };
 
   // ...(isLocationTBA && address),
@@ -111,7 +115,8 @@ const editTicket = async (
   endTime: string, 
   perks: string[], 
   isUnlimited: boolean,
-  numberofPeople?: number
+  numberofPeople?: number,
+  color?: string
 ): Promise<any> => {
   const payload = {
     eventId,
@@ -129,6 +134,7 @@ const editTicket = async (
     ...(category === 'group' && { numberofPeople }),
     ...(type === 'paid' && { price }),
     ...(isUnlimited && { stock }),
+    ...(color && { color }),
   };
   const response = await apiCall({
     name: "editTicket",
