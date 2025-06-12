@@ -133,7 +133,7 @@ const editTicket = async (
     isUnlimited,
     ...(category === 'group' && { groupSize }),
     ...(type === 'paid' && { price }),
-    ...(isUnlimited && { stock }),
+    ...(!isUnlimited && { stock }),
     ...(color && { color }),
   };
   const response = await apiCall({

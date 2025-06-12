@@ -194,16 +194,16 @@ const CreateTicketComponent = () => {
 
     // Get current ticket data from store
     const ticketData = {
-      ticketName: getCurrentTicketData("ticketName"),
-      ticketType: getCurrentTicketData("ticketType"),
-      ticketCategory: getCurrentTicketData("ticketCategory"),
+      ticketName: getCurrentTicketData("name"),
+      ticketType: getCurrentTicketData("type"),
+      ticketCategory: getCurrentTicketData("category"),
       price: getCurrentTicketData("price"),
       purchaseLimit: getCurrentTicketData("purchaseLimit"),
-      stockAvailability: getCurrentTicketData("stockAvailability"),
+      stockAvailability: getCurrentTicketData("totalStock"),
       soldTarget: getCurrentTicketData("soldTarget"),
       groupSize: getCurrentTicketData("groupSize"),
       perks: getCurrentTicketData("perks"),
-      ticketAvailability: getCurrentTicketData("ticketAvailability"),
+      isUnlimited: getCurrentTicketData("isUnlimited"),
       salesStart: getCurrentTicketData("salesStart"),
       startTime: getCurrentTicketData("startTime"),
       salesEnd: getCurrentTicketData("salesEnd"),
@@ -264,14 +264,14 @@ const CreateTicketComponent = () => {
           ticketData.ticketType.toLowerCase(),
           ticketData.ticketType === "Paid" ? Number(ticketData.price) : 0,
           Number(ticketData.purchaseLimit) || 1,
-          ticketData.ticketAvailability === "limited" ? Number(ticketData.stockAvailability) : 0,
+          !ticketData.isUnlimited ? Number(ticketData.stockAvailability) : 0,
           Number(ticketData.soldTarget) || 0,
           salesStartISO,
           salesEndISO,
           ticketData.startTime || "00:00",
           ticketData.endTime || "23:59",
           Array.isArray(ticketData.perks) ? ticketData.perks.filter(perk => perk && perk.trim()) : [],
-          ticketData.ticketAvailability === "unlimited"? true : false,
+          ticketData.isUnlimited,
           Number(ticketData.groupSize)|| 1,
           ticketData.color
         );
@@ -353,14 +353,14 @@ const CreateTicketComponent = () => {
             value="limited"
             name="ticket-availability"
             checked={getValue("ticketAvailability") === "limited"}
-            onChange={() => handleChange("ticketAvailability", "limited")}
+            onChange={() => handleChange("isUnlimited", false)}
           />
           <RadioButton
             label="Unlimited"
             value="unlimited"
             name="ticket-availability"
             checked={getValue("ticketAvailability") === "unlimited"}
-            onChange={() => handleChange("ticketAvailability", "unlimited")}
+            onChange={() => handleChange("isUnlimited", true)}
           />
         </div>
       </div>
