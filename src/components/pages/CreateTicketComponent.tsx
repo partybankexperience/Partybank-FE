@@ -173,24 +173,6 @@ const CreateTicketComponent = () => {
       return convertISOToDateInput(value);
     }
     
-    // Map backend values to frontend form values
-    if (key === 'ticketCategory') {
-      if (value === 'single') return 'option1';
-      if (value === 'group') return 'option2';
-    }
-    
-    if (key === 'ticketType') {
-      if (value === 'free') return 'Free';
-      if (value === 'paid') return 'Paid';
-    }
-    
-    if (key === 'ticketAvailability') {
-      // Backend sends isUnlimited boolean, we need to map to "limited"/"unlimited"
-      const isUnlimited = getCurrentTicketData('isUnlimited');
-      if (isUnlimited === true) return 'unlimited';
-      if (isUnlimited === false) return 'limited';
-    }
-    
     // Map backend field names to frontend field names
     if (key === 'ticketName') {
       return getCurrentTicketData('name') || value;
@@ -198,6 +180,27 @@ const CreateTicketComponent = () => {
     
     if (key === 'stockAvailability') {
       return getCurrentTicketData('totalStock') || value;
+    }
+    
+    if (key === 'ticketCategory') {
+      const category = getCurrentTicketData('category') || value;
+      if (category === 'single') return 'option1';
+      if (category === 'group') return 'option2';
+      return value;
+    }
+    
+    if (key === 'ticketType') {
+      const type = getCurrentTicketData('type') || value;
+      if (type === 'free') return 'Free';
+      if (type === 'paid') return 'Paid';
+      return value;
+    }
+    
+    if (key === 'ticketAvailability') {
+      const isUnlimited = getCurrentTicketData('isUnlimited');
+      if (isUnlimited === true) return 'unlimited';
+      if (isUnlimited === false) return 'limited';
+      return value;
     }
     
     return value;
