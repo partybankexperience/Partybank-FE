@@ -10,6 +10,7 @@ import { createTicket } from "../../Containers/ticketApi";
 import { useState } from "react";
 import { successAlert, errorAlert } from "../alerts/ToastService";
 import { SketchPicker } from 'react-color';
+import { isoToDateInput, isoToTimeInput, dateTimeToISO } from '../helpers/dateTimeHelpers';
 
 // New ColorPickerInput component
 const ColorPickerInput = ({ id, label, value, setValue, classname }: any) => {
@@ -107,9 +108,30 @@ const CreateTicketComponent = () => {
   const ticketType = ["Free", "Paid"];
 
   const handleChange = (key: string, value: any) => {
+    // Convert date/time inputs back to ISO format for storage
+    let processedValue = value;
+    
+    if (key === 'salesStart' || key === 'salesEnd') {
+      // For date fields, combine with existing time or default time
+      const timeKey = key === 'salesStart' ? 'startTime' : 'endTime';
+      const existingTime = isCreateEventContext 
+        ? form[currentStage]?.[timeKey] || '00:00'
+        : getCurrentTicketData(timeKey) || '00:00';
+      
+      processedValue = dateTimeToISO(value, isoToTimeInput(existingTime) || '00:00');
+    } else if (key === 'startTime' || key === 'endTime') {
+      // For time fields, combine with existing date or current date
+      const dateKey = key === 'startTime' ? 'salesStart' : 'salesEnd';
+      const existingDate = isCreateEventContext 
+        ? form[currentStage]?.[dateKey] || new Date().toISOString()
+        : getCurrentTicketData(dateKey) || new Date().toISOString();
+      
+      processedValue = dateTimeToISO(isoToDateInput(existingDate), value);
+    }
+    
     if (isCreateEventContext) {
       // Create Event Context: Use existing useEventStore logic
-      setFormValue(currentStage, key, value);
+      setFormValue(currentStage, key, processedValue);
 
       // Auto-save current ticket data to the tickets array
       const currentTicketData = form[currentStage];
@@ -121,20 +143,20 @@ const CreateTicketComponent = () => {
         const updatedTicket = {
           ...existingTicket,
           id: existingTicket.id || `ticket-${Date.now()}`,
-          name: key === 'ticketName' ? value : currentTicketData.ticketName,
-          type: key === 'ticketType' ? value : currentTicketData.ticketType,
-          price: key === 'price' ? value : currentTicketData.price,
-          category: key === 'ticketCategory' ? value : currentTicketData.ticketCategory,
-          purchaseLimit: key === 'purchaseLimit' ? value : currentTicketData.purchaseLimit,
-          stockAvailability: key === 'stockAvailability' ? value : currentTicketData.stockAvailability,
-          soldTarget: key === 'soldTarget' ? value : currentTicketData.soldTarget,
-          numberOfPeople: key === 'numberOfPeople' ? value : currentTicketData.numberOfPeople,
-          perks: key === 'perks' ? value : currentTicketData.perks,
-          ticketAvailability: key === 'ticketAvailability' ? value : currentTicketData.ticketAvailability,
-          salesStart: key === 'salesStart' ? value : currentTicketData.salesStart,
-          startTime: key === 'startTime' ? value : currentTicketData.startTime,
-          salesEnd: key === 'salesEnd' ? value : currentTicketData.salesEnd,
-          endTime: key === 'endTime' ? value : currentTicketData.endTime,
+          name: key === 'ticketName' ? processedValue : currentTicketData.ticketName,
+          type: key === 'ticketType' ? processedValue : currentTicketData.ticketType,
+          price: key === 'price' ? processedValue : currentTicketData.price,
+          category: key === 'ticketCategory' ? processedValue : currentTicketData.ticketCategory,
+          purchaseLimit: key === 'purchaseLimit' ? processedValue : currentTicketData.purchaseLimit,
+          stockAvailability: key === 'stockAvailability' ? processedValue : currentTicketData.stockAvailability,
+          soldTarget: key === 'soldTarget' ? processedValue : currentTicketData.soldTarget,
+          numberOfPeople: key === 'numberOfPeople' ? processedValue : currentTicketData.numberOfPeople,
+          perks: key === 'perks' ? processedValue : currentTicketData.perks,
+          ticketAvailability: key === 'ticketAvailability' ? processedValue : currentTicketData.ticketAvailability,
+          salesStart: key === 'salesStart' ? processedValue : currentTicketData.salesStart,
+          startTime: key === 'startTime' ? processedValue : currentTicketData.startTime,
+          salesEnd: key === 'salesEnd' ? processedValue : currentTicketData.salesEnd,
+          endTime: key === 'endTime' ? processedValue : currentTicketData.endTime,
           savedTicketId: existingTicket.savedTicketId || null
         };
 
@@ -144,19 +166,30 @@ const CreateTicketComponent = () => {
       }
     } else if (isManageEventsContext) {
       // Manage Events Context: Use useTicketStore
-      setCurrentTicketData(key, value);
+      setCurrentTicketData(key, processedValue);
       // Auto-save to active ticket for real-time sidebar sync
       saveCurrentDataToActiveTicket();
     }
   };
 
   const getValue = (key: string) => {
+    let value = "";
+    
     if (isCreateEventContext) {
-      return form[currentStage]?.[key] || "";
+      value = form[currentStage]?.[key] || "";
     } else if (isManageEventsContext) {
-      return getCurrentTicketData(key) || "";
+      value = getCurrentTicketData(key) || "";
     }
-    return "";
+    
+    // Convert ISO dates to input format for date/time fields
+    if (key === 'salesStart' || key === 'salesEnd') {
+      return isoToDateInput(value);
+    }
+    if (key === 'startTime' || key === 'endTime') {
+      return isoToTimeInput(value);
+    }
+    
+    return value;
   };
 
   const updatePerk = (index: number, value: any) => {
