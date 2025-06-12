@@ -387,7 +387,7 @@ const CreateTicketComponent = () => {
             </label>
             <div className="relative">
               <div 
-                className="w-full h-[44px] border-[1px] border-neutral rounded-[4px] px-[16px] py-[10px] cursor-pointer flex items-center gap-3 hover:border-lightPurple focus:border-lightPurple"
+                className="w-full h-[44px] border-[1px] border-neutral rounded-[4px] px-[16px] py-[10px] cursor-pointer flex items-center gap-3 hover:border-lightPurple focus:border-lightPurple bg-white"
                 onClick={() => {
                   const colorPicker = document.getElementById('ticket-color-picker');
                   if (colorPicker) {
