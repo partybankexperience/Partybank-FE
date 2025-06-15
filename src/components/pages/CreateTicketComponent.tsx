@@ -160,6 +160,10 @@ const CreateTicketComponent = () => {
       return value;
     }
     
+    if (key === 'color') {
+      return getCurrentTicketData('color') || value;
+    }
+    
     return value;
   };
 

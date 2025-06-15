@@ -1,4 +1,3 @@
-
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -62,7 +61,8 @@ export const useTicketStore = create<TicketStore>()(
         salesStart: "",
         startTime: "",
         salesEnd: "",
-        endTime: ""
+        endTime: "",
+        color: ""
       },
 
       addTicket: () => {
@@ -101,7 +101,8 @@ export const useTicketStore = create<TicketStore>()(
             salesStart: "",
             startTime: "",
             salesEnd: "",
-            endTime: ""
+            endTime: "",
+            color: ""
           }
         }));
       },
@@ -146,7 +147,7 @@ export const useTicketStore = create<TicketStore>()(
             salesStart: activeTicket.salesStart,
             startTime: activeTicket.startTime,
             salesEnd: activeTicket.salesEnd,
-            endTime: activeTicket.endTime
+            endTime: ""
           } : {
             ticketCategory: "",
             ticketType: "",
@@ -161,7 +162,8 @@ export const useTicketStore = create<TicketStore>()(
             salesStart: "",
             startTime: "",
             salesEnd: "",
-            endTime: ""
+            endTime: "",
+            color: ""
           };
 
           return {
@@ -322,7 +324,7 @@ export const useTicketStore = create<TicketStore>()(
       resetTicketStore: () => {
         // Clear localStorage first
         localStorage.removeItem("ticket-management-storage");
-        
+
         // Reset all state to initial values
         //error -'Object literal may only specify known properties, and 'ticketCategory' does not exist in type 'Partial<TicketData>'.
         set({
@@ -342,7 +344,8 @@ export const useTicketStore = create<TicketStore>()(
             salesStart: "",
             startTime: "",
             salesEnd: "",
-            endTime: ""
+            endTime: "",
+            color: ""
           }
         });
       },
