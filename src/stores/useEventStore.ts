@@ -167,6 +167,7 @@ export const useEventStore = create<EventData>()(
 
         // Map tickets if any
         if (eventData.tickets && eventData.tickets.length > 0) {
+          // console.log(eventData.tickets,'the tickets from the event side');
           form['Tickets Create'] = {
             tickets: eventData.tickets,
           };

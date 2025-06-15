@@ -185,9 +185,10 @@ const goNext = async () => {
         const tickets = formData.tickets || [];
         const activeIndex = formData.activeTicketIndex || 0;
         const savedTickets = formData.savedTickets || [];
-
-        // Build current ticket object from form data
         const existingTicket = tickets[activeIndex] || {};
+
+        console.log(tickets, 'tickets from the form data');
+    
         const currentTicket = {
           name: formData.ticketName?.trim() || "",
           type: formData.ticketType || "",
@@ -204,230 +205,154 @@ const goNext = async () => {
           salesEnd: formData.salesEnd || "",
           endTime: formData.endTime || "",
           savedTicketId: existingTicket.savedTicketId || null,
-          id: existingTicket.id || `ticket-${Date.now()}`
+          id: existingTicket.id ,
+          color: formData.color || ""
         };
-
-        // Check if current ticket is already saved
-        const currentTicketId = tickets[activeIndex]?.id || `ticket-${activeIndex}`;
+    
+        const currentTicketId = currentTicket.id;
         const isCurrentTicketSaved = savedTickets.includes(currentTicketId);
-
-        // Validate current ticket if it has a name or any filled fields
-        const hasCurrentTicketData = currentTicket.name || currentTicket.type || currentTicket.category || 
-                                   currentTicket.price || currentTicket.purchaseLimit || currentTicket.salesStart;
-
+    
+        const hasCurrentTicketData = Object.values({
+          name: currentTicket.name,
+          type: currentTicket.type,
+          category: currentTicket.category,
+          price: currentTicket.price,
+          purchaseLimit: currentTicket.purchaseLimit,
+          salesStart: currentTicket.salesStart
+        }).some(Boolean);
+    
+        const validateTicket = () => {
+          if (!currentTicket.name) return setError(stage, "ticketName", "Ticket name is required");
+          if (!currentTicket.type) return setError(stage, "ticketType", "Ticket type is required");
+          if (!currentTicket.category) return setError(stage, "ticketCategory", "Ticket category is required");
+    
+          if (
+            currentTicket.type === "Paid" &&
+            (!currentTicket.price || Number(currentTicket.price) <= 0)
+          ) {
+            return setError(stage, "price", "Price is required for paid tickets");
+          }
+    
+          if (!currentTicket.salesStart) return setError(stage, "salesStart", "Sales start date is required");
+          if (!currentTicket.startTime) return setError(stage, "startTime", "Start time is required");
+          if (!currentTicket.salesEnd) return setError(stage, "salesEnd", "Sales end date is required");
+          if (!currentTicket.endTime) return setError(stage, "endTime", "End time is required");
+          if (!currentTicket.purchaseLimit) return setError(stage, "purchaseLimit", "Purchase limit is required");
+    
+          if (
+            currentTicket.isUnlimited === "limited" &&
+            (!currentTicket.stockAvailability || Number(currentTicket.stockAvailability) <= 0)
+          ) {
+            return setError(stage, "stockAvailability", "Stock availability is required for limited tickets");
+          }
+    
+          if (
+            currentTicket.category === "option2" &&
+            (!currentTicket.groupSize || Number(currentTicket.groupSize) <= 0)
+          ) {
+            return setError(stage, "groupSize", "Number of people is required for group tickets");
+          }
+    
+          return true;
+        };
+    
         if (hasCurrentTicketData) {
-          // Validate current ticket required fields
-          if (!currentTicket.name) {
-            setError(stage, "ticketName", "Ticket name is required");
-            return;
-          }
-          if (!currentTicket.type) {
-            setError(stage, "ticketType", "Ticket type is required");
-            return;
-          }
-          if (!currentTicket.category) {
-            setError(stage, "ticketCategory", "Ticket category is required");
-            return;
-          }
-          if (currentTicket.type === "Paid" && (!currentTicket.price || Number(currentTicket.price) <= 0)) {
-            setError(stage, "price", "Price is required for paid tickets");
-            return;
-          }
-          if (!currentTicket.salesStart) {
-            setError(stage, "salesStart", "Sales start date is required");
-            return;
-          }
-          if (!currentTicket.startTime) {
-            setError(stage, "startTime", "Start time is required");
-            return;
-          }
-          if (!currentTicket.salesEnd) {
-            setError(stage, "salesEnd", "Sales end date is required");
-            return;
-          }
-          if (!currentTicket.endTime) {
-            setError(stage, "endTime", "End time is required");
-            return;
-          }
-          if (!currentTicket.purchaseLimit) {
-            setError(stage, "purchaseLimit", "Purchase limit is required");
-            return;
-          }
-          if (currentTicket.isUnlimited === "limited" && (!currentTicket.stockAvailability || Number(currentTicket.stockAvailability) <= 0)) {
-            setError(stage, "stockAvailability", "Stock availability is required for limited tickets");
-            return;
-          }
-          if (currentTicket.category === "option2" && (!currentTicket.groupSize || Number(currentTicket.groupSize) <= 0)) {
-            setError(stage, "groupSize", "Number of people is required for group tickets");
-            return;
-          }
-
+          if (validateTicket() !== true) return;
           clearStageErrors(stage);
-
-          // Save current ticket to the tickets array
-          let updatedTickets = [...tickets];
-          updatedTickets[activeIndex] = {
-            ...existingTicket,
-            ...currentTicket
-          };
-          setFormValue("Tickets Create", "tickets", updatedTickets);
-
-          // Create/update ticket via API
+    
+          const updatedTickets = [...tickets];
+          updatedTickets[activeIndex] = { ...existingTicket, ...currentTicket };
+          setFormValue(stage, "tickets", updatedTickets);
+    
           try {
-            const categoryMap: { [key: string]: string } = {
-              "option1": "single",
-              "option2": "group"
-            };
-
+            // const categoryMap = { option1: "single", option2: "group" };
             const salesStartISO = `${currentTicket.salesStart}T${currentTicket.startTime}:00Z`;
             const salesEndISO = `${currentTicket.salesEnd}T${currentTicket.endTime}:00Z`;
-
             const currentTicketInArray = updatedTickets[activeIndex];
-            let response;
-
-            // Check if ticket already has a backend ID (savedTicketId) - if so, edit it
-            if (currentTicketInArray?.savedTicketId) {
-              // Edit existing ticket
-              console.log("Editing existing ticket with ID:", currentTicketInArray.savedTicketId);
-              console.log("Complete ticket form data being saved:", {
-                ticketId: currentTicketInArray.savedTicketId,
-                formData: currentTicket,
-                fullTicketData: currentTicketInArray,
-                activeIndex: activeIndex,
-                allTickets: updatedTickets
-              });
-              response = await editTicket(
-                currentTicketInArray.savedTicketId,
-                eventId as string,
-                currentTicket.name,
-                categoryMap[currentTicket.category] || currentTicket.category,
-                currentTicket.type.toLowerCase(),
-                currentTicket.type === "Paid" ? Number(currentTicket.price) : 0,
-                Number(currentTicket.purchaseLimit),
-                currentTicket.isUnlimited === "limited" ? Number(currentTicket.stockAvailability) : 999999,
-                Number(currentTicket.soldTarget) || 0,
-                salesStartISO,
-                salesEndISO,
-                currentTicket.startTime,
-                currentTicket.endTime,
-                Array.isArray(currentTicket.perks) ? currentTicket.perks.filter(perk => perk && perk.trim()) : [],
-                currentTicket.isUnlimited === "unlimited",
-                currentTicket.category === "option2" ? Number(currentTicket.groupSize) : undefined
-              );
-            } else {
-              // Create new ticket
-              console.log("Creating new ticket");
-              console.log("Complete new ticket form data:", {
-                formData: currentTicket,
-                ticketData: currentTicketInArray,
-                activeIndex: activeIndex,
-                eventId: eventId
-              });
-              response = await createTicketByEventId(
-                eventId as string,
-                currentTicket.name,
-                categoryMap[currentTicket.category] || currentTicket.category,
-                currentTicket.type.toLowerCase(),
-                currentTicket.type === "Paid" ? Number(currentTicket.price) : 0,
-                Number(currentTicket.purchaseLimit),
-                currentTicket.isUnlimited === "limited" ? Number(currentTicket.stockAvailability) : 999999,
-                Number(currentTicket.soldTarget) || 0,
-                salesStartISO,
-                salesEndISO,
-                currentTicket.startTime,
-                currentTicket.endTime,
-                Array.isArray(currentTicket.perks) ? currentTicket.perks.filter(perk => perk && perk.trim()) : [],
-                currentTicket.isUnlimited === "unlimited",
-                currentTicket.category === "option2" ? Number(currentTicket.groupSize) : undefined
-              );
-
-              // Store the backend ticket ID for new tickets
-              if (response?.ticketId) {
-                updatedTickets[activeIndex] = {
-                  ...updatedTickets[activeIndex],
-                  savedTicketId: response.ticketId
-                };
-                console.log("Assigned savedTicketId to new ticket:", {
-                  ticketId: response.ticketId,
-                  updatedTicketData: updatedTickets[activeIndex],
-                  activeIndex: activeIndex
-                });
-                setFormValue("Tickets Create", "tickets", updatedTickets);
-              }
+            const categoryMap: { [key: string]: string } = {
+              option1: "single",
+              option2: "group",
+            };
+    
+            const perksArray = Array.isArray(currentTicket.perks)
+              ? currentTicket.perks.filter(p => p && p.trim())
+              : [];
+              
+    
+            const ticketPayload = [
+              eventId as string,
+              currentTicket.name,
+              categoryMap[currentTicket.category] || currentTicket.category,
+              currentTicket.type.toLowerCase(),
+              currentTicket.type === "Paid" ? Number(currentTicket.price) : 0,
+              Number(currentTicket.purchaseLimit),
+              !currentTicket.isUnlimited
+                ? Number(currentTicket.stockAvailability):0,
+                
+              Number(currentTicket.soldTarget) || 0,
+              salesStartISO,
+              salesEndISO,
+              currentTicket.startTime,
+              currentTicket.endTime,
+              perksArray,
+              currentTicket.isUnlimited === "unlimited",
+              currentTicket.category === "option2" ? Number(currentTicket.groupSize) : undefined,
+              currentTicket.color || ""
+            ]as const;
+    
+            const response = currentTicketInArray?.savedTicketId||currentTicketId
+              ? await editTicket(currentTicketInArray.savedTicketId, ...ticketPayload)
+              : await createTicketByEventId(...ticketPayload);
+    
+            if (!currentTicketInArray?.savedTicketId && response?.ticketId) {
+              updatedTickets[activeIndex] = {
+                ...updatedTickets[activeIndex],
+                savedTicketId: response.ticketId
+              };
+              setFormValue(stage, "tickets", updatedTickets);
             }
-
-
+    
           } catch (error) {
             console.error("Error creating/updating ticket:", error);
             setError(stage, "general", `Failed to save ticket: ${currentTicket.name}`);
             return;
           }
-
-          // Update savedTickets list to include current ticket (for both new and edited)
-          const updatedSavedTickets = formData.savedTickets || [];
-          const currentTicketId = updatedTickets[activeIndex]?.id;
-          if (currentTicketId && !updatedSavedTickets.includes(currentTicketId)) {
+    
+          const updatedSavedTickets = [...savedTickets];
+          if (!updatedSavedTickets.includes(currentTicketId)) {
             updatedSavedTickets.push(currentTicketId);
-            setFormValue("Tickets Create", "savedTickets", updatedSavedTickets);
+            setFormValue(stage, "savedTickets", updatedSavedTickets);
           }
-
-          // Check if there are more unsaved tickets to work on
-          const allTicketForms = updatedTickets.length > 0 ? updatedTickets : [{}];
-          let nextUnsavedIndex = -1;
-
-          for (let i = 0; i < allTicketForms.length; i++) {
-            if (i !== activeIndex) {
-              const ticket = allTicketForms[i];
-              const ticketId = ticket.id || `ticket-${i}`;
-              // Check if ticket is not saved and has some data
-              if (!updatedSavedTickets.includes(ticketId) && 
-                  (ticket.name || ticket.type || ticket.category)) {
-                nextUnsavedIndex = i;
-                break;
-              }
-            }
-          }
-
-          // If there's another unsaved ticket, switch to it
-          if (nextUnsavedIndex !== -1) {
-            const nextTicket = allTicketForms[nextUnsavedIndex];
-            setFormValue("Tickets Create", "activeTicketIndex", nextUnsavedIndex);
-
-            // Load the next ticket's data into the form
-            setFormValue("Tickets Create", "ticketName", nextTicket.name || "");
-            setFormValue("Tickets Create", "ticketType", nextTicket.type || "");
-            setFormValue("Tickets Create", "ticketCategory", nextTicket.category || "");
-            setFormValue("Tickets Create", "price", nextTicket.price || "");
-            setFormValue("Tickets Create", "purchaseLimit", nextTicket.purchaseLimit || "");
-            setFormValue("Tickets Create", "stockAvailability", nextTicket.stockAvailability || "");
-            setFormValue("Tickets Create", "soldTarget", nextTicket.soldTarget || "");
-            setFormValue("Tickets Create", "groupSize", nextTicket.groupSize || "");
-            setFormValue("Tickets Create", "perks", nextTicket.perks || [""]);
-            setFormValue("Tickets Create", "isUnlimited", nextTicket.isUnlimited || "");
-            setFormValue("Tickets Create", "salesStart", nextTicket.salesStart || "");
-            setFormValue("Tickets Create", "startTime", nextTicket.startTime || "");
-            setFormValue("Tickets Create", "salesEnd", nextTicket.salesEnd || "");
-            setFormValue("Tickets Create", "endTime", nextTicket.endTime || "");
-
-            return; // Stay on current stage to complete the next ticket
+    
+          const nextIndex = updatedTickets.findIndex((ticket, index) =>
+            index !== activeIndex &&
+            !updatedSavedTickets.includes(ticket?.id || `ticket-${index}`) &&
+            (ticket.name || ticket.type || ticket.category)
+          );
+    
+          if (nextIndex !== -1) {
+            const next = updatedTickets[nextIndex];
+            setFormValue(stage, "activeTicketIndex", nextIndex);
+            Object.entries(next).forEach(([key, value]) => {
+              setFormValue(stage, key, value ?? (key === "perks" ? [""] : ""));
+            });
+            return;
           }
         }
-
-        // If no current ticket data and no tickets exist, require at least one
-        const finalTickets = formData.tickets || [];
-        if (finalTickets.length === 0 && !hasCurrentTicketData) {
+    
+        if ((formData.tickets || []).length === 0 && !hasCurrentTicketData) {
           setError(stage, "ticketName", "At least one ticket must be created");
           return;
         }
-
+    
         clearStageErrors(stage);
-
+    
       } catch (error) {
         console.error("Error in Tickets Create stage:", error);
         setError(stage, "general", "An unexpected error occurred while creating tickets.");
-        return;
       }
     }
+    
 
     if (stage === "Accessibility") {
       try {

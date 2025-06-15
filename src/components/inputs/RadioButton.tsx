@@ -20,7 +20,7 @@ const RadioButton = ({
   }: RadioButtonProps) => {
     return (
       <label className="inline-flex  gap-2 cursor-pointer text-[.8rem] font-[RedHat] text-black">
-        <span className="relative h-[18px] w-[18px] flex items-center justify-center">
+        <span className="relative h-[1rem] w-[1rem] flex items-center justify-center">
           <input
             type="radio"
             name={name}
@@ -39,7 +39,7 @@ const RadioButton = ({
             `}
           >
             <div
-              className={`w-[8px] h-[8px] rounded-full transition-colors duration-200 ${
+              className={`w-[.5rem] h-[.5rem] rounded-full transition-colors duration-200 ${
                 checked ? 'bg-primary' : 'bg-transparent'
               }`}
             />

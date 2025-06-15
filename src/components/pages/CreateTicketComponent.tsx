@@ -41,6 +41,7 @@ const CreateTicketComponent = () => {
   const currentStage = "Tickets Create";
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  console.log(form, 'the whole form')
 
   // Event ID Source
   const eventId = isCreateEventContext 
@@ -98,9 +99,9 @@ const CreateTicketComponent = () => {
           startTime: key === 'startTime' ? value : currentTicketData.startTime,
           salesEnd: key === 'salesEnd' ? processedValue : currentTicketData.salesEnd,
           endTime: key === 'endTime' ? value : currentTicketData.endTime,
+          color:key==='color' ? value : currentTicketData.color,
           savedTicketId: existingTicket.savedTicketId || null
         };
-
         const updatedTickets = [...tickets];
         updatedTickets[activeIndex] = updatedTicket;
         setFormValue(currentStage, "tickets", updatedTickets);
@@ -110,7 +111,9 @@ const CreateTicketComponent = () => {
       setCurrentTicketData(key, processedValue);
       // Auto-save to active ticket for real-time sidebar sync
       saveCurrentDataToActiveTicket();
+
     }
+
   };
 
   const getValue = (key: string) => {
@@ -132,7 +135,7 @@ const CreateTicketComponent = () => {
     }
     
     if (key === 'stockAvailability') {
-      return getCurrentTicketData('totalStock') || value;
+      return getCurrentTicketData('stockAvailability') || value;
     }
     
     if (key === 'groupSize') {
@@ -154,18 +157,25 @@ const CreateTicketComponent = () => {
     }
     
     if (key === 'isUnlimited') {
-      const isUnlimited = getCurrentTicketData('isUnlimited');
+      const isUnlimited = getCurrentTicketData('isUnlimited') || value;
+      let result
+      if(value==='') return result=false;
+      else if(value=='true'||value==='true') return result=true;
+      else if(value=='false'||value==='false') return result=false;
+      // console.log(value,'the value is very concerning')
+      // console.log(getCurrentTicketData('isUnlimited'))
       if (isUnlimited === true) return true;
-      if (isUnlimited === false) return false;
-      return value;
+      if (isUnlimited === false||"") return false;
+      return result;
     }
     
     if (key === 'color') {
       return getCurrentTicketData('color') || value;
     }
-    
     return value;
   };
+  console.log(getValue('color'),'the color value is here')
+  console.log("Retrieved color value:", form[currentStage]?.color || getCurrentTicketData('color'));
 
   const updatePerk = (index: number, value: any) => {
     const perks = getValue("perks");
@@ -204,7 +214,7 @@ const CreateTicketComponent = () => {
       ticketCategory: getCurrentTicketData("category"),
       price: getCurrentTicketData("price"),
       purchaseLimit: getCurrentTicketData("purchaseLimit"),
-      stockAvailability: getCurrentTicketData("totalStock"),
+      stockAvailability: getCurrentTicketData("stockAvailability"),
       soldTarget: getCurrentTicketData("soldTarget"),
       groupSize: getCurrentTicketData("groupSize"),
       perks: getCurrentTicketData("perks"),
@@ -215,7 +225,6 @@ const CreateTicketComponent = () => {
       endTime: getCurrentTicketData("endTime"),
       color: getCurrentTicketData("color")
     };
-
     // Validation
     if (!ticketData.ticketName) {
       errorAlert("Error","Ticket name is required");
@@ -306,7 +315,7 @@ const CreateTicketComponent = () => {
       setIsSubmitting(false);
     }
   };
-
+console.log(getValue("isUnlimited"),'checking ')
   return (
     <div className="grid gap-[2.5rem] mt-[20px]">
       <div className="grid gap-[15px]">
@@ -355,13 +364,14 @@ const CreateTicketComponent = () => {
         <div className="grid md:flex gap-4 md:gap-[2.5rem]">
         {availabilityType.map((availability) => {
   const isUnlimited = availability === "Unlimited";
+  console.log(isUnlimited, getValue("isUnlimited"),'checking where the issue is really from')
   return (
     <RadioButton
       key={availability}
       label={availability}
       value={availability}
       name="ticket-availability"
-      checked={getValue("isUnlimited") === isUnlimited}
+      checked={!!getValue("isUnlimited") === isUnlimited}
       onChange={() => handleChange("isUnlimited", isUnlimited)}
     />
   );
@@ -399,7 +409,7 @@ const CreateTicketComponent = () => {
             classname="!w-full"
             type="number"
           />
-          {getValue("isUnlimited") === "limited" && (
+          {!getValue("isUnlimited") && (
             <DefaultInput
               id="stockAvailability"
               label="Stock Availability"

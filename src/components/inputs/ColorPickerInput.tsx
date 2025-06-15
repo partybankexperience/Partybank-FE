@@ -18,7 +18,7 @@ const ColorPickerInput = ({
   classname = ''
 }: ColorPickerInputProps) => {
   const [showPicker, setShowPicker] = useState(false);
-  const currentColor = value || '#3B82F6';
+  const currentColor = value || '';
 
   const togglePicker = () => {
     setShowPicker(!showPicker);

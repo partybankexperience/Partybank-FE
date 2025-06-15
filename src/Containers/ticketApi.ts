@@ -138,7 +138,7 @@ const editTicket = async (
   };
   const response = await apiCall({
     name: "editTicket",
-    urlExtra: `/${id}`,
+    urlExtra: `/${eventId}`,
     data: payload
   });
   return response;
