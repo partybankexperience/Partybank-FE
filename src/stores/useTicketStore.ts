@@ -17,6 +17,7 @@ interface TicketData {
   startTime: string;
   salesEnd: string;
   endTime: string;
+  color: string;
   savedTicketId?: string | null;
   isSaved?: boolean; // Track if ticket is saved to backend
 }
@@ -81,7 +82,8 @@ export const useTicketStore = create<TicketStore>()(
           salesStart: "",
           startTime: "",
           salesEnd: "",
-          endTime: ""
+          endTime: "",
+          color: ""
         };
 
         set(state => ({
@@ -217,7 +219,8 @@ export const useTicketStore = create<TicketStore>()(
               salesStart: selectedTicket.salesStart,
               startTime: selectedTicket.startTime,
               salesEnd: selectedTicket.salesEnd,
-              endTime: selectedTicket.endTime
+              endTime: selectedTicket.endTime,
+              color: selectedTicket.color
             } : state.currentTicketData;
 
             return {
@@ -306,7 +309,8 @@ export const useTicketStore = create<TicketStore>()(
             salesStart: (currentData as any).salesStart || "",
             startTime: (currentData as any).startTime || "",
             salesEnd: (currentData as any).salesEnd || "",
-            endTime: (currentData as any).endTime || ""
+            endTime: (currentData as any).endTime || "",
+            color: (currentData as any).color || ""
           };
 
           // If this is the first ticket and tickets array was empty
