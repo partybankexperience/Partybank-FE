@@ -195,55 +195,82 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
   };
 
   const handleDeleteTicket = async (ticketIndex: number) => {
-    const ticketId = currentTicket?.tickets?.[ticketIndex]?.id;
-    if(ticketId){
+    // Prevent deletion if only one ticket remains
+    if (allTicketForms.length <= 1) {
+      alert("At least one ticket type must be created");
+      return;
+    }
+
+    const ticketToDelete = allTicketForms[ticketIndex];
+    const ticketId = ticketToDelete?.id;
+
+    // Step 1: Handle saved tickets - delete from backend first
+    if (ticketId) {
       try {
         await deleteTicket(ticketId);
       } catch (error) {
         console.error("Error deleting ticket:", error);
         return; // Abort deletion from UI if API call fails
       }
-    } else {
-      //handle deleting and updating the ticket in the store
     }
-  
-    if (allTicketForms.length <= 1) {
-      alert("At least one ticket type must be created");
-      return;
-    }
-  
+
+    // Step 2: Handle deletion based on context
     if (isCreateEventContext) {
-      const updatedTickets = tickets.filter((_:any, index:any) => index !== ticketIndex);
-      setFormValue("Tickets Create", "tickets", updatedTickets);
-  
+      // Create Event Context: Update EventStore
+      const updatedTickets = tickets.filter((_: any, index: any) => index !== ticketIndex);
+      
+      // Calculate new active index
       const newActiveIndex =
         activeTicketIndex === ticketIndex
           ? Math.max(0, activeTicketIndex - 1)
           : activeTicketIndex > ticketIndex
           ? activeTicketIndex - 1
           : activeTicketIndex;
-  
+
+      // Update the store
+      setFormValue("Tickets Create", "tickets", updatedTickets);
       setFormValue("Tickets Create", "activeTicketIndex", newActiveIndex);
-  
+
+      // Step 3: Load the new active ticket's data into the form
       if (updatedTickets.length > 0) {
-        handleEditTicket(newActiveIndex);
+        const newActiveTicket = updatedTickets[newActiveIndex];
+        if (newActiveTicket) {
+          // Populate form with new active ticket's data
+          setFormValue("Tickets Create", "ticketName", newActiveTicket.name || "");
+          setFormValue("Tickets Create", "ticketType", newActiveTicket.type || "");
+          setFormValue("Tickets Create", "ticketCategory", newActiveTicket.category || "");
+          setFormValue("Tickets Create", "price", newActiveTicket.price || "");
+          setFormValue("Tickets Create", "purchaseLimit", newActiveTicket.purchaseLimit || "");
+          setFormValue("Tickets Create", "totalStock", newActiveTicket.totalStock || "");
+          setFormValue("Tickets Create", "soldTarget", newActiveTicket.soldTarget || "");
+          setFormValue("Tickets Create", "groupSize", newActiveTicket.groupSize || "");
+          setFormValue("Tickets Create", "perks", newActiveTicket.perks || [""]);
+          setFormValue("Tickets Create", "isUnlimited", newActiveTicket.isUnlimited || "");
+          setFormValue("Tickets Create", "salesStart", newActiveTicket.salesStart || "");
+          setFormValue("Tickets Create", "startTime", newActiveTicket.startTime || "");
+          setFormValue("Tickets Create", "salesEnd", newActiveTicket.salesEnd || "");
+          setFormValue("Tickets Create", "endTime", newActiveTicket.endTime || "");
+          setFormValue("Tickets Create", "color", newActiveTicket.color || "");
+        }
       } else {
-        // Reset form fields
+        // Reset form fields if no tickets remain (shouldn't happen due to minimum check)
         [
           "ticketName", "ticketType", "ticketCategory", "price",
           "purchaseLimit", "totalStock", "soldTarget",
-          "groupSize", "perks", "isUnlimited"
+          "groupSize", "perks", "isUnlimited", "salesStart",
+          "startTime", "salesEnd", "endTime", "color"
         ].forEach(field => {
           setFormValue("Tickets Create", field, field === "perks" ? [""] : "");
         });
       }
-    }
-  
-    if (isManageEventsContext) {
+    } else if (isManageEventsContext) {
+      // Manage Events Context: Use TicketStore's delete method
+      // The store will handle updating activeTicketIndex and currentTicketData automatically
       manageDeleteTicket(ticketIndex);
     }
-  
-    onDeleteTicket?.(allTicketForms[ticketIndex].id);
+
+    // Step 4: Notify parent component
+    onDeleteTicket?.(ticketId);
   };
   
   const hasInitialized = useRef(false);
