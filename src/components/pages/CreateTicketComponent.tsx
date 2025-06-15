@@ -84,13 +84,13 @@ const CreateTicketComponent = () => {
         const existingTicket = tickets[activeIndex] || {};
         const updatedTicket = {
           ...existingTicket,
-          id: existingTicket.id || `ticket-${Date.now()}`,
+          id: existingTicket.id,
           name: key === 'ticketName' ? value : currentTicketData.ticketName,
           type: key === 'ticketType' ? value : currentTicketData.ticketType,
           price: key === 'price' ? value : currentTicketData.price,
           category: key === 'ticketCategory' ? value : currentTicketData.ticketCategory,
           purchaseLimit: key === 'purchaseLimit' ? value : currentTicketData.purchaseLimit,
-          stockAvailability: key === 'stockAvailability' ? value : currentTicketData.stockAvailability,
+          totalStock: key === 'totalStock' ? value : currentTicketData.totalStock,
           soldTarget: key === 'soldTarget' ? value : currentTicketData.soldTarget,
           groupSize: key === 'groupSize' ? value : currentTicketData.groupSize,
           perks: key === 'perks' ? value : currentTicketData.perks,
@@ -134,8 +134,8 @@ const CreateTicketComponent = () => {
       return getCurrentTicketData('name') || value;
     }
     
-    if (key === 'stockAvailability') {
-      return getCurrentTicketData('stockAvailability') || value;
+    if (key === 'totalStock') {
+      return getCurrentTicketData('totalStock') || value;
     }
     
     if (key === 'groupSize') {
@@ -214,7 +214,7 @@ const CreateTicketComponent = () => {
       ticketCategory: getCurrentTicketData("category"),
       price: getCurrentTicketData("price"),
       purchaseLimit: getCurrentTicketData("purchaseLimit"),
-      stockAvailability: getCurrentTicketData("stockAvailability"),
+      totalStock: getCurrentTicketData("totalStock"),
       soldTarget: getCurrentTicketData("soldTarget"),
       groupSize: getCurrentTicketData("groupSize"),
       perks: getCurrentTicketData("perks"),
@@ -278,7 +278,7 @@ const CreateTicketComponent = () => {
           ticketData.ticketType.toLowerCase(),
           ticketData.ticketType === "Paid" ? Number(ticketData.price) : 0,
           Number(ticketData.purchaseLimit) || 1,
-          !ticketData.isUnlimited ? Number(ticketData.stockAvailability) : 0,
+          !ticketData.isUnlimited ? Number(ticketData.totalStock) : 0,
           Number(ticketData.soldTarget) || 0,
           salesStartISO,
           salesEndISO,
@@ -411,10 +411,10 @@ console.log(getValue("isUnlimited"),'checking ')
           />
           {!getValue("isUnlimited") && (
             <DefaultInput
-              id="stockAvailability"
+              id="totalStock"
               label="Stock Availability"
-              value={getValue("stockAvailability")}
-              setValue={(v:any) => handleChange("stockAvailability", v)}
+              value={getValue("totalStock")}
+              setValue={(v:any) => handleChange("totalStock", v)}
               placeholder="Enter stock quantity"
               classname="!w-full"
               type="number"

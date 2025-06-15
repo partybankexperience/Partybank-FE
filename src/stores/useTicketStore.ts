@@ -8,7 +8,7 @@ interface TicketData {
   price: string;
   category: string;
   purchaseLimit: string;
-  stockAvailability: string;
+  totalStock: string;
   soldTarget: string;
   groupSize: string;
   perks: string[];
@@ -20,6 +20,7 @@ interface TicketData {
   color: string;
   savedTicketId?: string | null;
   isSaved?: boolean;
+  key?: string; // Optional key for local state management
 }
 
 interface TicketStore {
@@ -41,13 +42,14 @@ interface TicketStore {
 }
 
 const emptyTicket = (): TicketData => ({
-  id: `ticket-${Date.now()}`,
+  id:'',
+  key: `ticket-${Date.now()}`,
   name: '',
   type: '',
   price: '',
   category: '',
   purchaseLimit: '',
-  stockAvailability: '',
+  totalStock: '',
   soldTarget: '',
   groupSize: '',
   perks: [''],
@@ -56,7 +58,7 @@ const emptyTicket = (): TicketData => ({
   startTime: '',
   salesEnd: '',
   endTime: '',
-  color: ''
+  color: '',
 });
 
 const ticketToFormData = (ticket: TicketData): any => ({
@@ -66,7 +68,7 @@ const ticketToFormData = (ticket: TicketData): any => ({
   isUnlimited: ticket.isUnlimited,
   price: ticket.price,
   purchaseLimit: ticket.purchaseLimit,
-  stockAvailability: ticket.stockAvailability,
+  totalStock: ticket.totalStock,
   soldTarget: ticket.soldTarget,
   groupSize: ticket.groupSize,
   perks: ticket.perks,
@@ -83,7 +85,7 @@ const formDataToTicket = (data: Partial<TicketData> & { [key: string]: any }): P
   category: data.ticketCategory || '',
   price: data.price || '',
   purchaseLimit: data.purchaseLimit || '',
-  stockAvailability: data.stockAvailability || '',
+  totalStock: data.totalStock || '',
   soldTarget: data.soldTarget || '',
   groupSize: data.groupSize || '',
   perks: data.perks || [''],
@@ -120,21 +122,29 @@ export const useTicketStore = create<TicketStore>()(
         });
       },
 
-      deleteTicket: ticketIndex => {
-        set(state => {
+      deleteTicket: (ticketIndex) => {
+        set((state) => {
           if (state.tickets.length <= 1) return state;
-
+      
           const updatedTickets = state.tickets.filter((_, i) => i !== ticketIndex);
-          const newIndex = ticketIndex === state.activeTicketIndex ? Math.max(0, state.activeTicketIndex - 1)
-            : state.activeTicketIndex > ticketIndex ? state.activeTicketIndex - 1 : state.activeTicketIndex;
-
+      
+          const newIndex =
+            ticketIndex === state.activeTicketIndex
+              ? Math.max(0, state.activeTicketIndex - 1)
+              : state.activeTicketIndex > ticketIndex
+              ? state.activeTicketIndex - 1
+              : state.activeTicketIndex;
+      
           return {
+            ...state, // <-- ✅ Ensure other parts of state remain intact
             tickets: updatedTickets,
             activeTicketIndex: newIndex,
-            currentTicketData: ticketToFormData(updatedTickets[newIndex] || emptyTicket())
+            currentTicketData: ticketToFormData(updatedTickets[newIndex] || emptyTicket()),
           };
         });
-      },
+      }
+      
+      ,
 
       setActiveTicket: ticketIndex => {
         set(state => {
@@ -196,13 +206,14 @@ export const useTicketStore = create<TicketStore>()(
           if (updatedTickets[ticketIndex]) {
             updatedTickets[ticketIndex] = {
               ...updatedTickets[ticketIndex],
-              savedTicketId,
-              isSaved: true
+              savedTicketId: savedTicketId || updatedTickets[ticketIndex].id,
+              isSaved: !!(savedTicketId || updatedTickets[ticketIndex].id)
             };
           }
           return { tickets: updatedTickets };
         });
       },
+      
 
       getNextUnsavedTicket: () => {
         const state = get();

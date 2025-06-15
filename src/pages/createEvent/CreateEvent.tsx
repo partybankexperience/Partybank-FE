@@ -184,7 +184,11 @@ const goNext = async () => {
       try {
         const tickets = formData.tickets || [];
         const activeIndex = formData.activeTicketIndex || 0;
-        const savedTickets = formData.savedTickets || [];
+        // const savedTickets = formData.savedTickets || [];
+        const savedTickets = (formData.tickets || [])
+  .filter((ticket:any) => !!ticket.id)
+  .map((ticket:any) => ticket.id);
+
         const existingTicket = tickets[activeIndex] || {};
 
         console.log(tickets, 'tickets from the form data');
@@ -195,7 +199,7 @@ const goNext = async () => {
           category: formData.ticketCategory || "",
           price: formData.price || "",
           purchaseLimit: formData.purchaseLimit || "",
-          stockAvailability: formData.stockAvailability || "",
+          totalStock: formData.totalStock || "",
           soldTarget: formData.soldTarget || "",
           groupSize: formData.groupSize || "",
           perks: formData.perks || [""],
@@ -241,9 +245,9 @@ const goNext = async () => {
     
           if (
             currentTicket.isUnlimited === "limited" &&
-            (!currentTicket.stockAvailability || Number(currentTicket.stockAvailability) <= 0)
+            (!currentTicket.totalStock || Number(currentTicket.totalStock) <= 0)
           ) {
-            return setError(stage, "stockAvailability", "Stock availability is required for limited tickets");
+            return setError(stage, "totalStock", "Stock availability is required for limited tickets");
           }
     
           if (
@@ -266,8 +270,8 @@ const goNext = async () => {
     
           try {
             // const categoryMap = { option1: "single", option2: "group" };
-            const salesStartISO = `${currentTicket.salesStart}T${currentTicket.startTime}:00Z`;
-            const salesEndISO = `${currentTicket.salesEnd}T${currentTicket.endTime}:00Z`;
+            // const salesStartISO = `${currentTicket.salesStart}T${currentTicket.startTime}:00Z`;
+            // const salesEndISO = `${currentTicket.salesEnd}T${currentTicket.endTime}:00Z`;
             const currentTicketInArray = updatedTickets[activeIndex];
             const categoryMap: { [key: string]: string } = {
               option1: "single",
@@ -287,27 +291,28 @@ const goNext = async () => {
               currentTicket.type === "Paid" ? Number(currentTicket.price) : 0,
               Number(currentTicket.purchaseLimit),
               !currentTicket.isUnlimited
-                ? Number(currentTicket.stockAvailability):0,
+                ? Number(currentTicket.totalStock):0,
                 
               Number(currentTicket.soldTarget) || 0,
-              salesStartISO,
-              salesEndISO,
+              currentTicket.salesStart,
+              currentTicket.salesEnd,
               currentTicket.startTime,
               currentTicket.endTime,
               perksArray,
-              currentTicket.isUnlimited === "unlimited",
+              currentTicket.isUnlimited,
               currentTicket.category === "option2" ? Number(currentTicket.groupSize) : undefined,
               currentTicket.color || ""
             ]as const;
     
-            const response = currentTicketInArray?.savedTicketId||currentTicketId
-              ? await editTicket(currentTicketInArray.savedTicketId, ...ticketPayload)
+            const response =currentTicketId
+              ? await editTicket(currentTicketId, ...ticketPayload)
               : await createTicketByEventId(...ticketPayload);
     
             if (!currentTicketInArray?.savedTicketId && response?.ticketId) {
               updatedTickets[activeIndex] = {
                 ...updatedTickets[activeIndex],
-                savedTicketId: response.ticketId
+                // savedTicketId: response.ticketId
+                id: response.ticketId,
               };
               setFormValue(stage, "tickets", updatedTickets);
             }
