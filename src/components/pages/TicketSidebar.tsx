@@ -196,12 +196,15 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
 
   const handleDeleteTicket = async (ticketIndex: number) => {
     const ticketId = currentTicket?.tickets?.[ticketIndex]?.id;
-  
-    try {
-      await deleteTicket(ticketId);
-    } catch (error) {
-      console.error("Error deleting ticket:", error);
-      return; // Abort deletion from UI if API call fails
+    if(ticketId){
+      try {
+        await deleteTicket(ticketId);
+      } catch (error) {
+        console.error("Error deleting ticket:", error);
+        return; // Abort deletion from UI if API call fails
+      }
+    } else {
+      //handle deleting and updating the ticket in the store
     }
   
     if (allTicketForms.length <= 1) {
