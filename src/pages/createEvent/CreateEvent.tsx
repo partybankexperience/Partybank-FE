@@ -5,7 +5,7 @@ import CreateEventLayout from "../../components/layouts/CreateEventLayout"
 import CreateTicketComponent from "../../components/pages/CreateTicketComponent"
 import { stages, useEventStore } from "../../stores/useEventStore"
 import { validateStage } from "../../utils/eventValidation"
-import { createEvent, editEvent, getScheduleandLocation, accessibility, notification, createTag } from "../../Containers/eventApi"
+import { createEvent, editEvent, getScheduleandLocation, accessibility, notification, createTag, publishEvent } from "../../Containers/eventApi"
 import { editTicket,createTicketByEventId } from "../../Containers/ticketApi"
 import Accessibility from "./Accessibility"
 import EventSetup from "./EventSetup"
@@ -514,14 +514,25 @@ const goNext = async () => {
           : "Next"}
       </DefaultButton>
 ):(
-  <DefaultButton variant="primary" onClick={() => {
-    // Clear storage when publishing event (completing the flow)
-    clearEventStorage();
-    // Clear eventId
-    Storage.removeItem("eventId");
-    navigate("/dashboard");
-  }}>
-  Publish Event
+  <DefaultButton variant="primary" onClick={async () => {
+    if (eventId) {
+      try {
+        setIsCreatingEvent(true);
+        await publishEvent(eventId);
+        // Clear storage when publishing event (completing the flow)
+        clearEventStorage();
+        // Clear eventId
+        Storage.removeItem("eventId");
+        navigate("/dashboard");
+      } catch (error) {
+        console.error("Error publishing event:", error);
+        errorAlert("Failed to publish event. Please try again.");
+      } finally {
+        setIsCreatingEvent(false);
+      }
+    }
+  }} isLoading={isCreatingEvent}>
+  {isCreatingEvent ? "Publishing..." : "Publish Event"}
 </DefaultButton>
 )}
     </div>
