@@ -267,6 +267,19 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
       // Manage Events Context: Use TicketStore's delete method
       // The store will handle updating activeTicketIndex and currentTicketData automatically
       manageDeleteTicket(ticketIndex);
+      
+      // Import the necessary functions from ticket store to check for unsaved tickets
+      const { getNextUnsavedTicket, moveToNextUnsavedTicket, hasUnsavedTickets } = useTicketStore.getState();
+      
+      // Try to move to next unsaved ticket after deletion
+      const movedToNext = moveToNextUnsavedTicket();
+      
+      // If no more unsaved tickets and we're in manage events context, 
+      // we should stay on the current form or handle accordingly
+      if (!movedToNext && !hasUnsavedTickets()) {
+        // All tickets are saved, stay on current active ticket
+        console.log("All tickets are saved after deletion");
+      }
     }
 
     // Step 4: Notify parent component
