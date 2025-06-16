@@ -1,3 +1,4 @@
+
 import { useEventStore } from "../../stores/useEventStore";
 
 const fieldLabels: Record<string, string> = {
@@ -55,6 +56,43 @@ const Review = () => {
     { step: "Review & Publish", data: form["Review & Publish"] },
   ];
 
+  const renderTickets = (tickets: any[]) => {
+    if (!Array.isArray(tickets) || tickets.length === 0) {
+      return (
+        <div className="text-[.9rem] text-[#979595]">
+          No tickets created
+        </div>
+      );
+    }
+
+    return tickets.map((ticket, index) => (
+      <div key={index} className="space-y-2 border-b border-gray-200 pb-4 mb-4 last:border-b-0">
+        <h4 className="text-[1rem] font-semibold text-black">Ticket {index + 1}</h4>
+        {Object.entries(ticket)
+          .filter(([key]) => fieldLabels[key]) // Only show keys that have labels
+          .map(([key, value]) => (
+            <div
+              key={key}
+              className="flex justify-between items-start gap-[10px]"
+            >
+              <p className="text-[.9rem] text-[#979595]">
+                {fieldLabels[key]}
+              </p>
+              <p className="text-[.9rem] text-black max-w-[60%]">
+                {typeof value === "boolean"
+                  ? value
+                    ? "Yes"
+                    : "No"
+                  : Array.isArray(value)
+                  ? value.join(", ")
+                  : String(value)}
+              </p>
+            </div>
+          ))}
+      </div>
+    ));
+  };
+
   return (
     <div className="space-y-6 mt-6">
       {state.map(({ step, data }) => {
@@ -64,41 +102,48 @@ const Review = () => {
           <div key={step} className="space-y-4">
             <h2 className="text-black text-[1rem] font-bold">{step}:</h2>
             <div className="grid gap-4">
-              {Object.entries(data).map(([key, value]) => {
-                if (key === "coverImage") {
-                  // const previewUrl = URL.createObjectURL(value);
-                  return (
-                    <div key={key} className="w-full max-w-md">
-                      <p className="text-[.9rem] text-[#979595] mb-2">
-                        {fieldLabels[key] || key}
+              {/* Handle cover image first if it exists */}
+              {data.coverImage && (
+                <div className="w-full max-w-md">
+                  <p className="text-[.9rem] text-[#979595] mb-2">
+                    Cover Image
+                  </p>
+                  <img
+                    src={data.coverImage}
+                    alt="Event Cover"
+                    className="w-full h-auto rounded-lg"
+                  />
+                </div>
+              )}
+              
+              {/* Handle tickets array separately */}
+              {step === "Tickets Create" && data.tickets ? (
+                <div>
+                  <p className="text-[.9rem] text-[#979595] mb-4">Tickets</p>
+                  {renderTickets(data.tickets)}
+                </div>
+              ) : (
+                /* Handle other fields */
+                Object.entries(data)
+                  .filter(([key]) => key !== "coverImage" && key !== "tickets" && fieldLabels[key]) // Filter out undefined labels and already handled fields
+                  .map(([key, value]) => (
+                    <div
+                      key={key}
+                      className="flex justify-between items-start gap-[10px]"
+                    >
+                      <p className="text-[.9rem] text-[#979595]">
+                        {fieldLabels[key]}
                       </p>
-                      <img
-                        src={value}
-                        alt="Event Cover"
-                        className="w-full h-auto rounded-lg"
-                      />
+                      <p className="text-[.9rem] text-black max-w-[60%]">
+                        {typeof value === "boolean"
+                          ? value
+                            ? "Yes"
+                            : "No"
+                          : String(value)}
+                      </p>
                     </div>
-                  );
-                }
-
-                return (
-                  <div
-                    key={key}
-                    className="flex justify-between items-start gap-[10px]"
-                  >
-                    <p className="text-[.9rem] text-[#979595]">
-                      {fieldLabels[key] || key}
-                    </p>
-                    <p className="text-[.9rem] text-black max-w-[60%]">
-                      {typeof value === "boolean"
-                        ? value
-                          ? "Yes"
-                          : "No"
-                        : String(value)}
-                    </p>
-                  </div>
-                );
-              })}
+                  ))
+              )}
             </div>
           </div>
         );
