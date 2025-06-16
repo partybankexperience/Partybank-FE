@@ -193,10 +193,16 @@ const goNext = async () => {
 
         console.log(tickets, 'tickets from the form data');
 
+        // Map category values to proper format before storing
+        const categoryMap: { [key: string]: string } = {
+          option1: "single",
+          option2: "group",
+        };
+
         const currentTicket = {
           name: formData.ticketName?.trim() || "",
           type: formData.ticketType || "",
-          category: formData.ticketCategory || "",
+          category: categoryMap[formData.ticketCategory] || formData.ticketCategory || "",
           price: formData.price || "",
           purchaseLimit: formData.purchaseLimit || "",
           totalStock: formData.totalStock || "",
@@ -269,14 +275,7 @@ const goNext = async () => {
           setFormValue(stage, "tickets", updatedTickets);
 
           try {
-            // const categoryMap = { option1: "single", option2: "group" };
-            // const salesStartISO = `${currentTicket.salesStart}T${currentTicket.startTime}:00Z`;
-            // const salesEndISO = `${currentTicket.salesEnd}T${currentTicket.endTime}:00Z`;
             const currentTicketInArray = updatedTickets[activeIndex];
-            const categoryMap: { [key: string]: string } = {
-              option1: "single",
-              option2: "group",
-            };
 
             const perksArray = Array.isArray(currentTicket.perks)
               ? currentTicket.perks.filter(p => p && p.trim())
