@@ -329,19 +329,29 @@ const goNext = async () => {
             setFormValue(stage, "savedTickets", updatedSavedTickets);
           }
     
-          const nextIndex = updatedTickets.findIndex((ticket, index) =>
-            index !== activeIndex &&
-            !updatedSavedTickets.includes(ticket?.id || `ticket-${index}`) &&
-            (ticket.name || ticket.type || ticket.category)
+          // Check for remaining tickets with isSaved: false
+          const nextUnsavedIndex = updatedTickets.findIndex((ticket, index) =>
+            index !== activeIndex && 
+            (!ticket.isSaved || ticket.isSaved === false)
           );
     
-          if (nextIndex !== -1) {
-            const next = updatedTickets[nextIndex];
-            setFormValue(stage, "activeTicketIndex", nextIndex);
-            Object.entries(next).forEach(([key, value]) => {
-              setFormValue(stage, key, value ?? (key === "perks" ? [""] : ""));
+          if (nextUnsavedIndex !== -1) {
+            // Move to next unsaved ticket
+            const nextTicket = updatedTickets[nextUnsavedIndex];
+            setFormValue(stage, "activeTicketIndex", nextUnsavedIndex);
+            
+            // Load the next ticket's data into the form
+            Object.entries(nextTicket).forEach(([key, value]) => {
+              if (key === 'name') setFormValue(stage, 'ticketName', value ?? "");
+              else if (key === 'type') setFormValue(stage, 'ticketType', value ?? "");
+              else if (key === 'category') setFormValue(stage, 'ticketCategory', value ?? "");
+              else if (key !== 'id' && key !== 'savedTicketId' && key !== 'key' && key !== 'isSaved') {
+                setFormValue(stage, key, value ?? (key === "perks" ? [""] : ""));
+              }
             });
-            return;
+            
+            console.log(`Moved to next unsaved ticket at index ${nextUnsavedIndex}`);
+            return; // Stay on current stage to edit the next unsaved ticket
           }
         }
     
