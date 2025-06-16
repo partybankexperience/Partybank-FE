@@ -192,7 +192,7 @@ const goNext = async () => {
         const existingTicket = tickets[activeIndex] || {};
 
         console.log(tickets, 'tickets from the form data');
-    
+
         const currentTicket = {
           name: formData.ticketName?.trim() || "",
           type: formData.ticketType || "",
@@ -212,10 +212,10 @@ const goNext = async () => {
           id: existingTicket.id ,
           color: formData.color || ""
         };
-    
+
         const currentTicketId = currentTicket.id;
         const isCurrentTicketSaved = savedTickets.includes(currentTicketId);
-    
+
         const hasCurrentTicketData = Object.values({
           name: currentTicket.name,
           type: currentTicket.type,
@@ -224,50 +224,50 @@ const goNext = async () => {
           purchaseLimit: currentTicket.purchaseLimit,
           salesStart: currentTicket.salesStart
         }).some(Boolean);
-    
+
         const validateTicket = () => {
           if (!currentTicket.name) return setError(stage, "ticketName", "Ticket name is required");
           if (!currentTicket.type) return setError(stage, "ticketType", "Ticket type is required");
           if (!currentTicket.category) return setError(stage, "ticketCategory", "Ticket category is required");
-    
+
           if (
             currentTicket.type === "Paid" &&
             (!currentTicket.price || Number(currentTicket.price) <= 0)
           ) {
             return setError(stage, "price", "Price is required for paid tickets");
           }
-    
+
           if (!currentTicket.salesStart) return setError(stage, "salesStart", "Sales start date is required");
           if (!currentTicket.startTime) return setError(stage, "startTime", "Start time is required");
           if (!currentTicket.salesEnd) return setError(stage, "salesEnd", "Sales end date is required");
           if (!currentTicket.endTime) return setError(stage, "endTime", "End time is required");
           if (!currentTicket.purchaseLimit) return setError(stage, "purchaseLimit", "Purchase limit is required");
-    
+
           if (
             currentTicket.isUnlimited === "limited" &&
             (!currentTicket.totalStock || Number(currentTicket.totalStock) <= 0)
           ) {
             return setError(stage, "totalStock", "Stock availability is required for limited tickets");
           }
-    
+
           if (
             currentTicket.category === "option2" &&
             (!currentTicket.groupSize || Number(currentTicket.groupSize) <= 0)
           ) {
             return setError(stage, "groupSize", "Number of people is required for group tickets");
           }
-    
+
           return true;
         };
-    
+
         if (hasCurrentTicketData) {
           if (validateTicket() !== true) return;
           clearStageErrors(stage);
-    
+
           const updatedTickets = [...tickets];
           updatedTickets[activeIndex] = { ...existingTicket, ...currentTicket };
           setFormValue(stage, "tickets", updatedTickets);
-    
+
           try {
             // const categoryMap = { option1: "single", option2: "group" };
             // const salesStartISO = `${currentTicket.salesStart}T${currentTicket.startTime}:00Z`;
@@ -277,12 +277,12 @@ const goNext = async () => {
               option1: "single",
               option2: "group",
             };
-    
+
             const perksArray = Array.isArray(currentTicket.perks)
               ? currentTicket.perks.filter(p => p && p.trim())
               : [];
-              
-    
+
+
             const ticketPayload = [
               eventId as string,
               currentTicket.name,
@@ -292,7 +292,7 @@ const goNext = async () => {
               Number(currentTicket.purchaseLimit),
               !currentTicket.isUnlimited
                 ? Number(currentTicket.totalStock):0,
-                
+
               Number(currentTicket.soldTarget) || 0,
               currentTicket.salesStart,
               currentTicket.salesEnd,
@@ -303,11 +303,11 @@ const goNext = async () => {
               currentTicket.category === "option2" ? Number(currentTicket.groupSize) : undefined,
               currentTicket.color || ""
             ]as const;
-    
+
             const response =currentTicketId
               ? await editTicket(currentTicketId, ...ticketPayload)
               : await createTicketByEventId(...ticketPayload);
-    
+
             if (!currentTicketInArray?.savedTicketId && response?.ticketId) {
               updatedTickets[activeIndex] = {
                 ...updatedTickets[activeIndex],
@@ -316,30 +316,30 @@ const goNext = async () => {
               };
               setFormValue(stage, "tickets", updatedTickets);
             }
-    
+
           } catch (error) {
             console.error("Error creating/updating ticket:", error);
             setError(stage, "general", `Failed to save ticket: ${currentTicket.name}`);
             return;
           }
-    
+
           const updatedSavedTickets = [...savedTickets];
           if (!updatedSavedTickets.includes(currentTicketId)) {
             updatedSavedTickets.push(currentTicketId);
             setFormValue(stage, "savedTickets", updatedSavedTickets);
           }
-    
-          // Check for remaining tickets with isSaved: false
+
+          // Check for remaining tickets with empty or null id
           const nextUnsavedIndex = updatedTickets.findIndex((ticket, index) =>
             index !== activeIndex && 
-            (!ticket.isSaved || ticket.isSaved === false)
+            (!ticket.id || ticket.id === '' || ticket.id === null)
           );
-    
+
           if (nextUnsavedIndex !== -1) {
             // Move to next unsaved ticket
             const nextTicket = updatedTickets[nextUnsavedIndex];
             setFormValue(stage, "activeTicketIndex", nextUnsavedIndex);
-            
+
             // Load the next ticket's data into the form
             Object.entries(nextTicket).forEach(([key, value]) => {
               if (key === 'name') setFormValue(stage, 'ticketName', value ?? "");
@@ -349,25 +349,25 @@ const goNext = async () => {
                 setFormValue(stage, key, value ?? (key === "perks" ? [""] : ""));
               }
             });
-            
+
             console.log(`Moved to next unsaved ticket at index ${nextUnsavedIndex}`);
             return; // Stay on current stage to edit the next unsaved ticket
           }
         }
-    
+
         if ((formData.tickets || []).length === 0 && !hasCurrentTicketData) {
           setError(stage, "ticketName", "At least one ticket must be created");
           return;
         }
-    
+
         clearStageErrors(stage);
-    
+
       } catch (error) {
         console.error("Error in Tickets Create stage:", error);
         setError(stage, "general", "An unexpected error occurred while creating tickets.");
       }
     }
-    
+
 
     if (stage === "Accessibility") {
       try {
