@@ -1,5 +1,6 @@
 
 import { useEventStore } from "../../stores/useEventStore";
+import { formatDate, formatTime } from "../../components/helpers/dateTimeHelpers";
 
 const fieldLabels: Record<string, string> = {
   name: "Event Name",
@@ -56,6 +57,34 @@ const Review = () => {
     { step: "Review & Publish", data: form["Review & Publish"] },
   ];
 
+  const formatValue = (key: string, value: any) => {
+    if (value === null || value === undefined || value === '') {
+      return "N/A";
+    }
+
+    // Handle date fields
+    if (key === 'startDate' || key === 'endDate') {
+      return formatDate(value);
+    }
+
+    // Handle time fields
+    if (key === 'startTime' || key === 'endTime' || key === 'salesStart' || key === 'salesEnd') {
+      return formatTime(value);
+    }
+
+    // Handle boolean values
+    if (typeof value === "boolean") {
+      return value ? "Yes" : "No";
+    }
+
+    // Handle arrays
+    if (Array.isArray(value)) {
+      return value.length > 0 ? value.join(", ") : "N/A";
+    }
+
+    return String(value);
+  };
+
   const renderTickets = (tickets: any[]) => {
     if (!Array.isArray(tickets) || tickets.length === 0) {
       return (
@@ -79,13 +108,7 @@ const Review = () => {
                 {fieldLabels[key]}
               </p>
               <p className="text-[.9rem] text-black max-w-[60%]">
-                {typeof value === "boolean"
-                  ? value
-                    ? "Yes"
-                    : "No"
-                  : Array.isArray(value)
-                  ? value.join(", ")
-                  : String(value)}
+                {formatValue(key, value)}
               </p>
             </div>
           ))}
@@ -135,11 +158,7 @@ const Review = () => {
                         {fieldLabels[key]}
                       </p>
                       <p className="text-[.9rem] text-black max-w-[60%]">
-                        {typeof value === "boolean"
-                          ? value
-                            ? "Yes"
-                            : "No"
-                          : String(value)}
+                        {formatValue(key, value)}
                       </p>
                     </div>
                   ))
