@@ -15,12 +15,35 @@ const fieldLabels: Record<string, string> = {
   transferChargesToCustomer: "Transfer Charges to Customers",
   venueName:'Venue Name',
   eventType:'Event Type',
-  startDate:'Start Date'
+  startDate:'Start Date',
+  seriesName:'Series Name',
+  endDate:'End Date',
+  startTime:'Start Time',
+  endTime:'End Time',
+  selectedLocation:'Select Location',
+  address:'Address',
+  ticketCategory:'Ticket Category', 
+  ticketType:'Ticket Type',
+  ticketName:'Ticket Name',
+  price:'Price',
+  purchaseLimit:'Purchase Limit',
+  totalStock:'Total Stock',
+  soldTarget:'Sold Target',
+  salesStart:'Sales Start',
+  salesEnd:'Sales End',
+  isUnlimited: ' Ticket Availability',
+  color:'Color',
+  perks:'Perks',
+  groupSize:'Group Size',
+  minAge:'Minimum Age',
+  notifyOnTicketSale:'Notify on Ticket Sale',
+  
   // Add more if needed...
 };
 
 const Review = () => {
   const { form } = useEventStore();
+  console.log(form, "form");
 
   const state = [
     { step: "Event Setup", data: form["Event Setup"] },
@@ -42,15 +65,15 @@ const Review = () => {
             <h2 className="text-black text-[1rem] font-bold">{step}:</h2>
             <div className="grid gap-4">
               {Object.entries(data).map(([key, value]) => {
-                if (key === "coverImage" && value instanceof File) {
-                  const previewUrl = URL.createObjectURL(value);
+                if (key === "coverImage") {
+                  // const previewUrl = URL.createObjectURL(value);
                   return (
                     <div key={key} className="w-full max-w-md">
                       <p className="text-[.9rem] text-[#979595] mb-2">
                         {fieldLabels[key] || key}
                       </p>
                       <img
-                        src={previewUrl}
+                        src={value}
                         alt="Event Cover"
                         className="w-full h-auto rounded-lg"
                       />
