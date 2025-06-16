@@ -62,6 +62,15 @@ const Review = () => {
       return "N/A";
     }
 
+    // Handle eventType field
+    if (key === 'eventType') {
+      if (value === 'single-day') {
+        return "Single day";
+      } else if (value === 'multi-day') {
+        return "Multiple days";
+      }
+    }
+
     // Handle date fields
     if (key === 'startDate' || key === 'endDate') {
       return formatDate(value);
