@@ -158,15 +158,28 @@ const CreateTicketComponent = () => {
     
     if (key === 'isUnlimited') {
       const isUnlimited = getCurrentTicketData('isUnlimited') || value;
-      let result
-      if(value==='') return result=false;
-      else if(value=='true'||value==='true') return result=true;
-      else if(value=='false'||value==='false') return result=false;
-      // console.log(value,'the value is very concerning')
-      // console.log(getCurrentTicketData('isUnlimited'))
-      if (isUnlimited === true) return true;
-      if (isUnlimited === false||"") return false;
-      return result;
+      
+      // Handle empty string or falsy values as false (Limited)
+      if (value === '' || value === null || value === undefined) {
+        return false;
+      }
+      
+      // Handle string representations
+      if (value === 'true' || value === true) {
+        return true;
+      }
+      
+      if (value === 'false' || value === false) {
+        return false;
+      }
+      
+      // Handle the retrieved value from ticket data
+      if (isUnlimited === true || isUnlimited === 'true') {
+        return true;
+      }
+      
+      // Default to false (Limited)
+      return false;
     }
     
     if (key === 'color') {
