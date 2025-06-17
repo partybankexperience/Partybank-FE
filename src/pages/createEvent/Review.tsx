@@ -7,8 +7,8 @@ const fieldLabels: Record<string, string> = {
   category: "Category",
   description: "Description",
   contactNumber: "Contact Number",
-  tags: "Tags",
-  series: "Series",
+  selectedTagName: "Tags",
+  seriesName: "Series Name",
   coverImage: "Cover Image",
   eventVisibility: "Event Visibility",
   parkingAvailable: "Parking Available",
@@ -18,11 +18,11 @@ const fieldLabels: Record<string, string> = {
   venueName:'Venue Name',
   eventType:'Event Type',
   startDate:'Start Date',
-  seriesName:'Series Name',
+  // seriesName:'Series Name',
   endDate:'End Date',
   startTime:'Start Time',
   endTime:'End Time',
-  selectedLocation:'Select Location',
+  // selectedLocation:'Select Location',
   address:'Address',
   ticketCategory:'Ticket Category', 
   ticketType:'Ticket Type',
@@ -58,7 +58,7 @@ const Review = () => {
   ];
 
   const formatValue = (key: string, value: any) => {
-    if (value === null || value === undefined || value === '') {
+    if (value === null || value === undefined || value === '' && key !== 'coverImage' && key !== 'price' && key !== 'isUnlimited') {
       return "N/A";
     }
 
@@ -75,14 +75,26 @@ const Review = () => {
     if (key === 'startDate' || key === 'endDate') {
       return formatDate(value);
     }
-
+    if (key === 'price' ) {
+      if (value === 0 || value === '0' || value===''|| !value) {
+        return "Free";
+      } else {
+        return formatDate(value)
+      }
+    }
+    if (key === 'isUnlimited' ) {
+      if (value === true || value === 'true') {
+        return "Unlimited";
+      }
+      return "Limited";
+    }
     // Handle time fields
     if (key === 'startTime' || key === 'endTime' || key === 'salesStart' || key === 'salesEnd') {
       return formatTime(value);
     }
 
     // Handle boolean values
-    if (typeof value === "boolean") {
+    if (typeof value === "boolean" && key!=='isUnlimited') {
       return value ? "Yes" : "No";
     }
 
@@ -116,9 +128,17 @@ const Review = () => {
               <p className="text-[.9rem] text-[#979595]">
                 {fieldLabels[key]}
               </p>
-              <p className="text-[.9rem] text-black max-w-[60%]">
-                {formatValue(key, value)}
-              </p>
+              {fieldLabels[key] === 'Color' && value!=='' && value!==null ? (
+                <div
+                className="w-[1rem] h-[1rem] rounded-full border-[1px] border-black"
+                style={{ backgroundColor: value as string }}
+              ></div>
+              ):(
+
+                <p className="text-[.9rem] text-black max-w-[60%]">
+                  {formatValue(key, value)}
+                </p>
+              )}
             </div>
           ))}
       </div>
