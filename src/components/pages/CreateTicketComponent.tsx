@@ -92,9 +92,9 @@ const CreateTicketComponent = () => {
           purchaseLimit: key === 'purchaseLimit' ? value : currentTicketData.purchaseLimit,
           totalStock: key === 'totalStock' ? value : currentTicketData.totalStock,
           soldTarget: key === 'soldTarget' ? value : currentTicketData.soldTarget,
-          groupSize: key === 'groupSize' ? value : currentTicketData.groupSize,
+          groupSize: key === 'groupSize' ? value :   currentTicketData.groupSize,
           perks: key === 'perks' ? value : currentTicketData.perks,
-          isUnlimited: key === 'isUnlimited' ? value : currentTicketData.isUnlimited,
+          isUnlimited: key === 'isUnlimited' ? value : Boolean(currentTicketData.isUnlimited) ,
           salesStart: key === 'salesStart' ? processedValue : currentTicketData.salesStart,
           startTime: key === 'startTime' ? value : currentTicketData.startTime,
           salesEnd: key === 'salesEnd' ? processedValue : currentTicketData.salesEnd,
@@ -157,30 +157,11 @@ const CreateTicketComponent = () => {
     }
     
     if (key === 'isUnlimited') {
-      const isUnlimited = getCurrentTicketData('isUnlimited') || value;
-      
-      // Handle empty string or falsy values as false (Limited)
-      if (value === '' || value === null || value === undefined) {
-        return false;
-      }
-      
-      // Handle string representations
-      if (value === 'true' || value === true) {
-        return true;
-      }
-      
-      if (value === 'false' || value === false) {
-        return false;
-      }
-      
-      // Handle the retrieved value from ticket data
-      if (isUnlimited === true || isUnlimited === 'true') {
-        return true;
-      }
-      
-      // Default to false (Limited)
-      return false;
+      const isUnlimited = value ?? getCurrentTicketData('isUnlimited');
+    
+      return String(isUnlimited).toLowerCase() === 'true';
     }
+    
     
     if (key === 'color') {
       return getCurrentTicketData('color') || value;
@@ -231,7 +212,7 @@ const CreateTicketComponent = () => {
       soldTarget: getCurrentTicketData("soldTarget"),
       groupSize: getCurrentTicketData("groupSize"),
       perks: getCurrentTicketData("perks"),
-      isUnlimited: getCurrentTicketData("isUnlimited"),
+      isUnlimited: Boolean(getCurrentTicketData("isUnlimited")),
       salesStart: getCurrentTicketData("salesStart"),
       startTime: getCurrentTicketData("startTime"),
       salesEnd: getCurrentTicketData("salesEnd"),
@@ -378,6 +359,7 @@ console.log(getValue("isUnlimited"),'checking ')
         {availabilityType.map((availability) => {
   const isUnlimited = availability === "Unlimited";
   console.log(isUnlimited, getValue("isUnlimited"),'checking where the issue is really from')
+  console.log(isUnlimited,'where is the string coming from')
   return (
     <RadioButton
       key={availability}

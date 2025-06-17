@@ -64,6 +64,7 @@ const createTicketByEventId = async (
   groupSize?: number,
   color?: string
 ): Promise<any> => {
+    const normalizedIsUnlimited = isUnlimited === true
   const payload = {
     name,
     category,
@@ -76,7 +77,7 @@ const createTicketByEventId = async (
     startTime,
     endTime,
     perks,
-    isUnlimited,
+    isUnlimited:normalizedIsUnlimited,
     ...(category === 'group' &&  { groupSize:groupSize }),
     ...(type === 'paid' &&  { price }),
     ...(!isUnlimited &&  { stock }),

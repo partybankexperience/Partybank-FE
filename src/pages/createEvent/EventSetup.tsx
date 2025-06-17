@@ -6,7 +6,7 @@ import { ImageUploadInput } from "../../components/inputs/ImageInput";
 import { useEventStore } from "../../stores/useEventStore";
 import {
   getTags,
-  createTag,
+  // createTag,
   checkSimilarEvent,
 } from "../../Containers/eventApi";
 import type { Options } from "easymde";

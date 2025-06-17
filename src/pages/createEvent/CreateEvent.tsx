@@ -18,10 +18,9 @@ import { Storage } from "../../stores/InAppStorage"
 
 
 const CreateEvent = () => {
-  const [currentStep, setCurrentStep] = useState(0);
   const [isCreatingEvent, setIsCreatingEvent] = useState(false);
   const [originalFormData, setOriginalFormData] = useState<any>(null);
-  const { stage, setStage, form, errors, setError, clearStageErrors, clearEventStorage, conditionalClearStorage, setFormValue } = useEventStore()
+  const { stage, setStage, form, setError, clearStageErrors, clearEventStorage, conditionalClearStorage, setFormValue } = useEventStore()
     const currentIndex = stages.indexOf(stage)
     const navigate = useNavigate()
     const eventId = Storage.getItem("eventId") || null;
@@ -220,7 +219,7 @@ const goNext = async () => {
         };
 
         const currentTicketId = currentTicket.id;
-        const isCurrentTicketSaved = savedTickets.includes(currentTicketId);
+        // const isCurrentTicketSaved = savedTickets.includes(currentTicketId);
 
         const hasCurrentTicketData = Object.values({
           name: currentTicket.name,
@@ -526,7 +525,7 @@ const goNext = async () => {
         navigate("/dashboard");
       } catch (error) {
         console.error("Error publishing event:", error);
-        errorAlert("Failed to publish event. Please try again.");
+        errorAlert("Error","Failed to publish event. Please try again.");
       } finally {
         setIsCreatingEvent(false);
       }
