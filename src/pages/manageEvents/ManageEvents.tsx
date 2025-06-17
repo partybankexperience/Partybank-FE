@@ -36,11 +36,11 @@ const ManageEvents = () => {
 
     switch (activeTab) {
       case "Active":
-        return events.filter((event: any) => event.status === "published");
+        return events.filter((event: any) => event.timingStatus === "published");
       case "Upcoming":
-        return events.filter((event: any) => event.status === "upcoming");
+        return events.filter((event: any) => event.timingStatus === "upcoming");
       case "Past":
-        return events.filter((event: any) => event.status === "past");
+        return events.filter((event: any) => event.timingStatus === "past");
       case "Drafts":
         return events.filter((event: any) => event.status === "draft");
       default:
