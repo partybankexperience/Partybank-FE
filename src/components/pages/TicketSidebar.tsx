@@ -287,7 +287,63 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
   };
   
   const hasInitialized = useRef(false);
+  const hasPrefilled = useRef(false);
 
+  // Auto-prefill data on component load
+  useEffect(() => {
+    if (hasPrefilled.current) return;
+
+    if (isCreateEventContext) {
+      const formValues = form["Tickets Create"];
+      if (!formValues) return;
+
+      // Check if there are existing tickets to prefill from
+      const existingTickets = formValues.tickets || [];
+      const currentActiveIndex = formValues.activeTicketIndex || 0;
+
+      if (existingTickets.length > 0 && existingTickets[currentActiveIndex]) {
+        const activeTicket = existingTickets[currentActiveIndex];
+        
+        // Prefill form with active ticket's data
+        setFormValue("Tickets Create", "ticketName", activeTicket.name || "");
+        setFormValue("Tickets Create", "ticketType", activeTicket.type || "");
+        setFormValue("Tickets Create", "ticketCategory", activeTicket.category || "");
+        setFormValue("Tickets Create", "price", activeTicket.price || "");
+        setFormValue("Tickets Create", "purchaseLimit", activeTicket.purchaseLimit || "");
+        setFormValue("Tickets Create", "totalStock", activeTicket.totalStock || "");
+        setFormValue("Tickets Create", "soldTarget", activeTicket.soldTarget || "");
+        setFormValue("Tickets Create", "groupSize", activeTicket.groupSize || "");
+        setFormValue("Tickets Create", "perks", activeTicket.perks || [""]);
+        setFormValue("Tickets Create", "isUnlimited", activeTicket.isUnlimited || "");
+        setFormValue("Tickets Create", "salesStart", activeTicket.salesStart || "");
+        setFormValue("Tickets Create", "startTime", activeTicket.startTime || "");
+        setFormValue("Tickets Create", "salesEnd", activeTicket.salesEnd || "");
+        setFormValue("Tickets Create", "endTime", activeTicket.endTime || "");
+        setFormValue("Tickets Create", "color", activeTicket.color || "");
+      }
+    } else if (isManageEventsContext) {
+      // For manage events context, check if there are existing tickets
+      if (manageTickets.length > 0 && manageTickets[manageActiveIndex]) {
+        const activeTicket = manageTickets[manageActiveIndex];
+        
+        // Set current ticket data from the active ticket
+        Object.entries(activeTicket).forEach(([key, value]) => {
+          if (key !== 'id' && key !== 'key' && key !== 'isSaved' && key !== 'savedTicketId') {
+            // Map ticket fields to form fields
+            const formKey = key === 'name' ? 'ticketName' :
+                          key === 'type' ? 'ticketType' :
+                          key === 'category' ? 'ticketCategory' : key;
+            
+            getCurrentTicketData.setState({ [formKey]: value });
+          }
+        });
+      }
+    }
+
+    hasPrefilled.current = true;
+  }, [isCreateEventContext, isManageEventsContext, form, manageTickets, manageActiveIndex]);
+
+  // Original sync logic for create event context
   useEffect(() => {
     if (!isCreateEventContext || hasInitialized.current) return;
   
