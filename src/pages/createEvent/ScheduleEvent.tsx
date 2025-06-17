@@ -19,9 +19,7 @@ const ScheduleEvent = () => {
   const scheduleEventErrors = errors["Schedule & Location"] || {};
   const selected = scheduleEventForm.eventType || "";
   const [showLocation, setShowLocation] = useState(false);
-  const [localErrors, setLocalErrors] = useState<Record<string, boolean>>({});
 
-  // Create refs for all input fields
   const eventTypeRef = useRef<any>(null);
   const startDateRef = useRef<any>(null);
   const endDateRef = useRef<any>(null);
@@ -70,7 +68,6 @@ const ScheduleEvent = () => {
       setFormValue("Schedule & Location", "coordinates", null);
     }
   };
-
   const handleLocationSelect = (location: any) => {
     // Extract address components and format them according to the required structure
     const addressParts = location.name.split(', ');
@@ -170,7 +167,6 @@ const ScheduleEvent = () => {
             helperText={scheduleEventErrors.startDate || ""}
             style={scheduleEventErrors.startDate ? "border-red-500" : ""}
             inputRef={startDateRef}
-            setExternalError={(hasError) => setLocalErrors(prev => ({ ...prev, startDate: hasError }))}
           />
           <DefaultInput
             type="time"
@@ -185,7 +181,6 @@ const ScheduleEvent = () => {
             helperText={scheduleEventErrors.startTime || ""}
             style={scheduleEventErrors.startTime ? "border-red-500" : ""}
             inputRef={startTimeRef}
-            setExternalError={(hasError) => setLocalErrors(prev => ({ ...prev, startTime: hasError }))}
           />
           <DefaultInput
             type="time"
@@ -200,7 +195,6 @@ const ScheduleEvent = () => {
             helperText={scheduleEventErrors.endTime || ""}
             style={scheduleEventErrors.endTime ? "border-red-500" : ""}
             inputRef={endTimeRef}
-            setExternalError={(hasError) => setLocalErrors(prev => ({ ...prev, endTime: hasError }))}
           />
         </div>
 
@@ -220,7 +214,6 @@ const ScheduleEvent = () => {
               helperText={scheduleEventErrors.endDate || ""}
               style={scheduleEventErrors.endDate ? "border-red-500" : ""}
               inputRef={endDateRef}
-              setExternalError={(hasError) => setLocalErrors(prev => ({ ...prev, endDate: hasError }))}
             />
             <div className="md:col-span-2"></div>
           </div>
@@ -251,12 +244,11 @@ const ScheduleEvent = () => {
           helperText={scheduleEventErrors.venueName || ""}
           style={scheduleEventErrors.venueName ? "border-red-500" : ""}
           inputRef={venueNameRef}
-          setExternalError={(hasError) => setLocalErrors(prev => ({ ...prev, venueName: hasError }))}
         />
-
         {/* Show venue and location inputs only if location toggle is on */}
         {showLocation && (
           <>
+
             {/* Map Autocomplete */}
             <div className="grid gap-2">
               <label className="text-black text-[1rem] font-semibold">
