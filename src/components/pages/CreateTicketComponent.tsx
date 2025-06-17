@@ -61,13 +61,6 @@ const CreateTicketComponent = () => {
   const endTimeRef = useRef<any>(null);
   const perksRef = useRef<any>(null);
   
-  // Create refs for all input fields
-  const nameRef = useRef<any>(null);
-  const priceRef = useRef<any>(null);
-  const quantityRef = useRef<any>(null);
-  const colorRef = useRef<any>(null);
-  const descriptionRef = useRef<any>(null);
-  
   console.log(form, 'the whole form')
 
   // Event ID Source
@@ -354,13 +347,12 @@ const CreateTicketComponent = () => {
     }
   };
 
-  const { tickets, updateTicket, currentTicketIndex } = useTicketStore();
-  const ticketErrors = errors["Tickets Create"] || {};
-  const [localErrors, setLocalErrors] = useState<Record<string, boolean>>({});
-
   const getCurrentTicketData = (key: string) => {
-    if (currentTicketIndex >= 0 && tickets[currentTicketIndex]) {
-      return tickets[currentTicketIndex][key];
+    if (isCreateEventContext) {
+      return form["Tickets Create"]?.[key] || "";
+    }
+    if (currentTicketIndex >= 0 && manageTickets[currentTicketIndex]) {
+      return manageTickets[currentTicketIndex][key];
     }
     return '';
   };
@@ -817,7 +809,7 @@ export default CreateTicketComponent;
 import DefaultButton from "../buttons/DefaultButton";
 import DefaultInput from "../inputs/DefaultInput";
 import { useLocation, useNavigate } from "react-router-dom";
-import RadioButtonfrom "../inputs/RadioButton";
+import RadioButton from "../inputs/RadioButton";
 import { useEventStore } from "../../stores/useEventStore";
 import { useTicketStore } from "../../stores/useTicketStore";
 import { NumericFormat } from 'react-number-format';
