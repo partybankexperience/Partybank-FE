@@ -26,6 +26,7 @@ const ScheduleEvent = () => {
   const startTimeRef = useRef<any>(null);
   const endTimeRef = useRef<any>(null);
   const venueNameRef = useRef<any>(null);
+  const locationRef = useRef<any>(null);
 
   // Initialize and sync showLocation state with form data
   useEffect(() => {
@@ -102,6 +103,8 @@ const ScheduleEvent = () => {
           endTimeRef.current.focus();
         } else if (scheduleEventErrors.venueName && venueNameRef.current) {
           venueNameRef.current.focus();
+        } else if (scheduleEventErrors.selectedLocation && locationRef.current) {
+          locationRef.current.focus();
         }
       }, 100);
     }
@@ -249,9 +252,9 @@ const ScheduleEvent = () => {
             {/* Map Autocomplete */}
             <div className="grid gap-2">
               <label className="text-black text-[1rem] font-semibold">
-                Event Location
+                Event Location *
               </label>
-              <div className="w-full min-h-[400px]">
+              <div className="w-full min-h-[400px]" ref={locationRef}>
                 <MapWithAutocomplete 
                   onSelect={handleLocationSelect}
                   defaultCenter={
@@ -262,6 +265,11 @@ const ScheduleEvent = () => {
                   prefilledLocation={scheduleEventForm.selectedLocation}
                 />
               </div>
+              {scheduleEventErrors.selectedLocation && (
+                <p className="text-[13px] text-red-500 mt-1">
+                  {scheduleEventErrors.selectedLocation}
+                </p>
+              )}
               {scheduleEventForm.selectedLocation && (
                 <div className="mt-2 p-3 bg-gray-50 rounded-md">
                   <p className="text-sm text-gray-700">

@@ -192,6 +192,11 @@ const Accessibility = () => {
             isChecked={toggle}
           />
         </div>
+        {accessibilityErrors.transferCharges && (
+          <p className="text-[13px] text-red-500 mt-1">
+            {accessibilityErrors.transferCharges}
+          </p>
+        )}
 
         <ul className="grid gap-[10px] list-disc pl-5">
           {list.map((lab, idx) => (

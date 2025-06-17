@@ -7,7 +7,7 @@ import { useTicketStore } from "../../stores/useTicketStore";
 import { NumericFormat } from 'react-number-format';
 import { FaPlus, FaTrash } from 'react-icons/fa';
 import { createTicket } from "../../Containers/ticketApi";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { successAlert, errorAlert } from "../alerts/ToastService";
 import { convertISOToDateInput, convertDateInputToISO } from '../helpers/dateTimeHelpers';
 import ColorPickerInput from "../inputs/ColorPickerInput";
@@ -26,7 +26,7 @@ const CreateTicketComponent = () => {
   const showButtons = !isCreateEventContext;
 
   // State Management Logic - Context Aware
-  const { form, setFormValue } = useEventStore();
+  const { form, setFormValue, errors } = useEventStore();
   const { 
     setCurrentTicketData, 
     getCurrentTicketData, 
@@ -39,8 +39,27 @@ const CreateTicketComponent = () => {
     activeTicketIndex: manageActiveIndex
   } = useTicketStore();
   const currentStage = "Tickets Create";
+  const ticketErrors = errors[currentStage] || {};
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Refs for focus management
+  const ticketCategoryRef = useRef<any>(null);
+  const ticketTypeRef = useRef<any>(null);
+  const ticketAvailabilityRef = useRef<any>(null);
+  const ticketNameRef = useRef<any>(null);
+  const purchaseLimitRef = useRef<any>(null);
+  const totalStockRef = useRef<any>(null);
+  const priceRef = useRef<any>(null);
+  const soldTargetRef = useRef<any>(null);
+  const groupSizeRef = useRef<any>(null);
+  const ticketColorRef = useRef<any>(null);
+  const salesStartRef = useRef<any>(null);
+  const startTimeRef = useRef<any>(null);
+  const salesEndRef = useRef<any>(null);
+  const endTimeRef = useRef<any>(null);
+  const perksRef = useRef<any>(null);
+  
   console.log(form, 'the whole form')
 
   // Event ID Source
@@ -309,6 +328,55 @@ const CreateTicketComponent = () => {
       setIsSubmitting(false);
     }
   };
+const validateForm = () => {
+    // Focus on first error from store
+    if (Object.keys(ticketErrors).length > 0) {
+      setTimeout(() => {
+        if (ticketErrors.ticketCategory && ticketCategoryRef.current) {
+          ticketCategoryRef.current.focus();
+        } else if (ticketErrors.ticketType && ticketTypeRef.current) {
+          ticketTypeRef.current.focus();
+        } else if (ticketErrors.isUnlimited && ticketAvailabilityRef.current) {
+          ticketAvailabilityRef.current.focus();
+        } else if (ticketErrors.ticketName && ticketNameRef.current) {
+          ticketNameRef.current.focus();
+        } else if (ticketErrors.purchaseLimit && purchaseLimitRef.current) {
+          purchaseLimitRef.current.focus();
+        } else if (ticketErrors.totalStock && totalStockRef.current) {
+          totalStockRef.current.focus();
+        } else if (ticketErrors.price && priceRef.current) {
+          priceRef.current.focus();
+        } else if (ticketErrors.soldTarget && soldTargetRef.current) {
+          soldTargetRef.current.focus();
+        } else if (ticketErrors.groupSize && groupSizeRef.current) {
+          groupSizeRef.current.focus();
+        } else if (ticketErrors.color && ticketColorRef.current) {
+          ticketColorRef.current.focus();
+        } else if (ticketErrors.salesStart && salesStartRef.current) {
+          salesStartRef.current.focus();
+        } else if (ticketErrors.startTime && startTimeRef.current) {
+          startTimeRef.current.focus();
+        } else if (ticketErrors.salesEnd && salesEndRef.current) {
+          salesEndRef.current.focus();
+        } else if (ticketErrors.endTime && endTimeRef.current) {
+          endTimeRef.current.focus();
+        } else if (ticketErrors.perks && perksRef.current) {
+          perksRef.current.focus();
+        }
+      }, 100);
+    }
+
+    return Object.keys(ticketErrors).length === 0;
+  };
+
+  // Export validation function for external use
+  useEffect(() => {
+    (window as any).validateTicketsCreate = validateForm;
+    return () => {
+      delete (window as any).validateTicketsCreate;
+    };
+  }, [form[currentStage]]);
+
 console.log(getValue("isUnlimited"),'checking ')
   return (
     <div className="grid gap-[2.5rem] mt-[20px]">
@@ -318,6 +386,7 @@ console.log(getValue("isUnlimited"),'checking ')
           role="radiogroup"
           aria-label="Select an option"
           className="grid md:flex gap-4"
+          ref={ticketCategoryRef}
         >
           {label.map((lab, idx) => {
             const val = `option${idx + 1}`;
@@ -334,12 +403,20 @@ console.log(getValue("isUnlimited"),'checking ')
             );
           })}
         </div>
+        {ticketErrors.ticketCategory && (
+          <p className="text-[13px] text-red-500 mt-1">
+            {ticketErrors.ticketCategory}
+          </p>
+        )}
       </div>
 
 <div className="grid md:flex justify-between gap-[15px]">
       <div className="grid gap-[15px]">
         <h2 className="text-black text-[1.2rem] font-bold">Ticket Type</h2>
-        <div className="grid md:flex gap-4 md:gap-[2.5rem]">
+        <div 
+          className="grid md:flex gap-4 md:gap-[2.5rem]"
+          ref={ticketTypeRef}
+        >
           {ticketType.map((type) => (
             <RadioButton
               key={type}
@@ -351,11 +428,19 @@ console.log(getValue("isUnlimited"),'checking ')
             />
           ))}
         </div>
+        {ticketErrors.ticketType && (
+          <p className="text-[13px] text-red-500 mt-1">
+            {ticketErrors.ticketType}
+          </p>
+        )}
       </div>
 
       <div className="grid gap-[15px]">
         <h2 className="text-black text-[1.2rem] font-bold">Ticket Availability</h2>
-        <div className="grid md:flex gap-4 md:gap-[2.5rem]">
+        <div 
+          className="grid md:flex gap-4 md:gap-[2.5rem]"
+          ref={ticketAvailabilityRef}
+        >
         {availabilityType.map((availability) => {
   const isUnlimited = availability === "Unlimited";
   console.log(isUnlimited, getValue("isUnlimited"),'checking where the issue is really from')
@@ -380,6 +465,11 @@ console.log(getValue("isUnlimited"),'checking ')
             onChange={() => handleChange("isUnlimited", true)}
           /> */}
         </div>
+        {ticketErrors.isUnlimited && (
+          <p className="text-[13px] text-red-500 mt-1">
+            {ticketErrors.isUnlimited}
+          </p>
+        )}
       </div>
 
 </div>
@@ -394,6 +484,10 @@ console.log(getValue("isUnlimited"),'checking ')
             setValue={(v:any) => handleChange("ticketName", v)}
             placeholder="Enter ticket name"
             classname="!w-full"
+            required
+            helperText={ticketErrors.ticketName || ""}
+            style={ticketErrors.ticketName ? "border-red-500" : ""}
+            inputRef={ticketNameRef}
           />
           <DefaultInput
             id="purchaseLimit"
@@ -403,6 +497,10 @@ console.log(getValue("isUnlimited"),'checking ')
             placeholder="1"
             classname="!w-full"
             type="number"
+            required
+            helperText={ticketErrors.purchaseLimit || ""}
+            style={ticketErrors.purchaseLimit ? "border-red-500" : ""}
+            inputRef={purchaseLimitRef}
           />
           {!getValue("isUnlimited") && (
             <DefaultInput
@@ -413,14 +511,19 @@ console.log(getValue("isUnlimited"),'checking ')
               placeholder="Enter stock quantity"
               classname="!w-full"
               type="number"
+              required
+              helperText={ticketErrors.totalStock || ""}
+              style={ticketErrors.totalStock ? "border-red-500" : ""}
+              inputRef={totalStockRef}
             />
           )}
           {getValue("ticketType") === "Paid" && (
             <div className="grid gap-1 w-full relative">
               <label className="text-[#231F20] text-[16px] font-semibold font-[RedHat]">
-                Price
+                Price *
               </label>
               <NumericFormat
+                ref={priceRef}
                 value={getValue("price")}
                 onValueChange={(values) => {
                   handleChange("price", values.floatValue || 0);
@@ -428,11 +531,16 @@ console.log(getValue("isUnlimited"),'checking ')
                 thousandSeparator=","
                 prefix="₦"
                 placeholder="₦0.00"
-                className="text-[14px] border-[1px] text-black placeholder:text-neutralDark placeholder:text-[14px] font-[RedHat] rounded-[4px] py-[10px] px-[16px] !w-full bg-white border-neutral hover:border-lightPurple focus:border-lightPurple hover:shadow-[0_0_0_2px_rgba(77,64,85,0.1)] focus:shadow-[0_0_0_2px_rgba(77,64,85,0.1)]"
+                className={`text-[14px] border-[1px] text-black placeholder:text-neutralDark placeholder:text-[14px] font-[RedHat] rounded-[4px] py-[10px] px-[16px] !w-full bg-white hover:border-lightPurple focus:border-lightPurple hover:shadow-[0_0_0_2px_rgba(77,64,85,0.1)] focus:shadow-[0_0_0_2px_rgba(77,64,85,0.1)] ${ticketErrors.price ? 'border-red-500' : 'border-neutral'}`}
                 decimalScale={2}
                 fixedDecimalScale
                 allowNegative={false}
               />
+              {ticketErrors.price && (
+                <p className="text-[13px] text-red-500 mt-1">
+                  {ticketErrors.price}
+                </p>
+              )}
             </div>
           )}
           <DefaultInput
@@ -443,6 +551,9 @@ console.log(getValue("isUnlimited"),'checking ')
             placeholder="Enter sold target"
             classname="!w-full"
             type="number"
+            helperText={ticketErrors.soldTarget || ""}
+            style={ticketErrors.soldTarget ? "border-red-500" : ""}
+            inputRef={soldTargetRef}
           />
           {getValue("ticketCategory") === "option2" && (
             <DefaultInput
@@ -453,6 +564,10 @@ console.log(getValue("isUnlimited"),'checking ')
               placeholder="Enter number of people"
               classname="!w-full"
               type="number"
+              required
+              helperText={ticketErrors.groupSize || ""}
+              style={ticketErrors.groupSize ? "border-red-500" : ""}
+              inputRef={groupSizeRef}
             />
           )}
           <ColorPickerInput
@@ -461,6 +576,9 @@ console.log(getValue("isUnlimited"),'checking ')
             value={getValue("color")}
             setValue={(v: string) => handleChange("color", v)}
             classname="!w-full"
+            helperText={ticketErrors.color || ""}
+            style={ticketErrors.color ? "border-red-500" : ""}
+            inputRef={ticketColorRef}
           />
         </div>
       </div>
@@ -476,6 +594,10 @@ console.log(getValue("isUnlimited"),'checking ')
             placeholder="12/04/2025"
             classname="!w-full"
             type="date"
+            required
+            helperText={ticketErrors.salesStart || ""}
+            style={ticketErrors.salesStart ? "border-red-500" : ""}
+            inputRef={salesStartRef}
           />
           <DefaultInput
             id="startTime"
@@ -485,6 +607,10 @@ console.log(getValue("isUnlimited"),'checking ')
             placeholder="08:00"
             classname="!w-full"
             type="time"
+            required
+            helperText={ticketErrors.startTime || ""}
+            style={ticketErrors.startTime ? "border-red-500" : ""}
+            inputRef={startTimeRef}
           />
           <DefaultInput
             id="salesEnd"
@@ -494,6 +620,10 @@ console.log(getValue("isUnlimited"),'checking ')
             placeholder="16/04/2025"
             classname="!w-full"
             type="date"
+            required
+            helperText={ticketErrors.salesEnd || ""}
+            style={ticketErrors.salesEnd ? "border-red-500" : ""}
+            inputRef={salesEndRef}
           />
           <DefaultInput
             id="endTime"
@@ -503,6 +633,10 @@ console.log(getValue("isUnlimited"),'checking ')
             placeholder="18:00"
             classname="!w-full"
             type="time"
+            required
+            helperText={ticketErrors.endTime || ""}
+            style={ticketErrors.endTime ? "border-red-500" : ""}
+            inputRef={endTimeRef}
           />
         </div>
       </div>
@@ -524,6 +658,9 @@ console.log(getValue("isUnlimited"),'checking ')
               setValue={(v: any) => updatePerk(index, v)}
               placeholder="Enter perk here"
               classname="!w-full"
+              helperText={index === 0 && ticketErrors.perks ? ticketErrors.perks : ""}
+              style={index === 0 && ticketErrors.perks ? "border-red-500" : ""}
+              inputRef={index === 0 ? perksRef : undefined}
               rightContent={
                 <div className="flex items-center gap-2">
                   {perksArray.length > 1 && (
