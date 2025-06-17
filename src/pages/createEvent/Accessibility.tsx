@@ -1,7 +1,4 @@
-
-import { useRef, useEffect } from "react";
-import RadioButton from "../../components/inputs/RadioButton";
-import SlideToggle from "../../components/inputs/SlideToggle";
+import { useEffect, useRef, useState } from "react";
 import DefaultInput from "../../components/inputs/DefaultInput";
 import { useEventStore } from "../../stores/useEventStore";
 
@@ -9,27 +6,14 @@ const Accessibility = () => {
   const { form, setFormValue, errors } = useEventStore();
   const accessibilityForm = form["Accessibility"] || {};
   const accessibilityErrors = errors["Accessibility"] || {};
+  const [localErrors, setLocalErrors] = useState<Record<string, boolean>>({});
 
-  const selected = accessibilityForm.eventVisibility || "";
-  const featuresEvent = accessibilityForm.wheelchairAccess || "";
-  const parking = accessibilityForm.parkingAvailable || "";
-  const toggle = accessibilityForm.transferCharges || false;
-  const minAge = accessibilityForm.minAge || "";
-
-  const eventVisibilityRef = useRef<any>(null);
+  // Create refs for all input fields
   const wheelchairAccessRef = useRef<any>(null);
-  const parkingAvailableRef = useRef<any>(null);
-  const minAgeRef = useRef<any>(null);
-
-  const eventVisibility = [
-    { name: "Public Event", value: "public", extraText: "Visible to all users" },
-    { name: "Private Event", value: "private", extraText: "Access via direct link or invite" },
-  ];
-  const features = ["Yes", "No"];
-  const list = [
-    "If enabled, attendees cover platform/service fees instead of the organizer.",
-    "This will be reflected in the ticket price during checkout.",
-  ];
+  const signLanguageRef = useRef<any>(null);
+  const audioDescriptionRef = useRef<any>(null);
+  const largeTextRef = useRef<any>(null);
+  const additionalNotesRef = useRef<any>(null);
 
   const handleInputChange = (key: string, value: any) => {
     setFormValue("Accessibility", key, value);
@@ -39,18 +23,20 @@ const Accessibility = () => {
     // Focus on first error from store
     if (Object.keys(accessibilityErrors).length > 0) {
       setTimeout(() => {
-        if (accessibilityErrors.eventVisibility && eventVisibilityRef.current) {
-          eventVisibilityRef.current.focus();
-        } else if (accessibilityErrors.wheelchairAccess && wheelchairAccessRef.current) {
+        if (accessibilityErrors.wheelchairAccess && wheelchairAccessRef.current) {
           wheelchairAccessRef.current.focus();
-        } else if (accessibilityErrors.parkingAvailable && parkingAvailableRef.current) {
-          parkingAvailableRef.current.focus();
-        } else if (accessibilityErrors.minAge && minAgeRef.current) {
-          minAgeRef.current.focus();
+        } else if (accessibilityErrors.signLanguage && signLanguageRef.current) {
+          signLanguageRef.current.focus();
+        } else if (accessibilityErrors.audioDescription && audioDescriptionRef.current) {
+          audioDescriptionRef.current.focus();
+        } else if (accessibilityErrors.largeText && largeTextRef.current) {
+          largeTextRef.current.focus();
+        } else if (accessibilityErrors.additionalNotes && additionalNotesRef.current) {
+          additionalNotesRef.current.focus();
         }
       }, 100);
     }
-    
+
     return Object.keys(accessibilityErrors).length === 0;
   };
 
@@ -63,149 +49,87 @@ const Accessibility = () => {
   }, [accessibilityForm]);
 
   return (
-    <div>
+    <div className="grid gap-[20px]">
       <div className="grid gap-2">
-        <h2 className="text-black text-[1rem] font-bold">
-          Event Visibility & Access
-        </h2>
-        <div
-          role="radiogroup"
-          aria-label="Select an option"
-          className="grid md:grid-cols-2 gap-4 md:gap-[2.5rem]"
-          ref={eventVisibilityRef}
-        >
-          {eventVisibility.map((lab, idx) => {
-            const val = `option${idx + 1}`;
-            return (
-              <RadioButton
-                key={val}
-                label={lab.name}
-                value={lab.value}
-                name="event-visibility"
-                checked={selected === lab.value}
-                onChange={(val: string) =>
-                  handleInputChange("eventVisibility", val)
-                }
-                extraText={lab.extraText}
-              />
-            );
-          })}
-        </div>
-        {accessibilityErrors.eventVisibility && (
-          <p className="text-[13px] text-red-500 mt-1">
-            {accessibilityErrors.eventVisibility}
-          </p>
-        )}
+        <h2 className="text-black text-[1.2rem] font-semibold">Accessibility Features</h2>
+        <p className="text-gray-600 text-sm">
+          Please specify any accessibility accommodations your event will provide.
+        </p>
       </div>
 
-      <h2 className="text-black text-[1rem] mt-[2.5rem] font-bold">
-        Accessibility Features
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-[20px] mt-[10px]">
-        <div className="grid gap-2">
-          <p className="text-black text-[1rem]">Wheelchair Accessibility</p>
-          <div
-            role="radiogroup"
-            aria-label="Select an option"
-            className="grid md:flex gap-4 md:gap-[2.5rem]"
-            ref={wheelchairAccessRef}
-          >
-            {features.map((lab, idx) => {
-              const val = `wheelchair-${idx + 1}`;
-              return (
-                <RadioButton
-                  key={val}
-                  label={lab}
-                  value={lab}
-                  name="wheelchair"
-                  checked={featuresEvent === lab}
-                  onChange={(val: string) =>
-                    handleInputChange("wheelchairAccess", val)
-                  }
-                />
-              );
-            })}
-          </div>
-          {accessibilityErrors.wheelchairAccess && (
-            <p className="text-[13px] text-red-500 mt-1">
-              {accessibilityErrors.wheelchairAccess}
-            </p>
-          )}
-        </div>
+      <DefaultInput
+        id="wheelchairAccess"
+        label="Wheelchair Accessibility"
+        value={accessibilityForm.wheelchairAccess || ""}
+        setValue={(value: string) => handleInputChange("wheelchairAccess", value)}
+        placeholder="Select wheelchair accessibility"
+        showDropdown
+        dropdownOptions={["Fully Accessible", "Partially Accessible", "Not Accessible"]}
+        required
+        helperText={accessibilityErrors.wheelchairAccess || ""}
+        style={accessibilityErrors.wheelchairAccess ? "border-red-500" : ""}
+        classname="!w-full"
+        inputRef={wheelchairAccessRef}
+        setExternalError={(hasError) => setLocalErrors(prev => ({ ...prev, wheelchairAccess: hasError }))}
+      />
 
-        <div className="grid gap-2">
-          <p className="text-black text-[1rem]">Parking Availability</p>
-          <div
-            role="radiogroup"
-            aria-label="Select an option"
-            className="grid md:flex gap-4 md:gap-[2.5rem]"
-            ref={parkingAvailableRef}
-          >
-            {features.map((lab, idx) => {
-              const val = `parking-${idx + 1}`;
-              return (
-                <RadioButton
-                  key={val}
-                  label={lab}
-                  value={lab}
-                  name="parking"
-                  checked={parking === lab}
-                  onChange={(val: string) =>
-                    handleInputChange("parkingAvailable", val)
-                  }
-                />
-              );
-            })}
-          </div>
-          {accessibilityErrors.parkingAvailable && (
-            <p className="text-[13px] text-red-500 mt-1">
-              {accessibilityErrors.parkingAvailable}
-            </p>
-          )}
-        </div>
-      </div>
+      <DefaultInput
+        id="signLanguage"
+        label="Sign Language Interpretation"
+        value={accessibilityForm.signLanguage || ""}
+        setValue={(value: string) => handleInputChange("signLanguage", value)}
+        placeholder="Select sign language support"
+        showDropdown
+        dropdownOptions={["Available", "Available Upon Request", "Not Available"]}
+        helperText={accessibilityErrors.signLanguage || ""}
+        style={accessibilityErrors.signLanguage ? "border-red-500" : ""}
+        classname="!w-full"
+        inputRef={signLanguageRef}
+        setExternalError={(hasError) => setLocalErrors(prev => ({ ...prev, signLanguage: hasError }))}
+      />
 
-      <div className="grid gap-[20px] mt-[2.5rem]">
-        <DefaultInput
-          id="minAge"
-          label="Minimum Age Requirement"
-          type="number"
-          value={minAge}
-          setValue={(value: string) => handleInputChange("minAge", value)}
-          placeholder="e.g., 18 (leave empty for no restriction)"
-          classname="!w-full md:!w-1/2"
-          helperText={accessibilityErrors.minAge || ""}
-          style={accessibilityErrors.minAge ? "border-red-500" : ""}
-          inputRef={minAgeRef}
-        />
-      </div>
+      <DefaultInput
+        id="audioDescription"
+        label="Audio Description Services"
+        value={accessibilityForm.audioDescription || ""}
+        setValue={(value: string) => handleInputChange("audioDescription", value)}
+        placeholder="Select audio description availability"
+        showDropdown
+        dropdownOptions={["Available", "Available Upon Request", "Not Available"]}
+        helperText={accessibilityErrors.audioDescription || ""}
+        style={accessibilityErrors.audioDescription ? "border-red-500" : ""}
+        classname="!w-full"
+        inputRef={audioDescriptionRef}
+        setExternalError={(hasError) => setLocalErrors(prev => ({ ...prev, audioDescription: hasError }))}
+      />
 
-      <div className="grid gap-[15px] mt-[2.5rem]">
-        <div className="flex items-center justify-between w-full">
-          <p className="font-bold text-[1rem]">
-            Transfer Event Charges to Customers
-          </p>
-          <SlideToggle
-            toggle={(val: boolean) =>
-              handleInputChange("transferCharges", val)
-            }
-            isChecked={toggle}
-          />
-        </div>
-        {accessibilityErrors.transferCharges && (
-          <p className="text-[13px] text-red-500 mt-1">
-            {accessibilityErrors.transferCharges}
-          </p>
-        )}
+      <DefaultInput
+        id="largeText"
+        label="Large Text Materials"
+        value={accessibilityForm.largeText || ""}
+        setValue={(value: string) => handleInputChange("largeText", value)}
+        placeholder="Select large text availability"
+        showDropdown
+        dropdownOptions={["Available", "Available Upon Request", "Not Available"]}
+        helperText={accessibilityErrors.largeText || ""}
+        style={accessibilityErrors.largeText ? "border-red-500" : ""}
+        classname="!w-full"
+        inputRef={largeTextRef}
+        setExternalError={(hasError) => setLocalErrors(prev => ({ ...prev, largeText: hasError }))}
+      />
 
-        <ul className="grid gap-[10px] list-disc pl-5">
-          {list.map((lab, idx) => (
-            <li key={idx} className="text-[#918F90] text-[.8rem]">
-              {lab}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <DefaultInput
+        id="additionalNotes"
+        label="Additional Accessibility Notes"
+        value={accessibilityForm.additionalNotes || ""}
+        setValue={(value: string) => handleInputChange("additionalNotes", value)}
+        placeholder="Any additional accessibility information or accommodations"
+        helperText={accessibilityErrors.additionalNotes || ""}
+        style={accessibilityErrors.additionalNotes ? "border-red-500" : ""}
+        classname="!w-full"
+        inputRef={additionalNotesRef}
+        setExternalError={(hasError) => setLocalErrors(prev => ({ ...prev, additionalNotes: hasError }))}
+      />
     </div>
   );
 };
