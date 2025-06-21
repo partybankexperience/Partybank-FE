@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { Storage } from './InAppStorage';
 
 export const stages = [
   'Event Setup',
@@ -10,7 +11,7 @@ export const stages = [
   // 'Event Guests',
   'Review & Publish',
 ]
-
+const number=Storage.getItem('user')?.phoneNumber;
 interface EventData {
   stage: string
   form: Record<string, Record<string, any>>
@@ -138,7 +139,7 @@ export const useEventStore = create<EventData>()(
           selectedTags: eventData.tags && Array.isArray(eventData.tags) && eventData.tags.length > 0 
             ? eventData.tags[0].id || eventData.tags[0] 
             : eventData.tags || '',
-          contactNumber: eventData.phone || '',
+          contactNumber: eventData.phone || number || '',
           seriesId: eventData.seriesId || '',
           // Add series name for display if available
           seriesName: eventData.series?.name || '',

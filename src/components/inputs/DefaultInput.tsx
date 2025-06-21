@@ -28,6 +28,7 @@ type?: "text" | "password" | "email"|"tel"|"date"|"time"|"number";
   classname?: string;
   onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>
   onBlur?: React.FocusEventHandler<HTMLInputElement>
+  min?: string;
 };
 
 const DefaultInput = ({
@@ -51,7 +52,8 @@ const DefaultInput = ({
   setExternalError,
   classname='',
   onKeyDown,
-  onBlur
+  onBlur,
+  min=''
 }: DefaultInputProps) => {
   // const [value, setValue] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -139,19 +141,6 @@ const DefaultInput = ({
             {leftContent}
           </div>
         )}
-
-        {/* <input
-          id={id}
-          type={inputType}
-          placeholder={placeholder}
-          disabled={disabled}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          onBlur={handleBlur}
-          aria-describedby={`${id}-helper`}
-          aria-invalid={hasError}
-          className={`${baseStyle} ${paddingLeft} ${paddingRight} ${style}`}
-        /> */}
 {showDropdown ? (
   <div className="relative w-full">
   <select
@@ -192,7 +181,22 @@ const DefaultInput = ({
     aria-invalid={hasError}
     className={`${baseStyle} ${paddingLeft} ${paddingRight} ${style}`}
     onKeyDown={onKeyDown}
-    min={type === "date" ? new Date().toISOString().split('T')[0] : type === "number" ? "0" : undefined}
+    min={
+      type === "date"
+        ? min || new Date().toISOString().split("T")[0]
+        : type === "number"
+        ? "0"
+        : undefined
+    }
+    // min={
+    //   min !== undefined
+    //     ? min
+    //     : type === "date"
+    //     ? new Date().toISOString().split('T')[0]
+    //     : type === "number"
+    //     ? "0"
+    //     : undefined
+    // }
     onInput={(e) => {
       // Additional safeguard for number inputs
       if (type === "number" && e.currentTarget.value !== "" && parseFloat(e.currentTarget.value) < 0) {

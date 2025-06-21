@@ -444,8 +444,7 @@ console.log(getValue("isUnlimited"),'checking ')
         >
         {availabilityType.map((availability) => {
   const isUnlimited = availability === "Unlimited";
-  console.log(isUnlimited, getValue("isUnlimited"),'checking where the issue is really from')
-  console.log(isUnlimited,'where is the string coming from')
+  
   return (
     <RadioButton
       key={availability}
@@ -458,13 +457,6 @@ console.log(getValue("isUnlimited"),'checking ')
   );
 })}
 
-          {/* <RadioButton
-            label="Unlimited"
-            value="unlimited"
-            name="ticket-availability"
-            checked={getValue("isUnlimited") === "unlimited"}
-            onChange={() => handleChange("isUnlimited", true)}
-          /> */}
         </div>
         {ticketErrors.isUnlimited && (
           <p className="text-[13px] text-red-500 mt-1">
@@ -632,6 +624,7 @@ console.log(getValue("isUnlimited"),'checking ')
             helperText={ticketErrors.salesEnd || ""}
             style={ticketErrors.salesEnd ? "border-red-500" : ""}
             inputRef={salesEndRef}
+            min={getValue("salesStart")}
           />
           <DefaultInput
             id="endTime"

@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { formatDate, formatTimeRange } from "../../../components/helpers/dateTimeHelpers";
 import { useEventStore } from "../../../stores/useEventStore";
 import { Storage } from "../../../stores/InAppStorage";
+import { successAlert } from "../../../components/alerts/ToastService";
 
 const Overview = () => {
   const navigate=useNavigate()
@@ -26,7 +27,13 @@ const Overview = () => {
   const [loading, setLoading] = useState(true);
   const [shareLoading, setShareLoading] = useState(false);
   const { setStage, prefillEventData, mapBackendStepToFrontend } = useEventStore();
-  
+  useEffect(() => {
+    if (location.state === 'Success') {
+      // Show toast, alert, or banner
+      successAlert("Success", "Event created successfully!");
+      // e.g., toast.success("Event created successfully!");
+    }
+  }, [location.state]);
   // Get ID from navigate state
   const eventId = location.state?.id;
   

@@ -214,6 +214,7 @@ const ScheduleEvent = () => {
               helperText={scheduleEventErrors.endDate || ""}
               style={scheduleEventErrors.endDate ? "border-red-500" : ""}
               inputRef={endDateRef}
+              min={scheduleEventForm.startDate || ""}
             />
             <div className="md:col-span-2"></div>
           </div>

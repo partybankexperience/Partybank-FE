@@ -20,12 +20,13 @@ const EventSetup = () => {
   const eventSetupErrors = errors["Event Setup"] || {};
   const [tags, setTags] = useState<any[]>([]);
   const [tagOptions, setTagOptions] = useState<string[]>([]);
+  
 
   const [series, setSeries] = useState<any[]>([]);
   const [seriesLoading, setSeriesLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
-  const [selectedSeriesName, setSelectedSeriesName] = useState<string>("");
+  // const [selectedSeriesName, setSelectedSeriesName] = useState<string>("");
   const [checkingSimilarEvents, setCheckingSimilarEvents] = useState(false);
   const [similarEvents, setSimilarEvents] = useState<any[]>([]);
   const [showSimilarEventsMessage, setShowSimilarEventsMessage] =
@@ -35,7 +36,6 @@ const EventSetup = () => {
   const categoryRef = useRef<any>(null);
   const tagsRef = useRef<any>(null);
   const contactNumberRef = useRef<any>(null);
-
   useEffect(() => {
     const fetchSeries = async () => {
       try {
@@ -53,7 +53,6 @@ const EventSetup = () => {
           console.log("Matched series:", matchedSeries);
           if (matchedSeries) {
             setFormValue("Event Setup", "seriesName", matchedSeries.name);
-            // setSelectedSeriesName(matchedSeries.name);
             console.log("Set series name to:", matchedSeries.name);
           }
         }
@@ -232,19 +231,7 @@ const EventSetup = () => {
     };
   }, [eventSetupForm]);
 
-  console.log("EventSetup form data:", eventSetupForm);
-  console.log("Current tag options:", tagOptions);
-  console.log("Full tags data:", tags);
-  console.log("Selected tag ID:", eventSetupForm.tags);
-  console.log("Selected tag name:", eventSetupForm.selectedTagName);
-  console.log(
-    "Should show create tag inputs:",
-    eventSetupForm.tags === "Other"
-  );
-  console.log("Series ID in form:", eventSetupForm.seriesId);
-  console.log("Series name in form:", eventSetupForm.seriesName);
-  console.log("Selected series name state:", selectedSeriesName);
-  console.log("All series data:", series);
+
 
   return (
     <div className="grid gap-[20px]">
@@ -407,7 +394,7 @@ const EventSetup = () => {
             "seriesId",
             selectedSeries ? selectedSeries.id : null
           );
-          setSelectedSeriesName(selectedSeriesName);
+          // setSelectedSeriesName(selectedSeriesName);
         }}
         placeholder={seriesLoading ? "Loading series..." : "Select Series"}
         classname="!w-full"

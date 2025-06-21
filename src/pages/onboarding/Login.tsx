@@ -31,6 +31,7 @@ const Login = () => {
       // Show notification immediately
       errorAlert("Not Authenticated", "You need to be logged in to access this page.");
       // Clean up URL after showing notification
+      setisLoading(false);
       const timer = setTimeout(() => {
         navigate("/", { replace: true, state: null });
       }, 2000); // Give time for user to read the notification
@@ -62,6 +63,7 @@ const Login = () => {
       navigate("/dashboard");
     } catch (error) {
       console.log(error);
+      setisLoading(false);
     } finally {
       setisLoading(false);
     }

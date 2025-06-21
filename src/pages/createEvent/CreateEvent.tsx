@@ -24,6 +24,7 @@ const CreateEvent = () => {
     const currentIndex = stages.indexOf(stage)
     const navigate = useNavigate()
     const eventId = Storage.getItem("eventId") || null;
+    let slug = "";
 
   // Function to check if form data has changed
   const hasFormDataChanged = (currentData: any, originalData: any): boolean => {
@@ -37,7 +38,6 @@ const CreateEvent = () => {
       setOriginalFormData(JSON.parse(JSON.stringify(form["Event Setup"])));
     }
   }, [eventId, form["Event Setup"], originalFormData]);
-
 const goNext = async () => {
   try {
     const formData = form[stage] || {};
@@ -136,6 +136,7 @@ const goNext = async () => {
 
         if (success && success.eventId) {
           Storage.setItem("eventId", success.eventId);
+          slug = success.slug;
           setOriginalFormData(JSON.parse(JSON.stringify(formData)));
         }
       }
@@ -507,7 +508,7 @@ const goNext = async () => {
         clearEventStorage();
         // Clear eventId
         Storage.removeItem("eventId");
-        navigate("/dashboard");
+        navigate(`/manage-events/${slug}`, { state:'Success' });
       } catch (error) {
         console.error("Error publishing event:", error);
         errorAlert("Error","Failed to publish event. Please try again.");
