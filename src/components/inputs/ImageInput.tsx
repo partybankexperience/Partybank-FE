@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useEventStore } from "../../stores/useEventStore";
 
 interface ImageUploadInputProps {
   label?: string;
@@ -17,6 +18,7 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
 }) => {
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
+  const { setIsNextButtonDisabled } = useEventStore();
 
   const uploadToCloudinary = async (file: File): Promise<string> => {
     const formData = new FormData();
@@ -61,6 +63,7 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
 
     try {
       setUploading(true);
+      setIsNextButtonDisabled(true);
       const imageUrl = await uploadToCloudinary(file);
       onChange?.(imageUrl);
     } catch (err) {
@@ -68,6 +71,7 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
       setError("Image upload failed. Please try again.");
     } finally {
       setUploading(false);
+      setIsNextButtonDisabled(false);
     }
   };
 

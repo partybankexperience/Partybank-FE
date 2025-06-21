@@ -15,12 +15,14 @@ interface EventData {
   stage: string
   form: Record<string, Record<string, any>>
   errors: Record<string, Record<string, string>>
+  isNextButtonDisabled: boolean;
   setStage: (stage: string) => void
   setForm: (form: Record<string, any>) => void
   setFormValue: (stage: string, key: string, value: any) => void
   setError: (stage: string, key: string, error: string) => void
   clearError: (stage: string, key: string) => void
   clearStageErrors: (stage: string) => void
+  setIsNextButtonDisabled: (disabled: boolean) => void;
   // Actions
   clearForm: (stage: string) => void;
   resetEventStore: () => void;
@@ -36,6 +38,7 @@ export const useEventStore = create<EventData>()(
       stage: 'Event Setup',
       form: {},
       errors: {},
+      isNextButtonDisabled: false,
       setStage: (stage) => set(() => ({ stage })),
       setForm: (form) => set(() => ({ form })),
       setFormValue: (stage, key, value) => {
@@ -92,15 +95,18 @@ export const useEventStore = create<EventData>()(
           form: {},
           errors: {},
           stage: 'Event Setup',
+          isNextButtonDisabled: false,
         }));
         localStorage.removeItem("event-creation-storage");
       },
+       setIsNextButtonDisabled: (disabled) => set({ isNextButtonDisabled: disabled }),
       clearEventStorage: () => {
         localStorage.removeItem("event-creation-storage");
         set(() => ({
           form: {},
           errors: {},
           stage: 'Event Setup',
+          isNextButtonDisabled: false,
         }));
       },
       conditionalClearStorage: () => {
@@ -112,6 +118,7 @@ export const useEventStore = create<EventData>()(
             form: {},
             errors: {},
             stage: 'Event Setup',
+            isNextButtonDisabled: false,
           }));
         }
       },

@@ -20,7 +20,7 @@ import { Storage } from "../../stores/InAppStorage"
 const CreateEvent = () => {
   const [isCreatingEvent, setIsCreatingEvent] = useState(false);
   const [originalFormData, setOriginalFormData] = useState<any>(null);
-  const { stage, setStage, form, setError, clearStageErrors, clearEventStorage, conditionalClearStorage, setFormValue } = useEventStore()
+  const { stage, setStage, form, setError, clearStageErrors, clearEventStorage, conditionalClearStorage, setFormValue, isNextButtonDisabled } = useEventStore()
     const currentIndex = stages.indexOf(stage)
     const navigate = useNavigate()
     const eventId = Storage.getItem("eventId") || null;
@@ -492,7 +492,7 @@ const goNext = async () => {
       )}
 {stage !== "Review & Publish"? (
 
-      <DefaultButton onClick={goNext} isLoading={isCreatingEvent}>
+      <DefaultButton onClick={goNext} isLoading={isCreatingEvent} disabled={isNextButtonDisabled || isCreatingEvent}>
         {stage === "Event Setup" && isCreatingEvent 
           ? (eventId ? "Updating Event..." : "Creating Event...") 
           : "Next"}
