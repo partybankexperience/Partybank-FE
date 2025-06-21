@@ -1,6 +1,7 @@
 
 import { useEventStore } from "../../stores/useEventStore";
 import { formatDate, formatTime } from "../../components/helpers/dateTimeHelpers";
+import { formatNumber } from "../../components/helpers/numberFormatHelpers";
 
 const fieldLabels: Record<string, string> = {
   name: "Event Name",
@@ -59,6 +60,15 @@ const Review = () => {
 
   const formatValue = (key: string, value: any) => {
     if (value === null || value === undefined || value === '' && key !== 'coverImage' && key !== 'price' && key !== 'isUnlimited') {
+      return "N/A";
+    }
+
+    // Handle numeric quantity fields with formatNumber helper
+    if (key === 'totalStock' || key === 'soldTarget' || key === 'groupSize') {
+      const numValue = typeof value === 'string' ? parseFloat(value) : value;
+      if (!isNaN(numValue) && numValue !== null && numValue !== undefined) {
+        return formatNumber(numValue);
+      }
       return "N/A";
     }
 
