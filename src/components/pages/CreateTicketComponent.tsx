@@ -10,6 +10,7 @@ import { createTicket } from "../../Containers/ticketApi";
 import { useState, useRef, useEffect } from "react";
 import { successAlert, errorAlert } from "../alerts/ToastService";
 import { convertISOToDateInput, convertDateInputToISO } from '../helpers/dateTimeHelpers';
+import { formatPrice } from '../helpers/numberFormatHelpers';
 import ColorPickerInput from "../inputs/ColorPickerInput";
 
 
@@ -522,20 +523,27 @@ console.log(getValue("isUnlimited"),'checking ')
               <label className="text-[#231F20] text-[16px] font-semibold font-[RedHat]">
                 Price *
               </label>
-              <NumericFormat
-                // ref={priceRef}
-                value={getValue("price")}
-                onValueChange={(values) => {
-                  handleChange("price", values.floatValue || 0);
-                }}
-                thousandSeparator=","
-                prefix="₦"
-                placeholder="₦0.00"
-                className={`text-[14px] border-[1px] text-black placeholder:text-neutralDark placeholder:text-[14px] font-[RedHat] rounded-[4px] py-[10px] px-[16px] !w-full bg-white hover:border-lightPurple focus:border-lightPurple hover:shadow-[0_0_0_2px_rgba(77,64,85,0.1)] focus:shadow-[0_0_0_2px_rgba(77,64,85,0.1)] ${ticketErrors.price ? 'border-red-500' : 'border-neutral'}`}
-                decimalScale={2}
-                fixedDecimalScale
-                allowNegative={false}
-              />
+              <div className="relative">
+                <NumericFormat
+                  // ref={priceRef}
+                  value={getValue("price")}
+                  onValueChange={(values) => {
+                    handleChange("price", values.floatValue || 0);
+                  }}
+                  thousandSeparator=","
+                  prefix="₦"
+                  placeholder="₦0.00"
+                  className={`text-[14px] border-[1px] text-black placeholder:text-neutralDark placeholder:text-[14px] font-[RedHat] rounded-[4px] py-[10px] px-[16px] !w-full bg-white hover:border-lightPurple focus:border-lightPurple hover:shadow-[0_0_0_2px_rgba(77,64,85,0.1)] focus:shadow-[0_0_0_2px_rgba(77,64,85,0.1)] ${ticketErrors.price ? 'border-red-500' : 'border-neutral'}`}
+                  decimalScale={2}
+                  fixedDecimalScale
+                  allowNegative={false}
+                />
+                {getValue("price") && Number(getValue("price")) >= 10000 && (
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-500 bg-white px-1">
+                    {formatPrice(getValue("price"))}
+                  </div>
+                )}
+              </div>
               {ticketErrors.price && (
                 <p className="text-[13px] text-red-500 mt-1">
                   {ticketErrors.price}
