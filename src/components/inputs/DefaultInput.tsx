@@ -192,7 +192,14 @@ const DefaultInput = ({
     aria-invalid={hasError}
     className={`${baseStyle} ${paddingLeft} ${paddingRight} ${style}`}
     onKeyDown={onKeyDown}
-    min={type === "date" ? new Date().toISOString().split('T')[0] : undefined}
+    min={type === "date" ? new Date().toISOString().split('T')[0] : type === "number" ? "0" : undefined}
+    onInput={(e) => {
+      // Additional safeguard for number inputs
+      if (type === "number" && e.currentTarget.value !== "" && parseFloat(e.currentTarget.value) < 0) {
+        e.currentTarget.value = "0";
+        setValue("0");
+      }
+    }}
   />
 )}
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
