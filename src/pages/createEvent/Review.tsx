@@ -1,7 +1,7 @@
 
 import { useEventStore } from "../../stores/useEventStore";
 import { formatDate, formatTime } from "../../components/helpers/dateTimeHelpers";
-import { formatNumber } from "../../components/helpers/numberFormatHelpers";
+import { formatNumber, formatPrice } from "../../components/helpers/numberFormatHelpers";
 
 const fieldLabels: Record<string, string> = {
   name: "Event Name",
@@ -85,11 +85,11 @@ const Review = () => {
     if (key === 'startDate' || key === 'endDate') {
       return formatDate(value);
     }
-    if (key === 'price' ) {
-      if (value === 0 || value === '0' || value===''|| !value) {
+    if (key === 'price') {
+      if (value === 0 || value === '0' || value === '' || !value) {
         return "Free";
       } else {
-        return formatDate(value)
+        return formatPrice(value);
       }
     }
     if (key === 'isUnlimited' ) {
