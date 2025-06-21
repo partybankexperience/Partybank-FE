@@ -6,7 +6,7 @@ const hours = [
   "12PM", "2PM", "4PM", "6PM", "8PM", "9PM"
 ];
 
-const dummyData = hours.map((time, index) => ({
+const dummyData = hours.map((time) => ({
   time,
   value: Math.floor(Math.random() * 100) // Random dummy values
 }));

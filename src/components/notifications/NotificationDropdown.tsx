@@ -1,5 +1,5 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import  { useState, useRef, useEffect } from 'react';
 import { VscBellDot } from "react-icons/vsc";
 import { BiCheck, BiTrash } from "react-icons/bi";
 import { BsDot } from "react-icons/bs";

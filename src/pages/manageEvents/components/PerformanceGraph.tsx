@@ -35,6 +35,7 @@ export default function PerformanceChart() {
         <Tooltip 
   formatter={(value: number, name: string, props) => {
     const { payload } = props;
+    console.log(value, name);
     return (
         <div className="p-2 rounded bg-white text-black text-sm">
           <div className="font-bold text-center">{payload.ticketsSold.toLocaleString()} tickets</div>

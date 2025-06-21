@@ -2,12 +2,10 @@ import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { Modal } from "../modal/Modal";
 import DefaultButton from "../buttons/DefaultButton";
-import { useNavigate } from "react-router";
 import DefaultInput from "../inputs/DefaultInput";
 import { ImageUploadInput } from "../inputs/ImageInput";
 import { createSeries } from "../../Containers/seriesApi";
 import { Storage } from "../../stores/InAppStorage";
-import FallbackImage from "../common/FallbackImage";
 
 interface CreateNewSeriesProps {
   onSeriesCreated?: (newSeries: any) => void;
@@ -19,7 +17,6 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
   const [coverImage, setCoverImage] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsModalOpen] = useState(false);
-  const navigate = useNavigate();
   useEffect(() => {
     console.log("CreateNewSeries mounted")
   }, [])

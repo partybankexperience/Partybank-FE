@@ -26,7 +26,7 @@ const Notification = () => {
         </p>
         <SlideToggle
           toggle={(val: any) => handleToggleChange(val)}
-          defaultValue={notificationForm.notifyOnTicketSale || false}
+          // defaultValue={notificationForm.notifyOnTicketSale || false}
           isChecked={notificationForm.notifyOnTicketSale || false}
         />
       </div>

@@ -78,7 +78,7 @@ const columns: TableColumn<Guest>[] = [
   { name: "Ticket Type", selector: (row) => row.TicketType },
   {
     name: "Actions",
-    cell: (row) => (
+    cell: () => (
       <button className="text-gray-500 hover:text-black">
         <FaEllipsisV />
       </button>

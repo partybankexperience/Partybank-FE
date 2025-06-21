@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 // import { PiMapPinBold } from "react-icons/pi";
 import { LuPencilLine } from "react-icons/lu";
@@ -23,7 +22,6 @@ const SeriesCard = ({
   imageUrl?: string
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const navigate = useNavigate();
 
   const buttonOptions = [
     {

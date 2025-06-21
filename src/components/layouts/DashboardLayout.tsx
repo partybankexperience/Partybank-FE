@@ -1,6 +1,5 @@
 import { FaPlus } from "react-icons/fa6";
 import DefaultButton from "../buttons/DefaultButton";
-import avatar from "../../assets/images/avatar.png";
 import logo from "../../assets/images/logoWhite.svg";
 import { MdDashboard } from "react-icons/md";
 import { BiSolidCalendarStar } from "react-icons/bi";
@@ -17,7 +16,6 @@ import { useState } from "react";
 import { SidebarModal } from "../modal/SidebarModal";
 import NotificationDropdown from "../notifications/NotificationDropdown";
 import ProfileDropdown from "../dropdowns/ProfileDropdown";
-import PrivateRoute from "../../utils/privateRoute";
 import { Storage } from "../../stores/InAppStorage";
 import { RiLogoutCircleRLine, RiSettings3Line } from "react-icons/ri";
 

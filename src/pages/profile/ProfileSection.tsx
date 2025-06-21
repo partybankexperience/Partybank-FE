@@ -26,15 +26,11 @@ interface ProfileSectionProps {
 
 const ProfileSection = ({
   section,
-  personalInfo,
-  preferenceInfo,
-  securityInfo,
-  organizationInfo,
+  
   toggle,
   setToggle,
-  onBack,
+  
 }: ProfileSectionProps) => {
-    const [profilePic, setProfilePic] = useState<string>("");
     const [name, setname] = useState('');
     const navigate = useNavigate();
 
@@ -126,14 +122,14 @@ const ProfileSection = ({
             <p className="text-black text-[1rem]">Receive Email Notifications</p>
         <SlideToggle
           toggle={() => setToggle(!toggle)}
-          defaultChecked={toggle}
+          isChecked={toggle}
         />
         </div>
         <div className="flex justify-between">
             <p className="text-black text-[1rem]">Receive SMS Alerts</p>
         <SlideToggle
           toggle={() => setToggle(!toggle)}
-          defaultChecked={toggle}
+          isChecked={toggle}
         />
         </div>
         <div className="grid w-full gap-[15px] ">
