@@ -334,7 +334,9 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
                           key === 'type' ? 'ticketType' :
                           key === 'category' ? 'ticketCategory' : key;
             
-            getCurrentTicketData.setState({ [formKey]: value }); // fix this 'Property 'setState' does not exist on type '(key: string) => any'.'
+            // Use the ticket store's updateCurrentTicketData method
+            const { updateCurrentTicketData } = useTicketStore.getState();
+            updateCurrentTicketData(formKey, value);
           }
         });
       }
