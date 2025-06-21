@@ -402,24 +402,9 @@ const goNext = async () => {
     }
 
     if (stage === "Notifications") {
-      try {
-        if (!eventId) {
-          throw new Error("Event ID is required for notification settings");
-        }
-
-        const notificationData = form["Notifications"];
-
-        // Convert form data to match backend expectations
-        const notifyOnTicketSale = notificationData.notifyOnTicketSale || false;
-
-        const response = await notification(eventId, notifyOnTicketSale);
-
-        console.log("Notification settings updated successfully:", response);
-      } catch (error) {
-        console.error("Error updating notification settings:", error);
-        setError(stage, "general", "An unexpected error occurred while updating notification settings.");
-        return;
-      }
+      const notificationData = form["Notifications"];
+      const notifyOnTicketSale = notificationData.notifyOnTicketSale || false;
+      await notification(eventId, notifyOnTicketSale);
     }
     // Handle other stages
     const { isValid, errors } = validateStage(stage, formData);
