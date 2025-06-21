@@ -334,9 +334,9 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
                           key === 'type' ? 'ticketType' :
                           key === 'category' ? 'ticketCategory' : key;
             
-            // Use the ticket store's updateCurrentTicketData method
-            const { updateCurrentTicketData } = useTicketStore.getState();
-            updateCurrentTicketData(formKey, value);
+            // Use the ticket store's setCurrentTicketData method
+            const { setCurrentTicketData } = useTicketStore.getState();
+            setCurrentTicketData(formKey, value);
           }
         });
       }
