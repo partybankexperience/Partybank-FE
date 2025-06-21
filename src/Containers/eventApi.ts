@@ -185,4 +185,13 @@ const checkSimilarEvent = async(name: string, date: string): Promise<any> => {
   return response;
 };
 
-export { createEvent, createTag, getTags, getEventsById, getEvents, getScheduleandLocation, editEvent, deleteEvent, duplicateEvent, accessibility, publishEvent, notification, checkSimilarEvent };
+const getEventsBySlug = async (slug: string): Promise<any> => {
+  const response = await apiCall({
+    name: "getEventsBySlug",
+    urlExtra: `/${slug}`,
+    alert: false
+  });
+  return response;
+};
+
+export { createEvent, createTag, getTags, getEventsById, getEvents, getScheduleandLocation, editEvent, deleteEvent, duplicateEvent, accessibility, publishEvent, notification, checkSimilarEvent,getEventsBySlug };

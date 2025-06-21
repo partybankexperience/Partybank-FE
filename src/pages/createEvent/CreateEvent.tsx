@@ -298,7 +298,7 @@ const goNext = async () => {
               currentTicket.endTime,
               perksArray,
               currentTicket.isUnlimited,
-              currentTicket.category === "option2" ? Number(currentTicket.groupSize) : undefined,
+              currentTicket.category === "group" ? Number(currentTicket.groupSize) : undefined,
               currentTicket.color || ""
             ]as const;
 

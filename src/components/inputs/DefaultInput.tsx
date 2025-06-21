@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   FaExclamationTriangle,
   FaChevronDown,
@@ -43,11 +43,11 @@ const DefaultInput = ({
   showDropdown = false,
   dropdownOptions = [],
   required = false,
-  minLength = 6,
+  // minLength = 6,
   style = "",
   value,
   setValue,
-  inputRef,
+  // inputRef,
   setExternalError,
   classname='',
   onKeyDown,
@@ -57,7 +57,7 @@ const DefaultInput = ({
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [touched, setTouched] = useState(false);
-  const internalRef = useRef<HTMLInputElement>(null);
+  // const internalRef = useRef<HTMLInputElement>(null);
   const inputType = type === "password" && showPassword ? "text" : type;
   const stringValue = String(value || '');
   const isFilled = stringValue.trim().length > 0;

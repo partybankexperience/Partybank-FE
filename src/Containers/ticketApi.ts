@@ -32,7 +32,7 @@ const createTicket = async (
     endTime,
     perks,
     isUnlimited,
-    ...(category === 'group' &&  { groupSize:groupSize }),
+    ...(category === 'group' &&  { groupSize }),
     ...(type === 'paid' &&  { price }),
     ...(!isUnlimited &&  { stock }),
     ...(color && { color }),
@@ -65,6 +65,7 @@ const createTicketByEventId = async (
   color?: string
 ): Promise<any> => {
     const normalizedIsUnlimited = isUnlimited === true
+    // console.log("normalizedIsUnlimited", normalizedIsUnlimited);
   const payload = {
     name,
     category,
@@ -78,7 +79,8 @@ const createTicketByEventId = async (
     endTime,
     perks,
     isUnlimited:normalizedIsUnlimited,
-    ...(category === 'group' &&  { groupSize:groupSize }),
+    // groupSize,
+    ...(category === 'group' &&  { groupSize }),
     ...(type === 'paid' &&  { price }),
     ...(!isUnlimited &&  { stock }),
     ...(color && { color }),
@@ -119,6 +121,7 @@ const editTicket = async (
   groupSize?: number,
   color?: string
 ): Promise<any> => {
+    const normalizedIsUnlimited = isUnlimited === true
   const payload = {
     eventId,
     name,
@@ -131,7 +134,7 @@ const editTicket = async (
     startTime,
     endTime,
     perks,
-    isUnlimited,
+    isUnlimited:normalizedIsUnlimited,
     ...(category === 'group' && { groupSize }),
     ...(type === 'paid' && { price }),
     ...(!isUnlimited && { stock }),

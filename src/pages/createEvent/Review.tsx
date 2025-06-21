@@ -156,10 +156,10 @@ const Review = () => {
             <div className="grid gap-4">
               {/* Handle cover image first if it exists */}
               {data.coverImage && (
-                <div className="w-full max-w-md">
-                  <p className="text-[.9rem] text-[#979595] mb-2">
+                <div className="w-full h-[260px] overflow-hidden">
+                  {/* <p className="text-[.9rem] text-[#979595] mb-2">
                     Cover Image
-                  </p>
+                  </p> */}
                   <img
                     src={data.coverImage}
                     alt="Event Cover"

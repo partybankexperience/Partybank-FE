@@ -299,7 +299,7 @@ const CreateTicketComponent = () => {
           ticketData.endTime || "23:59",
           Array.isArray(ticketData.perks) ? ticketData.perks.filter(perk => perk && perk.trim()) : [],
           ticketData.isUnlimited,
-          Number(ticketData.groupSize)|| 1,
+          Number(ticketData.groupSize),
           ticketData.color
         );
         successAlert("Success","Ticket created successfully!");
@@ -523,7 +523,7 @@ console.log(getValue("isUnlimited"),'checking ')
                 Price *
               </label>
               <NumericFormat
-                ref={priceRef}
+                // ref={priceRef}
                 value={getValue("price")}
                 onValueChange={(values) => {
                   handleChange("price", values.floatValue || 0);
@@ -576,9 +576,9 @@ console.log(getValue("isUnlimited"),'checking ')
             value={getValue("color")}
             setValue={(v: string) => handleChange("color", v)}
             classname="!w-full"
-            helperText={ticketErrors.color || ""}
-            style={ticketErrors.color ? "border-red-500" : ""}
-            inputRef={ticketColorRef}
+            // helperText={ticketErrors.color || ""}
+            // style={ticketErrors.color ? "border-red-500" : ""}
+            // inputRef={ticketColorRef}
           />
         </div>
       </div>

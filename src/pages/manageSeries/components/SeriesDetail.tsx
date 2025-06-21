@@ -4,12 +4,11 @@ import { BiEditAlt } from "react-icons/bi";
 import DefaultButton from "../../../components/buttons/DefaultButton";
 import { CgLayoutGridSmall } from "react-icons/cg";
 import { useState, useEffect } from "react";
-import { useNavigate, useNavigation, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { Modal } from "../../../components/modal/Modal";
 import DefaultInput from "../../../components/inputs/DefaultInput";
-import { getSeriesById, updateSeries } from "../../../Containers/seriesApi";
-import { Storage } from "../../../stores/InAppStorage";
-import { EventCardSkeleton } from "../../../components/common/LoadingSkeleton";
+import { getSeriesBySlug, updateSeries } from "../../../Containers/seriesApi";
+
 
 interface SeriesData {
   id: string;
@@ -67,7 +66,7 @@ const SeriesDetail = () => {
 
             try {
                 setLoading(true);
-                const response = await getSeriesById(seriesId);
+                const response = await getSeriesBySlug(slug as string);
                 setSeriesData(response);
                 setEditedName(response.name);
                 setEditedDescription(response.description);

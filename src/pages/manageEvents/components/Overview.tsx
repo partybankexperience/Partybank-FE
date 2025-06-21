@@ -11,7 +11,7 @@ import { RiInboxArchiveLine } from "react-icons/ri";
 import { FaShare } from "react-icons/fa";
 import TicketsCard from "../../../components/cards/TicketCard";
 import { useNavigate, useParams, useLocation } from "react-router";
-import { getEventsById } from "../../../Containers/eventApi";
+import { getEventsBySlug } from "../../../Containers/eventApi";
 import { useEffect, useState } from "react";
 import { formatDate, formatTimeRange } from "../../../components/helpers/dateTimeHelpers";
 import { useEventStore } from "../../../stores/useEventStore";
@@ -29,19 +29,7 @@ const Overview = () => {
   
   // Get ID from navigate state
   const eventId = location.state?.id;
-  // const location = [
-  //   { icon: <GrLocation className="text-primary" />, name: "Landmark Centre" },
-  //   {
-  //     icon: <MdOutlineCalendarMonth className="text-primary" />,
-  //     name: "12 Apr 2025",
-  //   },
-  //   {
-  //     icon: <FaRegClock className="text-primary" />,
-  //     name: "8:15 AM - 08:30 PM",
-  //   },
-  // ];
-
-  // Format location data using actual event data or fallbacks
+  
   const getLocationData = () => {
     if (!eventData) return [];
 
@@ -165,13 +153,7 @@ const Overview = () => {
       icon: <RiInboxArchiveLine />,
     },
   ];
-  // const eventDetails = [
-  //   { label: "Internal ID", value: "1236548765" },
-  //   { label: "Category", value: "Festival" },
-  //   { label: "Tags", value: "Beats, Dj, Party" },
-  //   { label: "Series", value: "My Series" },
-  //   { label: "Organizer’s Contact Number", value: "+234  704 3946 3386" },
-  // ];
+
 
   useEffect(() => {
     let isMounted = true;
@@ -179,13 +161,13 @@ const Overview = () => {
     async function getEvent() {
       try {
         setLoading(true);
-        const res = await getEventsById(eventId as string);
+        const res = await getEventsBySlug(slug as string);
 
         if (!isMounted) return;
 
         setEventData(res);
 
-        if (res.currentStep !== "reviewPublish") {
+        if (res.currentStep !== "completed") {
           // Store the event ID for editing
           Storage.setItem("eventId", res.id);
 
@@ -255,12 +237,12 @@ const Overview = () => {
   return (
     <div className="grid">
       <h1 className="text-black text-[1.6rem] font-medium">Overview</h1>
-      <div className="grid md:grid-cols-[1fr_2fr] gap-[30px] mt-[20px]">
+      <div className="grid md:grid-cols-[1fr_2fr] gap-[30px] mt-[20px] ">
         <div className="rounded-[10px] h-[170px] md:h-[350px] ">
           <img
             src={eventData.bannerImage || ticket}
             alt={`${eventData.name || 'Event'} banner`}
-            className="rounded-[10px]  h-[170px] md:h-[350px] w-full object-cover overflow-hidden"
+            className="rounded-[10px]  h-[170px] md:h-[350px] w-full object-cover overflow-hidden "
           />
         </div>
         <div className="grid gap-[20px] h-fit md:max-h-[60vh] md:overflow-y-auto">

@@ -48,4 +48,11 @@ const deleteSeries =async (id: String): Promise<any> =>{
     urlExtra: `/${id}`
   });  return response;
 }
-export { createSeries,getSeries,getSeriesById,updateSeries,deleteSeries }
+const getSeriesBySlug = async (slug: String): Promise<any> => {
+  const response = await apiCall({
+    name: "getSeriesBySlug",
+    urlExtra: `/${slug}`
+  });
+  return response;
+}
+export { createSeries,getSeries,getSeriesById,updateSeries,deleteSeries,getSeriesBySlug }

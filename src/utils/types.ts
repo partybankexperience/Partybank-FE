@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes, MouseEventHandler } from "react";
+import {  MouseEventHandler } from "react";
 
 export type DefaultButtonType = {
     handleClick?: MouseEventHandler<HTMLButtonElement> | undefined;
@@ -46,7 +46,9 @@ export type endPointlistTypes = {
     publishEvent: endpointTypes;
     editTicket: endpointTypes;
     checkSimilarEvent:endpointTypes;
-    createTicketByEventId:endpointTypes
+    createTicketByEventId:endpointTypes;
+    getEventsBySlug: endpointTypes;
+    getSeriesBySlug: endpointTypes;
 };
 
 export type urlPropTypes = {

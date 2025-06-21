@@ -6,10 +6,10 @@ const headers = {
     crossDomain: 'true',
 };
 
-const FileHeaders = {
-    'Content-Type': 'multipart/form-data',
-    crossDomain: 'true',
-};
+// const FileHeaders = {
+//     'Content-Type': 'multipart/form-data',
+//     crossDomain: 'true',
+// };
 
 export const endPoints: endPointlistTypes = {
     // onboarding
@@ -122,6 +122,12 @@ export const endPoints: endPointlistTypes = {
         headers,
         auth: true,
     },
+    getEventsBySlug: {
+        url: "/events/slug",
+        method: "GET",
+        headers,
+        auth: true,
+    },
     createTag:{
         url: "/tags",
         method: "POST",
@@ -211,5 +217,11 @@ export const endPoints: endPointlistTypes = {
         method: "GET",
         headers,
         auth: true,
-    }
+    },
+    getSeriesBySlug: {
+        url: "/series/slug",
+        method: "GET",
+        headers,
+        auth: true,
+    },
 };

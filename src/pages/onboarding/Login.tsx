@@ -58,6 +58,7 @@ const Login = () => {
       const res = await LoginUser(email, password);
       Storage.setItem("token", res.accessToken);
       Storage.setItem("user", res.user);
+      console.log(res, "Login Response");
       navigate("/dashboard");
     } catch (error) {
       console.log(error);

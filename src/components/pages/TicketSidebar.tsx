@@ -269,7 +269,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
       manageDeleteTicket(ticketIndex);
       
       // Import the necessary functions from ticket store to check for unsaved tickets
-      const { getNextUnsavedTicket, moveToNextUnsavedTicket, hasUnsavedTickets } = useTicketStore.getState();
+      const { moveToNextUnsavedTicket, hasUnsavedTickets } = useTicketStore.getState();
       
       // Try to move to next unsaved ticket after deletion
       const movedToNext = moveToNextUnsavedTicket();
@@ -334,7 +334,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
                           key === 'type' ? 'ticketType' :
                           key === 'category' ? 'ticketCategory' : key;
             
-            getCurrentTicketData.setState({ [formKey]: value });
+            getCurrentTicketData.setState({ [formKey]: value }); // fix this 'Property 'setState' does not exist on type '(key: string) => any'.'
           }
         });
       }

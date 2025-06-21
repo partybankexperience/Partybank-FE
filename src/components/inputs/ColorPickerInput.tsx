@@ -11,7 +11,7 @@ type ColorPickerInputProps = {
 };
 
 const ColorPickerInput = ({
-  id,
+  // id,
   label,
   value,
   setValue,
