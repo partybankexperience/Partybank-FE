@@ -55,10 +55,10 @@ const Signup = () => {
         onSubmit={handleRegisterUser}
       >
         <div className="grid gap-[10px] text-center md:text-left">
-          <h1 className="text-black text-[24px] md:text-[36px] font-bold">
+          <h1 className="text-black text-3xl font-semibold">
             Create an Account
           </h1>
-          <p className="text-lightGrey text-[20px]">
+          <p className="text-lightGrey font-normal text-sm">
             Let’s sign up quickly to get stated.
           </p>
         </div>

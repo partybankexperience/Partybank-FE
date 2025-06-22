@@ -91,10 +91,10 @@ const Login = () => {
         onSubmit={handleSignIn}
       >
         <div className="flex flex-col gap-[6px] text-center md:text-left">
-          <h1 className="font-[RedHat] text-3xl font-semibold">
+          <h1 className=" text-3xl font-semibold">
             Login to your account
           </h1>
-          <p className="font-[RedHat] text-[#918F90] font-normal text-sm">
+          <p className=" text-lightGrey font-normal text-sm">
             Let’s sign in quickly to continue to your account.
           </p>
         </div>
@@ -163,7 +163,7 @@ const Login = () => {
             Sign in with Google
           </DefaultButton>
         </div>
-        <p className="text-[#A7A5A6] font-[RedHat] text-[14px]  mt-[0.5vh] text-center">
+        <p className="text-[#A7A5A6]  text-[14px]  mt-[0.5vh] text-center">
           Don’t have an account?{"  "}
           <span
             className="text-red cursor-pointer font-bold hover:text-deepRed"
