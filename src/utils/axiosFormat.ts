@@ -2,10 +2,9 @@ import axios from "axios";
 import { urlPropTypes } from "./types";
 import { endPoints } from "./apiLib";
 import { Storage } from "../stores/InAppStorage";
-import { baseURL } from "./api.env";
 import { errorAlert, successAlert } from "../components/alerts/ToastService";
 
-const baseUrl = (): string => `${baseURL}`;
+const baseUrl = (): string => `${import.meta.env.VITE_BASE_URL}`;
 
 export const apiCall = ({
   urlExtra,
