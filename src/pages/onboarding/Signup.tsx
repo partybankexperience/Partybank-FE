@@ -1,4 +1,4 @@
-import { FcGoogle } from "react-icons/fc";
+// import { FcGoogle } from "react-icons/fc";
 import DefaultButton from "../../components/buttons/DefaultButton";
 import DefaultInput from "../../components/inputs/DefaultInput";
 import LoginLayout from "../../components/layouts/LoginLayout";
@@ -86,7 +86,7 @@ const Signup = () => {
           >
             Sign Up
           </DefaultButton>
-          <DefaultButton
+          {/* <DefaultButton
             variant="secondary"
             size="normal"
             className="w-full"
@@ -94,7 +94,7 @@ const Signup = () => {
             type="icon-left"
           >
             Sign Up with Google
-          </DefaultButton>
+          </DefaultButton> */}
         </div>
         <p className="text-grey200 text-[14px]  mt-[0.5vh] text-center">
           Already have an account?{" "}
