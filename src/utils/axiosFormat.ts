@@ -48,21 +48,19 @@ export const apiCall = ({
         // }
       })
       .catch((err) => {
-        // Check if the error response is 401
+        const errorMessage =
+          err.response?.data?.message || err.message || "Something went wrong.";
+      
         if (err.response?.status === 401) {
-          // Clear token and redirect with state to trigger notification
-          Storage.clearItem()
-          // Use history.pushState for navigation without refresh
-          window.history.pushState(null, '', '/?state=notAuthenticated');
-          // Dispatch a popstate event to trigger navigation
-          window.dispatchEvent(new PopStateEvent('popstate'));
+          Storage.clearItem();
+      
+          // Use window.location to redirect and pass message in query param
+          window.location.href = `/login?state=notAuthenticated&message=${encodeURIComponent(errorMessage)}`;
           return;
         }
-        errorAlert(
-          "Network Error",
-          err.response?.data?.message || err.message || "Something went wrong."
-        );
+      
+        errorAlert("Network Error", errorMessage);
         rej(err);
-      });
+      })
   });
 };

@@ -21,24 +21,31 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // useEffect(() => {
+  //   // Check both location.state and URL parameters for notAuthenticated
+  //   const urlParams = new URLSearchParams(location.search);
+  //   const isNotAuthenticated = location.state === 'notAuthenticated' || urlParams.get('state') === 'notAuthenticated';
+
+  //   if (isNotAuthenticated) {
+  //     console.log('User was redirected due to not being authenticated.');
+  //     // Show notification immediately
+  //     errorAlert("Not Authenticated", "You need to be logged in to access this page.");
+  //     // Clean up URL after showing notification
+  //     setisLoading(false);
+  //     const timer = setTimeout(() => {
+  //       navigate("/", { replace: true, state: null });
+  //     }, 2000); // Give time for user to read the notification
+
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [location.state, location.search, navigate]);
+  const state = location.state as { message?: string };
+
   useEffect(() => {
-    // Check both location.state and URL parameters for notAuthenticated
-    const urlParams = new URLSearchParams(location.search);
-    const isNotAuthenticated = location.state === 'notAuthenticated' || urlParams.get('state') === 'notAuthenticated';
-
-    if (isNotAuthenticated) {
-      console.log('User was redirected due to not being authenticated.');
-      // Show notification immediately
-      errorAlert("Not Authenticated", "You need to be logged in to access this page.");
-      // Clean up URL after showing notification
-      setisLoading(false);
-      const timer = setTimeout(() => {
-        navigate("/", { replace: true, state: null });
-      }, 2000); // Give time for user to read the notification
-
-      return () => clearTimeout(timer);
+    if (state?.message) {
+      errorAlert("Error", state.message);
     }
-  }, [location.state, location.search, navigate]);
+  }, [state?.message]);
 
   async function handleSignIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
