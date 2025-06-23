@@ -53,9 +53,8 @@ export const apiCall = ({
       
         if (err.response?.status === 401) {
           Storage.clearItem();
-      
           // Use window.location to redirect and pass message in query param
-          window.location.href = `/login?state=notAuthenticated&message=${encodeURIComponent(errorMessage)}`;
+          window.location.href = `/?state=notAuthenticated&message=${encodeURIComponent(errorMessage)}`;
           return;
         }
       

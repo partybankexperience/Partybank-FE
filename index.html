@@ -1,14 +1,49 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/logoWhite.svg" />
+
+    <!-- SEO -->
+    <title>Partybank – Celebrations Secured, Memories Deposited</title>
+    <meta name="description" content="Partybank is a hybrid ticketing platform for real-world events. It unifies online and offline ticket sales to reduce fraud, prevent underreporting, and give organizers full visibility into revenue and attendance." />
+    <meta name="keywords" content="event tickets, PartyBank, event management, sell tickets, buy tickets, online events" />
+    <meta name="author" content="PartyBank Team" />
+
+    <!-- Accessibility -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/logoWhite.svg" />
+
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;700&display=swap" rel="stylesheet" />
-    <title>Party Bank</title>
+
+    <!-- Open Graph (for social preview) -->
+    <meta property="og:title" content="Partybank – Celebrations Secured, Memories Deposited" />
+    <meta property="og:description" content="Partybank is a hybrid ticketing platform for real-world events. It unifies online and offline ticket sales to reduce fraud, prevent underreporting, and give organizers full visibility into revenue and attendance." />
+    <meta property="og:image" content="/pb-logo%1.svg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://preview.thepartybank.com" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="PartyBank – Event Ticketing Platform" />
+    <meta name="twitter:description" content="Create, sell, and manage tickets for your events online." />
+    <meta name="twitter:image" content="/pb-logo%1.svg" />
   </head>
   <body>
-    <div id="root"></div>
+    <noscript>
+      <div role="alert" style="padding: 1rem; background: #fef3c7; color: #92400e; text-align: center;">
+        JavaScript is disabled in your browser. Please enable it to use PartyBank.
+      </div>
+    </noscript>
+
+    <!-- Main application mount point -->
+    <main id="root" role="main" aria-label="PartyBank application"></main>
+
+    <!-- Scripts -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

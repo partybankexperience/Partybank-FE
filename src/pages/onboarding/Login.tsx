@@ -1,6 +1,6 @@
 import DefaultButton from "../../components/buttons/DefaultButton";
 import DefaultInput from "../../components/inputs/DefaultInput";
-import { FcGoogle } from "react-icons/fc";
+// import { FcGoogle } from "react-icons/fc";
 import LoginLayout from "../../components/layouts/LoginLayout";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
@@ -14,39 +14,28 @@ const Login = () => {
   const [password, setpassword] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [isLoading, setisLoading] = useState(false)
-  const [isGoogleLoading, setisGoogleLoading] = useState(false)
+  // const [isGoogleLoading, setisGoogleLoading] = useState(false)
   const [passwordError, setPasswordError] = useState(false);
   const emailRef = useRef<any>(null);
   const passwordRef = useRef<any>(null);
   const navigate = useNavigate();
+  
   const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
 
-  // useEffect(() => {
-  //   // Check both location.state and URL parameters for notAuthenticated
-  //   const urlParams = new URLSearchParams(location.search);
-  //   const isNotAuthenticated = location.state === 'notAuthenticated' || urlParams.get('state') === 'notAuthenticated';
-
-  //   if (isNotAuthenticated) {
-  //     console.log('User was redirected due to not being authenticated.');
-  //     // Show notification immediately
-  //     errorAlert("Not Authenticated", "You need to be logged in to access this page.");
-  //     // Clean up URL after showing notification
-  //     setisLoading(false);
-  //     const timer = setTimeout(() => {
-  //       navigate("/", { replace: true, state: null });
-  //     }, 2000); // Give time for user to read the notification
-
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [location.state, location.search, navigate]);
-  const state = location.state as { message?: string };
+  const message = queryParams.get("message");
+  const state = queryParams.get("state");
 
   useEffect(() => {
-    if (state?.message) {
-      errorAlert("Error", state.message);
+    if (state === "notAuthenticated" && message) {
+      errorAlert("Error", decodeURIComponent(message))
+      const timer = setTimeout(() => {
+              navigate("/", { replace: true, state: null });
+            }, 2000); // Give time for user to read the notification
+      return () => clearTimeout(timer); // Cleanup the timer on component unmount
     }
-  }, [state?.message]);
-
+  }, [state, message]);
+  
   async function handleSignIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (emailError) {
@@ -78,24 +67,24 @@ const Login = () => {
     // Handle sign-in logic here
   }
 
-  async function handleLoginWithGoogle() {
-    // event.preventDefault();
-    // Handle Google login logic here
-    setisGoogleLoading(true);
+  // async function handleLoginWithGoogle() {
+  //   // event.preventDefault();
+  //   // Handle Google login logic here
+  //   setisGoogleLoading(true);
 
-    try {
-      await LoginWithGoogle();
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setisGoogleLoading(false);
-    }
-  }
+  //   try {
+  //     await LoginWithGoogle();
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setisGoogleLoading(false);
+  //   }
+  // }
 
-  // Test
-  const LoginWithGoogle = () => {
-    window.location.href = "https://partybank-be-production.up.railway.app/api/v2/auth/google";
-  };
+  // // Test
+  // const LoginWithGoogle = () => {
+  //   window.location.href = `${import.meta.env.VITE_BASE_URL}/auth/google`;
+  // };
 
 
   return (
@@ -165,7 +154,7 @@ const Login = () => {
           >
             Sign In
           </DefaultButton>
-          <DefaultButton
+          {/* <DefaultButton
             variant="secondary"
             size="normal"
             className="w-full"
@@ -175,7 +164,7 @@ const Login = () => {
             isLoading={isGoogleLoading}
           >
             Sign in with Google
-          </DefaultButton>
+          </DefaultButton> */}
         </div>
         <p className="text-[#A7A5A6]  text-[14px]  mt-[0.5vh] text-center">
           Don’t have an account?{"  "}
