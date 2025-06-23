@@ -96,7 +96,7 @@ const Signup = () => {
             Sign Up with Google
           </DefaultButton>
         </div>
-        <p className="text-grey200 text-[16px] mt-[1.1vh] text-center">
+        <p className="text-grey200 text-[14px]  mt-[0.5vh] text-center">
           Already have an account?{" "}
           <span
             className="text-red font-medium cursor-pointer hover:text-deepRed"

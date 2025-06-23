@@ -9,8 +9,8 @@ const StepThree = ({ password, confirmPassword, setPassword, setConfirmPassword,
   return (
     <form onSubmit={onSubmit} className="grid mt-[2vh] md:mt-[4vh] gap-[3vh] h-fit">
       <div className="grid gap-[10px] text-center md:text-left">
-        <h1 className="text-black text-[24px] md:text-[36px] font-bold">Reset Password</h1>
-        <p className="text-lightGrey text-[20px]">Enter your new password below.</p>
+        <h1 className="text-black text-3xl font-semibold">Reset Password</h1>
+        <p className="text-lightGrey font-normal text-sm">Enter your new password below.</p>
       </div>
       <div className="grid w-full gap-[18px]">
         <DefaultInput
@@ -44,7 +44,7 @@ const StepThree = ({ password, confirmPassword, setPassword, setConfirmPassword,
           Reset Password
         </DefaultButton>
       </div>
-      <p className="text-grey200 text-[16px] mt-[1.1vh] text-center">
+      <p className="text-grey200 text-[14px]  mt-[0.5vh] text-center">
         Remember your password?{" "}
         <span
           className="text-red font-medium cursor-pointer hover:text-deepRed"
