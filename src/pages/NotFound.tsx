@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import DefaultButton from "../components/buttons/DefaultButton";
 import { FaHome } from "react-icons/fa";
 import { Storage } from "../stores/InAppStorage";
-import logo from "../assets/images/pb-logo 1.svg";
+import logo from "../assets/images/pb-logo.svg";
 
 const NotFound = () => {
     const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import login from "../../assets/images/Login.png";
-import logo from "../../assets/images/pb-logo 1.svg";
+import logo from "../../assets/images/pb-logo.svg";
 import avatar from "../../assets/images/avatar.png";
 import { ToastContainer } from "react-toastify";
 
