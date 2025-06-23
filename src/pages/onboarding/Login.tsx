@@ -4,7 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 import LoginLayout from "../../components/layouts/LoginLayout";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { LoginUser, LoginWithGoogle } from "../../Containers/onBoardingApi";
+import { LoginUser } from "../../Containers/onBoardingApi";
 import { Storage } from "../../stores/InAppStorage";
 import { errorAlert } from "../../components/alerts/ToastService";
 
@@ -91,6 +91,13 @@ const Login = () => {
       setisGoogleLoading(false);
     }
   }
+
+  // Test
+  const LoginWithGoogle = () => {
+    window.location.href = "https://partybank-be-production.up.railway.app/api/v2/auth/google";
+  };
+
+
   return (
     <LoginLayout>
       <form
