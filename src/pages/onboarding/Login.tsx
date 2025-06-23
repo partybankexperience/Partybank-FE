@@ -166,7 +166,7 @@ const Login = () => {
         <p className="text-[#A7A5A6]  text-[14px]  mt-[0.5vh] text-center">
           Don’t have an account?{"  "}
           <span
-            className="text-red cursor-pointer font-bold hover:text-deepRed"
+            className="text-red cursor-pointer hover:text-deepRed"
             onClick={() => navigate("/signup")}
             role="link"
             tabIndex={0}
