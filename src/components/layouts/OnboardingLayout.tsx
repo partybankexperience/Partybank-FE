@@ -6,6 +6,7 @@ import logo from "../../assets/images/logoWhite.svg";
 import image from "../../assets/images/image.png";
 import { Storage } from "../../stores/InAppStorage";
 import { infoAlert } from "../alerts/ToastService";
+import { ToastContainer } from "react-toastify";
 
 const steps = [
   { path: "emailVerification", label: "Email Verification" },
@@ -74,6 +75,7 @@ const OnboardingLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="md:p-[20px] md:px-[5vw] md:py-[9.2vh] flex flex-col md:grid md:grid-cols-[1fr_2.5fr] md:gap-[20px] lg:gap-[80px] min-h-screen">
+      <ToastContainer/>
       <div className="rounded-[22px] h-fit bg-white md:bg-lightdark md:h-full p-[2vw]" style={{ backgroundImage: `url(${image})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
         <img src={logo} alt="Partybank logo" className="hidden md:block h-[50px]" />
         <nav className="my-[2vw] md:mb-0 flex justify-center md:justify-start items-center w-90% h-fit md:grid gap-[1vh]">

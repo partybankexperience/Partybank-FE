@@ -7,6 +7,7 @@ interface ImageUploadInputProps {
   onChange?: (url: string) => void;
   requiredSize?: { width: number; height: number };
   maxSizeMB?: number;
+  setUploadingImage?:any;
 }
 
 export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
@@ -15,6 +16,7 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
   maxSizeMB = 4,
   value,
   onChange,
+  setUploadingImage,
 }) => {
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
@@ -63,6 +65,7 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
 
     try {
       setUploading(true);
+      setUploadingImage&& setUploadingImage(true);
       setIsNextButtonDisabled(true);
       const imageUrl = await uploadToCloudinary(file);
       onChange?.(imageUrl);
@@ -72,6 +75,7 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
     } finally {
       setUploading(false);
       setIsNextButtonDisabled(false);
+      setUploadingImage&& setUploadingImage(false);
     }
   };
 

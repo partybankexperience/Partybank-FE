@@ -34,12 +34,12 @@ const PasswordSetup = () => {
       label: "Numbers and symbols",
       check: /[0-9!@#$%^&*(),.?":{}|<>]/.test(password),
     },
-    {label:'Passwords match', check: password === confirmPassword},
+    {label:'Passwords match', check: password === confirmPassword && password.length > 0 },
     // { label: "No spaces", check: !/\s/.test(password) },
     {label:'Mix of uppercase and lowercase letters', check: /[a-z]/.test(password) && /[A-Z]/.test(password) }
   ];
   const confirmPasswordVerification = [
-    { label: "Passwords match", check: password === confirmPassword },  ]
+    { label: "Passwords match", check: password === confirmPassword && password.length > 0 },  ]
   return (
     <div className="flex flex-col flex-grow  justify-between h-full px-[20px] md:px-0">
       <div
@@ -77,7 +77,7 @@ const PasswordSetup = () => {
           <DefaultInput
             id="confirmPassword"
             label="Confirm Password"
-            placeholder="rewrite password"
+            placeholder="Rewrite password"
             type="password"
             style="!w-full"
             value={confirmPassword}
@@ -146,6 +146,8 @@ const PasswordSetup = () => {
             className="!w-full md:!w-fit md:!mx-auto"
             onClick={handleNext}
             isLoading={isLoading}
+            disabled={!passwordVerification.every((item) => item.check) ||
+              confirmPassword !== password}
           >
             Next
           </DefaultButton>

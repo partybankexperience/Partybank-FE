@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { RxCrossCircled } from "react-icons/rx";
 
 interface ModalProps {
@@ -11,43 +11,43 @@ interface ModalProps {
 
 export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   const modalRef = useRef<HTMLDivElement>(null);
-  const previouslyFocusedElement = useRef<HTMLElement | null>(null);
-  const disabledElements = useRef<HTMLElement[]>([]);
+  // const previouslyFocusedElement = useRef<HTMLElement | null>(null);
+  // const disabledElements = useRef<HTMLElement[]>([]);
 
-  useEffect(() => {
-    if (!isOpen) return;
+  // useEffect(() => {
+  //   if (!isOpen) return;
 
-    previouslyFocusedElement.current = document.activeElement as HTMLElement;
+  //   previouslyFocusedElement.current = document.activeElement as HTMLElement;
 
-    const allFocusableOutsideModal = document.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
+  //   const allFocusableOutsideModal = document.querySelectorAll<HTMLElement>(
+  //     'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  //   );
 
-    disabledElements.current = Array.from(allFocusableOutsideModal).filter(
-      (el) => !modalRef.current?.contains(el)
-    );
+  //   disabledElements.current = Array.from(allFocusableOutsideModal).filter(
+  //     (el) => !modalRef.current?.contains(el)
+  //   );
 
-    disabledElements.current.forEach((el) => el.setAttribute('tabindex', '-1'));
+  //   disabledElements.current.forEach((el) => el.setAttribute('tabindex', '-1'));
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        onClose();
-      }
-    };
+  //   const handleKeyDown = (e: KeyboardEvent) => {
+  //     if (e.key === 'Escape') {
+  //       e.preventDefault();
+  //       onClose();
+  //     }
+  //   };
 
-    document.addEventListener('keydown', handleKeyDown);
-    document.body.style.overflow = 'hidden';
+  //   document.addEventListener('keydown', handleKeyDown);
+  //   document.body.style.overflow = 'hidden';
 
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
-      previouslyFocusedElement.current?.focus();
+  //   return () => {
+  //     document.removeEventListener('keydown', handleKeyDown);
+  //     document.body.style.overflow = '';
+  //     previouslyFocusedElement.current?.focus();
 
-      // Restore original tabindex
-      disabledElements.current.forEach((el) => el.removeAttribute('tabindex'));
-    };
-  }, [isOpen, onClose]);
+  //     // Restore original tabindex
+  //     disabledElements.current.forEach((el) => el.removeAttribute('tabindex'));
+  //   };
+  // }, [isOpen, onClose]);
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onClose();

@@ -27,6 +27,7 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
     setDescription("");
     setCoverImage("");
   };
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
