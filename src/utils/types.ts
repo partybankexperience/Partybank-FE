@@ -49,6 +49,7 @@ export type endPointlistTypes = {
     createTicketByEventId:endpointTypes;
     getEventsBySlug: endpointTypes;
     getSeriesBySlug: endpointTypes;
+    resendOTP: endpointTypes;
 };
 
 export type urlPropTypes = {

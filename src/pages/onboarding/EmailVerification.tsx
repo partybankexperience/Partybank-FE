@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { useOnboardingStore } from "../../stores/onboardingStore";
 import emailPic from "../../assets/images/email.svg";
 import DefaultButton from "../../components/buttons/DefaultButton";
-import { Verifyotp } from "../../Containers/onBoardingApi";
+import { resendOTP, Verifyotp } from "../../Containers/onBoardingApi";
 import { Storage } from "../../stores/InAppStorage";
 import maskEmail from "../../components/helpers/maskedEmail";
+import { formatCountdownTimer } from "../../components/helpers/dateTimeHelpers";
 
 const EmailVerification = () => {
   const [otp, setOtp] = useState("");
+  const [timer, setTimer] = useState(600);
   const navigate = useNavigate();
   const [isLoading, setisLoading] = useState(false)
   const { markStepComplete } = useOnboardingStore();
@@ -40,6 +42,26 @@ e.preventDefault()
       setisLoading(false);
     }
   };
+  // Countdown timer
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (timer > 0) {
+      interval = setInterval(() => setTimer((prev) => prev - 1), 1000);
+    }
+    return () => clearInterval(interval);
+  }, [timer]);
+  const handleResendOtp = async () => {
+    try {
+      setisLoading(true);
+      await resendOTP(email);
+      setTimer(60); // Reset timer
+    
+     
+    } catch (error) {
+      
+    } finally {
+      setisLoading(false);
+    }}
   const encryptedEmail = email ? maskEmail(email) : "";
 
   return (
@@ -63,7 +85,16 @@ e.preventDefault()
             />
           )}
         />
-        <p className="text-center text-primary text-[16px] font-medium cursor-pointer">Resend OTP</p>
+        <button
+          type="button"
+          onClick={handleResendOtp}
+          className={`text-center text-[16px] font-medium ${
+            timer > 0 ? "text-grey300 cursor-not-allowed" : "text-primary"
+          }`}
+          disabled={timer > 0}
+        >
+          {timer > 0 ? `Resend OTP in ${formatCountdownTimer(timer)}s` : "Resend OTP"}
+        </button>
       </div>
       <DefaultButton
         type="default"

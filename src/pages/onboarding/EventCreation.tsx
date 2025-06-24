@@ -205,6 +205,7 @@ const EventCreation = () => {
               className="!w-full md:!w-[9rem] md:!mx-auto"
               onClick={handleCreateSeries}
               isLoading={uploadingImage}
+              disabled={!seriesNameOnboarding.trim() || !descriptionOnboarding.trim()}
             >
               Create Series
             </DefaultButton>

@@ -42,7 +42,7 @@ const ForgotPassword = () => {
       window.removeEventListener("popstate", handlePopState);
     };
   }, [step]);
-
+  
   const handleStep1Submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return setEmailError(true);
@@ -84,7 +84,6 @@ const ForgotPassword = () => {
       setIsLoading(false);
     }
   };
-
   return (
     <LoginLayout>
       {step === 1 && (
@@ -114,6 +113,7 @@ const ForgotPassword = () => {
           setConfirmPassword={setConfirmPassword}
           onSubmit={handleStep3Submit}
           isLoading={isLoading}
+          
         />
       )}
     </LoginLayout>

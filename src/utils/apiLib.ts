@@ -37,6 +37,12 @@ export const endPoints: endPointlistTypes = {
         headers,
         auth:false
     },
+    resendOTP: {
+        url: "/auth/resend-otp",
+        method: "POST",
+        headers,
+        auth: true,
+    },
     forgotPassword: {
         url: "/reset-password/initiate",
         method: "POST",

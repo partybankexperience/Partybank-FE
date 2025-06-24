@@ -107,6 +107,13 @@ const resetPassword = async (email:String,password:String,confirmPassword:String
   });
   return response;
 };
+const resendOTP= async (email: String): Promise<any> => {
+  const response = await apiCall({
+    name: "resendOTP",
+    data: { email },
+  });
+  return response;
+};
 export {
   LoginWithGoogle,
   LoginUser,
@@ -119,5 +126,6 @@ export {
   refreshToken,
   forgotPassword,
   forgotPasswordConfirmOTP,
-  resetPassword
+  resetPassword,
+  resendOTP
 };
