@@ -74,8 +74,9 @@ const OnboardingLayout = ({ children }: { children: React.ReactNode }) => {
 
 
   return (
+    <>
+    
     <div className="md:p-[20px] md:px-[5vw] md:py-[9.2vh] flex flex-col md:grid md:grid-cols-[1fr_2.5fr] md:gap-[20px] lg:gap-[80px] min-h-screen">
-      <ToastContainer/>
       <div className="rounded-[22px] h-fit bg-white md:bg-lightdark md:h-full p-[2vw]" style={{ backgroundImage: `url(${image})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
         <img src={logo} alt="Partybank logo" className="hidden md:block h-[50px]" />
         <nav className="my-[2vw] md:mb-0 flex justify-center md:justify-start items-center w-90% h-fit md:grid gap-[1vh]">
@@ -121,7 +122,10 @@ const OnboardingLayout = ({ children }: { children: React.ReactNode }) => {
       <div className="bg-grey300 md:rounded-[22px] md:h-full p-[2vw] flex flex-col flex-grow">
         {children}
       </div>
+
     </div>
+      <ToastContainer/>
+    </>
   );
 };
 

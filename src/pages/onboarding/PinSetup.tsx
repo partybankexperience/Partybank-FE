@@ -52,7 +52,6 @@ const PinSetup = () => {
               />
             )}
           />
-          <p className="text-center text-primary text-[16px] font-medium cursor-pointer">Resend OTP</p>
         </div>
         <div className="flex gap-[20px] items-center mx-auto">
           <DefaultButton
