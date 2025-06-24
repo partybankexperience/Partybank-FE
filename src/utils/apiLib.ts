@@ -92,7 +92,7 @@ export const endPoints: endPointlistTypes = {
         auth: true,
     },
     getSeries: {
-        url: "/series",
+        url: "/series/organizer",
         method: "GET",
         headers,
         auth: true,
@@ -123,7 +123,7 @@ export const endPoints: endPointlistTypes = {
         auth: true,
     },
     getEvents: {
-        url: "/events",
+        url: "/events/organizer",
         method: "GET",
         headers,
         auth: true,
