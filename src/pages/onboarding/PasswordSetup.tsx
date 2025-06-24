@@ -34,7 +34,12 @@ const PasswordSetup = () => {
       label: "Numbers and symbols",
       check: /[0-9!@#$%^&*(),.?":{}|<>]/.test(password),
     },
+    {label:'Passwords match', check: password === confirmPassword},
+    // { label: "No spaces", check: !/\s/.test(password) },
+    {label:'Mix of uppercase and lowercase letters', check: /[a-z]/.test(password) && /[A-Z]/.test(password) }
   ];
+  const confirmPasswordVerification = [
+    { label: "Passwords match", check: password === confirmPassword },  ]
   return (
     <div className="flex flex-col flex-grow  justify-between h-full px-[20px] md:px-0">
       <div
@@ -44,7 +49,7 @@ const PasswordSetup = () => {
         <h1 className="text-[24px] md:text-[36px] font-bold text-black text-center">
           Password Setup
         </h1>
-        <div className="grid md:w-fit md:m-auto">
+        <div className="grid md:w-[30rem] md:m-auto">
           <DefaultInput
             id="password"
             label="Password"
@@ -54,19 +59,21 @@ const PasswordSetup = () => {
             value={password}
             setValue={setpassword}
           />
-          <div className="grid gap-[10px] md:flex items-center">
-            {passwordVerification.map((item, index) => (
-              <div
-                className="flex items-center gap-[8px] text-grey200 text-[14px]"
-                key={index}
-              >
-                <FiCheck />
-                <p>{item.label}</p>
-              </div>
-            ))}
-          </div>
+          <div className="grid gap-[10px] md:flex md:flex-wrap items-center">
+              {passwordVerification.map((item, index) => (
+                <div
+                  className={`flex items-center gap-[8px] text-[14px] ${
+                    item.check ? "text-green-800" : "text-grey200"
+                  }`}
+                  key={index}
+                >
+                  <FiCheck />
+                  <p>{item.label}</p>
+                </div>
+              ))}
+            </div>
         </div>
-        <div className="grid md:w-fit md:m-auto">
+        <div className="grid md:w-[30rem] md:m-auto">
           <DefaultInput
             id="confirmPassword"
             label="Confirm Password"
@@ -76,21 +83,23 @@ const PasswordSetup = () => {
             value={confirmPassword}
             setValue={setConfirmPassword}
           />
-          <div className="grid gap-[10px] md:flex items-center">
-            {passwordVerification.map((item, index) => (
-              <div
-                className="flex items-center gap-[8px] text-grey200 text-[14px]"
-                key={index}
-              >
-                <FiCheck />
-                <p>{item.label}</p>
-              </div>
-            ))}
-          </div>
+          <div className="grid gap-[10px] md:flex md:flex-wrap items-center">
+              {confirmPasswordVerification.map((item, index) => (
+                <div
+                  className={`flex items-center gap-[8px] text-[14px] ${
+                    item.check ? "text-green-800" : "text-grey200"
+                  }`}
+                  key={index}
+                >
+                  <FiCheck />
+                  <p>{item.label}</p>
+                </div>
+              ))}
+            </div>
         </div>
       </div>
       <div className="flex gap-[20px] items-center mx-auto">
-        <div
+        {/* <div
           className="h-fit grid
         gap-[50px]"
         >
@@ -121,7 +130,7 @@ const PasswordSetup = () => {
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="flex gap-[20px] items-center mx-auto">
           <DefaultButton
             type="default"

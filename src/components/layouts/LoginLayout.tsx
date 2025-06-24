@@ -1,7 +1,9 @@
 import { ReactNode } from "react";
 import login from "../../assets/images/Login.png";
 import logo from "../../assets/images/pb-logo.svg";
-import avatar from "../../assets/images/avatar.png";
+import avatar1 from "../../assets/images/avatar1.svg";
+import avatar2 from "../../assets/images/avatar2.svg";
+import avatar3 from "../../assets/images/avatar3.svg";
 import { ToastContainer } from "react-toastify";
 
 interface LoginLayoutProps {
@@ -30,9 +32,9 @@ const LoginLayout = ({ children }: LoginLayoutProps) => {
           <div className="flex items-center gap-2">
             <div className="flex items-center -space-x-4">
               <div className="flex items-center -space-x-4">
-                <img src={avatar} alt="User Image"className="w-12 h-12 rounded-full object-cover border border-black"/>
-                <img src={avatar} alt="User Image"className="w-12 h-12 rounded-full object-cover border border-black"/>
-                <img src={avatar} alt="User Image"className="w-12 h-12 rounded-full object-cover border border-black"/>
+                <img src={avatar3} alt="User Image"className="w-12 h-12 rounded-full object-cover border border-black"/>
+                <img src={avatar1} alt="User Image"className="w-12 h-12 rounded-full object-cover border border-black"/>
+                <img src={avatar2} alt="User Image"className="w-12 h-12 rounded-full object-cover border border-black"/>
               </div>
             </div>
             <p className="text-sm text-white/80">Trusted by over 10,000+ buyers</p>
