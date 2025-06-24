@@ -93,7 +93,7 @@ const Login = () => {
         className="grid mt-[2vh] md:mt-[2vh] gap-[3vh] h-fit w-full "
         onSubmit={handleSignIn}
       >
-        <div className="flex flex-col gap-[6px] text-center md:text-left">
+        <div className="grid gap-[10px] text-center md:text-left">
           <h1 className=" text-3xl font-semibold">
             Login to your account
           </h1>
