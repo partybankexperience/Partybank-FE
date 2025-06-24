@@ -20,14 +20,18 @@ const EventCreation = () => {
     const [seriesName, setSeriesName] = useState("");
     const [description, setDescription] = useState("");
     const [coverImage, setCoverImage] = useState("");
+    const [isLoading, setisLoading] = useState(false)
     const handleNext = () => {
         try {
+          setisLoading(true);
             // const res=await CreateSeries(confirmPassword,password)
             markStepComplete("pinSetup");
             setIsModalOpen(true);
             // navigate("/dashboard");
           } catch (error) {
-            
+            setisLoading(false);
+          }finally{
+            setisLoading(false);
           }
       markStepComplete("pinSetup");
       setIsModalOpen(true);
@@ -113,6 +117,7 @@ const EventCreation = () => {
           variant="primary"
           className="!w-full md:!w-fit md:!mx-auto"
           onClick={handleNext}
+          isLoading={isLoading}
         >
           Finish
         </DefaultButton>

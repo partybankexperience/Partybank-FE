@@ -10,15 +10,19 @@ const PasswordSetup = () => {
   const navigate = useNavigate();
   const [password, setpassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isLoading, setisLoading] = useState(false)
   const { markStepComplete,updateOnboardingStep } = useOnboardingStore();
 
   const handleNext = async () => {
     try {
+      setisLoading(true);
       const res=await SetPassword(confirmPassword,password)
       updateOnboardingStep(res.currentStep);
       markStepComplete("passwordSetup");
       navigate("/profileInformation", { replace: true });
-    } catch (error) {}
+    } catch (error) {setisLoading(false);}finally{
+      setisLoading(false);
+    }
   };
   const handleBack = () => {
     navigate(-1);
@@ -132,6 +136,7 @@ const PasswordSetup = () => {
             variant="primary"
             className="!w-full md:!w-fit md:!mx-auto"
             onClick={handleNext}
+            isLoading={isLoading}
           >
             Next
           </DefaultButton>

@@ -13,6 +13,8 @@ const Signup = () => {
   const navigate = useNavigate();
   const [email, setemail] = useState("");
   const [emailError, setEmailError] = useState(false);
+  const [isLoading, setisLoading] = useState(false)
+
   const { reset } = useOnboardingStore();
 
   const emailRef = useRef<any>(null);
@@ -40,12 +42,16 @@ const Signup = () => {
       return;
     }
     try {
+      setisLoading(true);
       await RegisterUser(email);
       navigate("/emailVerification");
       Storage.setItem("email", email);
       console.log("User registered successfully");
     } catch (error) {
       console.log(error);
+      setisLoading(false);
+    }finally{
+      setisLoading(false);
     }
   }
   return (
@@ -83,6 +89,7 @@ const Signup = () => {
             type="default"
             className="w-full"
             submitType="submit"
+            isLoading={isLoading}
           >
             Sign Up
           </DefaultButton>

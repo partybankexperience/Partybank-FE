@@ -10,6 +10,7 @@ const ProfileInfo = () => {
   const [fullName, setFullName] = useState("");
   const [businessName, setBusinessName] = useState("");
   const [phone, setPhone] = useState("");
+  const [isLoading, setisLoading] = useState(false)
   const { markStepComplete,updateOnboardingStep } = useOnboardingStore();
 
   const handleNext = async (e:any) => {
@@ -19,11 +20,14 @@ const ProfileInfo = () => {
       return;
     }
     try {
+      setisLoading(true);
       const res = await SetProfile(fullName, businessName,phone);
       updateOnboardingStep(res.currentStep);
       markStepComplete("profileInformation");
       navigate("/pinSetup", { replace: true });
-    } catch (error) {}
+    } catch (error) {setisLoading(false);}finally{
+      setisLoading(false);
+    }
   };
   const handleBack = () => {
     navigate(-1);
@@ -84,6 +88,7 @@ const ProfileInfo = () => {
           className="!w-full md:!w-fit md:!mx-auto"
           onClick={()=>handleNext}
           submitType="submit"
+          isLoading={isLoading}
         >
           Next
         </DefaultButton>

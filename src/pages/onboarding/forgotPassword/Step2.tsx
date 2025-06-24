@@ -16,6 +16,7 @@ const StepTwo = ({ email, otp, setOtp, onSubmit, isLoading }:any) => {
           value={otp}
           onChange={setOtp}
           numInputs={4}
+          inputType="tel"
           renderSeparator={<span className="mx-[28px]"> </span>}
           renderInput={(props) => (
             <input

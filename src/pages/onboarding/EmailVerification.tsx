@@ -11,6 +11,7 @@ import maskEmail from "../../components/helpers/maskedEmail";
 const EmailVerification = () => {
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
+  const [isLoading, setisLoading] = useState(false)
   const { markStepComplete } = useOnboardingStore();
 
   const email = Storage.getItem('email') || null
@@ -24,6 +25,7 @@ const EmailVerification = () => {
   const handleNext = async(e:any) => {
 e.preventDefault()
     try {
+      setisLoading(true);
       if (otp.length < 4) {
         return;
       }
@@ -33,7 +35,9 @@ e.preventDefault()
       markStepComplete("emailVerification");
       navigate("/passwordSetup", { replace: true });
     } catch (error) {
-      
+      setisLoading(false);
+    }finally{
+      setisLoading(false);
     }
   };
   const encryptedEmail = email ? maskEmail(email) : "";
@@ -50,6 +54,7 @@ e.preventDefault()
           value={otp}
           onChange={setOtp}
           numInputs={4}
+          inputType="tel"
           renderSeparator={<span className="mx-[15px]"> </span>}
           renderInput={(props) => (
             <input
@@ -66,6 +71,8 @@ e.preventDefault()
         className="!w-full md:!w-fit md:!mx-auto"
         onClick={()=>handleNext}
         submitType="submit"
+        isLoading={isLoading}
+        disabled={otp.length < 4}
       >
         Next
       </DefaultButton>

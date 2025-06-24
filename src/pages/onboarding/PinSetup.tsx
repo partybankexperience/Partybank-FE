@@ -7,6 +7,7 @@ import pin from "../../assets/images/pinImage.svg";
 import { SetPin } from "../../Containers/onBoardingApi";
 const PinSetup = () => {
     const [otp, setOtp] = useState("");
+    const [isLoading, setisLoading] = useState(false)
     const navigate = useNavigate();
     const { markStepComplete ,updateOnboardingStep} = useOnboardingStore();
   
@@ -17,11 +18,14 @@ const PinSetup = () => {
       }
       // Handle the OTP submission logic here
       try {
+        setisLoading(true);
         const res = await SetPin(otp);
         updateOnboardingStep(res.currentStep);
         markStepComplete("pinSetup");
         navigate("/createEventSeries", { replace: true });
-      } catch (error) {}
+      } catch (error) {setisLoading(false);}finally{
+        setisLoading(false);
+      }
     };
     const handleBack = () => {
         navigate(-1);
@@ -39,6 +43,7 @@ const PinSetup = () => {
             value={otp}
             onChange={setOtp}
             numInputs={4}
+            inputType="tel"
             renderSeparator={<span className="mx-[28px]"> </span>}
             renderInput={(props) => (
               <input
@@ -64,6 +69,7 @@ const PinSetup = () => {
           className="!w-full md:!w-fit md:!mx-auto"
           onClick={()=>handleNext}
           submitType="submit"
+          isLoading={isLoading}
         >
           Next
         </DefaultButton>
