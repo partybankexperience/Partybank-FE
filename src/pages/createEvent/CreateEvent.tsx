@@ -170,6 +170,8 @@ console.log("Cover image:", formData.coverImage);
         const { isValid, errors } = validateStage(stage, formData);
         if (!isValid) {
           Object.entries(errors).forEach(([field, error]) => setError(stage, field, error));
+          const isValid = (window as any).validateEventSetup?.();
+          if (!isValid) return;
           return;
         }
         clearStageErrors(stage);

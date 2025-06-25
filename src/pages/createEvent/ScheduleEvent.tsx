@@ -14,7 +14,7 @@ const ScheduleEvent = () => {
     { label: "Single day", value: "single-day" },
     { label: "Multiple Day", value: "multi-day" }
   ];
-  const { form, setFormValue, errors } = useEventStore();
+  const { form, setFormValue, errors,clearError } = useEventStore();
   const scheduleEventForm = form["Schedule & Location"] || {};
   const scheduleEventErrors = errors["Schedule & Location"] || {};
   const selected = scheduleEventForm.eventType || "";
@@ -55,6 +55,9 @@ const ScheduleEvent = () => {
 
   const handleInputChange = (key: string, value: any) => {
     setFormValue("Schedule & Location", key, value);
+    if (scheduleEventErrors[key]) {
+      clearError("Schedule & Location", key);
+    }
   };
 
   const handleLocationToggle = (value: boolean) => {
@@ -164,7 +167,7 @@ const ScheduleEvent = () => {
             classname="!w-full"
             rightContent={<MdOutlineCalendarMonth className="text-black text-[1rem]" />}
             required
-            helperText={scheduleEventErrors.startDate || ""}
+            externalErrorMessage={scheduleEventErrors.name || null}
             style={scheduleEventErrors.startDate ? "border-red-500" : ""}
             ref={startDateRef}
           />
@@ -178,7 +181,7 @@ const ScheduleEvent = () => {
             classname="!w-full"
             rightContent={<FaRegClock className="text-black text-[1rem]" />}
             required
-            helperText={scheduleEventErrors.startTime || ""}
+            externalErrorMessage={scheduleEventErrors.startTime || null}
             style={scheduleEventErrors.startTime ? "border-red-500" : ""}
             ref={startTimeRef}
           />
@@ -192,7 +195,7 @@ const ScheduleEvent = () => {
             classname="!w-full"
             rightContent={<FaRegClock className="text-black text-[1rem]" />}
             required
-            helperText={scheduleEventErrors.endTime || ""}
+            externalErrorMessage={scheduleEventErrors.endTime || null}
             style={scheduleEventErrors.endTime ? "border-red-500" : ""}
             ref={endTimeRef}
           />
@@ -211,7 +214,7 @@ const ScheduleEvent = () => {
               classname="!w-full"
               rightContent={<MdOutlineCalendarMonth className="text-black text-[1rem]" />}
               required
-              helperText={scheduleEventErrors.endDate || ""}
+              externalErrorMessage={scheduleEventErrors.endDate || null}
               style={scheduleEventErrors.endDate ? "border-red-500" : ""}
               ref={endDateRef}
               min={scheduleEventForm.startDate || ""}
@@ -219,7 +222,18 @@ const ScheduleEvent = () => {
             <div className="md:col-span-2"></div>
           </div>
         )}
-
+ <DefaultInput
+          id="venueName"
+          label="Venue Name"
+          value={scheduleEventForm.venueName || ""}
+          setValue={(val: any) => handleInputChange("venueName", val)}
+          placeholder="e.g., Landmark Centre"
+          classname="!w-full"
+          required
+          externalErrorMessage={scheduleEventErrors.venueName || null}
+          style={scheduleEventErrors.venueName ? "border-red-500" : ""}
+          ref={venueNameRef}
+        />
         {/* Location Toggle */}
         <div className="grid gap-[10px]">
           <h2 className="text-black text-[1.2rem]">Location</h2>
@@ -234,18 +248,7 @@ const ScheduleEvent = () => {
           </div>
         </div>
 
-        <DefaultInput
-          id="venueName"
-          label="Venue Name"
-          value={scheduleEventForm.venueName || ""}
-          setValue={(val: any) => handleInputChange("venueName", val)}
-          placeholder="e.g., Landmark Centre"
-          classname="!w-full"
-          required
-          helperText={scheduleEventErrors.venueName || ""}
-          style={scheduleEventErrors.venueName ? "border-red-500" : ""}
-          ref={venueNameRef}
-        />
+       
         {/* Show venue and location inputs only if location toggle is on */}
         {showLocation && (
           <>
@@ -266,7 +269,7 @@ const ScheduleEvent = () => {
                   prefilledLocation={scheduleEventForm.selectedLocation}
                 />
               </div>
-              {scheduleEventErrors.selectedLocation && (
+              {/* {scheduleEventErrors.selectedLocation && (
                 <p className="text-[13px] text-red-500 mt-1">
                   {scheduleEventErrors.selectedLocation}
                 </p>
@@ -285,7 +288,7 @@ const ScheduleEvent = () => {
                     </div>
                   )}
                 </div>
-              )}
+              )} */}
             </div>
           </>
         )}

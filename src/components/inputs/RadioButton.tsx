@@ -19,7 +19,7 @@ const RadioButton = ({
     disabled = false,
   }: RadioButtonProps) => {
     return (
-      <label className="inline-flex  gap-2 cursor-pointer text-[.8rem] font-[RedHat] text-black">
+      <label className="inline-flex  gap-2 cursor-pointer text-[.8rem] font-[RedHat] text-black items-center">
         <span className="relative h-[1rem] w-[1rem] flex items-center justify-center">
           <input
             type="radio"

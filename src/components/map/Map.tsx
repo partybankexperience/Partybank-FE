@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import L, { LatLngExpression } from "leaflet";
-import DefaultButton from "../buttons/DefaultButton";
+// import DefaultButton from "../buttons/DefaultButton";
 
 interface Suggestion {
   name: string;
@@ -40,7 +40,7 @@ export const MapWithAutocomplete: React.FC<Props> = ({
     } else if (defaultCenter) {
       setSelectedPos(defaultCenter);
     }
-  }, [prefilledLocation, defaultCenter]);
+  }, [JSON.stringify(prefilledLocation)]);
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const fetchSuggestions = async (q: string) => {
@@ -93,9 +93,9 @@ export const MapWithAutocomplete: React.FC<Props> = ({
       value={query}
       onChange={(e) => setQuery(e.target.value)}
       placeholder="Search for a location..."
-      className="w-[calc(100%-6rem)] mx-[3rem] p-2 border bg-white border-gray-300 rounded-md"
+      className="w-[calc(100%-6rem)] mx-[4rem] p-2 border bg-white border-gray-300 rounded-md"
     />
-    <DefaultButton className="!w-fit absolute right-[3.3rem] !py-[.4rem] top-1 " size="small" onClick={() => {
+    {/* <DefaultButton className="!w-fit absolute right-[3.3rem] !py-[.4rem] top-1 " size="small" onClick={() => {
   const selected = suggestions.find(s => s.name === query);
   if (selected) {
     handleSelect(selected);
@@ -104,7 +104,7 @@ export const MapWithAutocomplete: React.FC<Props> = ({
   }
 }}>
         Confirm
-    </DefaultButton>
+    </DefaultButton> */}
     {suggestions.length > 0 && (
       <ul className="absolute w-full bg-white border border-gray-200 shadow-md rounded-md max-h-60 overflow-auto z-50">
         {suggestions.map((s, idx) => (
