@@ -53,9 +53,10 @@ const goNext = async () => {
 
       if (Object.keys(errors).length > 0) {
         Object.entries(errors).forEach(([field, error]) => setError(stage, field, error));
-        const validationFn = (window as any).validateEventSetup;
-        if (typeof validationFn === "function") validationFn();
-        return;
+        const isValid = (window as any).validateEventSetup?.();
+    if (!isValid) return;
+
+    return;
       }
 
       clearStageErrors(stage);
@@ -106,11 +107,17 @@ const goNext = async () => {
 
         // Edit existing event
         console.log("Editing existing event with ID:", eventId);
+        if(formData.coverImage ===''|| formData.coverImage === undefined) {
+          setFormValue(stage, "coverImage", "https://images.unsplash.com/photo-1485872299829-c673f5194813?q=80&w=2054&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+          
+        
+}
+console.log("Cover image:", formData.coverImage);
         success = await editEvent(
           eventId,
           formData.name,
           formData.description,
-          formData.coverImage || "",
+          formData.coverImage ,
           [finalTagId],
           formData.contactNumber,
           formData.category,
@@ -123,11 +130,16 @@ const goNext = async () => {
         }
       } else {
         // Create new event
+        if(formData.coverImage ===''|| formData.coverImage === undefined) {
+          setFormValue(stage, "coverImage", "https://images.unsplash.com/photo-1485872299829-c673f5194813?q=80&w=2054&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+          
+        
+}
         console.log("Creating new event");
         success = await createEvent(
           formData.name,
           formData.description,
-          formData.coverImage || "",
+          formData.coverImage ,
           [finalTagId],
           formData.contactNumber,
           formData.category,
@@ -470,7 +482,7 @@ const goNext = async () => {
   }, [clearEventStorage]);
   return (
     <CreateEventLayout>
-  <div className="flex flex-col min-h-[calc(100vh-20rem)] px-4 py-6">
+  <div className="flex flex-col min-h-[calc(100vh-20rem)] md:px-4 py-6">
     {/* Content area */}
     <div className="flex-grow">
       <h1 className="text-center text-black text-[1.2rem] font-bold">{stage}</h1>

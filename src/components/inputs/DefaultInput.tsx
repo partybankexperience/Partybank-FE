@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, forwardRef } from "react";
 import {
   FaExclamationTriangle,
   FaChevronDown,
@@ -15,7 +15,7 @@ type DefaultInputProps = {
   helperText?: string;
   helperLink?: string;
   disabled?: boolean;
-type?: "text" | "password" | "email"|"tel"|"date"|"time"|"number";
+  type?: "text" | "password" | "email" | "tel" | "date" | "time" | "number";
   leftContent?: React.ReactNode | string;
   rightContent?: React.ReactNode | string;
   showDropdown?: boolean;
@@ -23,38 +23,42 @@ type?: "text" | "password" | "email"|"tel"|"date"|"time"|"number";
   required?: boolean;
   minLength?: number;
   style?: string;
-  inputRef?: React.RefObject<HTMLInputElement>;
-  setExternalError?: (hasError: boolean) => void;
+  setExternalError?: (error: boolean) => void;
   classname?: string;
-  onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>
-  onBlur?: React.FocusEventHandler<HTMLInputElement>
+  onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
   min?: string;
+  externalErrorMessage?: string | null;
 };
 
-const DefaultInput = ({
-  id = "input-id",
-  label = "Label",
-  placeholder = "Enter value",
-  helperText = "",
-  helperLink = "",
-  disabled = false,
-  type = "text",
-  leftContent,
-  rightContent,
-  showDropdown = false,
-  dropdownOptions = [],
-  required = false,
-  // minLength = 6,
-  style = "",
-  value,
-  setValue,
-  // inputRef,
-  setExternalError,
-  classname='',
-  onKeyDown,
-  onBlur,
-  min=''
-}: DefaultInputProps) => {
+// ✅ forwardRef for external access to DOM element
+const DefaultInput = forwardRef<HTMLInputElement, DefaultInputProps>(
+  (
+    {
+      id = "input-id",
+      label = "Label",
+      placeholder = "Enter value",
+      helperText = "",
+      helperLink = "",
+      disabled = false,
+      type = "text",
+      leftContent,
+      rightContent,
+      showDropdown = false,
+      dropdownOptions = [],
+      required = false,
+      style = "",
+      value,
+      setValue,
+      setExternalError,
+      classname = "",
+      onKeyDown,
+      onBlur,
+      min = "",
+      externalErrorMessage = null,
+    },
+    ref
+  ) => {
   // const [value, setValue] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -99,9 +103,7 @@ const DefaultInput = ({
     }
     const validationError = validate();
     if (setExternalError) {
-      if (setExternalError) {
-        setExternalError(!!validationError); // True if there's an error, false otherwise
-      }
+      setExternalError(!!validationError); // True if there's an error, false otherwise
     }
   }, [value]);
 
@@ -151,6 +153,7 @@ const DefaultInput = ({
     onBlur={(e) => handleBlur(e as any)}
     aria-describedby={`${id}-helper`}
     aria-invalid={hasError}
+    // ref={ref}
     className={`${baseStyle} ${paddingLeft} pr-[40px] ${style} appearance-none cursor-pointer`}
   >
     <option value="" disabled hidden>
@@ -164,7 +167,7 @@ const DefaultInput = ({
   </select>
 
   {/* Chevron icon positioned absolutely */}
-  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-neutralDark text-sm">
+  <div className={`pointer-events-none absolute inset-y-0 right-3 flex items-center text-neutralDark text-sm`}>
     <FaChevronDown />
   </div>
 </div>
@@ -188,15 +191,7 @@ const DefaultInput = ({
         ? "0"
         : undefined
     }
-    // min={
-    //   min !== undefined
-    //     ? min
-    //     : type === "date"
-    //     ? new Date().toISOString().split('T')[0]
-    //     : type === "number"
-    //     ? "0"
-    //     : undefined
-    // }
+    ref={ref}
     onInput={(e) => {
       // Additional safeguard for number inputs
       if (type === "number" && e.currentTarget.value !== "" && parseFloat(e.currentTarget.value) < 0) {
@@ -206,8 +201,8 @@ const DefaultInput = ({
     }}
   />
 )}
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
-          {hasError && (
+        <div className={`absolute ${showDropdown?'right-9':'right-3'}  top-1/2 -translate-y-1/2 flex items-center gap-2`}>
+          {hasError || externalErrorMessage&& (
             <span className="text-red">
               <FaExclamationTriangle />
             </span>
@@ -242,9 +237,9 @@ const DefaultInput = ({
         </div>
       </div>
 
-      {hasError ? (
+      {hasError || externalErrorMessage ? (
         <p id={`${id}-helper`} className="text-[13px] text-red">
-          {error}
+          {error|| externalErrorMessage}
         </p>
       ) : (
         <p id={`${id}-helper`} className="text-[13px] text-[#665B6D]">
@@ -256,76 +251,6 @@ const DefaultInput = ({
       )}
     </div>
   );
-};
+});
 
 export default DefaultInput;
-
-// sample use of the default input
-// import DefaultInput from "./DefaultInput";
-// import { FaUser } from "react-icons/fa";
-
-// const SampleForm = () => {
-//   return (
-//     <div className="space-y-6 p-6">
-//       {/* Basic Text Input with Left and Right Content */}
-//       <DefaultInput
-//         id="username"
-//         label="Username"
-//         placeholder="Enter your username"
-//         helperText="Your unique ID"
-//         helperLink="Learn more"
-//         leftContent={<FaUser />}
-//         rightContent="@example.com"
-//         required
-//       />
-
-//       {/* Email Input with Validation */}
-//       <DefaultInput
-//         id="email"
-//         type="email"
-//         label="Email Address"
-//         placeholder="user@example.com"
-//         helperText="We'll never share your email"
-//         helperLink="Privacy policy"
-//         required
-//       />
-
-//       {/* Password Input with Visibility Toggle */}
-//       <DefaultInput
-//         id="password"
-//         type="password"
-//         label="Password"
-//         placeholder="••••••••"
-//         helperText="Use 6+ characters"
-//         helperLink="Forgot password?"
-//         required
-//         minLength={6}
-//       />
-
-//       {/* Disabled Input */}
-//       <DefaultInput
-//         id="disabled"
-//         label="Disabled Input"
-//         placeholder="Can't type here"
-//         helperText="This field is disabled"
-//         helperLink="Why?"
-//         disabled
-//       />
-
-//       {/* Dropdown Input */}
-//       <DefaultInput
-//         id="country"
-//         label="Country"
-//         placeholder="Select your country"
-//         helperText="Choose your home country"
-//         helperLink="Help"
-//         showDropdown
-//         dropdownOptions={["Canada", "USA", "UK"]}
-//         rightContent="🌐"
-//         required
-//       />
-//     </div>
-//   );
-// };
-
-// export default SampleForm;

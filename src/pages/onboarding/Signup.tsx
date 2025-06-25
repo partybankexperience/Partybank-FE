@@ -78,7 +78,7 @@ const Signup = () => {
             value={email}
             setValue={setemail}
             required
-            inputRef={emailRef}
+            ref={emailRef}
             setExternalError={setEmailError}
           />
         </div>

@@ -10,7 +10,6 @@ import { errorAlert } from "../../components/alerts/ToastService";
 
 const Login = () => {
   const [email, setemail] = useState("");
-  // const [emailError, setEmailError] = useState('')
   const [password, setpassword] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [isLoading, setisLoading] = useState(false)
@@ -111,7 +110,7 @@ const Login = () => {
             value={email}
             setValue={setemail}
             required
-            inputRef={emailRef}
+            ref={emailRef}
             setExternalError={setEmailError}
             // setExternalError={setEmailError}
           />
@@ -126,7 +125,7 @@ const Login = () => {
             value={password}
             setValue={setpassword}
             required
-            inputRef={passwordRef}
+            ref={passwordRef}
             setExternalError={setPasswordError}
             classname="!mb-0 "
           />

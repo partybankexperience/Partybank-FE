@@ -176,7 +176,7 @@ const Accessibility = () => {
           classname="!w-full md:!w-1/2"
           helperText={accessibilityErrors.minAge || ""}
           style={accessibilityErrors.minAge ? "border-red-500" : ""}
-          inputRef={minAgeRef}
+          ref={minAgeRef}
         />
       </div>
 

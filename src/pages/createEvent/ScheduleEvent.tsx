@@ -166,7 +166,7 @@ const ScheduleEvent = () => {
             required
             helperText={scheduleEventErrors.startDate || ""}
             style={scheduleEventErrors.startDate ? "border-red-500" : ""}
-            inputRef={startDateRef}
+            ref={startDateRef}
           />
           <DefaultInput
             type="time"
@@ -180,7 +180,7 @@ const ScheduleEvent = () => {
             required
             helperText={scheduleEventErrors.startTime || ""}
             style={scheduleEventErrors.startTime ? "border-red-500" : ""}
-            inputRef={startTimeRef}
+            ref={startTimeRef}
           />
           <DefaultInput
             type="time"
@@ -194,7 +194,7 @@ const ScheduleEvent = () => {
             required
             helperText={scheduleEventErrors.endTime || ""}
             style={scheduleEventErrors.endTime ? "border-red-500" : ""}
-            inputRef={endTimeRef}
+            ref={endTimeRef}
           />
         </div>
 
@@ -213,7 +213,7 @@ const ScheduleEvent = () => {
               required
               helperText={scheduleEventErrors.endDate || ""}
               style={scheduleEventErrors.endDate ? "border-red-500" : ""}
-              inputRef={endDateRef}
+              ref={endDateRef}
               min={scheduleEventForm.startDate || ""}
             />
             <div className="md:col-span-2"></div>
@@ -244,7 +244,7 @@ const ScheduleEvent = () => {
           required
           helperText={scheduleEventErrors.venueName || ""}
           style={scheduleEventErrors.venueName ? "border-red-500" : ""}
-          inputRef={venueNameRef}
+          ref={venueNameRef}
         />
         {/* Show venue and location inputs only if location toggle is on */}
         {showLocation && (

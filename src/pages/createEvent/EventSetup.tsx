@@ -15,7 +15,7 @@ import { useLocation } from "react-router-dom";
 import { FiLoader } from "react-icons/fi";
 
 const EventSetup = () => {
-  const { form, setFormValue, errors } = useEventStore();
+  const { form, setFormValue, errors,clearError } = useEventStore();
   const eventSetupForm = form["Event Setup"] || {};
   const eventSetupErrors = errors["Event Setup"] || {};
   const [tags, setTags] = useState<any[]>([]);
@@ -36,6 +36,7 @@ const EventSetup = () => {
   const categoryRef = useRef<any>(null);
   const tagsRef = useRef<any>(null);
   const contactNumberRef = useRef<any>(null);
+  const descriptionRef = useRef<any>(null);
   useEffect(() => {
     const fetchSeries = async () => {
       try {
@@ -80,7 +81,6 @@ const EventSetup = () => {
     setFormValue,
     location,
   ]);
-
   useEffect(() => {
     const fetchTags = async () => {
       try {
@@ -128,6 +128,9 @@ const EventSetup = () => {
     if (selectedTag) {
       setFormValue("Event Setup", "tags", selectedTag.id); // Store tag ID
       setFormValue("Event Setup", "selectedTagName", selectedTagName); // Store name for display
+      if (eventSetupErrors['tags']) {
+        clearError("Event Setup", 'tags');
+      }
     }
 
     console.log("Updated eventSetupForm.tags:", eventSetupForm.tags);
@@ -153,7 +156,11 @@ const EventSetup = () => {
 
   const handleInputChange = (key: string, value: string) => {
     setFormValue("Event Setup", key, value);
-
+    // Clear field error when typing
+  if (eventSetupErrors[key]) {
+    clearError("Event Setup", key);
+  }
+    
     // Reset similar events when name changes
     if (key === "name") {
       setSimilarEvents([]);
@@ -210,6 +217,8 @@ const EventSetup = () => {
       setTimeout(() => {
         if (eventSetupErrors.name && nameRef.current) {
           nameRef.current.focus();
+        } else if (eventSetupErrors.description && descriptionRef.current) {
+          descriptionRef.current.focus();
         } else if (eventSetupErrors.category && categoryRef.current) {
           categoryRef.current.focus();
         } else if (eventSetupErrors.tags && tagsRef.current) {
@@ -241,19 +250,17 @@ const EventSetup = () => {
           label="Event Name"
           value={eventSetupForm.name || ""}
           setValue={(value: string) => {
-            console.log("Name input changed:", value);
             handleInputChange("name", value);
           }}
           onBlur={() => {
-            console.log("onBlur event triggered on name input");
             handleNameBlur();
           }}
           placeholder="Enter event name"
           required
-          helperText={eventSetupErrors.name || ""}
           style={eventSetupErrors.name ? "border-red-500" : ""}
           classname="!w-full"
-          inputRef={nameRef}
+          ref={nameRef}
+          externalErrorMessage={eventSetupErrors.name || null}
           rightContent={
             checkingSimilarEvents ? (
               <FiLoader className="animate-spin text-gray-400" size={16} />
@@ -314,7 +321,13 @@ const EventSetup = () => {
           onChange={(value) => handleInputChange("description", value)}
           options={options}
           id="description"
+          ref={descriptionRef}
         />
+        { eventSetupErrors.description && (
+          <p className="text-red-500 text-[14px]">
+            {eventSetupErrors.description}
+          </p>
+        )}
       </div>
 
       <DefaultInput
@@ -327,9 +340,9 @@ const EventSetup = () => {
         value={eventSetupForm.category || ""}
         setValue={(value: string) => handleInputChange("category", value)}
         required
-        helperText={eventSetupErrors.category || ""}
+        externalErrorMessage={eventSetupErrors.category || null}
         style={eventSetupErrors.category ? "border-red-500" : ""}
-        inputRef={categoryRef}
+        ref={categoryRef}
       />
       <DefaultInput
         id="Tags"
@@ -342,9 +355,9 @@ const EventSetup = () => {
         dropdownOptions={tagOptions}
         disabled={loading}
         required
-        helperText={eventSetupErrors.tags || ""}
+        externalErrorMessage={eventSetupErrors.tags || null}
         style={eventSetupErrors.tags ? "border-red-500" : ""}
-        inputRef={tagsRef}
+        ref={tagsRef}
       />
 
       {eventSetupForm.tags === "Other" && (
@@ -411,9 +424,10 @@ const EventSetup = () => {
         placeholder="Enter contact number"
         classname="!w-full"
         required
-        helperText={eventSetupErrors.contactNumber || ""}
-        style={eventSetupErrors.contactNumber ? "border-red-500" : ""}
-        inputRef={contactNumberRef}
+        
+        ref={contactNumberRef}
+        externalErrorMessage={eventSetupErrors.contactNumber}
+        
       />
       <ImageUploadInput
         value={eventSetupForm.coverImage || ""}

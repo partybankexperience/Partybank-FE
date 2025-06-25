@@ -480,7 +480,7 @@ console.log(getValue("isUnlimited"),'checking ')
             required
             helperText={ticketErrors.ticketName || ""}
             style={ticketErrors.ticketName ? "border-red-500" : ""}
-            inputRef={ticketNameRef}
+            ref={ticketNameRef}
           />
           <DefaultInput
             id="purchaseLimit"
@@ -493,7 +493,7 @@ console.log(getValue("isUnlimited"),'checking ')
             required
             helperText={ticketErrors.purchaseLimit || ""}
             style={ticketErrors.purchaseLimit ? "border-red-500" : ""}
-            inputRef={purchaseLimitRef}
+            ref={purchaseLimitRef}
           />
           {!getValue("isUnlimited") && (
             <DefaultInput
@@ -507,7 +507,7 @@ console.log(getValue("isUnlimited"),'checking ')
               required
               helperText={ticketErrors.totalStock || ""}
               style={ticketErrors.totalStock ? "border-red-500" : ""}
-              inputRef={totalStockRef}
+              ref={totalStockRef}
             />
           )}
           {getValue("ticketType") === "Paid" && (
@@ -553,7 +553,7 @@ console.log(getValue("isUnlimited"),'checking ')
             type="number"
             helperText={ticketErrors.soldTarget || ""}
             style={ticketErrors.soldTarget ? "border-red-500" : ""}
-            inputRef={soldTargetRef}
+            ref={soldTargetRef}
           />
           {getValue("ticketCategory") === "option2" && (
             <DefaultInput
@@ -567,7 +567,7 @@ console.log(getValue("isUnlimited"),'checking ')
               required
               helperText={ticketErrors.groupSize || ""}
               style={ticketErrors.groupSize ? "border-red-500" : ""}
-              inputRef={groupSizeRef}
+              ref={groupSizeRef}
             />
           )}
           <ColorPickerInput
@@ -578,7 +578,7 @@ console.log(getValue("isUnlimited"),'checking ')
             classname="!w-full"
             // helperText={ticketErrors.color || ""}
             // style={ticketErrors.color ? "border-red-500" : ""}
-            // inputRef={ticketColorRef}
+            // ref={ticketColorRef}
           />
         </div>
       </div>
@@ -597,7 +597,7 @@ console.log(getValue("isUnlimited"),'checking ')
             required
             helperText={ticketErrors.salesStart || ""}
             style={ticketErrors.salesStart ? "border-red-500" : ""}
-            inputRef={salesStartRef}
+            ref={salesStartRef}
           />
           <DefaultInput
             id="startTime"
@@ -610,7 +610,7 @@ console.log(getValue("isUnlimited"),'checking ')
             required
             helperText={ticketErrors.startTime || ""}
             style={ticketErrors.startTime ? "border-red-500" : ""}
-            inputRef={startTimeRef}
+            ref={startTimeRef}
           />
           <DefaultInput
             id="salesEnd"
@@ -623,7 +623,7 @@ console.log(getValue("isUnlimited"),'checking ')
             required
             helperText={ticketErrors.salesEnd || ""}
             style={ticketErrors.salesEnd ? "border-red-500" : ""}
-            inputRef={salesEndRef}
+            ref={salesEndRef}
             min={getValue("salesStart")}
           />
           <DefaultInput
@@ -637,7 +637,7 @@ console.log(getValue("isUnlimited"),'checking ')
             required
             helperText={ticketErrors.endTime || ""}
             style={ticketErrors.endTime ? "border-red-500" : ""}
-            inputRef={endTimeRef}
+            ref={endTimeRef}
           />
         </div>
       </div>
@@ -661,7 +661,7 @@ console.log(getValue("isUnlimited"),'checking ')
               classname="!w-full"
               helperText={index === 0 && ticketErrors.perks ? ticketErrors.perks : ""}
               style={index === 0 && ticketErrors.perks ? "border-red-500" : ""}
-              inputRef={index === 0 ? perksRef : undefined}
+              ref={index === 0 ? perksRef : undefined}
               rightContent={
                 <div className="flex items-center gap-2">
                   {perksArray.length > 1 && (
