@@ -1,4 +1,4 @@
-import { FaPlus } from "react-icons/fa";
+// import { FaPlus } from "react-icons/fa";
 import { BsDot } from "react-icons/bs";
 import { BiEditAlt } from "react-icons/bi";
 import DefaultButton from "../../../components/buttons/DefaultButton";
@@ -277,7 +277,7 @@ const SeriesDetail = () => {
             <div className="grid gap-[20px] h-fit ">
                 <div className="flex justify-between items-center">
                     <h1 className="text-black font-medium text-[1.2rem]">Event List</h1>
-                    <DefaultButton
+                    {/* <DefaultButton
                         type="icon-left"
                         className="!w-fit"
                         icon={<FaPlus className="text-[.8rem] text-white" />}
@@ -288,7 +288,7 @@ const SeriesDetail = () => {
                         }}
                     >
                         Add Events to Series
-                    </DefaultButton>
+                    </DefaultButton> */}
                 </div>
                 <div className="grid gap-[20px] md:max-h-[70vh] md:overflow-y-auto ">
                     {loading ? (
