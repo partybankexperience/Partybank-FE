@@ -156,32 +156,40 @@ const DashboardLayout = ({ children }: any) => {
           />
         </button>
         <nav className="flex flex-col gap-[.1rem] px-2">
-          {navItems.map((item, index) => {
-            const isActive = currentPath.startsWith(item.path);
+         
+          <ul>
+    {navItems.map((item, index) => {
+      const isActive = currentPath.startsWith(item.path);
 
-            return (
-              <div key={index} className="flex h-full  items-center">
-                {isActive && (
-                  <div className="w-[5px] h-full py-[1rem] bg-primary rounded-r-lg  items-center " />
-                )}
-                <li
-                  className={`flex items-center gap-[8px] md:gap-[12px] font-medium text-[.7rem] md:text-[.8rem] cursor-pointer hover:text-primary p-[0.8rem] md:p-[1rem] w-full ${
-                    isActive ? "text-white" : "text-[#A9ABAE]"
-                  }`}
-                  onClick={() => navigate(item.path)}
-                >
-                  <div
-                    className={`text-[1.1rem] md:text-[1.3rem] flex-shrink-0 ${
-                      isActive ? "text-primary" : "text-white"
-                    }`}
-                  >
-                    {item.icon}
-                  </div>
-                  <span className="truncate">{item.name}</span>
-                </li>
+      return (
+        <li key={index}>
+          <button
+            onClick={() => navigate(item.path)}
+            className="flex h-full items-center w-full text-left"
+            aria-current={isActive ? "page" : undefined}
+          >
+            {isActive && (
+              <div className="w-[5px] h-full py-[1rem] bg-primary rounded-r-lg items-center" />
+            )}
+            <div
+              className={`flex items-center gap-[8px] md:gap-[12px] font-medium text-[.7rem] md:text-[.8rem] cursor-pointer hover:text-primary p-[0.8rem] md:p-[1rem] w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                isActive ? "text-white" : "text-[#A9ABAE]"
+              }`}
+            >
+              <div
+                className={`text-[1.1rem] md:text-[1.3rem] flex-shrink-0 ${
+                  isActive ? "text-primary" : "text-white"
+                }`}
+              >
+                {item.icon}
               </div>
-            );
-          })}
+              <span className="truncate">{item.name}</span>
+            </div>
+          </button>
+        </li>
+      );
+    })}
+  </ul>
         </nav>
       </div>
       <div className="flex flex-col h-full md:ml-[15rem] w-full max-w-full">

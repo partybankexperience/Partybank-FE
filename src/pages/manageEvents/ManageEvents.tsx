@@ -3,7 +3,7 @@ import CreateNewEvent from "./components/CreateNewEvent";
 import EventCard from "../../components/cards/EventCard";
 import { useNavigate } from "react-router";
 import Tabs from "../../components/tabs/Tabs";
-import { getEvents } from "../../Containers/eventApi";
+import { deleteEvent, getEvents } from "../../Containers/eventApi";
 import { EventCardSkeleton } from "../../components/common/LoadingSkeleton";
 
 const ManageEvents = () => {
@@ -25,7 +25,20 @@ const ManageEvents = () => {
       setLoading(false);
     }
   }
-
+async function handleDeleteEvent(eventId: string) {
+    try {
+      setLoading(true);
+      // Call the API to delete the event
+      await deleteEvent(eventId);
+      // After successful deletion, refresh the events list
+      await getAllEvent();
+    } catch (error) {
+      console.error("Error deleting event:", error);
+      // Optionally, show an error message to the user
+    } finally {
+      setLoading(false);
+    }
+  }
   useEffect(() => {
     getAllEvent();
   }, []);
@@ -79,8 +92,8 @@ const ManageEvents = () => {
               onEdit={() => {
                 navigate(`/manage-events/${val.slug}`, { state: { id: val.id } });
               }}
-              onDuplicate={() => console.log("Duplicate clicked")}
-              onDelete={() => console.log("Delete clicked")}
+              onDuplicate={() => console.log("Duplicate event", val.id)}
+              onDelete={() => handleDeleteEvent(val.id)}
             />
           ))
         ) : (

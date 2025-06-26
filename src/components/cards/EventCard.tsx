@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import { PiMapPinBold } from "react-icons/pi";
 import { LuPencilLine } from "react-icons/lu";
-import { FiCopy } from "react-icons/fi";
+// import { FiCopy } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { formatDate, formatTimeRange } from "../helpers/dateTimeHelpers";
 import FallbackImage from "../common/FallbackImage";
+// import { duplicateEvent } from "../../Containers/eventApi";
 
 const EventCard = ({
   name = "Canvas and Beats",
@@ -37,18 +38,18 @@ const EventCard = ({
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
-
+console.log(onDuplicate)
   const buttonOptions = [
     {
       name: "Edit",
       onClick: () => (onEdit ? onEdit() : navigate("/manage-events/:id")),
       icon: <LuPencilLine />,
     },
-    {
-      name: "Duplicate",
-      onClick: () => onDuplicate?.(),
-      icon: <FiCopy />,
-    },
+    // {
+    //   name: "Duplicate",
+    //   onClick: () => onDuplicate?.(),
+    //   icon: <FiCopy />,
+    // },
     {
       name: "Delete",
       onClick: () => onDelete?.(),
