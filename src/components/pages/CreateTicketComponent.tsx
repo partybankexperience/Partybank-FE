@@ -27,7 +27,7 @@ const CreateTicketComponent = () => {
   const showButtons = !isCreateEventContext;
 
   // State Management Logic - Context Aware
-  const { form, setFormValue, errors } = useEventStore();
+  const { form, setFormValue, errors,clearError } = useEventStore();
   const { 
     setCurrentTicketData, 
     getCurrentTicketData, 
@@ -41,7 +41,7 @@ const CreateTicketComponent = () => {
   } = useTicketStore();
   const currentStage = "Tickets Create";
   const ticketErrors = errors[currentStage] || {};
-
+console.log(ticketErrors, 'the ticket errors are here')
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Refs for focus management
@@ -83,6 +83,9 @@ const CreateTicketComponent = () => {
 
   const handleChange = (key: string, value: any) => {
     // Convert date input values to ISO format for storage
+    if (ticketErrors[key]) {
+      clearError(currentStage, key);
+    }
     let processedValue = value;
     if ((key === 'salesStart' || key === 'salesEnd') && value) {
       // For date fields, convert back to ISO format with time
@@ -478,8 +481,8 @@ console.log(getValue("isUnlimited"),'checking ')
             placeholder="Enter ticket name"
             classname="!w-full"
             required
-            helperText={ticketErrors.ticketName || ""}
-            style={ticketErrors.ticketName ? "border-red-500" : ""}
+            externalErrorMessage={ticketErrors.ticketName || null}
+            style={ticketErrors.ticketName && "border-red-500"}
             ref={ticketNameRef}
           />
           <DefaultInput
@@ -491,8 +494,8 @@ console.log(getValue("isUnlimited"),'checking ')
             classname="!w-full"
             type="number"
             required
-            helperText={ticketErrors.purchaseLimit || ""}
-            style={ticketErrors.purchaseLimit ? "border-red-500" : ""}
+            externalErrorMessage={ticketErrors.purchaseLimit || null}
+            style={ticketErrors.purchaseLimit && "border-red-500"}
             ref={purchaseLimitRef}
           />
           {!getValue("isUnlimited") && (
@@ -505,8 +508,8 @@ console.log(getValue("isUnlimited"),'checking ')
               classname="!w-full"
               type="number"
               required
-              helperText={ticketErrors.totalStock || ""}
-              style={ticketErrors.totalStock ? "border-red-500" : ""}
+              externalErrorMessage={ticketErrors.totalStock || null}
+              style={ticketErrors.totalStock && "border-red-500"}
               ref={totalStockRef}
             />
           )}
@@ -551,8 +554,8 @@ console.log(getValue("isUnlimited"),'checking ')
             placeholder="Enter sold target"
             classname="!w-full"
             type="number"
-            helperText={ticketErrors.soldTarget || ""}
-            style={ticketErrors.soldTarget ? "border-red-500" : ""}
+            externalErrorMessage={ticketErrors.soldTarget || null}
+            style={ticketErrors.soldTarget && "border-red-500"}
             ref={soldTargetRef}
           />
           {getValue("ticketCategory") === "option2" && (
@@ -565,8 +568,8 @@ console.log(getValue("isUnlimited"),'checking ')
               classname="!w-full"
               type="number"
               required
-              helperText={ticketErrors.groupSize || ""}
-              style={ticketErrors.groupSize ? "border-red-500" : ""}
+              externalErrorMessage={ticketErrors.groupSize || null}
+              style={ticketErrors.groupSize && "border-red-500"}
               ref={groupSizeRef}
             />
           )}
@@ -576,8 +579,8 @@ console.log(getValue("isUnlimited"),'checking ')
             value={getValue("color")}
             setValue={(v: string) => handleChange("color", v)}
             classname="!w-full"
-            // helperText={ticketErrors.color || ""}
-            // style={ticketErrors.color ? "border-red-500" : ""}
+            // externalErrorMessage={ticketErrors.color || null}
+            // style={ticketErrors.color && "border-red-500"}
             // ref={ticketColorRef}
           />
         </div>
@@ -595,8 +598,8 @@ console.log(getValue("isUnlimited"),'checking ')
             classname="!w-full"
             type="date"
             required
-            helperText={ticketErrors.salesStart || ""}
-            style={ticketErrors.salesStart ? "border-red-500" : ""}
+            externalErrorMessage={ticketErrors.salesStart || null}
+            style={ticketErrors.salesStart && "border-red-500"}
             ref={salesStartRef}
           />
           <DefaultInput
@@ -608,8 +611,8 @@ console.log(getValue("isUnlimited"),'checking ')
             classname="!w-full"
             type="time"
             required
-            helperText={ticketErrors.startTime || ""}
-            style={ticketErrors.startTime ? "border-red-500" : ""}
+            externalErrorMessage={ticketErrors.startTime || null}
+            style={ticketErrors.startTime && "border-red-500"}
             ref={startTimeRef}
           />
           <DefaultInput
@@ -621,8 +624,8 @@ console.log(getValue("isUnlimited"),'checking ')
             classname="!w-full"
             type="date"
             required
-            helperText={ticketErrors.salesEnd || ""}
-            style={ticketErrors.salesEnd ? "border-red-500" : ""}
+            externalErrorMessage={ticketErrors.salesEnd || null}
+            style={ticketErrors.salesEnd && "border-red-500"}
             ref={salesEndRef}
             min={getValue("salesStart")}
           />
@@ -635,8 +638,8 @@ console.log(getValue("isUnlimited"),'checking ')
             classname="!w-full"
             type="time"
             required
-            helperText={ticketErrors.endTime || ""}
-            style={ticketErrors.endTime ? "border-red-500" : ""}
+            externalErrorMessage={ticketErrors.endTime || null}
+            style={ticketErrors.endTime && "border-red-500"}
             ref={endTimeRef}
           />
         </div>
@@ -659,8 +662,8 @@ console.log(getValue("isUnlimited"),'checking ')
               setValue={(v: any) => updatePerk(index, v)}
               placeholder="Enter perk here"
               classname="!w-full"
-              helperText={index === 0 && ticketErrors.perks ? ticketErrors.perks : ""}
-              style={index === 0 && ticketErrors.perks ? "border-red-500" : ""}
+              externalErrorMessage={index === 0 && ticketErrors.perks ? ticketErrors.perks : ""}
+              style={index === 0 && ticketErrors.perks ? "border-red-500":''}
               ref={index === 0 ? perksRef : undefined}
               rightContent={
                 <div className="flex items-center gap-2">

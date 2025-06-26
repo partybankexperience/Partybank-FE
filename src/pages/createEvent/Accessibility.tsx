@@ -6,7 +6,7 @@ import DefaultInput from "../../components/inputs/DefaultInput";
 import { useEventStore } from "../../stores/useEventStore";
 
 const Accessibility = () => {
-  const { form, setFormValue, errors } = useEventStore();
+  const { form, setFormValue, errors,clearError } = useEventStore();
   const accessibilityForm = form["Accessibility"] || {};
   const accessibilityErrors = errors["Accessibility"] || {};
 
@@ -32,7 +32,10 @@ const Accessibility = () => {
   ];
 
   const handleInputChange = (key: string, value: any) => {
+
     setFormValue("Accessibility", key, value);
+    // Clear specific error when value changes
+    clearError("Accessibility", key);
   };
 
   const validateForm = () => {
@@ -174,7 +177,7 @@ const Accessibility = () => {
           setValue={(value: string) => handleInputChange("minAge", value)}
           placeholder="e.g., 18 (leave empty for no restriction)"
           classname="!w-full md:!w-1/2"
-          helperText={accessibilityErrors.minAge || ""}
+          externalErrorMessage={accessibilityErrors.minAge || null}
           style={accessibilityErrors.minAge ? "border-red-500" : ""}
           ref={minAgeRef}
         />

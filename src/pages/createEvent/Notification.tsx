@@ -1,4 +1,5 @@
 
+import { useEffect } from "react";
 import SlideToggle from "../../components/inputs/SlideToggle";
 import { useEventStore } from "../../stores/useEventStore";
 
@@ -17,6 +18,13 @@ const Notification = () => {
   const handleToggleChange = (val: boolean) => {
     setFormValue(currentStage, "notifyOnTicketSale", val);
   };
+  useEffect(() => {
+    const third = notificationForm.notifyOnTicketSale;
+    if (third === undefined || third === null) {
+      setFormValue(currentStage, "notifyOnTicketSale", false);
+    }
+  }, [])
+  
 
   return (
     <div className="grid gap-[15px] mt-[1rem]">

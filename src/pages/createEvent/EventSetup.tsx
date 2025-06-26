@@ -67,8 +67,7 @@ const EventSetup = () => {
 
     // Check for seriesId from navigation state
     const seriesIdFromNavigation = location.state?.seriesId;
-    console.log("Location state:", location.state);
-    console.log("Series ID from navigation:", seriesIdFromNavigation);
+   
     if (seriesIdFromNavigation) {
       console.log("Setting series ID from navigation:", seriesIdFromNavigation);
       setFormValue("Event Setup", "seriesId", seriesIdFromNavigation);
@@ -257,7 +256,7 @@ const EventSetup = () => {
           }}
           placeholder="Enter event name"
           required
-          style={eventSetupErrors.name ? "border-red-500" : ""}
+          style={eventSetupErrors.name && "border-red-500"}
           classname="!w-full"
           ref={nameRef}
           externalErrorMessage={eventSetupErrors.name || null}
@@ -341,7 +340,7 @@ const EventSetup = () => {
         setValue={(value: string) => handleInputChange("category", value)}
         required
         externalErrorMessage={eventSetupErrors.category || null}
-        style={eventSetupErrors.category ? "border-red-500" : ""}
+        style={eventSetupErrors.category && "border-red-500"}
         ref={categoryRef}
       />
       <DefaultInput
@@ -356,7 +355,7 @@ const EventSetup = () => {
         disabled={loading}
         required
         externalErrorMessage={eventSetupErrors.tags || null}
-        style={eventSetupErrors.tags ? "border-red-500" : ""}
+        style={eventSetupErrors.tags && "border-red-500"}
         ref={tagsRef}
       />
 
@@ -427,7 +426,7 @@ const EventSetup = () => {
         
         ref={contactNumberRef}
         externalErrorMessage={eventSetupErrors.contactNumber}
-        
+        style={eventSetupErrors.contactNumber && "border-red-500"}
       />
       <ImageUploadInput
         value={eventSetupForm.coverImage || ""}

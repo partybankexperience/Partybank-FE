@@ -157,6 +157,8 @@ console.log("Cover image:", formData.coverImage);
 
       if (!success) {
         setError(stage, "general", "Failed to create event. Please try again.");
+        errorAlert("Error", "Please fill in the form correctly.");
+
         return;
       }
       if (currentIndex < stages.length - 1) {
@@ -170,7 +172,7 @@ console.log("Cover image:", formData.coverImage);
         const { isValid, errors } = validateStage(stage, formData);
         if (!isValid) {
           Object.entries(errors).forEach(([field, error]) => setError(stage, field, error));
-          const isValid = (window as any).validateEventSetup?.();
+          const isValid = (window as any).validateScheduleEvent?.();
           if (!isValid) return;
           return;
         }
@@ -190,6 +192,8 @@ console.log("Cover image:", formData.coverImage);
         console.log(res, 'Schedule & Location response');
       } catch (error) {
         console.error("Error in Schedule & Location stage:", error);
+        errorAlert("Error", "Please fill in the form correctly.");
+
         setError(stage, "general", "An unexpected error occurred. Please try again.");
         return;
       }
@@ -246,40 +250,82 @@ console.log("Cover image:", formData.coverImage);
         }).some(Boolean);
 
         const validateTicket = () => {
-          if (!currentTicket.name) return setError(stage, "ticketName", "Ticket name is required");
-          if (!currentTicket.type) return setError(stage, "ticketType", "Ticket type is required");
-          if (!currentTicket.category) return setError(stage, "ticketCategory", "Ticket category is required");
-
+          let isValid = true;
+        
+          if (!currentTicket.name) {
+            setError(stage, "ticketName", "Ticket name is required");
+            isValid = false;
+          }
+        
+          if (!currentTicket.type) {
+            setError(stage, "ticketType", "Ticket type is required");
+            isValid = false;
+          }
+        
+          if (!currentTicket.category) {
+            setError(stage, "ticketCategory", "Ticket category is required");
+            isValid = false;
+          }
+          if (!currentTicket.totalStock && currentTicket.isUnlimited===true ) {
+            setError(stage, "totalStock", "Total stock is required for limited tickets");
+            isValid = false;
+          }
+          if (!currentTicket.soldTarget) {
+            setError(stage, "soldTarget", "Ticket sold target is required");
+            isValid = false;
+          }
           if (
             currentTicket.type === "Paid" &&
             (!currentTicket.price || Number(currentTicket.price) <= 0)
           ) {
-            return setError(stage, "price", "Price is required for paid tickets");
+            setError(stage, "price", "Price is required for paid tickets");
+            isValid = false;
           }
-
-          if (!currentTicket.salesStart) return setError(stage, "salesStart", "Sales start date is required");
-          if (!currentTicket.startTime) return setError(stage, "startTime", "Start time is required");
-          if (!currentTicket.salesEnd) return setError(stage, "salesEnd", "Sales end date is required");
-          if (!currentTicket.endTime) return setError(stage, "endTime", "End time is required");
-          if (!currentTicket.purchaseLimit) return setError(stage, "purchaseLimit", "Purchase limit is required");
-
+        
+          if (!currentTicket.salesStart) {
+            setError(stage, "salesStart", "Sales start date is required");
+            isValid = false;
+          }
+        
+          if (!currentTicket.startTime) {
+            setError(stage, "startTime", "Start time is required");
+            isValid = false;
+          }
+        
+          if (!currentTicket.salesEnd) {
+            setError(stage, "salesEnd", "Sales end date is required");
+            isValid = false;
+          }
+        
+          if (!currentTicket.endTime) {
+            setError(stage, "endTime", "End time is required");
+            isValid = false;
+          }
+        
+          if (!currentTicket.purchaseLimit) {
+            setError(stage, "purchaseLimit", "Purchase limit is required");
+            isValid = false;
+          }
+        
           if (
             currentTicket.isUnlimited === "limited" &&
             (!currentTicket.totalStock || Number(currentTicket.totalStock) <= 0)
           ) {
-            return setError(stage, "totalStock", "Stock availability is required for limited tickets");
+            setError(stage, "totalStock", "Stock availability is required for limited tickets");
+            isValid = false;
           }
-
+        
           if (
-            currentTicket.category === "option2" &&
+            currentTicket.category === "group" &&
             (!currentTicket.groupSize || Number(currentTicket.groupSize) <= 0)
           ) {
-            return setError(stage, "groupSize", "Number of people is required for group tickets");
+            setError(stage, "groupSize", "Number of people is required for group tickets");
+            isValid = false;
           }
-
-          return true;
+        
+          return isValid;
         };
-
+        
         if (hasCurrentTicketData) {
           if (validateTicket() !== true) return;
           clearStageErrors(stage);
@@ -295,7 +341,14 @@ console.log("Cover image:", formData.coverImage);
               ? currentTicket.perks.filter(p => p && p.trim())
               : [];
 
-
+// Validate Ticket stage
+const { isValid, errors } = validateStage(stage, formData);
+if (!isValid) {
+  Object.entries(errors).forEach(([field, error]) => setError(stage, field, error));
+  const isValid = (window as any).validateTicketsCreate?.();
+  if (!isValid) return;
+  return;
+}
             const ticketPayload = [
               eventId as string,
               currentTicket.name,
@@ -369,6 +422,7 @@ console.log("Cover image:", formData.coverImage);
         }
 
         if ((formData.tickets || []).length === 0 && !hasCurrentTicketData) {
+          errorAlert("Error", "At least one ticket must be created");
           setError(stage, "ticketName", "At least one ticket must be created");
           return;
         }
@@ -377,6 +431,7 @@ console.log("Cover image:", formData.coverImage);
 
       } catch (error) {
         console.error("Error in Tickets Create stage:", error);
+        errorAlert("Error", "Please fill in the form correctly.");
         setError(stage, "general", "An unexpected error occurred while creating tickets.");
       }
     }
@@ -398,8 +453,38 @@ console.log("Cover image:", formData.coverImage);
           attendeesCoverFees: accessibilityData.transferCharges || false,
           minAge: accessibilityData.minAge ? parseInt(accessibilityData.minAge) : null,
         };
+        const validateAccessibility = () => {
+          let isValid = true;
+          if (payload.visibility !== "public" && payload.visibility !== "private") {
+            setError(stage, "eventVisibility", "Event visibility is required");
+            isValid = false;
+          }
+          if (payload.wheelchairAccessible === undefined) {
+            setError(stage, "wheelchairAccess", "Wheelchair accessibility is required");
+            isValid = false;
+          }
+          if (payload.parkingAvailable === undefined) {
+            setError(stage, "parkingAvailable", "Parking availability is required");
+            isValid = false;
+          }
+          if (payload.minAge === null || payload.minAge === undefined || payload.minAge < 0) {
+            setError(stage, "minAge", "Minimum age is required");
+            isValid = false;
+          }
+          return isValid;
+        };
+        if (validateAccessibility()!== true) return;
+        
+        clearStageErrors(stage);
+        const { isValid, errors } = validateStage(stage, formData);
+if (!isValid) {
+  Object.entries(errors).forEach(([field, error]) => setError(stage, field, error));
+  const isValid = (window as any).validateAccessibility?.();
+  if (!isValid) return;
+  return;
+}
 
-        const response = await accessibility(
+        await accessibility(
           eventId,
           payload.wheelchairAccessible,
           payload.parkingAvailable,
@@ -408,9 +493,10 @@ console.log("Cover image:", formData.coverImage);
           payload.visibility as 'private' | 'public'
         );
 
-        console.log("Accessibility updated successfully:", response);
+        
       } catch (error) {
         console.error("Error updating accessibility:", error);
+        errorAlert("Error", "Please fill in the form correctly.");
         setError(stage, "general", "An unexpected error occurred while updating accessibility settings.");
         return;
       }
@@ -422,12 +508,12 @@ console.log("Cover image:", formData.coverImage);
       await notification(eventId, notifyOnTicketSale);
     }
     // Handle other stages
-    const { isValid, errors } = validateStage(stage, formData);
-    if (!isValid) {
-      Object.entries(errors).forEach(([field, error]) => setError(stage, field, error));
-      return;
-    }
-    clearStageErrors(stage);
+    // const { isValid, errors } = validateStage(stage, formData);
+    // if (!isValid) {
+    //   Object.entries(errors).forEach(([field, error]) => setError(stage, field, error));
+    //   return;
+    // }
+    // clearStageErrors(stage);
     if (currentIndex < stages.length - 1) {
       setStage(stages[currentIndex + 1]);
     }

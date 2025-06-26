@@ -75,6 +75,13 @@ const getEventsById =async (id: string): Promise<any> =>{
   return response;
 }
 const getScheduleandLocation = async (id:string,eventType: string,startDate:string,startTime:string,endTime:string,isLocationTBA:boolean,venueName?:string,address?: Address,endDate?:string): Promise<any> => {
+  const normalizeAddress = (addr?: Partial<Address>): Address => ({
+    country: addr?.country || "N/A",
+    state: addr?.state || "N/A",
+    city: addr?.city || "N/A",
+    street: addr?.street || "N/A",
+    postalCode: addr?.postalCode || "N/A",
+  });
   const response = await apiCall({
     name: "getScheduleandLocation",
     urlExtra: `/${id}/schedule-location`,
@@ -86,7 +93,7 @@ const getScheduleandLocation = async (id:string,eventType: string,startDate:stri
       endTime,
       isLocationTBA,
       venueName,
-      ...(isLocationTBA && address),
+      ...(isLocationTBA && normalizeAddress(address)),
     },
   });
   return response;
