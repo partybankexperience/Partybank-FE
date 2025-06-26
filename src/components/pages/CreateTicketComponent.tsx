@@ -37,13 +37,16 @@ const CreateTicketComponent = () => {
     moveToNextUnsavedTicket,
     hasUnsavedTickets,
     tickets: manageTickets,
-    activeTicketIndex: manageActiveIndex
+    activeTicketIndex: manageActiveIndex,
+    errors: manageTicketErrors,
+  setError: setTicketError,
+  clearError: clearTicketError,
   } = useTicketStore();
   const currentStage = "Tickets Create";
   const ticketErrors = errors[currentStage] || {};
 console.log(ticketErrors, 'the ticket errors are here')
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+  const errorField=isCreateEventContext ? ticketErrors : manageTicketErrors;
   // Refs for focus management
   const ticketCategoryRef = useRef<any>(null);
   const ticketTypeRef = useRef<any>(null);
@@ -83,8 +86,8 @@ console.log(ticketErrors, 'the ticket errors are here')
 
   const handleChange = (key: string, value: any) => {
     // Convert date input values to ISO format for storage
-    if (ticketErrors[key]) {
-      clearError(currentStage, key);
+    if (errorField[key]) {
+      isManageEventsContext?clearTicketError(key):clearError(currentStage, key);
     }
     let processedValue = value;
     if ((key === 'salesStart' || key === 'salesEnd') && value) {
@@ -191,8 +194,7 @@ console.log(ticketErrors, 'the ticket errors are here')
     }
     return value;
   };
-  console.log(getValue('color'),'the color value is here')
-  console.log("Retrieved color value:", form[currentStage]?.color || getCurrentTicketData('color'));
+
 
   const updatePerk = (index: number, value: any) => {
     const perks = getValue("perks");
@@ -207,7 +209,7 @@ console.log(ticketErrors, 'the ticket errors are here')
     const perksArray = Array.isArray(perks) && perks.length > 0 ? perks : [""];
     handleChange("perks", [...perksArray, ""]);
   };
-
+console.log(getCurrentTicketData("ticketCategory"), 'the is unlimited value is here')
   const deletePerk = (index: number) => {
     const perks = getValue("perks");
     const perksArray = Array.isArray(perks) && perks.length > 0 ? perks : [""];
@@ -216,19 +218,90 @@ console.log(ticketErrors, 'the ticket errors are here')
       handleChange("perks", updatedPerks);
     }
   };
-
+  // validate ticket in the manage ticket
+  const validateTicketManageEvents = () => {
+    let hasError = false;
+  
+    const required = (key: string, message: string) => {
+      const value = getCurrentTicketData(key);
+      if (!value || (typeof value === 'string' && value.trim() === '')) {
+        setTicketError(key, message);
+        hasError = true;
+      }
+    };
+  
+    required("ticketName", "Ticket name is required");
+    required("ticketType", "Ticket type is required");
+    required("ticketCategory", "Ticket category is required");
+    required("isUnlimited", "Ticket availability is required");
+  
+    if (getCurrentTicketData("ticketType") === "Paid") {
+      const price = getCurrentTicketData("price");
+      if (!price || Number(price) <= 0) {
+        setTicketError("price", "Price is required for paid tickets");
+        hasError = true;
+      }
+    }
+  
+    required("salesStart", "Sales start date is required");
+    required("startTime", "Start time is required");
+    required("salesEnd", "Sales end date is required");
+    required("endTime", "End time is required");
+    required("purchaseLimit", "Purchase limit is required");
+    required("soldTarget", "Sold target is required");
+  
+    const isUnlimited = String(getCurrentTicketData("isUnlimited")).toLowerCase() === "true";
+  
+    if (!isUnlimited) {
+      const stock = getCurrentTicketData("totalStock");
+      if (!stock || Number(stock) <= 0) {
+        setTicketError("totalStock", "Stock availability is required for limited tickets");
+        hasError = true;
+      }
+    }
+  
+    if (getCurrentTicketData("ticketCategory") === "option2") {
+      const groupSize = getCurrentTicketData("groupSize");
+      if (!groupSize || Number(groupSize) <= 0) {
+        setTicketError("groupSize", "Number of people is required for group tickets");
+        hasError = true;
+      }
+    }
+  
+    return !hasError;
+  };
+  
+ 
+  useEffect(() => {
+    (window as any).focusFirstTicketError = () => {
+      if (manageTicketErrors.name && ticketNameRef.current) ticketNameRef.current.focus();
+      else if (manageTicketErrors.type && ticketTypeRef.current) ticketTypeRef.current.focus();
+      else if (manageTicketErrors.category && ticketCategoryRef.current) ticketCategoryRef.current.focus();
+      else if (manageTicketErrors.price && priceRef.current) priceRef.current.focus();
+      else if (manageTicketErrors.salesStart && salesStartRef.current) salesStartRef.current.focus();
+      // ...repeat for other fields
+    };
+  
+    return () => {
+      delete (window as any).focusFirstTicketError;
+    };
+  }, [errorField]);
+  
+  
   // Form Submission Logic for Manage Events Context
   const handleManageEventsSubmit = async () => {
+   
     if (!eventId) {
       errorAlert("Error","Event ID not found");
       return;
     }
-
+    console.log( 'where is the logic')
+    console.log('the event id is here', eventId)
     // Get current ticket data from store
     const ticketData = {
-      ticketName: getCurrentTicketData("name"),
-      ticketType: getCurrentTicketData("type"),
-      ticketCategory: getCurrentTicketData("category"),
+      ticketName: getCurrentTicketData("ticketName"),
+      ticketType: getCurrentTicketData("ticketType"),
+      ticketCategory: getCurrentTicketData("ticketCategory"),
       price: getCurrentTicketData("price"),
       purchaseLimit: getCurrentTicketData("purchaseLimit"),
       totalStock: getCurrentTicketData("totalStock"),
@@ -242,20 +315,14 @@ console.log(ticketErrors, 'the ticket errors are here')
       endTime: getCurrentTicketData("endTime"),
       color: getCurrentTicketData("color")
     };
-    // Validation
-    if (!ticketData.ticketName) {
-      errorAlert("Error","Ticket name is required");
+    console.log("Submitting ticket data before the functiion:", ticketData);
+   
+   console.log(validateTicketManageEvents(),"why it's not validating")
+    if (!validateTicketManageEvents()) {
+      (window as any).validateForm?.();
       return;
     }
-    if (!ticketData.ticketType) {
-      errorAlert("Error","Ticket type is required");
-      return;
-    }
-    if (!ticketData.ticketCategory) {
-      errorAlert("Error","Ticket category is required");
-      return;
-    }
-
+    console.log("Submitting ticket data:", ticketData);
     setIsSubmitting(true);
 
     try {
@@ -269,13 +336,13 @@ console.log(ticketErrors, 'the ticket errors are here')
         "option2": "group"
       };
 
-      const salesStartISO = ticketData.salesStart ? 
-        new Date(`${ticketData.salesStart}T${ticketData.startTime || "00:00"}`).toISOString() : 
-        new Date().toISOString();
+      // const salesStartISO = ticketData.salesStart ? 
+      //   new Date(`${ticketData.salesStart}T${ticketData.startTime || "00:00"}`).toISOString() : 
+      //   new Date().toISOString();
 
-      const salesEndISO = ticketData.salesEnd ? 
-        new Date(`${ticketData.salesEnd}T${ticketData.endTime || "23:59"}`).toISOString() : 
-        new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(); // 30 days from now
+      // const salesEndISO = ticketData.salesEnd ? 
+      //   new Date(`${ticketData.salesEnd}T${ticketData.endTime || "23:59"}`).toISOString() : 
+      //   new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(); // 30 days from now
 
       let response;
 
@@ -297,8 +364,8 @@ console.log(ticketErrors, 'the ticket errors are here')
           Number(ticketData.purchaseLimit) || 1,
           !ticketData.isUnlimited ? Number(ticketData.totalStock) : 0,
           Number(ticketData.soldTarget) || 0,
-          salesStartISO,
-          salesEndISO,
+          ticketData.salesStart,
+          ticketData.salesEnd,
           ticketData.startTime || "00:00",
           ticketData.endTime || "23:59",
           Array.isArray(ticketData.perks) ? ticketData.perks.filter(perk => perk && perk.trim()) : [],
@@ -306,7 +373,7 @@ console.log(ticketErrors, 'the ticket errors are here')
           Number(ticketData.groupSize),
           ticketData.color
         );
-        successAlert("Success","Ticket created successfully!");
+        // successAlert("Success","Ticket created successfully!");
       }
 
       // Mark current ticket as saved
@@ -327,50 +394,51 @@ console.log(ticketErrors, 'the ticket errors are here')
 
     } catch (error) {
       console.error("Error submitting ticket:", error);
-      errorAlert("Error","Failed to save ticket. Please try again.");
+      // errorAlert("Error","Failed to save ticket. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 const validateForm = () => {
     // Focus on first error from store
-    if (Object.keys(ticketErrors).length > 0) {
+    
+    if (Object.keys(errorField).length > 0) {
       setTimeout(() => {
-        if (ticketErrors.ticketCategory && ticketCategoryRef.current) {
+        if (errorField.ticketCategory && ticketCategoryRef.current) {
           ticketCategoryRef.current.focus();
-        } else if (ticketErrors.ticketType && ticketTypeRef.current) {
+        } else if (errorField.ticketType && ticketTypeRef.current) {
           ticketTypeRef.current.focus();
-        } else if (ticketErrors.isUnlimited && ticketAvailabilityRef.current) {
+        } else if (errorField.isUnlimited && ticketAvailabilityRef.current) {
           ticketAvailabilityRef.current.focus();
-        } else if (ticketErrors.ticketName && ticketNameRef.current) {
+        } else if (errorField.ticketName && ticketNameRef.current) {
           ticketNameRef.current.focus();
-        } else if (ticketErrors.purchaseLimit && purchaseLimitRef.current) {
+        } else if (errorField.purchaseLimit && purchaseLimitRef.current) {
           purchaseLimitRef.current.focus();
-        } else if (ticketErrors.totalStock && totalStockRef.current) {
+        } else if (errorField.totalStock && totalStockRef.current) {
           totalStockRef.current.focus();
-        } else if (ticketErrors.price && priceRef.current) {
+        } else if (errorField.price && priceRef.current) {
           priceRef.current.focus();
-        } else if (ticketErrors.soldTarget && soldTargetRef.current) {
+        } else if (errorField.soldTarget && soldTargetRef.current) {
           soldTargetRef.current.focus();
-        } else if (ticketErrors.groupSize && groupSizeRef.current) {
+        } else if (errorField.groupSize && groupSizeRef.current) {
           groupSizeRef.current.focus();
-        } else if (ticketErrors.color && ticketColorRef.current) {
+        } else if (errorField.color && ticketColorRef.current) {
           ticketColorRef.current.focus();
-        } else if (ticketErrors.salesStart && salesStartRef.current) {
+        } else if (errorField.salesStart && salesStartRef.current) {
           salesStartRef.current.focus();
-        } else if (ticketErrors.startTime && startTimeRef.current) {
+        } else if (errorField.startTime && startTimeRef.current) {
           startTimeRef.current.focus();
-        } else if (ticketErrors.salesEnd && salesEndRef.current) {
+        } else if (errorField.salesEnd && salesEndRef.current) {
           salesEndRef.current.focus();
-        } else if (ticketErrors.endTime && endTimeRef.current) {
+        } else if (errorField.endTime && endTimeRef.current) {
           endTimeRef.current.focus();
-        } else if (ticketErrors.perks && perksRef.current) {
+        } else if (errorField.perks && perksRef.current) {
           perksRef.current.focus();
         }
       }, 100);
     }
 
-    return Object.keys(ticketErrors).length === 0;
+    return Object.keys(errorField).length === 0;
   };
 
   // Export validation function for external use
@@ -407,9 +475,9 @@ console.log(getValue("isUnlimited"),'checking ')
             );
           })}
         </div>
-        {ticketErrors.ticketCategory && (
+        {errorField.ticketCategory && (
           <p className="text-[13px] text-red-500 mt-1">
-            {ticketErrors.ticketCategory}
+            {errorField.ticketCategory}
           </p>
         )}
       </div>
@@ -432,9 +500,9 @@ console.log(getValue("isUnlimited"),'checking ')
             />
           ))}
         </div>
-        {ticketErrors.ticketType && (
+        {errorField.ticketType && (
           <p className="text-[13px] text-red-500 mt-1">
-            {ticketErrors.ticketType}
+            {errorField.ticketType}
           </p>
         )}
       </div>
@@ -461,9 +529,9 @@ console.log(getValue("isUnlimited"),'checking ')
 })}
 
         </div>
-        {ticketErrors.isUnlimited && (
+        {errorField.isUnlimited && (
           <p className="text-[13px] text-red-500 mt-1">
-            {ticketErrors.isUnlimited}
+            {errorField.isUnlimited}
           </p>
         )}
       </div>
@@ -481,8 +549,8 @@ console.log(getValue("isUnlimited"),'checking ')
             placeholder="Enter ticket name"
             classname="!w-full"
             required
-            externalErrorMessage={ticketErrors.ticketName || null}
-            style={ticketErrors.ticketName && "border-red-500"}
+            externalErrorMessage={errorField.ticketName || null}
+            style={errorField.ticketName && "border-red-500"}
             ref={ticketNameRef}
           />
           <DefaultInput
@@ -494,8 +562,8 @@ console.log(getValue("isUnlimited"),'checking ')
             classname="!w-full"
             type="number"
             required
-            externalErrorMessage={ticketErrors.purchaseLimit || null}
-            style={ticketErrors.purchaseLimit && "border-red-500"}
+            externalErrorMessage={errorField.purchaseLimit || null}
+            style={errorField.purchaseLimit && "border-red-500"}
             ref={purchaseLimitRef}
           />
           {!getValue("isUnlimited") && (
@@ -508,8 +576,8 @@ console.log(getValue("isUnlimited"),'checking ')
               classname="!w-full"
               type="number"
               required
-              externalErrorMessage={ticketErrors.totalStock || null}
-              style={ticketErrors.totalStock && "border-red-500"}
+              externalErrorMessage={errorField.totalStock || null}
+              style={errorField.totalStock && "border-red-500"}
               ref={totalStockRef}
             />
           )}
@@ -528,7 +596,7 @@ console.log(getValue("isUnlimited"),'checking ')
                   thousandSeparator=","
                   prefix="₦"
                   placeholder="₦0.00"
-                  className={`text-[14px] border-[1px] text-black placeholder:text-neutralDark placeholder:text-[14px] font-[RedHat] rounded-[4px] py-[10px] px-[16px] !w-full bg-white hover:border-lightPurple focus:border-lightPurple hover:shadow-[0_0_0_2px_rgba(77,64,85,0.1)] focus:shadow-[0_0_0_2px_rgba(77,64,85,0.1)] ${ticketErrors.price ? 'border-red-500' : 'border-neutral'}`}
+                  className={`text-[14px] border-[1px] text-black placeholder:text-neutralDark placeholder:text-[14px] font-[RedHat] rounded-[4px] py-[10px] px-[16px] !w-full bg-white hover:border-lightPurple focus:border-lightPurple hover:shadow-[0_0_0_2px_rgba(77,64,85,0.1)] focus:shadow-[0_0_0_2px_rgba(77,64,85,0.1)] ${errorField.price ? 'border-red-500' : 'border-neutral'}`}
                   decimalScale={2}
                   fixedDecimalScale
                   allowNegative={false}
@@ -539,9 +607,9 @@ console.log(getValue("isUnlimited"),'checking ')
                   </div>
                 )}
               </div>
-              {ticketErrors.price && (
+              {errorField.price && (
                 <p className="text-[13px] text-red-500 mt-1">
-                  {ticketErrors.price}
+                  {errorField.price}
                 </p>
               )}
             </div>
@@ -554,8 +622,8 @@ console.log(getValue("isUnlimited"),'checking ')
             placeholder="Enter sold target"
             classname="!w-full"
             type="number"
-            externalErrorMessage={ticketErrors.soldTarget || null}
-            style={ticketErrors.soldTarget && "border-red-500"}
+            externalErrorMessage={errorField.soldTarget || null}
+            style={errorField.soldTarget && "border-red-500"}
             ref={soldTargetRef}
           />
           {getValue("ticketCategory") === "option2" && (
@@ -568,8 +636,8 @@ console.log(getValue("isUnlimited"),'checking ')
               classname="!w-full"
               type="number"
               required
-              externalErrorMessage={ticketErrors.groupSize || null}
-              style={ticketErrors.groupSize && "border-red-500"}
+              externalErrorMessage={errorField.groupSize || null}
+              style={errorField.groupSize && "border-red-500"}
               ref={groupSizeRef}
             />
           )}
@@ -579,8 +647,8 @@ console.log(getValue("isUnlimited"),'checking ')
             value={getValue("color")}
             setValue={(v: string) => handleChange("color", v)}
             classname="!w-full"
-            // externalErrorMessage={ticketErrors.color || null}
-            // style={ticketErrors.color && "border-red-500"}
+            // externalErrorMessage={errorField.color || null}
+            // style={errorField.color && "border-red-500"}
             // ref={ticketColorRef}
           />
         </div>
@@ -598,8 +666,8 @@ console.log(getValue("isUnlimited"),'checking ')
             classname="!w-full"
             type="date"
             required
-            externalErrorMessage={ticketErrors.salesStart || null}
-            style={ticketErrors.salesStart && "border-red-500"}
+            externalErrorMessage={errorField.salesStart || null}
+            style={errorField.salesStart && "border-red-500"}
             ref={salesStartRef}
           />
           <DefaultInput
@@ -611,8 +679,8 @@ console.log(getValue("isUnlimited"),'checking ')
             classname="!w-full"
             type="time"
             required
-            externalErrorMessage={ticketErrors.startTime || null}
-            style={ticketErrors.startTime && "border-red-500"}
+            externalErrorMessage={errorField.startTime || null}
+            style={errorField.startTime && "border-red-500"}
             ref={startTimeRef}
           />
           <DefaultInput
@@ -624,8 +692,8 @@ console.log(getValue("isUnlimited"),'checking ')
             classname="!w-full"
             type="date"
             required
-            externalErrorMessage={ticketErrors.salesEnd || null}
-            style={ticketErrors.salesEnd && "border-red-500"}
+            externalErrorMessage={errorField.salesEnd || null}
+            style={errorField.salesEnd && "border-red-500"}
             ref={salesEndRef}
             min={getValue("salesStart")}
           />
@@ -638,8 +706,8 @@ console.log(getValue("isUnlimited"),'checking ')
             classname="!w-full"
             type="time"
             required
-            externalErrorMessage={ticketErrors.endTime || null}
-            style={ticketErrors.endTime && "border-red-500"}
+            externalErrorMessage={errorField.endTime || null}
+            style={errorField.endTime && "border-red-500"}
             ref={endTimeRef}
           />
         </div>
@@ -662,8 +730,8 @@ console.log(getValue("isUnlimited"),'checking ')
               setValue={(v: any) => updatePerk(index, v)}
               placeholder="Enter perk here"
               classname="!w-full"
-              externalErrorMessage={index === 0 && ticketErrors.perks ? ticketErrors.perks : ""}
-              style={index === 0 && ticketErrors.perks ? "border-red-500":''}
+              externalErrorMessage={index === 0 && errorField.perks ? errorField.perks : ""}
+              style={index === 0 && errorField.perks ? "border-red-500":''}
               ref={index === 0 ? perksRef : undefined}
               rightContent={
                 <div className="flex items-center gap-2">
@@ -702,6 +770,7 @@ console.log(getValue("isUnlimited"),'checking ')
             onClick={() => {
               if (isManageEventsContext) {
                 const slug = location.pathname.split('/')[2];
+                resetTicketStore()
                 navigate(`/manage-events/${slug}`, { state: { id: eventId } });
               }
             }}

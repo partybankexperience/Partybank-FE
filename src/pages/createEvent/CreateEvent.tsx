@@ -113,6 +113,7 @@ const goNext = async () => {
         
 }
 console.log("Cover image:", formData.coverImage);
+setIsCreatingEvent(true);
         success = await editEvent(
           eventId,
           formData.name,
@@ -177,7 +178,7 @@ console.log("Cover image:", formData.coverImage);
           return;
         }
         clearStageErrors(stage);
-
+        setIsCreatingEvent(true);
         const res= await getScheduleandLocation(
           eventId, 
           formData.eventType,
@@ -193,9 +194,11 @@ console.log("Cover image:", formData.coverImage);
       } catch (error) {
         console.error("Error in Schedule & Location stage:", error);
         errorAlert("Error", "Please fill in the form correctly.");
-
+        setIsCreatingEvent(false);
         setError(stage, "general", "An unexpected error occurred. Please try again.");
         return;
+      } finally {
+        setIsCreatingEvent(false);
       }
     }
     if (stage === "Tickets Create") {
@@ -349,6 +352,7 @@ if (!isValid) {
   if (!isValid) return;
   return;
 }
+setIsCreatingEvent(true);
             const ticketPayload = [
               eventId as string,
               currentTicket.name,
@@ -385,8 +389,11 @@ if (!isValid) {
 
           } catch (error) {
             console.error("Error creating/updating ticket:", error);
+            setIsCreatingEvent(false);
             setError(stage, "general", `Failed to save ticket: ${currentTicket.name}`);
             return;
+          }finally {
+            setIsCreatingEvent(false);
           }
 
           const updatedSavedTickets = [...savedTickets];
@@ -483,7 +490,7 @@ if (!isValid) {
   if (!isValid) return;
   return;
 }
-
+setIsCreatingEvent(true);
         await accessibility(
           eventId,
           payload.wheelchairAccessible,
@@ -496,15 +503,19 @@ if (!isValid) {
         
       } catch (error) {
         console.error("Error updating accessibility:", error);
+        setIsCreatingEvent(false);
         errorAlert("Error", "Please fill in the form correctly.");
         setError(stage, "general", "An unexpected error occurred while updating accessibility settings.");
         return;
+      }finally {
+        setIsCreatingEvent(false);
       }
     }
 
     if (stage === "Notifications") {
       const notificationData = form["Notifications"];
       const notifyOnTicketSale = notificationData.notifyOnTicketSale || false;
+      setIsCreatingEvent(true);
       await notification(eventId, notifyOnTicketSale);
     }
     // Handle other stages
@@ -521,6 +532,8 @@ if (!isValid) {
     setIsCreatingEvent(false);
     console.error("Error in goNext:", error);
     setError(stage, "general", "An unexpected error occurred. Please try again.");
+  }finally {
+    setIsCreatingEvent(false);
   }
 };
 

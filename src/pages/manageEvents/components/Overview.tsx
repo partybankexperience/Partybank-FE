@@ -17,6 +17,7 @@ import { formatDate, formatTimeRange } from "../../../components/helpers/dateTim
 import { useEventStore } from "../../../stores/useEventStore";
 import { Storage } from "../../../stores/InAppStorage";
 import { successAlert } from "../../../components/alerts/ToastService";
+import { deleteTicket } from "../../../Containers/ticketApi";
 
 const Overview = () => {
   const navigate=useNavigate()
@@ -138,7 +139,21 @@ const Overview = () => {
       setShareLoading(false);
     }
   };
-  const buttonOptions = [
+  async function handleDeleteTicket(ticketId: string) {
+    try {
+      setLoading(true);
+      // Call the API to delete the ticket
+      await deleteTicket(ticketId);
+      // After successful deletion, refresh the tickets list
+      setTickets((prevTickets) => prevTickets.filter((ticket:any) => ticket?.id !== ticketId));
+    } catch (error) {
+      console.error("Error deleting ticket:", error);
+      // Optionally, show an error message to the user
+    } finally {
+      setLoading(false);
+    }
+  }
+  const buttonOptions  = (ticketId: string) => [
     {
       name: "Edit",
       // onClick: () => (onEdit ? onEdit() : navigate("/manage-events/:id")),
@@ -151,7 +166,7 @@ const Overview = () => {
     },
     {
       name: "Delete",
-      // onClick: () => onDelete?.(),
+      onClick: () => handleDeleteTicket(ticketId),
       icon: <AiOutlineDelete />,
     },
     {
@@ -314,7 +329,7 @@ const Overview = () => {
                     availability={ticket.isSoldOut ? "Sold Out" : ticket.stock > 0 ? "Available" : "Limited"}
                     capacity={ticket.stock?.toString() || "N/A"}
                     price={ticket.type === "free" ? "Free" : `₦${ticket.price?.toLocaleString() || "0"}`}
-                    buttonOptions={buttonOptions}
+                    buttonOptions={buttonOptions(ticket.id)}
                   />
                 ))
               ) : (

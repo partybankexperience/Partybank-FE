@@ -39,6 +39,10 @@ interface TicketStore {
   getNextUnsavedTicket: () => number | null;
   hasUnsavedTickets: () => boolean;
   moveToNextUnsavedTicket: () => boolean;
+  errors: Record<string, string>;
+  setError: (key: string, error: string) => void;
+  clearError: (key: string) => void;
+  clearAllErrors: () => void;
 }
 
 const emptyTicket = (): TicketData => ({
@@ -196,7 +200,8 @@ export const useTicketStore = create<TicketStore>()(
         set({
           tickets: [],
           activeTicketIndex: 0,
-          currentTicketData: ticketToFormData(emptyTicket())
+          currentTicketData: ticketToFormData(emptyTicket()),
+          errors: {}
         });
       },
 
@@ -223,7 +228,27 @@ export const useTicketStore = create<TicketStore>()(
       hasUnsavedTickets: () => {
         return get().tickets.some(ticket => !ticket.isSaved);
       },
-
+      errors: {},
+      setError: (key:string, error:any) => {
+        set((state) => ({
+          errors: {
+            ...state.errors,
+            [key]: error,
+          },
+        }));
+      },
+      
+      clearError: (key:string) => {
+        set((state) => {
+          const newErrors = { ...state.errors };
+          delete newErrors[key];
+          return { errors: newErrors };
+        });
+      },
+      
+      clearAllErrors: () => {
+        set({ errors: {} });
+      },
       moveToNextUnsavedTicket: () => {
         const nextIndex:any = get().getNextUnsavedTicket();
         if (nextIndex !== -1) {
@@ -233,6 +258,7 @@ export const useTicketStore = create<TicketStore>()(
         return false;
       }
     }),
+    
     { name: 'ticket-management-storage' }
   )
 );
