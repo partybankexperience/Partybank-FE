@@ -173,6 +173,10 @@ const Dashboard = () => {
                       }}
                       onDuplicate={() => console.log("Duplicate clicked")}
                       onDelete={() => console.log("Delete clicked")}
+                      slug={event.slug}
+                      id={event.id}
+                      stage={event.status}
+                      timingStatus={event.timingStatus}
                     />
                   ))
                 ) : (

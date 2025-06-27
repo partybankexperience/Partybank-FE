@@ -203,14 +203,15 @@ const DashboardLayout = ({ children }: any) => {
                     setSection(null);
                   } else {
                     // Check if we're editing an event and should go back to manage events
-                    const eventId = Storage.getItem("eventId");
-                    if (currentPath.includes('/createEvent') && eventId) {
-                      // Clear eventId when navigating away from create event
-                      Storage.removeItem("eventId");
-                      navigate('/manageEvents');
-                    } else {
-                      navigate(-1);
-                    }
+                    // const eventId = Storage.getItem("eventId");
+                    // if (currentPath.includes('/createEvent') && eventId) {
+                    //   // Clear eventId when navigating away from create event
+                    //   Storage.removeItem("eventId");
+                    //   navigate('/manageEvents');
+                    // } else {
+                    //   navigate(-1);
+                    // }
+                    navigate(-1);
                   }
                 }}
                 aria-label="Go back"
@@ -233,7 +234,7 @@ const DashboardLayout = ({ children }: any) => {
           <div className={`gap-[10px] md:gap-[20px] items-center flex-shrink-0 ${showBackButton ? "hidden md:flex" : "flex"}`}>
             {/* <NotificationDropdown /> */}
 
-            <div className="hidden lg:block">
+            <div className="hidden   lg:flex ">
               <ProfileDropdown />
             </div>
             <DefaultButton

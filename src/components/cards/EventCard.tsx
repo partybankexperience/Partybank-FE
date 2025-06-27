@@ -7,8 +7,13 @@ import { LuPencilLine } from "react-icons/lu";
 import { AiOutlineDelete } from "react-icons/ai";
 import { formatDate, formatTimeRange } from "../helpers/dateTimeHelpers";
 import FallbackImage from "../common/FallbackImage";
+import { getEventsBySlug } from "../../Containers/eventApi";
+import { Storage } from "../../stores/InAppStorage";
+import { useEventStore } from "../../stores/useEventStore";
+// import { BsInfoCircle } from "react-icons/bs";
+import { MdOutlinePreview } from "react-icons/md";
 // import { duplicateEvent } from "../../Containers/eventApi";
-
+type StageType = 'upcoming' | 'active' | 'past' | 'draft' |'';
 const EventCard = ({
   name = "Canvas and Beats",
   location = "Landmark Centre",
@@ -18,9 +23,13 @@ const EventCard = ({
   progress = 50,
   ticketSold = 550,
   totalTicket = 1000,
-  onEdit,
+  // onEdit,
   onDuplicate,
   onDelete,
+  stage = "",
+  slug='',
+  id='',
+  timingStatus='',
   bannerImage = "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=60",
 }: {
   name?: string;
@@ -35,29 +44,88 @@ const EventCard = ({
   onDuplicate?: () => void;
   onDelete?: () => void;
   bannerImage?: string;
+  stage: StageType;
+  slug: string;
+  id: string;
+  timingStatus: string;
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 const dropdownRef = useRef<HTMLDivElement>(null);
 
   const navigate = useNavigate();
+  const { setStage, prefillEventData, mapBackendStepToFrontend } = useEventStore();
+
 console.log(onDuplicate)
-  const buttonOptions = [
-    {
-      name: "Edit",
-      onClick: () => (onEdit ? onEdit() : navigate("/manageEvents/:id")),
-      icon: <LuPencilLine />,
-    },
-    // {
-    //   name: "Duplicate",
-    //   onClick: () => onDuplicate?.(),
-    //   icon: <FiCopy />,
-    // },
-    {
-      name: "Delete",
-      onClick: () => onDelete?.(),
-      icon: <AiOutlineDelete />,
-    },
-  ];
+const buttonOptions = [];
+async function getEvent() {
+  try {
+    // setLoading(true);
+    const res = await getEventsBySlug(slug as string);
+    Storage.setItem("eventId", res.id);
+
+    // Prefill form data using the store method
+    prefillEventData(res);
+
+    // Map backend step to frontend stage and set it
+    const frontendStage = mapBackendStepToFrontend(res.currentStep);
+    setStage(frontendStage);
+    
+  } catch (error) {
+console.log(error)
+  }}
+function handleEdit() {
+  try {
+    getEvent();
+    navigate('/dashboard/createEvent');
+  } catch (error) {
+    
+  }
+  // if (onEdit) {
+  //   onEdit();
+  // } else {
+  // }
+}
+if (stage !== 'draft') {
+  buttonOptions.push({
+    name: "Preview",
+    onClick: () => navigate(`/manageEvents/${slug}`, { state: { id: id } }),
+    icon: < MdOutlinePreview  />,
+  });
+}
+
+if (timingStatus !== 'past'|| stage === 'draft') {
+  buttonOptions.push({
+    name: "Edit",
+    onClick: () => (handleEdit()),
+    icon: <LuPencilLine />,
+  });
+  buttonOptions.push({
+    name: "Delete",
+    onClick: () => onDelete?.(),
+    icon: <AiOutlineDelete />,
+  });
+}
+
+
+
+
+  // const buttonOptions = [
+  //   {
+  //     name: "Edit",
+  //     onClick: () => (onEdit ? onEdit() : navigate("/manageEvents/:id")),
+  //     icon: <LuPencilLine />,
+  //   },
+  //   // {
+  //   //   name: "Duplicate",
+  //   //   onClick: () => onDuplicate?.(),
+  //   //   icon: <FiCopy />,
+  //   // },
+  //   {
+  //     name: "Delete",
+  //     onClick: () => onDelete?.(),
+  //     icon: <AiOutlineDelete />,
+  //   },
+  // ];
 
   // Format the date and time for display
   const formattedDate = formatDate(startDate);

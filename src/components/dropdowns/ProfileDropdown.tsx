@@ -2,7 +2,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RiLogoutCircleRLine, RiSettings3Line } from 'react-icons/ri';
-import avatar from '../../assets/images/avatar.png';
+// import avatar from '../../assets/images/avatar.png';
+import { BsPersonCircle } from "react-icons/bs";
 import { Storage } from '../../stores/InAppStorage';
 
 const ProfileDropdown = () => {
@@ -33,16 +34,17 @@ const ProfileDropdown = () => {
   };
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative  flex items-center" ref={dropdownRef}>
       <button 
-        className="w-[50px] h-[50px] rounded-full cursor-pointer" 
+        className="w-[2.4rem] h-[2.4rem] rounded-full cursor-pointer bg-gray-100 " 
         onClick={() => setIsOpen(!isOpen)}
       >
-        <img
+        {/* <img
           src={avatar}
           alt="profile picture"
           className="w-full h-full rounded-full object-cover"
-        />
+        /> */}
+        <BsPersonCircle className='w-full h-full rounded-full object-cover text-gray-300'/>
       </button>
 
       {isOpen && (

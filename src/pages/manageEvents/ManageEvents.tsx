@@ -49,13 +49,13 @@ async function handleDeleteEvent(eventId: string) {
 
     switch (activeTab) {
       case "Active":
-        return events.filter((event: any) => event.timingStatus === "published");
+        return events.filter((event: any) => event.timingStatus === "published" &&event.status === "published");
       case "Upcoming":
-        return events.filter((event: any) => event.timingStatus === "upcoming");
+        return events.filter((event: any) => event.timingStatus === "upcoming" &&event.status === "published");
       case "Archived":
-        return events.filter((event: any) => event.timingStatus === "past");
+        return events.filter((event: any) => event.timingStatus === "past"&&event.status === "published" );
       case "Drafts":
-        return events.filter((event: any) => event.status === "draft");
+        return events.filter((event: any) => event.status === "draft" &&event.timingStatus === "past");
       default:
         return events;
     }
@@ -94,6 +94,10 @@ async function handleDeleteEvent(eventId: string) {
               }}
               onDuplicate={() => console.log("Duplicate event", val.id)}
               onDelete={() => handleDeleteEvent(val.id)}
+              slug={val?.slug}
+              id={val?.id}
+              timingStatus={val?.timingStatus}
+              stage={val?.status}
             />
           ))
         ) : (

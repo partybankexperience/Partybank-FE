@@ -189,21 +189,21 @@ const Overview = () => {
 
         setEventData(res);
 
-        if (res.currentStep !== "completed") {
-          // Store the event ID for editing
-          Storage.setItem("eventId", res.id);
+        Storage.setItem("eventId", res.id);
 
-          // Prefill form data using the store method
-          prefillEventData(res);
+        // Prefill form data using the store method
+        prefillEventData(res);
 
-          // Map backend step to frontend stage and set it
-          const frontendStage = mapBackendStepToFrontend(res.currentStep);
-          setStage(frontendStage);
+        // Map backend step to frontend stage and set it
+        const frontendStage = mapBackendStepToFrontend(res.currentStep);
+        setStage(frontendStage);
+        // if (res.currentStep !== "completed") {
+        //   // Store the event ID for editing
 
-          // Navigate to create event page
-          navigate('/dashboard/createEvent');
-          return;
-        }
+        // //   // Navigate to create event page
+        // //   navigate('/dashboard/createEvent');
+          
+        // }
 
         // Extract tickets from the response
         if (res && res.tickets && Array.isArray(res.tickets)) {
@@ -287,6 +287,7 @@ const Overview = () => {
                   type="icon-left"
                   className="!w-fit border"
                   icon={<LuPencilLine className="text-primary" />}
+                  onClick={()=>navigate('/dashboard/createEvent')}
                 >
                   Edit
                 </DefaultButton>
