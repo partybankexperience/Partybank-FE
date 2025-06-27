@@ -11,7 +11,7 @@ import { IoIosArrowForward } from 'react-icons/io';
 import { useNavigate } from 'react-router';
 import { BiSolidCalendarStar } from 'react-icons/bi';
 import { RiPuzzle2Fill } from 'react-icons/ri';
-import { getEvents } from '../../Containers/eventApi';
+import { deleteEvent, getEvents } from '../../Containers/eventApi';
 import { EventCardSkeleton } from '../../components/common/LoadingSkeleton';
 import { getDashboardOverview } from '../../Containers/dashboardApi';
 import { FaNairaSign } from 'react-icons/fa6';
@@ -32,7 +32,7 @@ interface Overview {
 
 const Dashboard = () => {
   const [selectedOption, setSelectedOption] = useState('Yearly');
-  const [selectedSaleOption, setSelectedSaleOption] = useState('Sales');
+  // const [selectedSaleOption, setSelectedSaleOption] = useState('Sales');
   const [overview, setOverview] = useState<Overview | null>(null);
   const [events, setEvents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -65,7 +65,20 @@ const Dashboard = () => {
     fetchOverview();
     fetchEvents();
   }, []);
-
+  async function handleDeleteEvent(eventId: string) {
+    try {
+      setLoading(true);
+      // Call the API to delete the event
+      await deleteEvent(eventId);
+      // After successful deletion, refresh the events list
+      await fetchEvents();
+    } catch (error) {
+      console.error("Error deleting event:", error);
+      // Optionally, show an error message to the user
+    } finally {
+      setLoading(false);
+    }
+  }
   const fallbackImage =
     'https://plus.unsplash.com/premium_vector-1744201400607-99dddccd0180?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
 
@@ -220,7 +233,7 @@ const Dashboard = () => {
                     navigate(`/manageEvents/${event.slug}`, { state: { id: event.id } });
                   }}
                   onDuplicate={() => console.log('Duplicate clicked')}
-                  onDelete={() => console.log('Delete clicked')}
+                  onDelete={() => handleDeleteEvent(event.id)}
                       slug={event.slug}
                       id={event.id}
                       stage={event.status}

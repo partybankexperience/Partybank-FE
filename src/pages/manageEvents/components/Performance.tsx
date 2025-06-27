@@ -99,7 +99,7 @@ const Performance = () => {
               <Dropdown
                 options={["Option 1", "Option 2", "Option 3"]}
                 selected={selectedOption}
-                onChange={setSelectedOption}
+                onSelect={setSelectedOption}
               />
             </div>
           </div>
@@ -147,12 +147,12 @@ const Performance = () => {
               <Dropdown
                 options={["Option 1", "Option 2", "Option 3"]}
                 selected={selectedOption}
-                onChange={setSelectedOption}
+                onSelect={setSelectedOption}
               />
               <Dropdown
                 options={["Option 1", "Option 2", "Option 3"]}
                 selected={selectedOption}
-                onChange={setSelectedOption}
+                onSelect={setSelectedOption}
               />
             </div>
           </div>
@@ -185,7 +185,7 @@ const Performance = () => {
               <Dropdown
                 options={["Option 1", "Option 2", "Option 3"]}
                 selected={selectedOption}
-                onChange={setSelectedOption}
+                onSelect={setSelectedOption}
               />
             </div>
           </div>

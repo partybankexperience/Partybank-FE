@@ -44,7 +44,7 @@ export default function SimpleAreaChart() {
           />
           <Tooltip
             contentStyle={{ borderRadius: 4 }}
-            formatter={(value, name, props) => {
+            formatter={(_value, _name, props) => {
               const payload = props.payload as any;
               return [
                 `${payload.ticketsSold.toLocaleString()} tickets`,
