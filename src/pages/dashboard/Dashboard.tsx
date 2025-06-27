@@ -140,14 +140,14 @@ const Dashboard = () => {
                 Sales Revenue
               </h2>
               <div className="flex items-center gap-3">
-                <Dropdown
+                {/* <Dropdown
                   options={['Option 1', 'Option 2', 'Option 3']}
                   selected={selectedSaleOption}
                   onSelect={setSelectedSaleOption}
                   className="text-[12px]"
-                />
+                /> */}
                 <Dropdown
-                  options={['Option 1', 'Option 2', 'Option 3']}
+                  options={['Monthly']}
                   selected={selectedOption}
                   onSelect={setSelectedOption}
                   className="text-[12px]"
