@@ -13,10 +13,10 @@ const EventPage = () => {
       <Tabs
         tabs={[
           "Overview",
-          "Performance & Sales",
-          "Guest List & Complimentary Tickets",
-          "Vendor Management",
-          "Invite & Manage Ticketers",
+          // "Performance & Sales",
+          // "Guest List & Complimentary Tickets",
+          // "Vendor Management",
+          // "Invite & Manage Ticketers",
         ]}
         activeTab={activeTab}
         onTabChange={setActiveTab}
