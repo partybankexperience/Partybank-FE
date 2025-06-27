@@ -5,9 +5,9 @@ import { GrLocation } from "react-icons/gr";
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import { FaRegClock } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
-import { FiCopy } from "react-icons/fi";
+// import { FiCopy } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
-import { RiInboxArchiveLine } from "react-icons/ri";
+// import { RiInboxArchiveLine } from "react-icons/ri";
 import { FaShare } from "react-icons/fa";
 import TicketsCard from "../../../components/cards/TicketCard";
 import { useNavigate, useParams, useLocation } from "react-router";
@@ -153,27 +153,27 @@ const Overview = () => {
       setLoading(false);
     }
   }
-  const buttonOptions  = (ticketId: string) => [
+  const buttonOptions  = (ticketId: string,ticketValue?:any,eventId?:any) => [
     {
       name: "Edit",
-      // onClick: () => (onEdit ? onEdit() : navigate("/manage-events/:id")),
+      onClick: () => ( navigate(`/manage-events/${slug}/create-ticket`, { state: { id: eventId, ticketValue } }) ),
       icon: <LuPencilLine />,
     },
-    {
-      name: "Duplicate",
-      // onClick: () => onDuplicate?.(),
-      icon: <FiCopy />,
-    },
+    // {
+    //   name: "Duplicate",
+    //   // onClick: () => onDuplicate?.(),
+    //   icon: <FiCopy />,
+    // },
     {
       name: "Delete",
       onClick: () => handleDeleteTicket(ticketId),
       icon: <AiOutlineDelete />,
     },
-    {
-      name: "Archive",
-      // onClick: () => onDelete?.(),
-      icon: <RiInboxArchiveLine />,
-    },
+    // {
+    //   name: "Archive",
+    //   // onClick: () => onDelete?.(),
+    //   icon: <RiInboxArchiveLine />,
+    // },
   ];
 
 
@@ -329,7 +329,7 @@ const Overview = () => {
                     availability={ticket.isSoldOut ? "Sold Out" : ticket.stock > 0 ? "Available" : "Limited"}
                     capacity={ticket.stock?.toString() || "N/A"}
                     price={ticket.type === "free" ? "Free" : `₦${ticket.price?.toLocaleString() || "0"}`}
-                    buttonOptions={buttonOptions(ticket.id)}
+                    buttonOptions={buttonOptions(ticket.id,ticket,eventId)}
                   />
                 ))
               ) : (

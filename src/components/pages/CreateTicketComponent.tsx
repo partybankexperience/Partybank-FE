@@ -6,9 +6,9 @@ import { useEventStore } from "../../stores/useEventStore";
 import { useTicketStore } from "../../stores/useTicketStore";
 import { NumericFormat } from 'react-number-format';
 import { FaPlus, FaTrash } from 'react-icons/fa';
-import { createTicket } from "../../Containers/ticketApi";
+import { createTicket, editTicket } from "../../Containers/ticketApi";
 import { useState, useRef, useEffect } from "react";
-import { successAlert, errorAlert } from "../alerts/ToastService";
+import {  errorAlert } from "../alerts/ToastService";
 import { convertISOToDateInput, convertDateInputToISO } from '../helpers/dateTimeHelpers';
 import { formatPrice } from '../helpers/numberFormatHelpers';
 import ColorPickerInput from "../inputs/ColorPickerInput";
@@ -19,7 +19,8 @@ import ColorPickerInput from "../inputs/ColorPickerInput";
 const CreateTicketComponent = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
+  const { id, ticketValue } = location.state || {};
+  console.log(id, ticketValue, 'the id and ticket value are here')
   // Context Detection
   const isCreateEventContext = location.pathname.includes('/dashboard/create-event');
   const isManageEventsContext = location.pathname.includes('/manage-events') && location.pathname.includes('/create-ticket');
@@ -40,7 +41,7 @@ const CreateTicketComponent = () => {
     activeTicketIndex: manageActiveIndex,
     errors: manageTicketErrors,
   setError: setTicketError,
-  clearError: clearTicketError,
+  clearError: clearTicketError
   } = useTicketStore();
   const currentStage = "Tickets Create";
   const ticketErrors = errors[currentStage] || {};
@@ -66,6 +67,36 @@ console.log(ticketErrors, 'the ticket errors are here')
   
   console.log(form, 'the whole form')
 
+const ticketToFormData = (ticket: any) => {
+
+
+  return {
+    ticketName: ticket.name ,
+    ticketType: ticket.type ,
+    ticketCategory: ticket.category,
+    isUnlimited: Boolean(ticket.isUnlimited),
+    price: ticket.price,
+    purchaseLimit: ticket.purchaseLimit,
+    totalStock: ticket.totalStock,
+    soldTarget: ticket.soldTarget,
+    groupSize: ticket.groupSize,
+    perks: Array.isArray(ticket.perks) && ticket.perks.length > 0 ? ticket.perks : [""],
+    salesStart: ticket.salesStart ,
+    startTime: ticket.startTime ,
+    salesEnd: ticket.salesEnd ,
+    endTime: ticket.endTime,
+    color: ticket.color ,
+  };
+};
+  useEffect(() => {
+    if (ticketValue && ticketValue !== undefined) {
+      const prefilledTicket =ticketToFormData(ticketValue || {});
+      // Prefill each key into Zustand ticket store
+      Object.entries(prefilledTicket).forEach(([key, value]) => {
+        setCurrentTicketData(key, value);
+      });
+    }
+  }, []);
   // Event ID Source
   const eventId = isCreateEventContext 
     ? localStorage.getItem("eventId") 
@@ -209,7 +240,6 @@ console.log(ticketErrors, 'the ticket errors are here')
     const perksArray = Array.isArray(perks) && perks.length > 0 ? perks : [""];
     handleChange("perks", [...perksArray, ""]);
   };
-console.log(getCurrentTicketData("ticketCategory"), 'the is unlimited value is here')
   const deletePerk = (index: number) => {
     const perks = getValue("perks");
     const perksArray = Array.isArray(perks) && perks.length > 0 ? perks : [""];
@@ -224,7 +254,9 @@ console.log(getCurrentTicketData("ticketCategory"), 'the is unlimited value is h
   
     const required = (key: string, message: string) => {
       const value = getCurrentTicketData(key);
-      if (!value || (typeof value === 'string' && value.trim() === '')) {
+      if (value === undefined || 
+        value === null || 
+        (typeof value === 'string' && value.trim() === '')) {
         setTicketError(key, message);
         hasError = true;
       }
@@ -233,7 +265,7 @@ console.log(getCurrentTicketData("ticketCategory"), 'the is unlimited value is h
     required("ticketName", "Ticket name is required");
     required("ticketType", "Ticket type is required");
     required("ticketCategory", "Ticket category is required");
-    required("isUnlimited", "Ticket availability is required");
+    // required("isUnlimited", "Ticket availability is required");
   
     if (getCurrentTicketData("ticketType") === "Paid") {
       const price = getCurrentTicketData("price");
@@ -295,8 +327,7 @@ console.log(getCurrentTicketData("ticketCategory"), 'the is unlimited value is h
       errorAlert("Error","Event ID not found");
       return;
     }
-    console.log( 'where is the logic')
-    console.log('the event id is here', eventId)
+    
     // Get current ticket data from store
     const ticketData = {
       ticketName: getCurrentTicketData("ticketName"),
@@ -315,20 +346,17 @@ console.log(getCurrentTicketData("ticketCategory"), 'the is unlimited value is h
       endTime: getCurrentTicketData("endTime"),
       color: getCurrentTicketData("color")
     };
-    console.log("Submitting ticket data before the functiion:", ticketData);
    
-   console.log(validateTicketManageEvents(),"why it's not validating")
     if (!validateTicketManageEvents()) {
       (window as any).validateForm?.();
       return;
     }
-    console.log("Submitting ticket data:", ticketData);
     setIsSubmitting(true);
 
     try {
       // Check if current ticket is already saved (edit mode)
       const currentTicket = manageTickets[manageActiveIndex];
-      const isEditMode = currentTicket && currentTicket.isSaved && currentTicket.savedTicketId;
+      // const isEditMode = currentTicket && currentTicket.isSaved && currentTicket.savedTicketId;
 
       // Map category values
       const categoryMap: any = {
@@ -346,13 +374,31 @@ console.log(getCurrentTicketData("ticketCategory"), 'the is unlimited value is h
 
       let response;
 
-      if (isEditMode) {
+      if ( ticketValue && ticketValue!==undefined ) {
         // TODO: Call editTicket API when available
         // response = await editTicket(currentTicket.savedTicketId, ...ticketData);
-        console.log("Edit mode detected - would call editTicket API with ID:", currentTicket.savedTicketId);
+        // console.log("Edit mode detected - would call editTicket API with ID:", currentTicket.savedTicketId);
+        await editTicket(ticketValue.id,eventId,
+          ticketData.ticketName,
+          categoryMap[ticketData.ticketCategory] || ticketData.ticketCategory,
+          ticketData.ticketType.toLowerCase(),
+          ticketData.ticketType === "Paid" ? Number(ticketData.price) : 0,
+          Number(ticketData.purchaseLimit) || 1,
+          !ticketData.isUnlimited ? Number(ticketData.totalStock) : 0,
+          Number(ticketData.soldTarget) || 0,
+          ticketData.salesStart,
+          ticketData.salesEnd,
+          ticketData.startTime,
+          ticketData.endTime ,
+          Array.isArray(ticketData.perks) ? ticketData.perks.filter(perk => perk && perk.trim()) : [],
+          ticketData.isUnlimited,
+          Number(ticketData.groupSize),
+          ticketData.color)
+
+          navigate(-1)
         // For now, simulate success
-        response = { id: currentTicket.savedTicketId };
-        successAlert("Success","Ticket updated successfully!");
+        // response = { id: currentTicket.savedTicketId };
+        // successAlert("Success","Ticket updated successfully!");
       } else {
         // Create new ticket
         response = await createTicket(
@@ -366,8 +412,8 @@ console.log(getCurrentTicketData("ticketCategory"), 'the is unlimited value is h
           Number(ticketData.soldTarget) || 0,
           ticketData.salesStart,
           ticketData.salesEnd,
-          ticketData.startTime || "00:00",
-          ticketData.endTime || "23:59",
+          ticketData.startTime,
+          ticketData.endTime ,
           Array.isArray(ticketData.perks) ? ticketData.perks.filter(perk => perk && perk.trim()) : [],
           ticketData.isUnlimited,
           Number(ticketData.groupSize),
@@ -448,7 +494,15 @@ const validateForm = () => {
       delete (window as any).validateTicketsCreate;
     };
   }, [form[currentStage]]);
-
+  useEffect(() => {
+    console.log("Component mounted");
+    return () => {
+      console.log("Component will unmount");
+      if (isManageEventsContext) {
+        resetTicketStore(); // ✅ runs only when leaving the component
+      }
+    };
+  }, []);
 console.log(getValue("isUnlimited"),'checking ')
   return (
     <div className="grid gap-[2.5rem] mt-[20px]">
@@ -782,7 +836,7 @@ console.log(getValue("isUnlimited"),'checking ')
             onClick={isManageEventsContext ? handleManageEventsSubmit : undefined}
             isLoading={isManageEventsContext ? isSubmitting : false}
           >
-            {isManageEventsContext ? "Create Ticket" : "Save Ticket"}
+            {isManageEventsContext &&!ticketValue ? "Create Ticket" : "Save Ticket"}
           </DefaultButton>
         </div>
       )}

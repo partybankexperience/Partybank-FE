@@ -43,6 +43,7 @@ interface TicketStore {
   setError: (key: string, error: string) => void;
   clearError: (key: string) => void;
   clearAllErrors: () => void;
+  loadTicketsFromBackend: (fetchedTickets: TicketData[]) => void;
 }
 
 const emptyTicket = (): TicketData => ({
@@ -115,7 +116,14 @@ export const useTicketStore = create<TicketStore>()(
           currentTicketData: ticketToFormData(emptyTicket())
         }));
       },
-
+      loadTicketsFromBackend: (fetchedTickets: TicketData[]) => {
+        set({
+          tickets: fetchedTickets,
+          activeTicketIndex: 0,
+          currentTicketData: ticketToFormData(fetchedTickets[0] || emptyTicket())
+        });
+      }
+,      
       updateTicket: (ticketIndex, data) => {
         set(state => {
           const updatedTickets = [...state.tickets];
