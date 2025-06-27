@@ -18,7 +18,7 @@ export const apiCall = ({
     const theName = name as keyof typeof endPoints;
     // const userDetails: any = Storage?.getItem('user') || '{}';
     const token: any = Storage?.getItem("token") || "";
-    let headers: any = endPoints[theName]?.headers || {};
+    const headers: any = endPoints[theName]?.headers || {};
 
     if (endPoints[theName]?.auth) {
       headers["Authorization"] = `Bearer ${token}`;

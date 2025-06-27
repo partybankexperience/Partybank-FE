@@ -1,6 +1,6 @@
 import { apiCall } from "../utils/axiosFormat";
 
-const RegisterUser = async (email: String): Promise<any> => {
+const RegisterUser = async (email: string): Promise<any> => {
   const response = await apiCall({
     name: "signUp",
     data: {
@@ -10,7 +10,7 @@ const RegisterUser = async (email: String): Promise<any> => {
   });
   return response;
 };
-const Verifyotp = async (email: String, otp: String): Promise<any> => {
+const Verifyotp = async (email: string, otp: string): Promise<any> => {
   const response = await apiCall({
     name: "verifyOTP",
     data: {
@@ -24,8 +24,8 @@ const Verifyotp = async (email: String, otp: String): Promise<any> => {
 
 // setPassword
 const SetPassword = async (
-  confirmPassword: String,
-  password: String
+  confirmPassword: string,
+  password: string
 ): Promise<any> => {
   const response = await apiCall({
     name: "setPassword",
@@ -35,9 +35,9 @@ const SetPassword = async (
 };
 
 const SetProfile = async (
-  fullName: String,
-  businessName: String,
-  phone: String
+  fullName: string,
+  businessName: string,
+  phone: string
 ): Promise<any> => {
   const response = await apiCall({
     name: "setProfile",
@@ -46,7 +46,7 @@ const SetProfile = async (
   return response;
 };
 
-const SetPin = async (pin: String): Promise<any> => {
+const SetPin = async (pin: string): Promise<any> => {
   const response = await apiCall({
     name: "setPin",
     data: { pin },
@@ -54,10 +54,10 @@ const SetPin = async (pin: String): Promise<any> => {
   return response;
 };
 const CreateSeries = async (
-  name: String,
-  userId: String,
-  description: String,
-  coverImage: String
+  name: string,
+  userId: string,
+  description: string,
+  coverImage: string
 ): Promise<any> => {
   const response = await apiCall({
     name: "createSeries",
@@ -65,7 +65,7 @@ const CreateSeries = async (
   });
   return response;
 };
-const LoginUser = async (email: String, password: String): Promise<any> => {
+const LoginUser = async (email: string, password: string): Promise<any> => {
   const response = await apiCall({
     name: "login",
     data: { email, password },
@@ -86,28 +86,28 @@ const refreshToken = async (): Promise<any> => {
   });
   return response;
 };
-const forgotPassword = async (email:String): Promise<any> => {
+const forgotPassword = async (email:string): Promise<any> => {
   const response = await apiCall({
     name: "forgotPassword",
     data: {email},
   });
   return response;
 };
-const forgotPasswordConfirmOTP = async (email:String,otp:String): Promise<any> => {
+const forgotPasswordConfirmOTP = async (email:string,otp:string): Promise<any> => {
   const response = await apiCall({
     name: "forgotPasswordOTP",
     data: {email,otp},
   });
   return response;
 };
-const resetPassword = async (email:String,password:String,confirmPassword:String): Promise<any> => {
+const resetPassword = async (email:string,password:string,confirmPassword:string): Promise<any> => {
   const response = await apiCall({
     name: "resetPassword",
     data: {email,password,confirmPassword},
   });
   return response;
 };
-const resendOTP= async (email: String): Promise<any> => {
+const resendOTP= async (email: string): Promise<any> => {
   const response = await apiCall({
     name: "resendOTP",
     data: { email },
