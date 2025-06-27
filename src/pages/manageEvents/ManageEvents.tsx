@@ -52,7 +52,7 @@ async function handleDeleteEvent(eventId: string) {
         return events.filter((event: any) => event.timingStatus === "published");
       case "Upcoming":
         return events.filter((event: any) => event.timingStatus === "upcoming");
-      case "Past":
+      case "Archived":
         return events.filter((event: any) => event.timingStatus === "past");
       case "Drafts":
         return events.filter((event: any) => event.status === "draft");
@@ -66,7 +66,7 @@ async function handleDeleteEvent(eventId: string) {
   return (
     <div className="min-h-[80vh] bg-white rounded-md p-[1.3vw]">
       <Tabs
-        tabs={["Active", "Upcoming", "Past", "Drafts"]}
+        tabs={["Active", "Upcoming", "Archived", "Drafts"]}
         activeTab={activeTab}
         onTabChange={setActiveTab}
         className="w-[50%] justify-between md:justify-evenly md:w-fit"

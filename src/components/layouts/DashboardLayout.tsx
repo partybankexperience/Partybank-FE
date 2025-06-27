@@ -3,9 +3,9 @@ import DefaultButton from "../buttons/DefaultButton";
 import logo from "../../assets/images/logoWhite.svg";
 import { MdDashboard } from "react-icons/md";
 import { BiSolidCalendarStar } from "react-icons/bi";
-import { AiOutlineNotification } from "react-icons/ai";
-import { TbReportAnalytics } from "react-icons/tb";
-import { AiOutlineDollarCircle } from "react-icons/ai";
+// import { AiOutlineNotification } from "react-icons/ai";
+// import { TbReportAnalytics } from "react-icons/tb";
+// import { AiOutlineDollarCircle } from "react-icons/ai";
 import { VscBellDot } from "react-icons/vsc";
 import { HiOutlineBars3CenterLeft } from "react-icons/hi2";
 import { matchPath, useLocation, useNavigate } from "react-router";
@@ -43,17 +43,17 @@ const DashboardLayout = ({ children }: any) => {
       icon: <BiSolidCalendarStar />,
     },
     { name: "Manage Series", path: "/manageSeries", icon: <VscBellDot /> },
-    {
-      name: "Bulk Announcements",
-      path: "/bulkAnnouncements",
-      icon: <AiOutlineNotification />,
-    },
-    { name: "Reports", path: "/reports", icon: <TbReportAnalytics /> },
-    {
-      name: "Payout Management",
-      path: "/payoutManagement",
-      icon: <AiOutlineDollarCircle />,
-    },
+    // {
+    //   name: "Bulk Announcements",
+    //   path: "/bulkAnnouncements",
+    //   icon: <AiOutlineNotification />,
+    // },
+    // { name: "Reports", path: "/reports", icon: <TbReportAnalytics /> },
+    // {
+    //   name: "Payout Management",
+    //   path: "/payoutManagement",
+    //   icon: <AiOutlineDollarCircle />,
+    // },
   ];
   const getPageTitle = () => {
     if (section) return section; 
@@ -230,7 +230,7 @@ const DashboardLayout = ({ children }: any) => {
             <HiOutlineBars3CenterLeft />
           </button>
           <div className={`gap-[10px] md:gap-[20px] items-center flex-shrink-0 ${showBackButton ? "hidden md:flex" : "flex"}`}>
-            <NotificationDropdown />
+            {/* <NotificationDropdown /> */}
 
             <div className="hidden lg:block">
               <ProfileDropdown />
