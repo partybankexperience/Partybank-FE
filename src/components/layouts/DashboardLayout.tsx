@@ -14,10 +14,11 @@ import { ToastContainer } from "react-toastify";
 import { useProfileSectionStore } from "../../stores/useProfileStore";
 import { useState } from "react";
 import { SidebarModal } from "../modal/SidebarModal";
-import NotificationDropdown from "../notifications/NotificationDropdown";
+// import NotificationDropdown from "../notifications/NotificationDropdown";
 import ProfileDropdown from "../dropdowns/ProfileDropdown";
 import { Storage } from "../../stores/InAppStorage";
 import { RiLogoutCircleRLine, RiSettings3Line } from "react-icons/ri";
+import PrivateRoute from "../../utils/privateRoute";
 
 const DashboardLayout = ({ children }: any) => {
   const navigate = useNavigate();
@@ -88,7 +89,7 @@ const DashboardLayout = ({ children }: any) => {
   };
 
   return (
-    // <PrivateRoute>
+    <PrivateRoute>
 
     <div className="flex h-full min-h-screen w-full ">
       <ToastContainer/>
@@ -258,7 +259,7 @@ const DashboardLayout = ({ children }: any) => {
         <main className="bg-[#f8f9f9] flex-grow p-[4vw] md:p-[2vw] pt-[7.5rem] md:pt-[1.5rem] md:mt-[5rem] min-h-[90vh] max-w-full overflow-x-hidden">{children}</main>
       </div>
     </div>
-    // </PrivateRoute>
+     </PrivateRoute>
   );
 };
 

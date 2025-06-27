@@ -64,7 +64,7 @@ const DefaultInput = forwardRef<HTMLInputElement, DefaultInputProps>(
   const [error, setError] = useState<string | null>(null);
   const [touched, setTouched] = useState(false);
   // const internalRef = useRef<HTMLInputElement>(null);
-  const inputType = type === "password" && showPassword ? "text" : type;
+  const inputType = type === "password" && showPassword ? "text" : type==='number'?'tel':type;
   const stringValue = String(value || '');
   const isFilled = stringValue.trim().length > 0;
   const hasError = !!error;
@@ -173,33 +173,46 @@ const DefaultInput = forwardRef<HTMLInputElement, DefaultInputProps>(
 </div>
 ) : (
   <input
-    id={id}
-    type={inputType}
-    placeholder={placeholder}
-    disabled={disabled}
-    value={value}
-    onChange={(e) => setValue(e.target.value)}
-    onBlur={(e) => handleBlur(e as any)}
-    aria-describedby={`${id}-helper`}
-    aria-invalid={hasError}
-    className={`${baseStyle} ${paddingLeft} ${paddingRight} ${style}`}
-    onKeyDown={onKeyDown}
-    min={
-      type === "date"
-        ? min || new Date().toISOString().split("T")[0]
-        : type === "number"
-        ? "0"
-        : undefined
+  id={id}
+  type={inputType}
+  placeholder={placeholder}
+  disabled={disabled}
+  value={value}
+  onChange={(e) => {
+    if (type === "number") {
+      const cleaned = e.target.value.replace(/[^0-9]/g, "");
+      const numericValue = cleaned === "" ? "" : Number(cleaned);
+      setValue(numericValue);
+    } else {
+      setValue(e.target.value);
     }
-    ref={ref}
-    onInput={(e) => {
-      // Additional safeguard for number inputs
-      if (type === "number" && e.currentTarget.value !== "" && parseFloat(e.currentTarget.value) < 0) {
-        e.currentTarget.value = "0";
-        setValue("0");
+  }}
+  onBlur={(e) => handleBlur(e as any)}
+  aria-describedby={`${id}-helper`}
+  aria-invalid={hasError}
+  className={`${baseStyle} ${paddingLeft} ${paddingRight} ${style}`}
+  pattern={type === "number" ? "[0-9]*" : undefined}
+  autoComplete={type === "password" ? "current-password" : "off"}
+  inputMode={type === "number" ? "numeric" : undefined}
+  onKeyDown={(e) => {
+    if (type === "number") {
+      if (["ArrowUp", "ArrowDown", "e", "E", "+", "-", "."].includes(e.key)) {
+        e.preventDefault();
       }
-    }}
-  />
+    }
+    if (onKeyDown) onKeyDown(e);
+  }}
+  min={
+    type === "date"
+      ? min || new Date().toISOString().split("T")[0]
+      : undefined
+  }
+  ref={ref}
+/>
+
+
+
+  
 )}
         <div className={`absolute ${showDropdown?'right-9':'right-3'}  top-1/2 -translate-y-1/2 flex items-center gap-2`}>
           {hasError || externalErrorMessage&& (

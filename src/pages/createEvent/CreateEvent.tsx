@@ -269,7 +269,9 @@ setIsCreatingEvent(true);
             setError(stage, "ticketCategory", "Ticket category is required");
             isValid = false;
           }
-          if (!currentTicket.totalStock && currentTicket.isUnlimited===false || currentTicket.isUnlimited === "") {
+          console.log(currentTicket.isUnlimited, 'isUnlimited value');
+          if (!currentTicket.totalStock && (currentTicket.isUnlimited === false || currentTicket.isUnlimited === "")
+          ) {
             setError(stage, "totalStock", "Total stock is required for limited tickets");
             isValid = false;
           }
