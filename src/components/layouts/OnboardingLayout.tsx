@@ -13,7 +13,7 @@ const steps = [
   { path: "passwordSetup", label: "Password Setup" },
   { path: "profileInformation", label: "Profile Information" },
   { path: "pinSetup", label: "PIN Setup" },
-  { path: "createEventSeries", label: "Create Event" },
+  { path: "createEventSeries", label: "Create Series" },
 ];
 
 const OnboardingLayout = ({ children }: { children: React.ReactNode }) => {

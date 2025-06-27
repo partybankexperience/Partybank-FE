@@ -129,14 +129,14 @@ useEffect(() => {
           
         </div>
           {/* Series Cards or Skeleton */}
-          <div className="flex flex-wrap gap-[20px] md:gap-[40px] justify-center m-auto overflow-auto md:max-h-[40vh]">
+          <div className="flex flex-col md:flex-row md:flex-wrap gap-[20px] md:gap-[40px] justify-center m-auto overflow-auto md:max-h-[40vh]">
   {/* Create New Series Card */}
-  <div className="md:w-[20vw]">
+  <div className="md:w-[20vw] w-[90vw]  md:h-[17.5rem]">
     <div
       className="bg-white rounded-[15px] p-[20px] flex flex-col items-center justify-center w-full text-center h-full border-2 border-dotted border-primary cursor-pointer hover:shadow-[0px_4px_20px_rgba(0,0,0,0.1)] transition-all duration-300"
       onClick={() => setIsCreateSeriesModalOpen(true)}
     >
-      <FaPlus className="text-primary text-[40px] mb-2" />
+      <FaPlus className="text-primary text-[2rem] mb-2" />
       <p className="text-[18px] font-medium text-black">Create New Series</p>
     </div>
   </div>
