@@ -1,27 +1,27 @@
-import ticket from "../../../assets/images/ticket.svg";
-import DefaultButton from "../../../components/buttons/DefaultButton";
-import { LuPencilLine } from "react-icons/lu";
-import { GrLocation } from "react-icons/gr";
-import { MdOutlineCalendarMonth } from "react-icons/md";
-import { FaRegClock } from "react-icons/fa6";
-import { FaPlus } from "react-icons/fa6";
+import ticket from '../../../assets/images/ticket.svg';
+import DefaultButton from '../../../components/buttons/DefaultButton';
+import { LuPencilLine } from 'react-icons/lu';
+import { GrLocation } from 'react-icons/gr';
+import { MdOutlineCalendarMonth } from 'react-icons/md';
+import { FaRegClock } from 'react-icons/fa6';
+import { FaPlus } from 'react-icons/fa6';
 // import { FiCopy } from "react-icons/fi";
-import { AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineDelete } from 'react-icons/ai';
 // import { RiInboxArchiveLine } from "react-icons/ri";
 // import { FaShare } from "react-icons/fa";
-import TicketsCard from "../../../components/cards/TicketCard";
-import { useNavigate, useParams, useLocation } from "react-router";
-import { getEventsBySlug } from "../../../Containers/eventApi";
-import { useEffect, useState } from "react";
-import { formatDate, formatTimeRange } from "../../../components/helpers/dateTimeHelpers";
-import { useEventStore } from "../../../stores/useEventStore";
-import { Storage } from "../../../stores/InAppStorage";
-import { successAlert } from "../../../components/alerts/ToastService";
-import { deleteTicket } from "../../../Containers/ticketApi";
+import TicketsCard from '../../../components/cards/TicketCard';
+import { useNavigate, useParams, useLocation } from 'react-router';
+import { getEventsBySlug } from '../../../Containers/eventApi';
+import { useEffect, useState } from 'react';
+import { formatDate, formatTimeRange } from '../../../components/helpers/dateTimeHelpers';
+import { useEventStore } from '../../../stores/useEventStore';
+import { Storage } from '../../../stores/InAppStorage';
+import { successAlert } from '../../../components/alerts/ToastService';
+import { deleteTicket } from '../../../Containers/ticketApi';
 
 const Overview = () => {
-  const navigate=useNavigate()
-  const {slug}=useParams()
+  const navigate = useNavigate();
+  const { slug } = useParams();
   const location = useLocation();
   const [eventData, setEventData] = useState<any>(null);
   const [tickets, setTickets] = useState([]);
@@ -31,28 +31,30 @@ const Overview = () => {
   useEffect(() => {
     if (location.state === 'Success') {
       // Show toast, alert, or banner
-      successAlert("Success", "Event created successfully!");
+      successAlert('Success', 'Event created successfully!');
       // e.g., toast.success("Event created successfully!");
     }
   }, [location.state]);
   // Get ID from navigate state
   const eventId = location.state?.id;
-  
+
   const getLocationData = () => {
     if (!eventData) return [];
 
     return [
-      { 
-        icon: <GrLocation className="text-primary" />, 
-        name: eventData.venueName || eventData.location || "Location TBD" 
+      {
+        icon: <GrLocation className="text-primary" />,
+        name: eventData.venueName || eventData.location || 'Location TBD',
       },
       {
         icon: <MdOutlineCalendarMonth className="text-primary" />,
-        name: eventData.startDate ? formatDate(eventData.startDate) : "Date TBD",
+        name: eventData.startDate ? formatDate(eventData.startDate) : 'Date TBD',
       },
       {
         icon: <FaRegClock className="text-primary" />,
-        name: eventData.startTime ? formatTimeRange(eventData.startTime, eventData.endTime) : "Time TBD",
+        name: eventData.startTime
+          ? formatTimeRange(eventData.startTime, eventData.endTime)
+          : 'Time TBD',
       },
     ];
   };
@@ -61,11 +63,14 @@ const Overview = () => {
     if (!eventData) return [];
 
     return [
-      { label: "Category", value: eventData.category || "N/A" },
-      { label: "Tags", value: Array.isArray(eventData.tags) ? eventData.tags.join(", ") : (eventData.tags || "N/A") },
-      { label: "Series", value: eventData.seriesName || "N/A" },
-      { label: "Status", value: eventData.status || "N/A" },
-      { label: "Visibility", value: eventData.visibility || "N/A" },
+      { label: 'Category', value: eventData.category || 'N/A' },
+      {
+        label: 'Tags',
+        value: Array.isArray(eventData.tags) ? eventData.tags.join(', ') : eventData.tags || 'N/A',
+      },
+      { label: 'Series', value: eventData.seriesName || 'N/A' },
+      { label: 'Status', value: eventData.status || 'N/A' },
+      { label: 'Visibility', value: eventData.visibility || 'N/A' },
     ];
   };
 
@@ -73,11 +78,11 @@ const Overview = () => {
     if (!eventData) return [];
 
     return [
-      { label: "Start Date", value: eventData.startDate ? formatDate(eventData.startDate) : "N/A" },
-      { label: "End Date", value: eventData.endDate ? formatDate(eventData.endDate) : "N/A" },
-      { label: "Start Time", value: eventData.startTime || "N/A" },
-      { label: "End Time", value: eventData.endTime || "N/A" },
-      { label: "Venue", value: eventData.venueName || eventData.location || "N/A" },
+      { label: 'Start Date', value: eventData.startDate ? formatDate(eventData.startDate) : 'N/A' },
+      { label: 'End Date', value: eventData.endDate ? formatDate(eventData.endDate) : 'N/A' },
+      { label: 'Start Time', value: eventData.startTime || 'N/A' },
+      { label: 'End Time', value: eventData.endTime || 'N/A' },
+      { label: 'Venue', value: eventData.venueName || eventData.location || 'N/A' },
     ];
   };
 
@@ -85,10 +90,13 @@ const Overview = () => {
     if (!eventData) return [];
 
     return [
-      { label: "Min Age", value: eventData.minAge ? `${eventData.minAge} years` : "No restriction" },
-      { label: "Wheelchair Accessible", value: eventData.wheelchairAccessible ? "Yes" : "No" },
-      { label: "Parking Available", value: eventData.parkingAvailable ? "Yes" : "No" },
-      { label: "Attendees Cover Fees", value: eventData.attendeesCoverFees ? "Yes" : "No" },
+      {
+        label: 'Min Age',
+        value: eventData.minAge ? `${eventData.minAge} years` : 'No restriction',
+      },
+      { label: 'Wheelchair Accessible', value: eventData.wheelchairAccessible ? 'Yes' : 'No' },
+      { label: 'Parking Available', value: eventData.parkingAvailable ? 'Yes' : 'No' },
+      { label: 'Attendees Cover Fees', value: eventData.attendeesCoverFees ? 'Yes' : 'No' },
     ];
   };
 
@@ -96,11 +104,11 @@ const Overview = () => {
   //   if (!eventData) return;
 
   //   setShareLoading(true);
-    
+
   //   try {
   //     // Create the event URL (you can modify this based on your event public URL structure)
   //     const eventUrl = `${window.location.origin}/event/${eventData.slug || eventData.id}`;
-      
+
   //     // Try to use the Web Share API first (for mobile devices)
   //     if (navigator.share) {
   //       await navigator.share({
@@ -111,10 +119,10 @@ const Overview = () => {
   //     } else {
   //       // Fallback to copying to clipboard
   //       await navigator.clipboard.writeText(eventUrl);
-        
+
   //       // You can add a toast notification here
   //       console.log('Event URL copied to clipboard!');
-        
+
   //       // Optional: Show a temporary feedback
   //       const shareButton = document.querySelector('[data-share-button]');
   //       const originalText = shareButton?.textContent ?? "";
@@ -145,18 +153,19 @@ const Overview = () => {
       // Call the API to delete the ticket
       await deleteTicket(ticketId);
       // After successful deletion, refresh the tickets list
-      setTickets((prevTickets) => prevTickets.filter((ticket:any) => ticket?.id !== ticketId));
+      setTickets((prevTickets) => prevTickets.filter((ticket: any) => ticket?.id !== ticketId));
     } catch (error) {
-      console.error("Error deleting ticket:", error);
+      console.error('Error deleting ticket:', error);
       // Optionally, show an error message to the user
     } finally {
       setLoading(false);
     }
   }
-  const buttonOptions  = (ticketId: string,ticketValue?:any,eventId?:any) => [
+  const buttonOptions = (ticketId: string, ticketValue?: any, eventId?: any) => [
     {
-      name: "Edit",
-      onClick: () => ( navigate(`/manageEvents/${slug}/createTicket`, { state: { id: eventId, ticketValue } }) ),
+      name: 'Edit',
+      onClick: () =>
+        navigate(`/manageEvents/${slug}/createTicket`, { state: { id: eventId, ticketValue } }),
       icon: <LuPencilLine />,
     },
     // {
@@ -165,7 +174,7 @@ const Overview = () => {
     //   icon: <FiCopy />,
     // },
     {
-      name: "Delete",
+      name: 'Delete',
       onClick: () => handleDeleteTicket(ticketId),
       icon: <AiOutlineDelete />,
     },
@@ -175,7 +184,6 @@ const Overview = () => {
     //   icon: <RiInboxArchiveLine />,
     // },
   ];
-
 
   useEffect(() => {
     let isMounted = true;
@@ -189,7 +197,7 @@ const Overview = () => {
 
         setEventData(res);
 
-        Storage.setItem("eventId", res.id);
+        Storage.setItem('eventId', res.id);
 
         // Prefill form data using the store method
         prefillEventData(res);
@@ -202,7 +210,7 @@ const Overview = () => {
 
         // //   // Navigate to create event page
         // //   navigate('/dashboard/createEvent');
-          
+
         // }
 
         // Extract tickets from the response
@@ -227,7 +235,7 @@ const Overview = () => {
     return () => {
       isMounted = false;
     };
-  }, [eventId])
+  }, [eventId]);
 
   if (loading) {
     return (
@@ -255,6 +263,7 @@ const Overview = () => {
   const eventDetails = getEventDetails();
   const scheduleLocationDetails = getScheduleLocationDetails();
   const accessibilityDetails = getAccessibilityDetails();
+  const isNotEditable = eventData.timingStatus === 'past';
 
   return (
     <div className="grid">
@@ -270,9 +279,10 @@ const Overview = () => {
         <div className="grid gap-[20px] h-fit md:max-h-[60vh] md:overflow-y-auto">
           <div className="pb-[20px] grid gap-[20px] border-b border-b-[#EDEDED]">
             <div className="flex items-center justify-between h-fit">
-              <h2 className="text-[1.3rem] font-bold">{eventData.name || "Untitled Event"}</h2>
-              <div className="flex gap-2">
-                {/* <DefaultButton
+              <h2 className="text-[1.3rem] font-bold">{eventData.name || 'Untitled Event'}</h2>
+              {!isNotEditable && (
+                <div className="flex gap-2">
+                  {/* <DefaultButton
                   variant="tertiary"
                   type="icon-left"
                   className="!w-fit border"
@@ -282,26 +292,24 @@ const Overview = () => {
                 >
                   <span data-share-button>Share</span>
                 </DefaultButton> */}
-                <DefaultButton
-                  variant="tertiary"
-                  type="icon-left"
-                  className="!w-fit border"
-                  icon={<LuPencilLine className="text-primary" />}
-                  onClick={()=>navigate('/dashboard/createEvent')}
-                >
-                  Edit
-                </DefaultButton>
-              </div>
+                  <DefaultButton
+                    variant="tertiary"
+                    type="icon-left"
+                    className="!w-fit border"
+                    icon={<LuPencilLine className="text-primary" />}
+                    onClick={() => navigate('/dashboard/createEvent')}
+                  >
+                    Edit
+                  </DefaultButton>
+                </div>
+              )}
             </div>
             <p className="text-lightGrey text-[1rem]">
-              {eventData.description || "No description available"}
+              {eventData.description || 'No description available'}
             </p>
             <div className="flex flex-col md:flex-row gap-[16px] text-[1rem]">
               {locationData.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-1 text-black "
-                >
+                <div key={index} className="flex items-center gap-1 text-black ">
                   {item.icon}
                   <p>{item.name}</p>
                 </div>
@@ -311,26 +319,35 @@ const Overview = () => {
           <div className="pb-[20px] grid gap-[20px] border-b border-b-[#EDEDED]">
             <div className="flex items-center justify-between h-fit">
               <h3 className="text-[1.3rem] ">Tickets</h3>
-              <DefaultButton
-                variant="tertiary"
-                type="icon-left"
-                className="!w-fit border"
-                icon={<FaPlus className="text-primary" />}
-                onClick={() => {navigate(`/manageEvents/${slug}/createTicket`, { state: { id: eventId } })}}
-              >
-                Create Ticket
-              </DefaultButton>
+              {!isNotEditable && (
+                <DefaultButton
+                  variant="tertiary"
+                  type="icon-left"
+                  className="!w-fit border"
+                  icon={<FaPlus className="text-primary" />}
+                  onClick={() => {
+                    navigate(`/manageEvents/${slug}/createTicket`, { state: { id: eventId } });
+                  }}
+                >
+                  Create Ticket
+                </DefaultButton>
+              )}
             </div>
             <div className="flex gap-[20px] overflow-x-auto">
               {tickets.length > 0 ? (
                 tickets.map((ticket: any, index: number) => (
                   <TicketsCard
                     key={ticket.id || index}
-                    title={ticket.name || "Unnamed Ticket"}
-                    availability={ticket.isSoldOut ? "Sold Out" : ticket.stock > 0 ? "Available" : "Limited"}
-                    capacity={ticket.stock?.toString() || "N/A"}
-                    price={ticket.type === "free" ? "Free" : `₦${ticket.price?.toLocaleString() || "0"}`}
-                    buttonOptions={buttonOptions(ticket.id,ticket,eventId)}
+                    title={ticket.name || 'Unnamed Ticket'}
+                    availability={
+                      ticket.isSoldOut ? 'Sold Out' : ticket.stock > 0 ? 'Available' : 'Limited'
+                    }
+                    capacity={ticket.stock?.toString() || 'N/A'}
+                    price={
+                      ticket.type === 'free' ? 'Free' : `₦${ticket.price?.toLocaleString() || '0'}`
+                    }
+                    buttonOptions={buttonOptions(ticket.id, ticket, eventId)}
+                    isNotEditable={isNotEditable}
                   />
                 ))
               ) : (
@@ -342,15 +359,13 @@ const Overview = () => {
             </div>
           </div>
           <div className="p-[1.25rem] border border-[#EDEDED] rounded-lg">
-            <h5 className="text-[1.25rem] font-bold text-black mb-[1rem]">
-              Event Setup:
-            </h5>
+            <h5 className="text-[1.25rem] font-bold text-black mb-[1rem]">Event Setup:</h5>
             <div>
               {eventDetails.map((item, idx) => (
                 <div
                   key={idx}
                   className={`flex justify-between text-[1rem] ${
-                    idx !== eventDetails.length - 1 ? "mb-[0.75rem]" : ""
+                    idx !== eventDetails.length - 1 ? 'mb-[0.75rem]' : ''
                   }`}
                 >
                   <p className="text-[#979595]">{item.label}:</p>
@@ -359,14 +374,14 @@ const Overview = () => {
               ))}
             </div>
             <h5 className="text-[1.25rem] font-bold text-black mt-[25px] mb-[1rem]">
-            Schedule & Location :
+              Schedule & Location :
             </h5>
             <div>
               {scheduleLocationDetails.map((item, idx) => (
                 <div
                   key={idx}
                   className={`flex justify-between text-[1rem] ${
-                    idx !== scheduleLocationDetails.length - 1 ? "mb-[0.75rem]" : ""
+                    idx !== scheduleLocationDetails.length - 1 ? 'mb-[0.75rem]' : ''
                   }`}
                 >
                   <p className="text-[#979595]">{item.label}:</p>
@@ -375,14 +390,14 @@ const Overview = () => {
               ))}
             </div>
             <h5 className="text-[1.25rem] font-bold text-black mt-[25px] mb-[1rem]">
-            Accessibility :
+              Accessibility :
             </h5>
             <div>
               {accessibilityDetails.map((item, idx) => (
                 <div
                   key={idx}
                   className={`flex justify-between text-[1rem] ${
-                    idx !== accessibilityDetails.length - 1 ? "mb-[0.75rem]" : ""
+                    idx !== accessibilityDetails.length - 1 ? 'mb-[0.75rem]' : ''
                   }`}
                 >
                   <p className="text-[#979595]">{item.label}:</p>
