@@ -224,7 +224,12 @@ const Dashboard = () => {
                 />
               ))
             ) : (
-              <div className="col-span-full text-center text-grey400">No events found.</div>
+              <div className="flex flex-col items-center justify-center col-span-full h-full text-center p-4">
+                <h3 className="text-lg font-medium text-gray-800">No events found.</h3>
+                <p className="text-sm text-gray-500 mt-2">
+                  You currently have no events. Start by creating a new event to see it listed here.
+                </p>
+              </div>
             )}
           </div>
         </section>
