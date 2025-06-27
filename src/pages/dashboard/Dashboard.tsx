@@ -10,10 +10,11 @@ import EventCard from "../../components/cards/EventCard";
 import { IoIosArrowForward } from "react-icons/io";
 import { useNavigate } from "react-router";
 import { BiSolidCalendarStar } from "react-icons/bi";
-import { FaDollarSign } from "react-icons/fa";
 import { RiPuzzle2Fill } from "react-icons/ri";
 import { getEvents } from "../../Containers/eventApi";
 import { EventCardSkeleton } from "../../components/common/LoadingSkeleton";
+import { getDashboardOverview } from "../../Containers/dashboardApi";
+import { FaNairaSign } from "react-icons/fa6";
 
 interface Sale {
   image: string;
@@ -22,12 +23,29 @@ interface Sale {
   event: string;
 }
 
+interface Overview {
+  totalEvents: number;
+  totalBuyers: number;
+  totalTicketsPurchased: number;
+  totalSalesAfterDeductions: number;
+}
+
 const Dashboard = () => {
   const [selectedOption, setSelectedOption] = useState("Yearly");
   const [selectedSaleOption, setSelectedSaleOption] = useState("Sales");
+  const [overview, setOverview] = useState<Overview | null>(null);
   const [events, setEvents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate=useNavigate()
+
+  const fetchOverview = async () => {
+    try {
+      const data = await getDashboardOverview();
+      setOverview(data);
+    } catch (err) {
+      console.error("Overview fetch error:", err);
+    }
+  };
 
   const fetchEvents = async () => {
     try {
@@ -44,6 +62,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+    fetchOverview();
     fetchEvents();
   }, []);
 
@@ -93,24 +112,28 @@ const Dashboard = () => {
       <div className="grid gap-[30px] h-full">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-[30px] h-fit">
           <Card
-            title="248"
+            title={overview?.totalBuyers.toString() || "0"}
             text="Total Buyers"
             icon={<BsPeopleFill className="text-[1.2rem] text-primary" />}
           />
           <Card
-            title="248"
+            title={overview?.totalTicketsPurchased.toString() || "0"}
             text="Total Ticket Purchase"
             icon={<RiPuzzle2Fill className="text-[1.2rem] text-primary" />}
           />
           <Card
-            title="248"
+            title={overview?.totalEvents.toString() || "0"}
             text="Total Events"
             icon={<BiSolidCalendarStar className="text-[1.2rem] text-primary" />}
           />
           <Card
-            title="248"
+            title={
+              overview
+                ? `₦${overview.totalSalesAfterDeductions.toLocaleString()}`
+                : "₦0"
+            }
             text="Total Sales"
-            icon={<FaDollarSign className="text-[1.2rem] text-primary" />}
+            icon={<FaNairaSign className="text-[1.2rem] text-primary" />}
           />
         </div>
 

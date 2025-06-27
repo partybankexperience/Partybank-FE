@@ -50,6 +50,7 @@ export type endPointlistTypes = {
     getEventsBySlug: endpointTypes;
     getSeriesBySlug: endpointTypes;
     resendOTP: endpointTypes;
+    getDashboardOverview: endpointTypes;
 };
 
 export type urlPropTypes = {
