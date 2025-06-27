@@ -115,6 +115,7 @@ export const endPoints: endPointlistTypes = {
         headers,
         auth: true,
     },
+    
     //Events
     createEvent: {
         url: "/events",
@@ -226,6 +227,14 @@ export const endPoints: endPointlistTypes = {
     },
     getSeriesBySlug: {
         url: "/series/slug",
+        method: "GET",
+        headers,
+        auth: true,
+    },
+
+    // Dashboard
+    getDashboardOverview: {
+        url: "/dashboard/overview",
         method: "GET",
         headers,
         auth: true,

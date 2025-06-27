@@ -1,6 +1,6 @@
 import { apiCall } from "../utils/axiosFormat";
 
-const createSeries = async (name: String, userId: String, description: String, coverImage: String): Promise<any> => {
+const createSeries = async (name: string, userId: string, description: string, coverImage: string): Promise<any> => {
   const payload = {
     name: name as string,
     userId: userId as string,
@@ -21,14 +21,14 @@ const getSeries =async (): Promise<any> =>{
   });
   return response;
 }
-const getSeriesById =async (id: String): Promise<any> =>{
+const getSeriesById =async (id: string): Promise<any> =>{
   const response = await apiCall({
     name: "getSeriesById",
     urlExtra: `/${id}`
   });
   return response;
 }
-const updateSeries = async (id: String, name: String, description: String, coverImage: String): Promise<any> => {
+const updateSeries = async (id: string, name: string, description: string, coverImage: string): Promise<any> => {
   const payload = {
     name: name as string,
     description: description as string,
@@ -42,13 +42,13 @@ const updateSeries = async (id: String, name: String, description: String, cover
   });
   return response;
 }
-const deleteSeries =async (id: String): Promise<any> =>{
+const deleteSeries =async (id: string): Promise<any> =>{
   const response = await apiCall({
     name: "deleteSeries",
     urlExtra: `/${id}`
   });  return response;
 }
-const getSeriesBySlug = async (slug: String): Promise<any> => {
+const getSeriesBySlug = async (slug: string): Promise<any> => {
   const response = await apiCall({
     name: "getSeriesBySlug",
     urlExtra: `/${slug}`

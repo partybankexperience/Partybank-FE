@@ -138,7 +138,7 @@ const deleteEvent = async (id: string): Promise<any> => {
   return response;
 };
 
-const duplicateEvent = async (id: string,includeTicket:Boolean,includeTags:Boolean,name:string): Promise<any> => {
+const duplicateEvent = async (id: string,includeTicket:boolean,includeTags:boolean,name:string): Promise<any> => {
   const response = await apiCall({
     name: "duplicateEvent",
     urlExtra: `/${id}/duplicate`,
