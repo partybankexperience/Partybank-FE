@@ -26,7 +26,7 @@ const OnboardingLayout = ({ children }: { children: React.ReactNode }) => {
   const check=async () => {
 
     const user = Storage.getItem("user");
-    if (stepParam !== "email-verification" && !user?.onboardingStep) {
+    if (stepParam !== "emailVerification" && !user?.onboardingStep) {
       if (!hasReset.current) {
         console.log("email step - reset and redirect");
         hasReset.current = true;
