@@ -136,7 +136,7 @@ const Dashboard = () => {
         <div className="grid lg:grid-cols-[2.5fr_1fr] gap-8">
           <section className="bg-white rounded-[15px] p-6" aria-label="Sales">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold text-black" id="Sales">
+              <h2 className="text-lg font-medium text-black" id="Sales">
                 Sales Revenue
               </h2>
               <div className="flex items-center gap-3">
@@ -161,7 +161,7 @@ const Dashboard = () => {
             aria-label="recentSales"
             className="bg-white rounded-[15px] p-6 md:min-w-[400px] h-fit"
           >
-            <h2 className="text-lg font-semibold text-black mb-4" id="recentSales">
+            <h2 className="text-lg font-medium text-black mb-4" id="recentSales">
               Recent Sales
             </h2>
             <div className="grid gap-3 h-[300px] overflow-y-auto">
@@ -188,9 +188,9 @@ const Dashboard = () => {
           </section>
         </div>
 
-        <section aria-label="myEvents" className="min-h-[30vh] bg-white rounded-md p-[1vw]">
+        <section aria-label="myEvents" className="min-h-[30vh] p-6 bg-white rounded-md">
           <div className="flex justify-between">
-            <h2 id="myEvents" className="text-[22px] text-black font-medium">
+            <h2 id="myEvents" className="text-lg text-black font-medium">
               My Events
             </h2>
             <button
