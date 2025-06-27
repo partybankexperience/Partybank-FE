@@ -8,7 +8,7 @@ import { FaPlus } from "react-icons/fa6";
 // import { FiCopy } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
 // import { RiInboxArchiveLine } from "react-icons/ri";
-import { FaShare } from "react-icons/fa";
+// import { FaShare } from "react-icons/fa";
 import TicketsCard from "../../../components/cards/TicketCard";
 import { useNavigate, useParams, useLocation } from "react-router";
 import { getEventsBySlug } from "../../../Containers/eventApi";
@@ -26,7 +26,7 @@ const Overview = () => {
   const [eventData, setEventData] = useState<any>(null);
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [shareLoading, setShareLoading] = useState(false);
+  // const [shareLoading, setShareLoading] = useState(false);
   const { setStage, prefillEventData, mapBackendStepToFrontend } = useEventStore();
   useEffect(() => {
     if (location.state === 'Success') {
@@ -92,53 +92,53 @@ const Overview = () => {
     ];
   };
 
-  const handleShare = async () => {
-    if (!eventData) return;
+  // const handleShare = async () => {
+  //   if (!eventData) return;
 
-    setShareLoading(true);
+  //   setShareLoading(true);
     
-    try {
-      // Create the event URL (you can modify this based on your event public URL structure)
-      const eventUrl = `${window.location.origin}/event/${eventData.slug || eventData.id}`;
+  //   try {
+  //     // Create the event URL (you can modify this based on your event public URL structure)
+  //     const eventUrl = `${window.location.origin}/event/${eventData.slug || eventData.id}`;
       
-      // Try to use the Web Share API first (for mobile devices)
-      if (navigator.share) {
-        await navigator.share({
-          title: eventData.name,
-          text: `Check out this event: ${eventData.name}`,
-          url: eventUrl,
-        });
-      } else {
-        // Fallback to copying to clipboard
-        await navigator.clipboard.writeText(eventUrl);
+  //     // Try to use the Web Share API first (for mobile devices)
+  //     if (navigator.share) {
+  //       await navigator.share({
+  //         title: eventData.name,
+  //         text: `Check out this event: ${eventData.name}`,
+  //         url: eventUrl,
+  //       });
+  //     } else {
+  //       // Fallback to copying to clipboard
+  //       await navigator.clipboard.writeText(eventUrl);
         
-        // You can add a toast notification here
-        console.log('Event URL copied to clipboard!');
+  //       // You can add a toast notification here
+  //       console.log('Event URL copied to clipboard!');
         
-        // Optional: Show a temporary feedback
-        const shareButton = document.querySelector('[data-share-button]');
-        const originalText = shareButton?.textContent ?? "";
-        if (shareButton) {
-          shareButton.textContent = 'Copied!';
-          setTimeout(() => {
-            shareButton.textContent = originalText;
-          }, 2000);
-        }
-      }
-    } catch (error) {
-      console.error('Error sharing:', error);
-      // Fallback: just copy the URL
-      try {
-        const eventUrl = `${window.location.origin}/event/${eventData.slug || eventData.id}`;
-        await navigator.clipboard.writeText(eventUrl);
-        console.log('Event URL copied to clipboard!');
-      } catch (clipboardError) {
-        console.error('Failed to copy to clipboard:', clipboardError);
-      }
-    } finally {
-      setShareLoading(false);
-    }
-  };
+  //       // Optional: Show a temporary feedback
+  //       const shareButton = document.querySelector('[data-share-button]');
+  //       const originalText = shareButton?.textContent ?? "";
+  //       if (shareButton) {
+  //         shareButton.textContent = 'Copied!';
+  //         setTimeout(() => {
+  //           shareButton.textContent = originalText;
+  //         }, 2000);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('Error sharing:', error);
+  //     // Fallback: just copy the URL
+  //     try {
+  //       const eventUrl = `${window.location.origin}/event/${eventData.slug || eventData.id}`;
+  //       await navigator.clipboard.writeText(eventUrl);
+  //       console.log('Event URL copied to clipboard!');
+  //     } catch (clipboardError) {
+  //       console.error('Failed to copy to clipboard:', clipboardError);
+  //     }
+  //   } finally {
+  //     setShareLoading(false);
+  //   }
+  // };
   async function handleDeleteTicket(ticketId: string) {
     try {
       setLoading(true);
@@ -272,7 +272,7 @@ const Overview = () => {
             <div className="flex items-center justify-between h-fit">
               <h2 className="text-[1.3rem] font-bold">{eventData.name || "Untitled Event"}</h2>
               <div className="flex gap-2">
-                <DefaultButton
+                {/* <DefaultButton
                   variant="tertiary"
                   type="icon-left"
                   className="!w-fit border"
@@ -281,7 +281,7 @@ const Overview = () => {
                   isLoading={shareLoading}
                 >
                   <span data-share-button>Share</span>
-                </DefaultButton>
+                </DefaultButton> */}
                 <DefaultButton
                   variant="tertiary"
                   type="icon-left"
