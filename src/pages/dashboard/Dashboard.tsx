@@ -51,42 +51,42 @@ const Dashboard = () => {
   'https://plus.unsplash.com/premium_vector-1744201400607-99dddccd0180?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
 
   const sales: Sale[] = [
-    {
-      image: "",
-      name: "Brooklyn Simmons",
-      price: "10,000",
-      event: "Canvas and Beats",
-    },
-    {
-      image: "",
-      name: "Jane Cooper",
-      price: "1,00,000",
-      event: "Temple of Eros",
-    },
-    {
-      image: "",
-      name: "Cameron Williamson",
-      price: "10,00,000",
-      event: "Gen-Z House Backyard Party",
-    },
-    {
-      image: "",
-      name: "Robert Fox",
-      price: "1,50,000",
-      event: "The Outlaws Evolution",
-    },
-    {
-      image: "",
-      name: "Jacob Jones",
-      price: "1,25,000",
-      event: "Temple of Eros",
-    },
-    {
-      image: "",
-      name: "Annette Black",
-      price: "2,00,000",
-      event: "Chill With Dummzy: The Classroom",
-    },
+    // {
+    //   image: "",
+    //   name: "Brooklyn Simmons",
+    //   price: "10,000",
+    //   event: "Canvas and Beats",
+    // },
+    // {
+    //   image: "",
+    //   name: "Jane Cooper",
+    //   price: "1,00,000",
+    //   event: "Temple of Eros",
+    // },
+    // {
+    //   image: "",
+    //   name: "Cameron Williamson",
+    //   price: "10,00,000",
+    //   event: "Gen-Z House Backyard Party",
+    // },
+    // {
+    //   image: "",
+    //   name: "Robert Fox",
+    //   price: "1,50,000",
+    //   event: "The Outlaws Evolution",
+    // },
+    // {
+    //   image: "",
+    //   name: "Jacob Jones",
+    //   price: "1,25,000",
+    //   event: "Temple of Eros",
+    // },
+    // {
+    //   image: "",
+    //   name: "Annette Black",
+    //   price: "2,00,000",
+    //   event: "Chill With Dummzy: The Classroom",
+    // },
   ];
   return (
     <DashboardLayout>
