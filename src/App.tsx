@@ -40,7 +40,7 @@ const App = () => {
     <>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/signUp" element={<Signup />} />
         {/* Onboarding Routes */}
         <Route
           path="/emailVerification"
@@ -58,7 +58,7 @@ const App = () => {
             </OnboardingLayout>
           }
         />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route
           path="/profileInformation"
           element={
@@ -85,10 +85,10 @@ const App = () => {
         />
         {/* Main components */}
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/dashboard/create-event" element={<DashboardLayout><CreateEvent /></DashboardLayout>} />
+        <Route path="/dashboard/createEvent" element={<DashboardLayout><CreateEvent /></DashboardLayout>} />
 
         <Route
-          path="/manage-events"
+          path="/manageEvents"
           element={
             <DashboardLayout>
               <ManageEvents />
@@ -96,7 +96,7 @@ const App = () => {
           }
         />
         <Route
-          path="/manage-events/:slug"
+          path="/manageEvents/:slug"
           element={
             <DashboardLayout>
               <EventPage />
@@ -104,7 +104,7 @@ const App = () => {
           }
         />
         <Route
-          path="/manage-events/:slug/create-ticket"
+          path="/manageEvents/:slug/createTicket"
           element={
             <DashboardLayout>
               <CreateTicket />
@@ -112,7 +112,7 @@ const App = () => {
           }
         />
         <Route
-          path="/manage-series"
+          path="/manageSeries"
           element={
             <DashboardLayout>
               <ManageSeries />
@@ -120,7 +120,7 @@ const App = () => {
           }
         />
         <Route
-          path="/manage-series/:slug"
+          path="/manageSeries/:slug"
           element={
             <DashboardLayout>
               <SeriesDetail />
@@ -128,7 +128,7 @@ const App = () => {
           }
         />
         <Route
-          path="/bulk-announcements"
+          path="/bulkAnnouncements"
           element={
             <DashboardLayout>
               <BulkAnnouncement />
@@ -144,7 +144,7 @@ const App = () => {
           }
         />
         <Route
-          path="/payout-management"
+          path="/payoutManagement"
           element={
             <DashboardLayout>
               <PayoutManagement />
@@ -152,7 +152,7 @@ const App = () => {
           }
         />
         <Route
-          path="/payout-management/settings"
+          path="/payoutManagement/settings"
           element={
             <DashboardLayout>
               <Settings />

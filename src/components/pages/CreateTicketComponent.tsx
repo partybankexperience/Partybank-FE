@@ -22,8 +22,8 @@ const CreateTicketComponent = () => {
   const { id, ticketValue } = location.state || {};
   console.log(id, ticketValue, 'the id and ticket value are here')
   // Context Detection
-  const isCreateEventContext = location.pathname.includes('/dashboard/create-event');
-  const isManageEventsContext = location.pathname.includes('/manage-events') && location.pathname.includes('/create-ticket');
+  const isCreateEventContext = location.pathname.includes('/dashboard/createEvent');
+  const isManageEventsContext = location.pathname.includes('/manageEvents') && location.pathname.includes('/createTicket');
 
   const showButtons = !isCreateEventContext;
 
@@ -433,7 +433,7 @@ const ticketToFormData = (ticket: any) => {
         if (!hasUnsavedTickets()) {
           resetTicketStore();
           const slug = location.pathname.split('/')[2];
-          navigate(`/manage-events/${slug}`, { state: { id: eventId } });
+          navigate(`/manageEvents/${slug}`, { state: { id: eventId } });
         }
       }
       // If moved to next ticket, stay on the form to continue editing
@@ -825,7 +825,7 @@ console.log(getValue("isUnlimited"),'checking ')
               if (isManageEventsContext) {
                 const slug = location.pathname.split('/')[2];
                 resetTicketStore()
-                navigate(`/manage-events/${slug}`, { state: { id: eventId } });
+                navigate(`/manageEvents/${slug}`, { state: { id: eventId } });
               }
             }}
           >

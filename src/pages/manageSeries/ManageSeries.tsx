@@ -56,9 +56,9 @@ const ManageSeries = () => {
             series.map((seriesItem) => (
               <SeriesCard
                 key={seriesItem.id}
-                title={seriesItem.name}
+                title={seriesItem?.name}
                 description={seriesItem.description}
-                onEdit={() => navigate(`/manage-series/${seriesItem.slug}`, { state: { id: seriesItem.id } })}
+                onEdit={() => navigate(`/manageSeries/${seriesItem.slug}`, { state: { id: seriesItem.id } })}
                 onDelete={() => handleSeriesDeleted(seriesItem.id)}
                 imageUrl={seriesItem.coverImage}
               />

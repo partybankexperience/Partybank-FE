@@ -26,13 +26,13 @@ const OnboardingLayout = ({ children }: { children: React.ReactNode }) => {
   const check=async () => {
 
     const user = Storage.getItem("user");
-    if (stepParam !== "emailVerification" && !user?.onboardingStep) {
+    if (stepParam !== "email-verification" && !user?.onboardingStep) {
       if (!hasReset.current) {
         console.log("email step - reset and redirect");
         hasReset.current = true;
         reset();
         infoAlert("Auth invalid", "Please sign up/login in first");
-        return navigate("/signup", {
+        return navigate("/signUp", {
           replace: true,
           state: {
             toast: {

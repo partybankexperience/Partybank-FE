@@ -148,7 +148,7 @@ const Dashboard = () => {
         <h2 id='myEvents' className="text-[22px] text-black font-medium" >
         My Events
               </h2>
-<button className="text-primary text-[16px] cursor-pointer hover:text-deepRed flex gap-[12.5px] items-center" onClick={()=>navigate('/manage-events')}>See all Events <IoIosArrowForward /></button>
+<button className="text-primary text-[16px] cursor-pointer hover:text-deepRed flex gap-[12.5px] items-center" onClick={()=>navigate('/manageEvents')}>See all Events <IoIosArrowForward /></button>
             </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[20px] mt-[19px]">
                 {loading ? (
@@ -169,7 +169,7 @@ const Dashboard = () => {
                       ticketSold={event.ticketsSold || 0}
                       totalTicket={event.totalTickets || 0}
                       onEdit={() => {
-                        navigate(`/manage-events/${event.slug}`, { state: { id: event.id } });
+                        navigate(`/manageEvents/${event.slug}`, { state: { id: event.id } });
                       }}
                       onDuplicate={() => console.log("Duplicate clicked")}
                       onDelete={() => console.log("Delete clicked")}

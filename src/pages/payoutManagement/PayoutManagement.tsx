@@ -121,10 +121,10 @@ const PayoutManagement = () => {
         {/* <CustomTable/> */}
         <div className="flex justify-between">
           <h1 className="text-black font-bold text-[1.5rem]">Payout History</h1>
-          <DefaultButton type="icon-left" className="hidden md:block" icon={<IoSettingsOutline className="text-[1rem] "/>} onClick={() => navigate("/payout-management/settings")}>
+          <DefaultButton type="icon-left" className="hidden md:block" icon={<IoSettingsOutline className="text-[1rem] "/>} onClick={() => navigate("/payoutManagement/settings")}>
           Payment Setting
           </DefaultButton>
-          <DefaultButton className="md:hidden !px-[8px]" icon={<IoSettingsOutline className="text-[1rem] "/>} onClick={() => navigate("/payout-management/settings")}>
+          <DefaultButton className="md:hidden !px-[8px]" icon={<IoSettingsOutline className="text-[1rem] "/>} onClick={() => navigate("/payoutManagement/settings")}>
           Payment Setting
           </DefaultButton>
         </div>

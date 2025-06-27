@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import { PiMapPinBold } from "react-icons/pi";
@@ -37,12 +37,14 @@ const EventCard = ({
   bannerImage?: string;
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+const dropdownRef = useRef<HTMLDivElement>(null);
+
   const navigate = useNavigate();
 console.log(onDuplicate)
   const buttonOptions = [
     {
       name: "Edit",
-      onClick: () => (onEdit ? onEdit() : navigate("/manage-events/:id")),
+      onClick: () => (onEdit ? onEdit() : navigate("/manageEvents/:id")),
       icon: <LuPencilLine />,
     },
     // {
@@ -61,10 +63,26 @@ console.log(onDuplicate)
   const formattedDate = formatDate(startDate);
   const timeDisplay = formatTimeRange(startTime, endTime);
 
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside, true);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside, true);
+    };
+  }, []);
   return (
     <div className="relative rounded-[9px] border min-h-fit border-[#E1E1E1] h-[347px] min-w-[180px] w-full hover:shadow-[0px_4px_20px_rgba(0,0,0,0.1)] transition-all duration-300">
       {/* Dropdown */}
-      <div className="absolute top-[15px] right-[15px] z-10">
+      <div className="absolute top-[15px] right-[15px] z-10" ref={dropdownRef}>
         <button
           onClick={() => setDropdownOpen((prev) => !prev)}
           className="w-[32px] h-[32px] p-[5px] rounded-[5px] cursor-pointer bg-white hover:bg-[#eaeaea] flex items-center justify-center"

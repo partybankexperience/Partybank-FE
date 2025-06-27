@@ -269,7 +269,7 @@ setIsCreatingEvent(true);
             setError(stage, "ticketCategory", "Ticket category is required");
             isValid = false;
           }
-          if (!currentTicket.totalStock && currentTicket.isUnlimited===true ) {
+          if (!currentTicket.totalStock && currentTicket.isUnlimited===false || currentTicket.isUnlimited === "") {
             setError(stage, "totalStock", "Total stock is required for limited tickets");
             isValid = false;
           }
@@ -543,7 +543,7 @@ setIsCreatingEvent(true);
       setStage(stages[currentIndex - 1])
     } else if (eventId) {
       // If editing an existing event, go back to manage events
-      navigate('/dashboard/manage-events');
+      navigate('/dashboard/manageEvents');
     }
   }
 
@@ -559,7 +559,7 @@ setIsCreatingEvent(true);
       // This triggers when user uses browser back/forward buttons
       // Clear storage only if navigating completely away from create event
       const currentPath = window.location.pathname;
-      if (!currentPath.includes('/create-event')) {
+      if (!currentPath.includes('/createEvent')) {
         clearEventStorage();
       }
     };
@@ -576,7 +576,7 @@ setIsCreatingEvent(true);
 
       // Clean up eventId if leaving create event completely
       const currentPath = window.location.pathname;
-      if (!currentPath.includes('/create-event')) {
+      if (!currentPath.includes('/createEvent')) {
         Storage.removeItem("eventId");
       }
     };
@@ -621,7 +621,7 @@ setIsCreatingEvent(true);
         clearEventStorage();
         // Clear eventId
         Storage.removeItem("eventId");
-        navigate(`/manage-events/${slug}`, { state:'Success' });
+        navigate(`/manageEvents/${slug}`, { state:'Success' });
       } catch (error) {
         console.error("Error publishing event:", error);
         errorAlert("Error","Failed to publish event. Please try again.");

@@ -284,7 +284,7 @@ const SeriesDetail = () => {
                         variant="primary"
                         onClick={() => {
                             console.log("Navigating to create event with series ID:", seriesId);
-                            navigate('/dashboard/create-event',{state: {seriesId: seriesId}});
+                            navigate('/dashboard/createEvent',{state: {seriesId: seriesId}});
                         }}
                     >
                         Add Events to Series
@@ -305,7 +305,7 @@ const SeriesDetail = () => {
                         ))
                     ) : events.length > 0 ? (
                         events.map((event) => (
-                            <div key={event.id} className="flex gap-[20px] items-center py-[20px] border-b border-[#E1E1E1] cursor-pointer" onClick={()=>navigate(`/manage-events/${event.slug}`, { state: { id: event.id } })}>
+                            <div key={event.id} className="flex gap-[20px] items-center py-[20px] border-b border-[#E1E1E1] cursor-pointer" onClick={()=>navigate(`/manageEvents/${event.slug}`, { state: { id: event.id } })}>
                                 <CgLayoutGridSmall className="text-black text-[2rem]" />
                                 <div className="rounded-md h-[5.9rem] w-[9.6rem] bg-almostBlack overflow-hidden">
                                     <img 

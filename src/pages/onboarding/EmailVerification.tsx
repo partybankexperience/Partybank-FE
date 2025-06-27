@@ -19,7 +19,7 @@ const EmailVerification = () => {
   const email = Storage.getItem('email') || null
   useEffect(() => {
       if (!email) {
-       navigate("/signup", { replace: true, state: {
+       navigate("/signUp", { replace: true, state: {
          toast: { type: "error", title: "Auth invalid", message: "Please sign up/login first" },
        }});
       }

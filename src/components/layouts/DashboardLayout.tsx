@@ -27,8 +27,8 @@ const DashboardLayout = ({ children }: any) => {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const subPageTitles: Record<string, string> = {
     "manage-events/:slug": "Event Page",
-    "manage-events/:slug/create-ticket": "Create Ticket",
-    "dashboard/create-event": "Create Event",
+    "manage-events/:slug/createTicket": "Create Ticket",
+    "dashboard/createEvent": "Create Event",
     "manage-series/:slug": "Series Detail",
     "payout-management/settings": "Settings",
     "profile": "Profile",
@@ -39,19 +39,19 @@ const DashboardLayout = ({ children }: any) => {
     { name: "Dashboard", path: "/dashboard", icon: <MdDashboard /> },
     {
       name: "Manage Events & Tickets",
-      path: "/manage-events",
+      path: "/manageEvents",
       icon: <BiSolidCalendarStar />,
     },
-    { name: "Manage Series", path: "/manage-series", icon: <VscBellDot /> },
+    { name: "Manage Series", path: "/manageSeries", icon: <VscBellDot /> },
     {
       name: "Bulk Announcements",
-      path: "/bulk-announcements",
+      path: "/bulkAnnouncements",
       icon: <AiOutlineNotification />,
     },
     { name: "Reports", path: "/reports", icon: <TbReportAnalytics /> },
     {
       name: "Payout Management",
-      path: "/payout-management",
+      path: "/payoutManagement",
       icon: <AiOutlineDollarCircle />,
     },
   ];
@@ -203,10 +203,10 @@ const DashboardLayout = ({ children }: any) => {
                   } else {
                     // Check if we're editing an event and should go back to manage events
                     const eventId = Storage.getItem("eventId");
-                    if (currentPath.includes('/create-event') && eventId) {
+                    if (currentPath.includes('/createEvent') && eventId) {
                       // Clear eventId when navigating away from create event
                       Storage.removeItem("eventId");
-                      navigate('/manage-events');
+                      navigate('/manageEvents');
                     } else {
                       navigate(-1);
                     }
@@ -241,7 +241,7 @@ const DashboardLayout = ({ children }: any) => {
               type="icon-left"
               variant="primary"
               className="hidden lg:block whitespace-nowrap"
-              onClick={() => navigate("/dashboard/create-event")}
+              onClick={() => navigate("/dashboard/createEvent")}
             >
               Create New Event
             </DefaultButton>
@@ -249,7 +249,7 @@ const DashboardLayout = ({ children }: any) => {
               size="small"
               variant="primary"
               className="!px-[6px] md:!px-[8px] !py-[8px] md:!py-[10px] lg:hidden whitespace-nowrap text-xs md:text-sm"
-              onClick={() => navigate("/dashboard/create-event")}
+              onClick={() => navigate("/dashboard/createEvent")}
             >
               Create Event
             </DefaultButton>

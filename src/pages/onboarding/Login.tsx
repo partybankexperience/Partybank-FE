@@ -132,7 +132,7 @@ const Login = () => {
           <div className="text-right m-0 ">
               <a
                 className="text-[14px] text-red cursor-pointer hover:underline"
-                onClick={() => navigate('/forgot-password')}
+                onClick={() => navigate('/forgotPassword')}
                 role="link"
                 tabIndex={0}
               >
@@ -169,7 +169,7 @@ const Login = () => {
           Don’t have an account?{"  "}
           <span
             className="text-red cursor-pointer hover:text-deepRed"
-            onClick={() => navigate("/signup")}
+            onClick={() => navigate("/signUp")}
             role="link"
             tabIndex={0}
           >

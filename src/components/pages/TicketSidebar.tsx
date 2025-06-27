@@ -16,8 +16,8 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
   const location = useLocation();
 
   // Context Detection
-  const isCreateEventContext = location.pathname.includes('/dashboard/create-event');
-  const isManageEventsContext = location.pathname.includes('/manage-events') && location.pathname.includes('/create-ticket');
+  const isCreateEventContext = location.pathname.includes('/dashboard/createEvent');
+  const isManageEventsContext = location.pathname.includes('/manageEvents') && location.pathname.includes('/createTicket');
 
   // Event Store (Create Event Context)
   const { form, setFormValue } = useEventStore();
