@@ -17,7 +17,8 @@ import { SidebarModal } from "../modal/SidebarModal";
 // import NotificationDropdown from "../notifications/NotificationDropdown";
 import ProfileDropdown from "../dropdowns/ProfileDropdown";
 import { Storage } from "../../stores/InAppStorage";
-import { RiLogoutCircleRLine, RiSettings3Line } from "react-icons/ri";
+import { RiLogoutCircleRLine} from "react-icons/ri";
+// import { RiLogoutCircleRLine, RiSettings3Line } from "react-icons/ri";
 import PrivateRoute from "../../utils/privateRoute";
 
 const DashboardLayout = ({ children }: any) => {
@@ -84,9 +85,9 @@ const DashboardLayout = ({ children }: any) => {
     navigate('/');
   };
 
-  const handleSettings = () => {
-    navigate('/profile');
-  };
+  // const handleSettings = () => {
+  //   navigate('/profile');
+  // };
 
   return (
     <PrivateRoute>
@@ -119,7 +120,7 @@ const DashboardLayout = ({ children }: any) => {
 
           {/* Settings and Logout buttons */}
           <div className="border-t border-gray-200 pt-4 mt-4">
-            <button
+            {/* <button
               onClick={() => {
                 handleSettings();
                 setIsMobileNavOpen(false);
@@ -128,7 +129,7 @@ const DashboardLayout = ({ children }: any) => {
             >
               <RiSettings3Line className="text-xl" />
               <span>Settings</span>
-            </button>
+            </button> */}
             <button
               onClick={() => {
                 handleLogout();

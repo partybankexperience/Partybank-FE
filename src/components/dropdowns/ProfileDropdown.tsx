@@ -1,7 +1,8 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { RiLogoutCircleRLine, RiSettings3Line } from 'react-icons/ri';
+import { RiLogoutCircleRLine } from 'react-icons/ri';
+// import { RiLogoutCircleRLine, RiSettings3Line } from 'react-icons/ri';
 // import avatar from '../../assets/images/avatar.png';
 import { BsPersonCircle } from "react-icons/bs";
 import { Storage } from '../../stores/InAppStorage';
@@ -28,10 +29,10 @@ const ProfileDropdown = () => {
     setIsOpen(false);
   };
 
-  const handleSettings = () => {
-    navigate('/profile');
-    setIsOpen(false);
-  };
+  // const handleSettings = () => {
+  //   navigate('/profile');
+  //   setIsOpen(false);
+  // };
 
   return (
     <div className="relative  flex items-center" ref={dropdownRef}>
@@ -48,15 +49,15 @@ const ProfileDropdown = () => {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+        <div className="absolute right-0 mt-[6rem] w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
           <div className="py-2">
-            <button
+            {/* <button
               onClick={handleSettings}
               className="flex items-center gap-3 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
             >
               <RiSettings3Line className="text-lg" />
               <span>Settings</span>
-            </button>
+            </button> */}
             <button
               onClick={handleLogout}
               className="flex items-center gap-3 w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-100 transition-colors"
