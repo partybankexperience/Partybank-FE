@@ -45,7 +45,7 @@ const ManageSeries = () => {
       <div className="h-fit grid gap-[18px]">
         <h1 className="text-black text-[1.2rem] font-bold">My Series</h1>
         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[20px]">
-          <CreateNewSeries onSeriesCreated={handleSeriesCreated} />
+          <CreateNewSeries onSeriesCreated={fetchSeries} />
           {loading ? (
             Array.from({ length: 3 }).map((_, index) => <SeriesCardSkeleton key={index} />)
           ) : series.length === 0 ? (
@@ -53,18 +53,20 @@ const ManageSeries = () => {
               No series found. Please create one!
             </div>
           ) : (
-            series.map((seriesItem) => (
-              <SeriesCard
-                key={seriesItem.id}
-                title={seriesItem?.name}
-                description={seriesItem.description}
-                onEdit={() =>
-                  navigate(`/manage-series/${seriesItem.slug}`, { state: { id: seriesItem.id } })
-                }
-                onDelete={() => handleSeriesDeleted(seriesItem.id)}
-                imageUrl={seriesItem.coverImage}
-              />
-            ))
+            series
+              .filter(Boolean)
+              .map((seriesItem) => (
+                <SeriesCard
+                  key={seriesItem.id}
+                  title={seriesItem?.name}
+                  description={seriesItem.description ?? ''}
+                  onEdit={() =>
+                    navigate(`/manage-series/${seriesItem.slug}`, { state: { id: seriesItem.id } })
+                  }
+                  onDelete={() => handleSeriesDeleted(seriesItem.id)}
+                  imageUrl={seriesItem.coverImage}
+                />
+              ))
           )}
         </div>
       </div>
