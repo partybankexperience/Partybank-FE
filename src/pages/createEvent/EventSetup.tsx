@@ -35,12 +35,12 @@ const EventSetup = () => {
   const tagsRef = useRef<any>(null);
   const contactNumberRef = useRef<any>(null);
   const descriptionRef = useRef<any>(null);
+
   useEffect(() => {
     const fetchSeries = async () => {
       try {
         setSeriesLoading(true);
         const response = await getSeries();
-        console.log('Fetched series data:', response);
         setSeries(response || []);
 
         // If there's a prefilled series ID, find and set the corresponding name
@@ -73,6 +73,7 @@ const EventSetup = () => {
 
     fetchSeries();
   }, [eventSetupForm.seriesId, location.state?.seriesId, setFormValue, location]);
+
   useEffect(() => {
     const fetchTags = async () => {
       try {
