@@ -151,8 +151,8 @@ export const useEventStore = create<EventData>()(
         // Map backend data to Schedule & Location stage
         form['Schedule & Location'] = {
           eventType: eventData.eventType || '',
-          startDate: eventData.startDate || '',
-          endDate: eventData.endDate || '',
+          startDate: eventData.startDate ? eventData.startDate.slice(0, 10) : '',
+          endDate: eventData.endDate ? eventData.endDate.slice(0, 10) : '',
           startTime: eventData.startTime || '',
           endTime: eventData.endTime || '',
           venueName: eventData.venueName || eventData.location || '',
