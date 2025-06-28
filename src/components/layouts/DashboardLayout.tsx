@@ -238,18 +238,16 @@ const DashboardLayout = ({ children }: any) => {
                 icon={<FaPlus />}
                 type="icon-left"
                 variant="primary"
-                className="hidden lg:block whitespace-nowrap"
+                className="
+                  px-3 sm:px-4 md:px-6
+                  py-2 sm:py-2.5 md:py-3
+                  text-xs sm:text-sm
+                "
                 onClick={() => navigate('/dashboard/create-event')}
               >
-                Create New Event
-              </DefaultButton>
-              <DefaultButton
-                size="small"
-                variant="primary"
-                className="!px-[6px] md:!px-[8px] !py-[8px] md:!py-[10px] lg:hidden whitespace-nowrap text-xs md:text-sm"
-                onClick={() => navigate('/dashboard/create-event')}
-              >
-                Create Event
+                {/* full text on md+, shorter on smaller */}
+                <span className="hidden md:inline">Create New Event</span>
+                <span className="inline md:hidden">Create Event</span>
               </DefaultButton>
             </div>
           </header>
