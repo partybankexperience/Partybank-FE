@@ -62,7 +62,8 @@ const ManageEvents = () => {
         );
       case 'Drafts':
         return events.filter(
-          (event: any) => event.status === 'draft' && event.timingStatus === 'past',
+          (event: any) =>
+            event.status === 'draft' || (event.status === 'draft' && event.timingStatus === 'past'),
         );
       default:
         return events;
