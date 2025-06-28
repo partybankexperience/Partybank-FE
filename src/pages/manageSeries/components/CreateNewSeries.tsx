@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa6';
-import { Modal } from '../modal/Modal';
-import DefaultButton from '../buttons/DefaultButton';
-import DefaultInput from '../inputs/DefaultInput';
-import { ImageUploadInput } from '../inputs/ImageInput';
-import { createSeries } from '../../Containers/seriesApi';
-import { Storage } from '../../stores/InAppStorage';
+import { createSeries } from '../../../Containers/seriesApi';
+import { Storage } from '../../../stores/InAppStorage';
+import { Modal } from '../../../components/modal/Modal';
+import DefaultInput from '../../../components/inputs/DefaultInput';
+import { ImageUploadInput } from '../../../components/inputs/ImageInput';
+import DefaultButton from '../../../components/buttons/DefaultButton';
 
 interface CreateNewSeriesProps {
   onSeriesCreated?: (newSeries: any) => void;
@@ -74,11 +74,9 @@ const CreateNewSeries = ({ onSeriesCreated }: CreateNewSeriesProps) => {
   return (
     <>
       <div
-        className="bg-[#FFF2F4] rounded-[10px] px-[20px] min-h-fit h-[157px] md:h-full min-w-[180px] w-full grid justify-center items-center cursor-pointer hover:shadow-[0px_4px_20px_rgba(0,0,0,0.1)] transition-all duration-300"
+        className="bg-[#FFF2F4] rounded-[10px] px-[20px] min-w-[180px] w-full min-h-fit h-[157px] md:h-[17.5rem] grid justify-center items-center cursor-pointer hover:shadow-[0px_4px_20px_rgba(0,0,0,0.1)] transition-all duration-300"
         role="button"
-        onClick={() => {
-          setIsModalOpen(true);
-        }}
+        onClick={() => setIsModalOpen(true)}
       >
         <div className="grid gap-[20px] text-center py-[20px]">
           <div className="bg-white rounded-[6px] p-[14px] h-fit w-fit m-auto">
