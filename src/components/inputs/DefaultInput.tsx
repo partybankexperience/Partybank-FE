@@ -112,7 +112,7 @@ const DefaultInput = forwardRef<HTMLInputElement, DefaultInputProps>(
       }
     };
 
-    const baseStyle = `text-[14px] border-[1px] text-black placeholder:text-neutralDark placeholder:text-[14px] font-[RedHat] rounded-[4px] py-[10px] px-[16px] w-full md:w-[20rem] flex items-center ${classname}
+    const baseStyle = `box-border appearance-none text-[14px] border-[1px] text-black placeholder:text-neutralDark placeholder:text-[14px] font-[RedHat] rounded-[4px] py-[10px] px-[16px] w-full md:w-[20rem] flex items-center ${classname}
     hover:shadow-[0_0_0_2px_rgba(77,64,85,0.1)] focus:shadow-[0_0_0_2px_rgba(77,64,85,0.1)] 
     ${hasError ? 'border-red' : isFilled ? 'border-purple' : 'border-neutral'} 
     hover:border-lightPurple focus:border-lightPurple 
