@@ -7,8 +7,8 @@ const Card = ({ icon, title, text }: any) => {
         <p className="text-black text-[1rem] font-medium">{title}</p>
         <p className="text-lightGrey text-[.8rem]">{text}</p>
       </div>
-      <div className="absolute top-0 right-0  ">
-        <img src={line} alt="" className=" h-fit max-w-[6rem] object-contain" />
+      <div className="absolute top-0 right-0 p-0 m-0">
+        <img src={line} alt="" className="w-24 h-auto object-contain" />
       </div>
     </div>
   );
