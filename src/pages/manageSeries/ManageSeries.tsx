@@ -27,9 +27,9 @@ const ManageSeries = () => {
     fetchSeries();
   }, []);
 
-  const handleSeriesCreated = (newSeries: any) => {
-    setSeries((prevSeries) => [...prevSeries, newSeries]);
-  };
+  // const handleSeriesCreated = (newSeries: any) => {
+  //   setSeries((prevSeries) => [...prevSeries, newSeries]);
+  // };
 
   const handleSeriesDeleted = async (seriesId: string) => {
     try {
