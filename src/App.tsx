@@ -8,7 +8,7 @@ import Dashboard from './pages/dashboard/Dashboard';
 import PasswordSetup from './pages/onboarding/PasswordSetup';
 import ProfileInfo from './pages/onboarding/ProfileInfo';
 import PinSetup from './pages/onboarding/PinSetup';
-import EventCreation from './pages/onboarding/EventCreation';
+import SeriesCreation from './pages/onboarding/SeriesCreation';
 import ManageEvents from './pages/manageEvents/ManageEvents';
 import ManageSeries from './pages/manageSeries/ManageSeries';
 import BulkAnnouncement from './pages/bulkAnnouncements/BulkAnnouncement';
@@ -79,7 +79,7 @@ const App = () => {
         path="/create-event-series"
         element={
           <OnboardingLayout>
-            <EventCreation />
+            <SeriesCreation />
           </OnboardingLayout>
         }
       />
