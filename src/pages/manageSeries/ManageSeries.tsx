@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router';
 import { useState, useEffect } from 'react';
-import CreateNewSeries from '../../components/cards/CreateNewSeries';
 import SeriesCard from '../../components/cards/SeriesCard';
 import { getSeries, deleteSeries } from '../../Containers/seriesApi';
 import { SeriesCardSkeleton } from '../../components/common/LoadingSkeleton';
+import CreateNewSeries from './components/CreateNewSeries';
 
 const ManageSeries = () => {
   const navigate = useNavigate();
@@ -49,7 +49,7 @@ const ManageSeries = () => {
           {loading ? (
             Array.from({ length: 3 }).map((_, index) => <SeriesCardSkeleton key={index} />)
           ) : series.length === 0 ? (
-            <div className="col-span-full text-center text-grey400">
+            <div className="md:hidden col-span-full text-center text-grey400">
               No series found. Please create one!
             </div>
           ) : (

@@ -88,7 +88,7 @@ const ManageEvents = () => {
           filteredEvents.map((val: any, index) => (
             <EventCard
               key={val.id || index}
-              progress={50}
+              progress={0}
               name={val?.name}
               startTime={val?.startTime}
               endTime={val?.endTime}
@@ -107,7 +107,7 @@ const ManageEvents = () => {
             />
           ))
         ) : (
-          <div className="m-auto text-center text-gray-500 py-8">
+          <div className="md:hidden m-auto text-center text-gray-500 py-8">
             No {activeTab.toLowerCase()} events found.
           </div>
         )}

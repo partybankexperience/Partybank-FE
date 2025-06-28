@@ -20,9 +20,9 @@ const EventCard = ({
   startDate = '2025-04-12T00:00:00.000Z',
   startTime = '',
   endTime = '',
-  progress = 50,
-  ticketSold = 550,
-  totalTicket = 1000,
+  progress = 0,
+  ticketSold = 0,
+  totalTicket = 0,
   // onEdit,
   onDuplicate,
   onDelete,
@@ -140,7 +140,7 @@ const EventCard = ({
     };
   }, []);
   return (
-    <div className="relative rounded-[9px] border min-h-fit border-[#E1E1E1] h-[347px] min-w-[180px] w-full hover:shadow-[0px_4px_20px_rgba(0,0,0,0.1)] transition-all duration-300">
+    <div className="relative rounded-[15px] border min-h-fit border-[#E1E1E1] h-[17.5rem] min-w-[180px] w-full hover:shadow-[0px_4px_20px_rgba(0,0,0,0.1)] transition-all duration-300">
       {/* Dropdown */}
       <div className="absolute top-[15px] right-[15px] z-10" ref={dropdownRef}>
         <button

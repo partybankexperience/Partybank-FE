@@ -8,6 +8,7 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Modal } from '../../../components/modal/Modal';
 import DefaultInput from '../../../components/inputs/DefaultInput';
 import { getSeriesBySlug, updateSeries } from '../../../Containers/seriesApi';
+import { getFallbackImage } from '../../../config/fallbackImages';
 
 interface SeriesData {
   id: string;
@@ -322,7 +323,7 @@ const SeriesDetail = () => {
                 <CgLayoutGridSmall className="text-black text-[2rem]" />
                 <div className="rounded-md h-[5.9rem] w-[9.6rem] bg-almostBlack overflow-hidden">
                   <img
-                    src={event.bannerImage}
+                    src={event.bannerImage ?? getFallbackImage('default')}
                     alt={event.name}
                     className="w-full h-full object-cover"
                   />
