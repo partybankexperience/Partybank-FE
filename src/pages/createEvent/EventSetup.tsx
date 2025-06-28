@@ -312,7 +312,7 @@ const EventSetup = () => {
         placeholder="Select Category"
         classname="!w-full"
         showDropdown
-        dropdownOptions={['Festival', 'Concert']}
+        dropdownOptions={['festival', 'concert']}
         value={eventSetupForm.category || ''}
         setValue={(value: string) => handleInputChange('category', value)}
         required
