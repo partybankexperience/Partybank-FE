@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import createEvent from '../../assets/images/createEvent.svg';
 import DefaultInput from '../../components/inputs/DefaultInput';
 import { ImageUploadInput } from '../../components/inputs/ImageInput';
-import { createSeries, getSeries } from '../../Containers/seriesApi';
+import { createSeries, deleteSeries, getSeries } from '../../Containers/seriesApi';
 import { Storage } from '../../stores/InAppStorage';
 import { errorAlert } from '../../components/alerts/ToastService';
 import SeriesCard from '../../components/cards/SeriesCard';
@@ -67,7 +67,7 @@ const EventCreation = () => {
         userId,
         descriptionOnboarding,
         coverImage ||
-          'https://images.unsplash.com/photo-1485872299829-c673f5194813?q=80&w=2054&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+          'https://res.cloudinary.com/dp1zblmv4/image/upload/v1751075414/partybank/jyvemoyskt5dnhatk9zw.png',
       );
 
       console.log('Series created:', response);
@@ -82,6 +82,16 @@ const EventCreation = () => {
       console.error('Error creating series:', error);
     }
   };
+
+  const handleSeriesDeleted = async (seriesId: string) => {
+    try {
+      await deleteSeries(seriesId);
+      setSeriesList((prev) => prev.filter((s: any) => s.id !== seriesId));
+    } catch (error) {
+      console.error('Error deleting series:', error);
+    }
+  };
+
   const handleBack = () => {
     navigate(-1);
   };
@@ -145,6 +155,10 @@ const EventCreation = () => {
                   title={series.name}
                   description={series.description}
                   imageUrl={series.image}
+                  onDelete={() => handleSeriesDeleted(series.id)}
+                  onEdit={() =>
+                    navigate(`/manage-series/${series.slug}`, { state: { id: series.id } })
+                  }
                 />
               </div>
             ))
