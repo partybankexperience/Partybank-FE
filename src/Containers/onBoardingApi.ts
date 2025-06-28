@@ -1,8 +1,8 @@
-import { apiCall } from "../utils/axiosFormat";
+import { apiCall } from '../utils/axiosFormat';
 
 const RegisterUser = async (email: string): Promise<any> => {
   const response = await apiCall({
-    name: "signUp",
+    name: 'signUp',
     data: {
       email,
     },
@@ -12,7 +12,7 @@ const RegisterUser = async (email: string): Promise<any> => {
 };
 const Verifyotp = async (email: string, otp: string): Promise<any> => {
   const response = await apiCall({
-    name: "verifyOTP",
+    name: 'verifyOTP',
     data: {
       email,
       otp,
@@ -23,32 +23,25 @@ const Verifyotp = async (email: string, otp: string): Promise<any> => {
 };
 
 // setPassword
-const SetPassword = async (
-  confirmPassword: string,
-  password: string
-): Promise<any> => {
+const SetPassword = async (confirmPassword: string, password: string): Promise<any> => {
   const response = await apiCall({
-    name: "setPassword",
+    name: 'setPassword',
     data: { password, confirmPassword },
   });
   return response;
 };
 
-const SetProfile = async (
-  fullName: string,
-  businessName: string,
-  phone: string
-): Promise<any> => {
+const SetProfile = async (fullName: string, businessName: string, phone: string): Promise<any> => {
   const response = await apiCall({
-    name: "setProfile",
-    data: { businessName, fullName,phone },
+    name: 'setProfile',
+    data: { businessName, fullName, phone },
   });
   return response;
 };
 
 const SetPin = async (pin: string): Promise<any> => {
   const response = await apiCall({
-    name: "setPin",
+    name: 'setPin',
     data: { pin },
   });
   return response;
@@ -57,59 +50,63 @@ const CreateSeries = async (
   name: string,
   userId: string,
   description: string,
-  coverImage: string
+  coverImage: string,
 ): Promise<any> => {
   const response = await apiCall({
-    name: "createSeries",
+    name: 'createSeries',
     data: { name, userId, description, coverImage },
   });
   return response;
 };
 const LoginUser = async (email: string, password: string): Promise<any> => {
   const response = await apiCall({
-    name: "login",
+    name: 'login',
     data: { email, password },
   });
   return response;
 };
 const LoginWithGoogle = async (): Promise<any> => {
   const response = await apiCall({
-    name: "loginWithGoogle",
+    name: 'loginWithGoogle',
     // data: {email,password},
   });
   return response;
 };
 const refreshToken = async (): Promise<any> => {
   const response = await apiCall({
-    name: "refreshToken",
+    name: 'refreshToken',
     // data: {email,password},
   });
   return response;
 };
-const forgotPassword = async (email:string): Promise<any> => {
+const forgotPassword = async (email: string): Promise<any> => {
   const response = await apiCall({
-    name: "forgotPassword",
-    data: {email},
+    name: 'forgotPassword',
+    data: { email },
   });
   return response;
 };
-const forgotPasswordConfirmOTP = async (email:string,otp:string): Promise<any> => {
+const forgotPasswordConfirmOTP = async (email: string, otp: string): Promise<any> => {
   const response = await apiCall({
-    name: "forgotPasswordOTP",
-    data: {email,otp},
+    name: 'forgotPasswordOTP',
+    data: { email, otp },
   });
   return response;
 };
-const resetPassword = async (email:string,password:string,confirmPassword:string): Promise<any> => {
+const resetPassword = async (
+  email: string,
+  password: string,
+  confirmPassword: string,
+): Promise<any> => {
   const response = await apiCall({
-    name: "resetPassword",
-    data: {email,password,confirmPassword},
+    name: 'resetPassword',
+    data: { email, password, confirmPassword },
   });
   return response;
 };
-const resendOTP= async (email: string): Promise<any> => {
+const resendOTP = async (email: string): Promise<any> => {
   const response = await apiCall({
-    name: "resendOTP",
+    name: 'resendOTP',
     data: { email },
   });
   return response;
@@ -127,5 +124,5 @@ export {
   forgotPassword,
   forgotPasswordConfirmOTP,
   resetPassword,
-  resendOTP
+  resendOTP,
 };

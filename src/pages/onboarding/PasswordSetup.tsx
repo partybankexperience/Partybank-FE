@@ -1,26 +1,28 @@
-import { useNavigate } from "react-router";
-import { useOnboardingStore } from "../../stores/onboardingStore";
-import DefaultButton from "../../components/buttons/DefaultButton";
-import DefaultInput from "../../components/inputs/DefaultInput";
-import { FiCheck } from "react-icons/fi";
-import { useState } from "react";
-import { SetPassword } from "../../Containers/onBoardingApi";
+import { useNavigate } from 'react-router';
+import { useOnboardingStore } from '../../stores/onboardingStore';
+import DefaultButton from '../../components/buttons/DefaultButton';
+import DefaultInput from '../../components/inputs/DefaultInput';
+import { FiCheck } from 'react-icons/fi';
+import { useState } from 'react';
+import { SetPassword } from '../../Containers/onBoardingApi';
 
 const PasswordSetup = () => {
   const navigate = useNavigate();
-  const [password, setpassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [isLoading, setisLoading] = useState(false)
-  const { markStepComplete,updateOnboardingStep } = useOnboardingStore();
+  const [password, setpassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [isLoading, setisLoading] = useState(false);
+  const { markStepComplete, updateOnboardingStep } = useOnboardingStore();
 
   const handleNext = async () => {
     try {
       setisLoading(true);
-      const res=await SetPassword(confirmPassword,password)
+      const res = await SetPassword(confirmPassword, password);
       updateOnboardingStep(res.currentStep);
-      markStepComplete("passwordSetup");
-      navigate("/profileInformation", { replace: true });
-    } catch (error) {setisLoading(false);}finally{
+      markStepComplete('passwordSetup');
+      navigate('/profile-information', { replace: true });
+    } catch (error) {
+      setisLoading(false);
+    } finally {
       setisLoading(false);
     }
   };
@@ -28,18 +30,22 @@ const PasswordSetup = () => {
     navigate(-1);
   };
   const passwordVerification = [
-    { label: "Minimum 8 characters", check: password.length >= 8 },
-    { label: "Mix of letters", check: /[a-zA-Z]/.test(password) },
+    { label: 'Minimum 8 characters', check: password.length >= 8 },
+    { label: 'Mix of letters', check: /[a-zA-Z]/.test(password) },
     {
-      label: "Numbers and symbols",
+      label: 'Numbers and symbols',
       check: /[0-9!@#$%^&*(),.?":{}|<>]/.test(password),
     },
-    {label:'Passwords match', check: password === confirmPassword && password.length > 0 },
+    { label: 'Passwords match', check: password === confirmPassword && password.length > 0 },
     // { label: "No spaces", check: !/\s/.test(password) },
-    {label:'Mix of uppercase and lowercase letters', check: /[a-z]/.test(password) && /[A-Z]/.test(password) }
+    {
+      label: 'Mix of uppercase and lowercase letters',
+      check: /[a-z]/.test(password) && /[A-Z]/.test(password),
+    },
   ];
   const confirmPasswordVerification = [
-    { label: "Passwords match", check: password === confirmPassword && password.length > 0 },  ]
+    { label: 'Passwords match', check: password === confirmPassword && password.length > 0 },
+  ];
   return (
     <div className="flex flex-col flex-grow  justify-between h-full px-[20px] md:px-0">
       <div
@@ -60,18 +66,18 @@ const PasswordSetup = () => {
             setValue={setpassword}
           />
           <div className="grid gap-[10px] md:flex md:flex-wrap items-center">
-              {passwordVerification.map((item, index) => (
-                <div
-                  className={`flex items-center gap-[8px] text-[14px] ${
-                    item.check ? "text-green-800" : "text-grey200"
-                  }`}
-                  key={index}
-                >
-                  <FiCheck />
-                  <p>{item.label}</p>
-                </div>
-              ))}
-            </div>
+            {passwordVerification.map((item, index) => (
+              <div
+                className={`flex items-center gap-[8px] text-[14px] ${
+                  item.check ? 'text-green-800' : 'text-grey200'
+                }`}
+                key={index}
+              >
+                <FiCheck />
+                <p>{item.label}</p>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="grid md:w-[30rem] md:m-auto">
           <DefaultInput
@@ -84,18 +90,18 @@ const PasswordSetup = () => {
             setValue={setConfirmPassword}
           />
           <div className="grid gap-[10px] md:flex md:flex-wrap items-center">
-              {confirmPasswordVerification.map((item, index) => (
-                <div
-                  className={`flex items-center gap-[8px] text-[14px] ${
-                    item.check ? "text-green-800" : "text-grey200"
-                  }`}
-                  key={index}
-                >
-                  <FiCheck />
-                  <p>{item.label}</p>
-                </div>
-              ))}
-            </div>
+            {confirmPasswordVerification.map((item, index) => (
+              <div
+                className={`flex items-center gap-[8px] text-[14px] ${
+                  item.check ? 'text-green-800' : 'text-grey200'
+                }`}
+                key={index}
+              >
+                <FiCheck />
+                <p>{item.label}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <div className="flex gap-[20px] items-center mx-auto">
@@ -146,8 +152,9 @@ const PasswordSetup = () => {
             className="!w-full md:!w-fit md:!mx-auto"
             onClick={handleNext}
             isLoading={isLoading}
-            disabled={!passwordVerification.every((item) => item.check) ||
-              confirmPassword !== password}
+            disabled={
+              !passwordVerification.every((item) => item.check) || confirmPassword !== password
+            }
           >
             Next
           </DefaultButton>

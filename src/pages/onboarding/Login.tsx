@@ -1,40 +1,40 @@
-import DefaultButton from "../../components/buttons/DefaultButton";
-import DefaultInput from "../../components/inputs/DefaultInput";
+import DefaultButton from '../../components/buttons/DefaultButton';
+import DefaultInput from '../../components/inputs/DefaultInput';
 // import { FcGoogle } from "react-icons/fc";
-import LoginLayout from "../../components/layouts/LoginLayout";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import { LoginUser } from "../../Containers/onBoardingApi";
-import { Storage } from "../../stores/InAppStorage";
-import { errorAlert } from "../../components/alerts/ToastService";
+import LoginLayout from '../../components/layouts/LoginLayout';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { LoginUser } from '../../Containers/onBoardingApi';
+import { Storage } from '../../stores/InAppStorage';
+import { errorAlert } from '../../components/alerts/ToastService';
 
 const Login = () => {
-  const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
+  const [email, setemail] = useState('');
+  const [password, setpassword] = useState('');
   const [emailError, setEmailError] = useState(false);
-  const [isLoading, setisLoading] = useState(false)
+  const [isLoading, setisLoading] = useState(false);
   // const [isGoogleLoading, setisGoogleLoading] = useState(false)
   const [passwordError, setPasswordError] = useState(false);
   const emailRef = useRef<any>(null);
   const passwordRef = useRef<any>(null);
   const navigate = useNavigate();
-  
+
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 
-  const message = queryParams.get("message");
-  const state = queryParams.get("state");
+  const message = queryParams.get('message');
+  const state = queryParams.get('state');
 
   useEffect(() => {
-    if (state === "notAuthenticated" && message) {
-      errorAlert("Error", decodeURIComponent(message))
+    if (state === 'notAuthenticated' && message) {
+      errorAlert('Error', decodeURIComponent(message));
       const timer = setTimeout(() => {
-              navigate("/", { replace: true, state: null });
-            }, 2000); // Give time for user to read the notification
+        navigate('/', { replace: true, state: null });
+      }, 2000); // Give time for user to read the notification
       return () => clearTimeout(timer); // Cleanup the timer on component unmount
     }
   }, [state, message]);
-  
+
   async function handleSignIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (emailError) {
@@ -50,12 +50,12 @@ const Login = () => {
       return;
     }
     try {
-    setisLoading(true);
+      setisLoading(true);
       const res = await LoginUser(email, password);
-      Storage.setItem("token", res.accessToken);
-      Storage.setItem("user", res.user);
-      console.log(res, "Login Response");
-      navigate("/dashboard");
+      Storage.setItem('token', res.accessToken);
+      Storage.setItem('user', res.user);
+      console.log(res, 'Login Response');
+      navigate('/dashboard');
     } catch (error) {
       console.log(error);
       setisLoading(false);
@@ -85,17 +85,11 @@ const Login = () => {
   //   window.location.href = `${import.meta.env.VITE_BASE_URL}/auth/google`;
   // };
 
-
   return (
     <LoginLayout>
-      <form
-        className="grid mt-[2vh] md:mt-[2vh] gap-[3vh] h-fit w-full "
-        onSubmit={handleSignIn}
-      >
+      <form className="grid mt-[2vh] md:mt-[2vh] gap-[3vh] h-fit w-full " onSubmit={handleSignIn}>
         <div className="grid gap-[10px] text-center md:text-left">
-          <h1 className=" text-3xl font-semibold">
-            Login to your account
-          </h1>
+          <h1 className=" text-3xl font-semibold">Login to your account</h1>
           <p className=" text-lightGrey font-normal text-sm">
             Let’s sign in quickly to continue to your account.
           </p>
@@ -115,24 +109,23 @@ const Login = () => {
             // setExternalError={setEmailError}
           />
           <div>
-
-          <DefaultInput
-            id="loginPassword"
-            label="Password"
-            placeholder="********"
-            type="password"
-            style="!w-full"
-            value={password}
-            setValue={setpassword}
-            required
-            ref={passwordRef}
-            setExternalError={setPasswordError}
-            classname="!mb-0 "
-          />
-          <div className="text-right m-0 ">
+            <DefaultInput
+              id="loginPassword"
+              label="Password"
+              placeholder="********"
+              type="password"
+              style="!w-full"
+              value={password}
+              setValue={setpassword}
+              required
+              ref={passwordRef}
+              setExternalError={setPasswordError}
+              classname="!mb-0 "
+            />
+            <div className="text-right m-0 ">
               <a
                 className="text-[14px] text-red cursor-pointer hover:underline"
-                onClick={() => navigate('/forgotPassword')}
+                onClick={() => navigate('/forgot-password')}
                 role="link"
                 tabIndex={0}
               >
@@ -166,10 +159,10 @@ const Login = () => {
           </DefaultButton> */}
         </div>
         <p className="text-[#A7A5A6]  text-[14px]  mt-[0.5vh] text-center">
-          Don’t have an account?{"  "}
+          Don’t have an account?{'  '}
           <span
             className="text-red cursor-pointer hover:text-deepRed"
-            onClick={() => navigate("/signUp")}
+            onClick={() => navigate('/signup')}
             role="link"
             tabIndex={0}
           >

@@ -1,44 +1,44 @@
-import { useNavigate } from "react-router"
-import { useState, useEffect } from "react"
-import CreateNewSeries from "../../components/cards/CreateNewSeries"
-import SeriesCard from "../../components/cards/SeriesCard"
-import { getSeries, deleteSeries } from "../../Containers/seriesApi"
-import { SeriesCardSkeleton } from "../../components/common/LoadingSkeleton"
+import { useNavigate } from 'react-router';
+import { useState, useEffect } from 'react';
+import CreateNewSeries from '../../components/cards/CreateNewSeries';
+import SeriesCard from '../../components/cards/SeriesCard';
+import { getSeries, deleteSeries } from '../../Containers/seriesApi';
+import { SeriesCardSkeleton } from '../../components/common/LoadingSkeleton';
 
 const ManageSeries = () => {
-  const navigate = useNavigate()
-  const [series, setSeries] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
+  const navigate = useNavigate();
+  const [series, setSeries] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchSeries = async () => {
     try {
-      setLoading(true)
-      const response = await getSeries()
-      setSeries(response || [])
+      setLoading(true);
+      const response = await getSeries();
+      setSeries(response || []);
     } catch (error) {
-      console.error("Error fetching series:", error)
-      setSeries([])
+      console.error('Error fetching series:', error);
+      setSeries([]);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchSeries()
-  }, [])
+    fetchSeries();
+  }, []);
 
   const handleSeriesCreated = (newSeries: any) => {
-    setSeries(prevSeries => [...prevSeries, newSeries])
-  }
+    setSeries((prevSeries) => [...prevSeries, newSeries]);
+  };
 
   const handleSeriesDeleted = async (seriesId: string) => {
     try {
-      await deleteSeries(seriesId)
-      setSeries(prevSeries => prevSeries.filter(s => s.id !== seriesId))
+      await deleteSeries(seriesId);
+      setSeries((prevSeries) => prevSeries.filter((s) => s.id !== seriesId));
     } catch (error) {
-      console.error("Error deleting series:", error)
+      console.error('Error deleting series:', error);
     }
-  }
+  };
 
   return (
     <div className=" min-h-[80vh]">
@@ -47,18 +47,20 @@ const ManageSeries = () => {
         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[20px]">
           <CreateNewSeries onSeriesCreated={handleSeriesCreated} />
           {loading ? (
-            Array.from({ length: 3 }).map((_, index) => (
-              <SeriesCardSkeleton key={index} />
-            ))
+            Array.from({ length: 3 }).map((_, index) => <SeriesCardSkeleton key={index} />)
           ) : series.length === 0 ? (
-            <div className="col-span-full text-center text-grey400">No series found. Please create one!</div>
+            <div className="col-span-full text-center text-grey400">
+              No series found. Please create one!
+            </div>
           ) : (
             series.map((seriesItem) => (
               <SeriesCard
                 key={seriesItem.id}
                 title={seriesItem?.name}
                 description={seriesItem.description}
-                onEdit={() => navigate(`/manageSeries/${seriesItem.slug}`, { state: { id: seriesItem.id } })}
+                onEdit={() =>
+                  navigate(`/manage-series/${seriesItem.slug}`, { state: { id: seriesItem.id } })
+                }
                 onDelete={() => handleSeriesDeleted(seriesItem.id)}
                 imageUrl={seriesItem.coverImage}
               />
@@ -67,7 +69,7 @@ const ManageSeries = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ManageSeries
+export default ManageSeries;

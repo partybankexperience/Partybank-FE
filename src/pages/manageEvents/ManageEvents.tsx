@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
-import CreateNewEvent from "./components/CreateNewEvent";
-import EventCard from "../../components/cards/EventCard";
-import { useNavigate } from "react-router";
-import Tabs from "../../components/tabs/Tabs";
-import { deleteEvent, getEvents } from "../../Containers/eventApi";
-import { EventCardSkeleton } from "../../components/common/LoadingSkeleton";
+import { useEffect, useState } from 'react';
+import CreateNewEvent from './components/CreateNewEvent';
+import EventCard from '../../components/cards/EventCard';
+import { useNavigate } from 'react-router';
+import Tabs from '../../components/tabs/Tabs';
+import { deleteEvent, getEvents } from '../../Containers/eventApi';
+import { EventCardSkeleton } from '../../components/common/LoadingSkeleton';
 
 const ManageEvents = () => {
-  const [activeTab, setActiveTab] = useState("Active");
+  const [activeTab, setActiveTab] = useState('Active');
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,13 +19,13 @@ const ManageEvents = () => {
       console.log(res);
       setEvents(res || []);
     } catch (error) {
-      console.error("Error fetching events:", error);
+      console.error('Error fetching events:', error);
       setEvents([]);
     } finally {
       setLoading(false);
     }
   }
-async function handleDeleteEvent(eventId: string) {
+  async function handleDeleteEvent(eventId: string) {
     try {
       setLoading(true);
       // Call the API to delete the event
@@ -33,7 +33,7 @@ async function handleDeleteEvent(eventId: string) {
       // After successful deletion, refresh the events list
       await getAllEvent();
     } catch (error) {
-      console.error("Error deleting event:", error);
+      console.error('Error deleting event:', error);
       // Optionally, show an error message to the user
     } finally {
       setLoading(false);
@@ -48,14 +48,22 @@ async function handleDeleteEvent(eventId: string) {
     if (!events || events.length === 0) return [];
 
     switch (activeTab) {
-      case "Active":
-        return events.filter((event: any) => event.timingStatus === "published" &&event.status === "published");
-      case "Upcoming":
-        return events.filter((event: any) => event.timingStatus === "upcoming" &&event.status === "published");
-      case "Archived":
-        return events.filter((event: any) => event.timingStatus === "past"&&event.status === "published" );
-      case "Drafts":
-        return events.filter((event: any) => event.status === "draft" &&event.timingStatus === "past");
+      case 'Active':
+        return events.filter(
+          (event: any) => event.timingStatus === 'published' && event.status === 'published',
+        );
+      case 'Upcoming':
+        return events.filter(
+          (event: any) => event.timingStatus === 'upcoming' && event.status === 'published',
+        );
+      case 'Archived':
+        return events.filter(
+          (event: any) => event.timingStatus === 'past' && event.status === 'published',
+        );
+      case 'Drafts':
+        return events.filter(
+          (event: any) => event.status === 'draft' && event.timingStatus === 'past',
+        );
       default:
         return events;
     }
@@ -66,7 +74,7 @@ async function handleDeleteEvent(eventId: string) {
   return (
     <div className="min-h-[80vh] bg-white rounded-md p-[1.3vw]">
       <Tabs
-        tabs={["Active", "Upcoming", "Archived", "Drafts"]}
+        tabs={['Active', 'Upcoming', 'Archived', 'Drafts']}
         activeTab={activeTab}
         onTabChange={setActiveTab}
         className="w-[50%] justify-between md:justify-evenly md:w-fit"
@@ -75,9 +83,7 @@ async function handleDeleteEvent(eventId: string) {
       <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[20px]">
         <CreateNewEvent />
         {loading ? (
-          Array.from({ length: 3 }).map((_, index) => (
-            <EventCardSkeleton key={index} />
-          ))
+          Array.from({ length: 3 }).map((_, index) => <EventCardSkeleton key={index} />)
         ) : filteredEvents.length > 0 ? (
           filteredEvents.map((val: any, index) => (
             <EventCard
@@ -90,9 +96,9 @@ async function handleDeleteEvent(eventId: string) {
               location={val?.location}
               bannerImage={val?.bannerImage}
               onEdit={() => {
-                navigate(`/manageEvents/${val.slug}`, { state: { id: val.id } });
+                navigate(`/manage-events/${val.slug}`, { state: { id: val.id } });
               }}
-              onDuplicate={() => console.log("Duplicate event", val.id)}
+              onDuplicate={() => console.log('Duplicate event', val.id)}
               onDelete={() => handleDeleteEvent(val.id)}
               slug={val?.slug}
               id={val?.id}

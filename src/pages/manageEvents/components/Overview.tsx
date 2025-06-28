@@ -165,7 +165,7 @@ const Overview = () => {
     {
       name: 'Edit',
       onClick: () =>
-        navigate(`/manageEvents/${slug}/createTicket`, { state: { id: eventId, ticketValue } }),
+        navigate(`/manage-events/${slug}/create-ticket`, { state: { id: eventId, ticketValue } }),
       icon: <LuPencilLine />,
     },
     // {
@@ -209,7 +209,7 @@ const Overview = () => {
         //   // Store the event ID for editing
 
         // //   // Navigate to create event page
-        // //   navigate('/dashboard/createEvent');
+        // //   navigate('/dashboard/create-event');
 
         // }
 
@@ -297,7 +297,7 @@ const Overview = () => {
                     type="icon-left"
                     className="!w-fit border"
                     icon={<LuPencilLine className="text-primary" />}
-                    onClick={() => navigate('/dashboard/createEvent')}
+                    onClick={() => navigate('/dashboard/create-event')}
                   >
                     Edit
                   </DefaultButton>
@@ -326,7 +326,7 @@ const Overview = () => {
                   className="!w-fit border"
                   icon={<FaPlus className="text-primary" />}
                   onClick={() => {
-                    navigate(`/manageEvents/${slug}/createTicket`, { state: { id: eventId } });
+                    navigate(`/manage-events/${slug}/create-ticket`, { state: { id: eventId } });
                   }}
                 >
                   Create Ticket
