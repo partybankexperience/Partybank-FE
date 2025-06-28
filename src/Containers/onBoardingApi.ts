@@ -2,7 +2,7 @@ import { apiCall } from '../utils/axiosFormat';
 
 const RegisterUser = async (email: string): Promise<any> => {
   const response = await apiCall({
-    name: 'signup',
+    name: 'signUp',
     data: {
       email,
     },
