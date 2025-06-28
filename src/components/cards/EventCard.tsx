@@ -62,6 +62,7 @@ const EventCard = ({
     try {
       // setLoading(true);
       const res = await getEventsBySlug(slug as string);
+      console.log('🔥 raw event payload:', res);
       Storage.setItem('eventId', res.id);
 
       // Prefill form data using the store method
@@ -74,6 +75,7 @@ const EventCard = ({
       console.log(error);
     }
   }
+
   function handleEdit() {
     try {
       getEvent();
@@ -84,6 +86,7 @@ const EventCard = ({
     // } else {
     // }
   }
+
   if (stage !== 'draft') {
     buttonOptions.push({
       name: 'Preview',

@@ -55,6 +55,7 @@ const CreateEvent = () => {
       setOriginalFormData(JSON.parse(JSON.stringify(form['Event Setup'])));
     }
   }, [eventId, form['Event Setup'], originalFormData]);
+
   const goNext = async () => {
     try {
       const formData = form[stage] || {};
@@ -123,7 +124,6 @@ const CreateEvent = () => {
           }
 
           // Edit existing event
-          console.log('Editing existing event with ID:', eventId);
           if (formData.coverImage === '' || formData.coverImage === undefined) {
             setFormValue(
               stage,
@@ -188,6 +188,7 @@ const CreateEvent = () => {
         }
         return;
       }
+
       if (stage === 'Schedule & Location') {
         try {
           // Validate Schedule & Location stage
@@ -222,6 +223,7 @@ const CreateEvent = () => {
           setIsCreatingEvent(false);
         }
       }
+
       if (stage === 'Tickets Create') {
         try {
           const tickets = formData.tickets || [];
@@ -570,7 +572,7 @@ const CreateEvent = () => {
       setStage(stages[currentIndex - 1]);
     } else if (eventId) {
       // If editing an existing event, go back to manage events
-      navigate('/dashboard/manageEvents');
+      navigate('/manage-events');
     }
   };
 
@@ -608,6 +610,7 @@ const CreateEvent = () => {
       }
     };
   }, [clearEventStorage]);
+
   return (
     <CreateEventLayout>
       <div className="flex flex-col min-h-[calc(100vh-20rem)] md:px-4 py-6">
