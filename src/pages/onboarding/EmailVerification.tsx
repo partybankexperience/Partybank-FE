@@ -1,44 +1,47 @@
-import { useNavigate } from "react-router";
-import OtpInput from "react-otp-input";
-import { useEffect, useState } from "react";
-import { useOnboardingStore } from "../../stores/onboardingStore";
-import emailPic from "../../assets/images/email.svg";
-import DefaultButton from "../../components/buttons/DefaultButton";
-import { resendOTP, Verifyotp } from "../../Containers/onBoardingApi";
-import { Storage } from "../../stores/InAppStorage";
-import maskEmail from "../../components/helpers/maskedEmail";
-import { formatCountdownTimer } from "../../components/helpers/dateTimeHelpers";
+import { useNavigate } from 'react-router';
+import OtpInput from 'react-otp-input';
+import { useEffect, useState } from 'react';
+import { useOnboardingStore } from '../../stores/onboardingStore';
+import emailPic from '../../assets/images/email.svg';
+import DefaultButton from '../../components/buttons/DefaultButton';
+import { resendOTP, Verifyotp } from '../../Containers/onBoardingApi';
+import { Storage } from '../../stores/InAppStorage';
+import maskEmail from '../../components/helpers/maskedEmail';
+import { formatCountdownTimer } from '../../components/helpers/dateTimeHelpers';
 
 const EmailVerification = () => {
-  const [otp, setOtp] = useState("");
+  const [otp, setOtp] = useState('');
   const [timer, setTimer] = useState(600);
   const navigate = useNavigate();
-  const [isLoading, setisLoading] = useState(false)
+  const [isLoading, setisLoading] = useState(false);
   const { markStepComplete } = useOnboardingStore();
 
-  const email = Storage.getItem('email') || null
+  const email = Storage.getItem('email') || null;
   useEffect(() => {
-      if (!email) {
-       navigate("/signUp", { replace: true, state: {
-         toast: { type: "error", title: "Auth invalid", message: "Please sign up/login first" },
-       }});
-      }
-    }, []);
-  const handleNext = async(e:any) => {
-e.preventDefault()
+    if (!email) {
+      navigate('/signup', {
+        replace: true,
+        state: {
+          toast: { type: 'error', title: 'Auth invalid', message: 'Please sign up/login first' },
+        },
+      });
+    }
+  }, []);
+  const handleNext = async (e: any) => {
+    e.preventDefault();
     try {
       setisLoading(true);
       if (otp.length < 4) {
         return;
       }
-      const res=await Verifyotp(email, otp)
-      Storage.setItem('token', res.accessToken)
-      Storage.setItem('user', res.user)
-      markStepComplete("emailVerification");
-      navigate("/passwordSetup", { replace: true });
+      const res = await Verifyotp(email, otp);
+      Storage.setItem('token', res.accessToken);
+      Storage.setItem('user', res.user);
+      markStepComplete('emailVerification');
+      navigate('/password-setup', { replace: true });
     } catch (error) {
       setisLoading(false);
-    }finally{
+    } finally {
       setisLoading(false);
     }
   };
@@ -55,14 +58,12 @@ e.preventDefault()
       setisLoading(true);
       await resendOTP(email);
       setTimer(60); // Reset timer
-    
-     
     } catch (error) {
-      
     } finally {
       setisLoading(false);
-    }}
-  const encryptedEmail = email ? maskEmail(email) : "";
+    }
+  };
+  const encryptedEmail = email ? maskEmail(email) : '';
 
   return (
     <form className="flex flex-col flex-grow  justify-between h-full" onSubmit={handleNext}>
@@ -89,18 +90,18 @@ e.preventDefault()
           type="button"
           onClick={handleResendOtp}
           className={`text-center text-[16px] font-medium ${
-            timer > 0 ? "text-grey300 cursor-not-allowed" : "text-primary"
+            timer > 0 ? 'text-grey300 cursor-not-allowed' : 'text-primary'
           }`}
           disabled={timer > 0}
         >
-          {timer > 0 ? `Resend OTP in ${formatCountdownTimer(timer)}s` : "Resend OTP"}
+          {timer > 0 ? `Resend OTP in ${formatCountdownTimer(timer)}s` : 'Resend OTP'}
         </button>
       </div>
       <DefaultButton
         type="default"
         variant="primary"
         className="!w-full md:!w-fit md:!mx-auto"
-        onClick={()=>handleNext}
+        onClick={() => handleNext}
         submitType="submit"
         isLoading={isLoading}
         disabled={otp.length < 4}

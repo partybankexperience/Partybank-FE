@@ -73,7 +73,7 @@ const Dashboard = () => {
       // After successful deletion, refresh the events list
       await fetchEvents();
     } catch (error) {
-      console.error("Error deleting event:", error);
+      console.error('Error deleting event:', error);
       // Optionally, show an error message to the user
     } finally {
       setLoading(false);
@@ -208,7 +208,7 @@ const Dashboard = () => {
             </h2>
             <button
               className="text-primary text-[16px] cursor-pointer hover:text-deepRed flex gap-[12.5px] items-center"
-              onClick={() => navigate('/manageEvents')}
+              onClick={() => navigate('/manage-events')}
             >
               See all Events <IoIosArrowForward />
             </button>
@@ -230,14 +230,14 @@ const Dashboard = () => {
                   ticketSold={event.ticketsSold || 0}
                   totalTicket={event.totalTickets || 0}
                   onEdit={() => {
-                    navigate(`/manageEvents/${event.slug}`, { state: { id: event.id } });
+                    navigate(`/manage-events/${event.slug}`, { state: { id: event.id } });
                   }}
                   onDuplicate={() => console.log('Duplicate clicked')}
                   onDelete={() => handleDeleteEvent(event.id)}
-                      slug={event.slug}
-                      id={event.id}
-                      stage={event.status}
-                      timingStatus={event.timingStatus}
+                  slug={event.slug}
+                  id={event.id}
+                  stage={event.status}
+                  timingStatus={event.timingStatus}
                 />
               ))
             ) : (

@@ -1,31 +1,33 @@
-import { useNavigate } from "react-router";
-import DefaultButton from "../../components/buttons/DefaultButton";
-import DefaultInput from "../../components/inputs/DefaultInput";
-import { useOnboardingStore } from "../../stores/onboardingStore";
-import { useState } from "react";
-import { SetProfile } from "../../Containers/onBoardingApi";
+import { useNavigate } from 'react-router';
+import DefaultButton from '../../components/buttons/DefaultButton';
+import DefaultInput from '../../components/inputs/DefaultInput';
+import { useOnboardingStore } from '../../stores/onboardingStore';
+import { useState } from 'react';
+import { SetProfile } from '../../Containers/onBoardingApi';
 
 const ProfileInfo = () => {
   const navigate = useNavigate();
-  const [fullName, setFullName] = useState("");
-  const [businessName, setBusinessName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [isLoading, setisLoading] = useState(false)
-  const { markStepComplete,updateOnboardingStep } = useOnboardingStore();
+  const [fullName, setFullName] = useState('');
+  const [businessName, setBusinessName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [isLoading, setisLoading] = useState(false);
+  const { markStepComplete, updateOnboardingStep } = useOnboardingStore();
 
-  const handleNext = async (e:any) => {
+  const handleNext = async (e: any) => {
     e.preventDefault();
     if (fullName.length < 0) {
-      console.log('here')
+      console.log('here');
       return;
     }
     try {
       setisLoading(true);
-      const res = await SetProfile(fullName, businessName,phone);
+      const res = await SetProfile(fullName, businessName, phone);
       updateOnboardingStep(res.currentStep);
-      markStepComplete("profileInformation");
-      navigate("/pinSetup", { replace: true });
-    } catch (error) {setisLoading(false);}finally{
+      markStepComplete('profileInformation');
+      navigate('/pin-setup', { replace: true });
+    } catch (error) {
+      setisLoading(false);
+    } finally {
       setisLoading(false);
     }
   };
@@ -33,11 +35,13 @@ const ProfileInfo = () => {
     navigate(-1);
   };
   return (
-    <form className="flex flex-col flex-grow  justify-between h-full px-[20px] md:px-0" onSubmit={handleNext}>
+    <form
+      className="flex flex-col flex-grow  justify-between h-full px-[20px] md:px-0"
+      onSubmit={handleNext}
+    >
       <div
         className="h-fit grid
           gap-[50px]"
-          
       >
         <h1 className="text-[24px] md:text-[36px] font-bold text-black text-center">
           Profile Information
@@ -86,7 +90,7 @@ const ProfileInfo = () => {
           type="default"
           variant="primary"
           className="!w-full md:!w-fit md:!mx-auto"
-          onClick={()=>handleNext}
+          onClick={() => handleNext}
           submitType="submit"
           isLoading={isLoading}
         >

@@ -1,36 +1,36 @@
-import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { HiOutlineDotsVertical } from "react-icons/hi";
-import { PiMapPinBold } from "react-icons/pi";
-import { LuPencilLine } from "react-icons/lu";
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { HiOutlineDotsVertical } from 'react-icons/hi';
+import { PiMapPinBold } from 'react-icons/pi';
+import { LuPencilLine } from 'react-icons/lu';
 // import { FiCopy } from "react-icons/fi";
-import { AiOutlineDelete } from "react-icons/ai";
-import { formatDate, formatTimeRange } from "../helpers/dateTimeHelpers";
-import FallbackImage from "../common/FallbackImage";
-import { getEventsBySlug } from "../../Containers/eventApi";
-import { Storage } from "../../stores/InAppStorage";
-import { useEventStore } from "../../stores/useEventStore";
+import { AiOutlineDelete } from 'react-icons/ai';
+import { formatDate, formatTimeRange } from '../helpers/dateTimeHelpers';
+import FallbackImage from '../common/FallbackImage';
+import { getEventsBySlug } from '../../Containers/eventApi';
+import { Storage } from '../../stores/InAppStorage';
+import { useEventStore } from '../../stores/useEventStore';
 // import { BsInfoCircle } from "react-icons/bs";
-import { MdOutlinePreview } from "react-icons/md";
+import { MdOutlinePreview } from 'react-icons/md';
 // import { duplicateEvent } from "../../Containers/eventApi";
-type StageType = 'upcoming' | 'active' | 'past' | 'draft' |'';
+type StageType = 'upcoming' | 'active' | 'past' | 'draft' | '';
 const EventCard = ({
-  name = "Canvas and Beats",
-  location = "Landmark Centre",
-  startDate = "2025-04-12T00:00:00.000Z",
-  startTime = "",
-  endTime = "",
+  name = 'Canvas and Beats',
+  location = 'Landmark Centre',
+  startDate = '2025-04-12T00:00:00.000Z',
+  startTime = '',
+  endTime = '',
   progress = 50,
   ticketSold = 550,
   totalTicket = 1000,
   // onEdit,
   onDuplicate,
   onDelete,
-  stage = "",
-  slug='',
-  id='',
-  timingStatus='',
-  bannerImage = "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=60",
+  stage = '',
+  slug = '',
+  id = '',
+  timingStatus = '',
+  bannerImage = 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=60',
 }: {
   name?: string;
   location?: string;
@@ -50,69 +50,64 @@ const EventCard = ({
   timingStatus: string;
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const navigate = useNavigate();
   const { setStage, prefillEventData, mapBackendStepToFrontend } = useEventStore();
 
-console.log(onDuplicate)
-const buttonOptions = [];
-async function getEvent() {
-  try {
-    // setLoading(true);
-    const res = await getEventsBySlug(slug as string);
-    Storage.setItem("eventId", res.id);
+  console.log(onDuplicate);
+  const buttonOptions = [];
+  async function getEvent() {
+    try {
+      // setLoading(true);
+      const res = await getEventsBySlug(slug as string);
+      Storage.setItem('eventId', res.id);
 
-    // Prefill form data using the store method
-    prefillEventData(res);
+      // Prefill form data using the store method
+      prefillEventData(res);
 
-    // Map backend step to frontend stage and set it
-    const frontendStage = mapBackendStepToFrontend(res.currentStep);
-    setStage(frontendStage);
-    
-  } catch (error) {
-console.log(error)
-  }}
-function handleEdit() {
-  try {
-    getEvent();
-    navigate('/dashboard/createEvent');
-  } catch (error) {
-    
+      // Map backend step to frontend stage and set it
+      const frontendStage = mapBackendStepToFrontend(res.currentStep);
+      setStage(frontendStage);
+    } catch (error) {
+      console.log(error);
+    }
   }
-  // if (onEdit) {
-  //   onEdit();
-  // } else {
-  // }
-}
-if (stage !== 'draft') {
-  buttonOptions.push({
-    name: "Preview",
-    onClick: () => navigate(`/manageEvents/${slug}`, { state: { id: id } }),
-    icon: < MdOutlinePreview  />,
-  });
-}
+  function handleEdit() {
+    try {
+      getEvent();
+      navigate('/dashboard/create-event');
+    } catch (error) {}
+    // if (onEdit) {
+    //   onEdit();
+    // } else {
+    // }
+  }
+  if (stage !== 'draft') {
+    buttonOptions.push({
+      name: 'Preview',
+      onClick: () => navigate(`/manage-events/${slug}`, { state: { id: id } }),
+      icon: <MdOutlinePreview />,
+    });
+  }
 
-if (timingStatus !== 'past'|| stage === 'draft') {
-  buttonOptions.push({
-    name: "Edit",
-    onClick: () => (handleEdit()),
-    icon: <LuPencilLine />,
-  });
-  buttonOptions.push({
-    name: "Delete",
-    onClick: () => onDelete?.(),
-    icon: <AiOutlineDelete />,
-  });
-}
-
-
-
+  if (timingStatus !== 'past' || stage === 'draft') {
+    buttonOptions.push({
+      name: 'Edit',
+      onClick: () => handleEdit(),
+      icon: <LuPencilLine />,
+    });
+    buttonOptions.push({
+      name: 'Delete',
+      onClick: () => onDelete?.(),
+      icon: <AiOutlineDelete />,
+    });
+  }
 
   // const buttonOptions = [
   //   {
   //     name: "Edit",
-  //     onClick: () => (onEdit ? onEdit() : navigate("/manageEvents/:id")),
+  //     onClick: () => (onEdit ? onEdit() : navigate("/manage-events/:id")),
   //     icon: <LuPencilLine />,
   //   },
   //   // {
@@ -134,17 +129,14 @@ if (timingStatus !== 'past'|| stage === 'draft') {
   // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setDropdownOpen(false);
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside, true);
+    document.addEventListener('mousedown', handleClickOutside, true);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside, true);
+      document.removeEventListener('mousedown', handleClickOutside, true);
     };
   }, []);
   return (
@@ -176,10 +168,10 @@ if (timingStatus !== 'past'|| stage === 'draft') {
         )}
       </div>
 
-      <div className="h-[150px] rounded-t-[9px] w-full bg-gray-100" >
-        <FallbackImage 
-          src={bannerImage} 
-          alt={`${name} banner image`} 
+      <div className="h-[150px] rounded-t-[9px] w-full bg-gray-100">
+        <FallbackImage
+          src={bannerImage}
+          alt={`${name} banner image`}
           className="w-full h-full object-cover rounded-t-[9px]"
           fallbackType="event"
         />
@@ -203,8 +195,8 @@ if (timingStatus !== 'past'|| stage === 'draft') {
               className="h-full rounded-full"
               style={{
                 width: `${progress}%`,
-                background: "linear-gradient(90deg, #e91c41 0%, #f16b83 100%)",
-                transition: "width 0.3s ease",
+                background: 'linear-gradient(90deg, #e91c41 0%, #f16b83 100%)',
+                transition: 'width 0.3s ease',
               }}
             />
           </div>

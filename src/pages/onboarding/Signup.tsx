@@ -1,19 +1,19 @@
 // import { FcGoogle } from "react-icons/fc";
-import DefaultButton from "../../components/buttons/DefaultButton";
-import DefaultInput from "../../components/inputs/DefaultInput";
-import LoginLayout from "../../components/layouts/LoginLayout";
-import { useLocation, useNavigate } from "react-router";
-import { useEffect, useRef, useState } from "react";
-import { RegisterUser } from "../../Containers/onBoardingApi";
-import { Storage } from "../../stores/InAppStorage";
-import { useOnboardingStore } from "../../stores/onboardingStore";
-import { errorAlert } from "../../components/alerts/ToastService";
+import DefaultButton from '../../components/buttons/DefaultButton';
+import DefaultInput from '../../components/inputs/DefaultInput';
+import LoginLayout from '../../components/layouts/LoginLayout';
+import { useLocation, useNavigate } from 'react-router';
+import { useEffect, useRef, useState } from 'react';
+import { RegisterUser } from '../../Containers/onBoardingApi';
+import { Storage } from '../../stores/InAppStorage';
+import { useOnboardingStore } from '../../stores/onboardingStore';
+import { errorAlert } from '../../components/alerts/ToastService';
 
 const Signup = () => {
   const navigate = useNavigate();
-  const [email, setemail] = useState("");
+  const [email, setemail] = useState('');
   const [emailError, setEmailError] = useState(false);
-  const [isLoading, setisLoading] = useState(false)
+  const [isLoading, setisLoading] = useState(false);
 
   const { reset } = useOnboardingStore();
 
@@ -44,29 +44,22 @@ const Signup = () => {
     try {
       setisLoading(true);
       await RegisterUser(email);
-      navigate("/emailVerification");
-      Storage.setItem("email", email);
-      console.log("User registered successfully");
+      navigate('/email-verification');
+      Storage.setItem('email', email);
+      console.log('User registered successfully');
     } catch (error) {
       console.log(error);
       setisLoading(false);
-    }finally{
+    } finally {
       setisLoading(false);
     }
   }
   return (
     <LoginLayout>
-      <form
-        className="grid mt-[2vh] md:mt-[4vh] gap-[3vh] h-fit "
-        onSubmit={handleRegisterUser}
-      >
+      <form className="grid mt-[2vh] md:mt-[4vh] gap-[3vh] h-fit " onSubmit={handleRegisterUser}>
         <div className="grid gap-[10px] text-center md:text-left">
-          <h1 className="text-black text-3xl font-semibold">
-            Create an Account
-          </h1>
-          <p className="text-lightGrey font-normal text-sm">
-            Let’s sign up quickly to get stated.
-          </p>
+          <h1 className="text-black text-3xl font-semibold">Create an Account</h1>
+          <p className="text-lightGrey font-normal text-sm">Let’s sign up quickly to get stated.</p>
         </div>
         <div className="grid w-full gap-[18px]">
           <DefaultInput
@@ -104,10 +97,10 @@ const Signup = () => {
           </DefaultButton> */}
         </div>
         <p className="text-grey200 text-[14px]  mt-[0.5vh] text-center">
-          Already have an account?{" "}
+          Already have an account?{' '}
           <span
             className="text-red font-medium cursor-pointer hover:text-deepRed"
-            onClick={() => navigate("/")}
+            onClick={() => navigate('/')}
             role="link"
             tabIndex={0}
           >
