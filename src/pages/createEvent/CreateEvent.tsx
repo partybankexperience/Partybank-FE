@@ -154,7 +154,7 @@ const CreateEvent = () => {
             setFormValue(
               stage,
               'coverImage',
-              'https://images.unsplash.com/photo-1485872299829-c673f5194813?q=80&w=2054&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+              'https://res.cloudinary.com/dp1zblmv4/image/upload/v1751075414/partybank/jyvemoyskt5dnhatk9zw.png',
             );
           }
           console.log('Creating new event');

@@ -12,14 +12,15 @@ import { Storage } from '../../stores/InAppStorage';
 import { useEventStore } from '../../stores/useEventStore';
 // import { BsInfoCircle } from "react-icons/bs";
 import { MdOutlinePreview } from 'react-icons/md';
+import { getFallbackImage } from '../../config/fallbackImages';
 // import { duplicateEvent } from "../../Containers/eventApi";
 type StageType = 'upcoming' | 'active' | 'past' | 'draft' | '';
 const EventCard = ({
-  name = 'Canvas and Beats',
-  location = 'Landmark Centre',
-  startDate = '2025-04-12T00:00:00.000Z',
-  startTime = '',
-  endTime = '',
+  name,
+  location = 'To Be Disclosed',
+  startDate,
+  startTime,
+  endTime,
   progress = 0,
   ticketSold = 0,
   totalTicket = 0,
@@ -30,12 +31,12 @@ const EventCard = ({
   slug = '',
   id = '',
   timingStatus = '',
-  bannerImage = 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=60',
+  bannerImage = getFallbackImage('default'),
 }: {
   name?: string;
   location?: string;
-  startDate?: string;
-  startTime?: string;
+  startDate: string;
+  startTime: string;
   endTime?: string;
   progress?: number;
   ticketSold?: number;
