@@ -160,7 +160,7 @@ const Dashboard = () => {
                   className="text-[12px]"
                 /> */}
                 <Dropdown
-                  options={['Monthly']}
+                  options={['Yearly', 'Monthly']}
                   selected={selectedOption}
                   onSelect={setSelectedOption}
                   className="text-[12px]"
