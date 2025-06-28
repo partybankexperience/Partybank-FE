@@ -1,14 +1,13 @@
+import { useEffect } from 'react';
+import SlideToggle from '../../components/inputs/SlideToggle';
+import { useEventStore } from '../../stores/useEventStore';
 
-import { useEffect } from "react";
-import SlideToggle from "../../components/inputs/SlideToggle";
-import { useEventStore } from "../../stores/useEventStore";
-
-const currentStage = "Notifications";
+const currentStage = 'Notifications';
 
 const notificationOptions = [
-  "Email Notifications (Free)",
-  "SMS Notifications (Paid Feature)",
-  "Push Notifications (Future consideration if an app is developed)",
+  'Email Notifications (Free)',
+  // "SMS Notifications (Paid Feature)",
+  // "Push Notifications (Future consideration if an app is developed)",
 ];
 
 const Notification = () => {
@@ -16,22 +15,19 @@ const Notification = () => {
   const notificationForm = form[currentStage] || {};
 
   const handleToggleChange = (val: boolean) => {
-    setFormValue(currentStage, "notifyOnTicketSale", val);
+    setFormValue(currentStage, 'notifyOnTicketSale', val);
   };
   useEffect(() => {
     const third = notificationForm.notifyOnTicketSale;
     if (third === undefined || third === null) {
-      setFormValue(currentStage, "notifyOnTicketSale", false);
+      setFormValue(currentStage, 'notifyOnTicketSale', false);
     }
-  }, [])
-  
+  }, []);
 
   return (
     <div className="grid gap-[15px] mt-[1rem]">
       <div className="flex items-center justify-between w-full">
-        <p className="font-bold text-[1rem]">
-          Notify on Ticket Sale
-        </p>
+        <p className="font-bold text-[1rem]">Notify on Ticket Sale</p>
         <SlideToggle
           toggle={(val: any) => handleToggleChange(val)}
           // defaultValue={notificationForm.notifyOnTicketSale || false}

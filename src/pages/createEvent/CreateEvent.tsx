@@ -658,7 +658,7 @@ const CreateEvent = () => {
                     clearEventStorage();
                     // Clear eventId
                     Storage.removeItem('eventId');
-                    navigate(`/manageEvents/${slug}`, { state: 'Success' });
+                    navigate(`/manage-events/${slug}`, { state: 'Success' });
                   } catch (error) {
                     console.error('Error publishing event:', error);
                     errorAlert('Error', 'Failed to publish event. Please try again.');

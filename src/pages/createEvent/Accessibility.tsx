@@ -1,20 +1,19 @@
-
-import { useRef, useEffect } from "react";
-import RadioButton from "../../components/inputs/RadioButton";
-import SlideToggle from "../../components/inputs/SlideToggle";
-import DefaultInput from "../../components/inputs/DefaultInput";
-import { useEventStore } from "../../stores/useEventStore";
+import { useRef, useEffect } from 'react';
+import RadioButton from '../../components/inputs/RadioButton';
+import SlideToggle from '../../components/inputs/SlideToggle';
+import DefaultInput from '../../components/inputs/DefaultInput';
+import { useEventStore } from '../../stores/useEventStore';
 
 const Accessibility = () => {
-  const { form, setFormValue, errors,clearError } = useEventStore();
-  const accessibilityForm = form["Accessibility"] || {};
-  const accessibilityErrors = errors["Accessibility"] || {};
+  const { form, setFormValue, errors, clearError } = useEventStore();
+  const accessibilityForm = form['Accessibility'] || {};
+  const accessibilityErrors = errors['Accessibility'] || {};
 
-  const selected = accessibilityForm.eventVisibility || "";
-  const featuresEvent = accessibilityForm.wheelchairAccess || "";
-  const parking = accessibilityForm.parkingAvailable || "";
+  const selected = accessibilityForm.eventVisibility || '';
+  const featuresEvent = accessibilityForm.wheelchairAccess || '';
+  const parking = accessibilityForm.parkingAvailable || '';
   const toggle = accessibilityForm.transferCharges || false;
-  const minAge = accessibilityForm.minAge || "";
+  const minAge = accessibilityForm.minAge || '';
 
   const eventVisibilityRef = useRef<any>(null);
   const wheelchairAccessRef = useRef<any>(null);
@@ -22,20 +21,19 @@ const Accessibility = () => {
   const minAgeRef = useRef<any>(null);
 
   const eventVisibility = [
-    { name: "Public Event", value: "public", extraText: "Visible to all users" },
-    { name: "Private Event", value: "private", extraText: "Access via direct link or invite" },
+    { name: 'Public Event', value: 'public', extraText: 'Visible to all users' },
+    // { name: "Private Event", value: "private", extraText: "Access via direct link or invite" },
   ];
-  const features = ["Yes", "No"];
+  const features = ['Yes', 'No'];
   const list = [
-    "If enabled, attendees cover platform/service fees instead of the organizer.",
-    "This will be reflected in the ticket price during checkout.",
+    'If enabled, attendees cover platform/service fees instead of the organizer.',
+    'This will be reflected in the ticket price during checkout.',
   ];
 
   const handleInputChange = (key: string, value: any) => {
-
-    setFormValue("Accessibility", key, value);
+    setFormValue('Accessibility', key, value);
     // Clear specific error when value changes
-    clearError("Accessibility", key);
+    clearError('Accessibility', key);
   };
 
   const validateForm = () => {
@@ -53,7 +51,7 @@ const Accessibility = () => {
         }
       }, 100);
     }
-    
+
     return Object.keys(accessibilityErrors).length === 0;
   };
 
@@ -68,9 +66,7 @@ const Accessibility = () => {
   return (
     <div>
       <div className="grid gap-2">
-        <h2 className="text-black text-[1rem] font-bold">
-          Event Visibility & Access
-        </h2>
+        <h2 className="text-black text-[1rem] font-bold">Event Visibility & Access</h2>
         <div
           role="radiogroup"
           aria-label="Select an option"
@@ -86,24 +82,18 @@ const Accessibility = () => {
                 value={lab.value}
                 name="event-visibility"
                 checked={selected === lab.value}
-                onChange={(val: string) =>
-                  handleInputChange("eventVisibility", val)
-                }
+                onChange={(val: string) => handleInputChange('eventVisibility', val)}
                 extraText={lab.extraText}
               />
             );
           })}
         </div>
         {accessibilityErrors.eventVisibility && (
-          <p className="text-[13px] text-red-500 mt-1">
-            {accessibilityErrors.eventVisibility}
-          </p>
+          <p className="text-[13px] text-red-500 mt-1">{accessibilityErrors.eventVisibility}</p>
         )}
       </div>
 
-      <h2 className="text-black text-[1rem] mt-[2.5rem] font-bold">
-        Accessibility Features
-      </h2>
+      <h2 className="text-black text-[1rem] mt-[2.5rem] font-bold">Accessibility Features</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-[20px] mt-[10px]">
         <div className="grid gap-2">
           <p className="text-black text-[1rem]">Wheelchair Accessibility</p>
@@ -122,17 +112,13 @@ const Accessibility = () => {
                   value={lab}
                   name="wheelchair"
                   checked={featuresEvent === lab}
-                  onChange={(val: string) =>
-                    handleInputChange("wheelchairAccess", val)
-                  }
+                  onChange={(val: string) => handleInputChange('wheelchairAccess', val)}
                 />
               );
             })}
           </div>
           {accessibilityErrors.wheelchairAccess && (
-            <p className="text-[13px] text-red-500 mt-1">
-              {accessibilityErrors.wheelchairAccess}
-            </p>
+            <p className="text-[13px] text-red-500 mt-1">{accessibilityErrors.wheelchairAccess}</p>
           )}
         </div>
 
@@ -153,17 +139,13 @@ const Accessibility = () => {
                   value={lab}
                   name="parking"
                   checked={parking === lab}
-                  onChange={(val: string) =>
-                    handleInputChange("parkingAvailable", val)
-                  }
+                  onChange={(val: string) => handleInputChange('parkingAvailable', val)}
                 />
               );
             })}
           </div>
           {accessibilityErrors.parkingAvailable && (
-            <p className="text-[13px] text-red-500 mt-1">
-              {accessibilityErrors.parkingAvailable}
-            </p>
+            <p className="text-[13px] text-red-500 mt-1">{accessibilityErrors.parkingAvailable}</p>
           )}
         </div>
       </div>
@@ -174,31 +156,25 @@ const Accessibility = () => {
           label="Minimum Age Requirement"
           type="number"
           value={minAge}
-          setValue={(value: string) => handleInputChange("minAge", value)}
+          setValue={(value: string) => handleInputChange('minAge', value)}
           placeholder="e.g., 18 (leave empty for no restriction)"
           classname="!w-full md:!w-1/2"
           externalErrorMessage={accessibilityErrors.minAge || null}
-          style={accessibilityErrors.minAge ? "border-red-500" : ""}
+          style={accessibilityErrors.minAge ? 'border-red-500' : ''}
           ref={minAgeRef}
         />
       </div>
 
       <div className="grid gap-[15px] mt-[2.5rem]">
         <div className="flex items-center justify-between w-full">
-          <p className="font-bold text-[1rem]">
-            Transfer Event Charges to Customers
-          </p>
+          <p className="font-bold text-[1rem]">Transfer Event Charges to Customers</p>
           <SlideToggle
-            toggle={(val: boolean) =>
-              handleInputChange("transferCharges", val)
-            }
+            toggle={(val: boolean) => handleInputChange('transferCharges', val)}
             isChecked={toggle}
           />
         </div>
         {accessibilityErrors.transferCharges && (
-          <p className="text-[13px] text-red-500 mt-1">
-            {accessibilityErrors.transferCharges}
-          </p>
+          <p className="text-[13px] text-red-500 mt-1">{accessibilityErrors.transferCharges}</p>
         )}
 
         <ul className="grid gap-[10px] list-disc pl-5">
