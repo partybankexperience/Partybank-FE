@@ -421,8 +421,9 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
   return (
     <div className="w-full md:w-[20rem] order-last md:order-none ">
       {/* Mobile: Horizontal scrollable cards */}
-      <div className="block md:hidden mb-4 ">
-        <div className="flex items-center justify-between mb-3 px-4 ">
+      {/* Mobile: Horizontal scrollable cards */}
+      <div className="block md:hidden mb-4">
+        <div className="flex items-center justify-between mb-3 px-4">
           <h3 className="text-black font-semibold text-sm">
             Add Tickets ({allTicketForms.length})
           </h3>
@@ -435,7 +436,7 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
           </button>
         </div>
 
-        <div className="flex gap-3  px-4 pb-2 overflow-x-auto max-w-[calc(100vw-2rem)]">
+        <div className="flex gap-3 px-4 pb-2 overflow-x-auto max-w-[calc(100vw-2rem)]">
           {allTicketForms.map((ticket, index) => {
             const isSaved = isCreateEventContext
               ? savedTickets.includes(ticket.id || `ticket-${index}`)
@@ -444,12 +445,27 @@ const TicketSidebar = ({ onAddTicket, onEditTicket, onDeleteTicket }: TicketSide
               <div
                 key={ticket.id || index}
                 onClick={() => handleEditTicket(index)}
-                className={`flex-shrink-0 w-32 p-2 rounded-lg border transition-colors cursor-pointer ${
+                className={`relative flex-shrink-0 w-32 p-2 rounded-lg border transition-colors cursor-pointer ${
                   index === activeTicketIndex
                     ? 'border-primary bg-primary/5'
                     : 'border-gray-200 bg-white'
                 }`}
               >
+                {/* 🗑️ Delete button */}
+                {allTicketForms.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteTicket(index);
+                    }}
+                    className="absolute top-1 right-1 p-1 text-gray-400 hover:text-red-500 bg-white rounded-full z-10"
+                    title="Delete ticket"
+                  >
+                    <FaTrash size={12} />
+                  </button>
+                )}
+
                 <div className="text-xs font-medium text-black truncate mb-1">
                   {ticket.name || `Ticket ${index + 1}`}
                 </div>
