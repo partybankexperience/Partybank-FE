@@ -133,7 +133,7 @@ const editEvent = async (
 const deleteEvent = async (id: string): Promise<any> => {
   const response = await apiCall({
     name: "deleteEvent",
-    urlExtra: `/${id}`,
+    urlExtra: `/${id}/soft-delete`,
   });
   return response;
 };

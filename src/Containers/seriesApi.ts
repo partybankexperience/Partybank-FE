@@ -45,7 +45,7 @@ const updateSeries = async (id: string, name: string, description: string, cover
 const deleteSeries =async (id: string): Promise<any> =>{
   const response = await apiCall({
     name: "deleteSeries",
-    urlExtra: `/${id}`
+    urlExtra: `/${id}/soft-delete`
   });  return response;
 }
 const getSeriesBySlug = async (slug: string): Promise<any> => {

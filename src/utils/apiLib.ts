@@ -111,7 +111,7 @@ export const endPoints: endPointlistTypes = {
   },
   deleteSeries: {
     url: '/series',
-    method: 'DELETE',
+    method: 'PATCH',
     headers,
     auth: true,
   },
@@ -179,7 +179,7 @@ export const endPoints: endPointlistTypes = {
   },
   deleteEvent: {
     url: '/events',
-    method: 'DELETE',
+    method: 'PATCH',
     headers,
     auth: true,
   },
