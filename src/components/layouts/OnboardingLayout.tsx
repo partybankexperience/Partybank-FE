@@ -53,7 +53,7 @@ const STEP_TO_PATH: Record<Step, string> = {
 function targetRouteForUser(user?: { isOnboardingComplete?: boolean; onboardingStep?: Step }) {
   if (!user?.onboardingStep) return '/email-verification';
   if (user.isOnboardingComplete) return '/dashboard';
-  if (user.onboardingStep === 'createEventSeries') return '/dashboard'; // optional step skipped
+  if (user.onboardingStep === 'createEventSeries') return '/create-event-series'; // optional step skipped
   return `/${STEP_TO_PATH[user.onboardingStep]}`;
 }
 
