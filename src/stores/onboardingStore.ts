@@ -1,52 +1,61 @@
-import { create } from "zustand";
-import { Storage } from "./InAppStorage";
+import { create } from 'zustand';
+import { Storage } from './InAppStorage';
+
+// FE step enum (includes FE-only 'emailVerification')
+type Step =
+  | 'emailVerification'
+  | 'passwordSetup'
+  | 'profileInformation'
+  | 'pinSetup'
+  | 'createEventSeries';
 
 type OnboardingStore = {
-  completedSteps: string[];
-  markStepComplete: (step: string) => void;
-  isStepCompleted: (step: string) => boolean;
+  completedSteps: Step[];
+  markStepComplete: (step: Step) => void;
+  isStepCompleted: (step: Step) => boolean;
   reset: () => void;
-  updateOnboardingStep: (step: string) => void;
+  updateOnboardingStep: (step: Step) => void;
 };
 
-const orderedSteps = [
-  "emailVerification",
-  "passwordSetup",
-  "profileInformation",
-  "pinSetup",
-  "createEventSeries",
+const orderedSteps: Step[] = [
+  'emailVerification',
+  'passwordSetup',
+  'profileInformation',
+  'pinSetup',
+  'createEventSeries',
 ];
 
 export const useOnboardingStore = create<OnboardingStore>((set, get) => {
-  // Get user info from storage
-  const user = Storage.getItem("user") || {};
-  const currentStep = user?.onboardingStep || "emailVerification";
+  // NOTE: ensure Storage.getItem('user') returns an object (parse JSON if needed in Storage)
+  const user = Storage.getItem('user') || {};
+  // Backend usually returns 'passwordSetup' etc.; default to FE-only 'emailVerification' when missing
+  const currentStep: Step = (user?.onboardingStep as Step) || 'emailVerification';
 
-  // Figure out all steps *before* and including the current one
   const currentStepIndex = orderedSteps.indexOf(currentStep);
-  const completedSteps = currentStepIndex !== -1
-    ? orderedSteps.slice(0, currentStepIndex)
-    : [];
+  const completedSteps = currentStepIndex !== -1 ? orderedSteps.slice(0, currentStepIndex) : [];
 
   return {
     completedSteps,
-    markStepComplete: (step) => {
+
+    markStepComplete: (step) =>
       set((state) => {
-        if (state.completedSteps.includes(step)) {
-          return state; // already completed
-        }
-        const updatedSteps = [...state.completedSteps, step];
-        Storage.setItem("completedSteps", updatedSteps); // (Optional) still persist
-        return { completedSteps: updatedSteps };
-      });
-    },
+        if (state.completedSteps.includes(step)) return state;
+        // Keep in defined order & dedupe
+        const updated = orderedSteps.filter((s) => state.completedSteps.includes(s) || s === step);
+        Storage.setItem('completedSteps', updated);
+        return { completedSteps: updated };
+      }),
+
     isStepCompleted: (step) => get().completedSteps.includes(step),
-    reset: () => set({ completedSteps: [] }),
+
+    reset: () => {
+      Storage.setItem('completedSteps', []); // optional: clear persisted progress
+      set({ completedSteps: [] });
+    },
+
     updateOnboardingStep: (step) => {
-      const user = Storage.getItem("user");
-      if (user) {
-        Storage.setItem("user", { ...user, onboardingStep: step });
-      }
+      const u = Storage.getItem('user');
+      if (u) Storage.setItem('user', { ...u, onboardingStep: step });
     },
   };
 });

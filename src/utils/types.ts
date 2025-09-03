@@ -61,10 +61,3 @@ export type urlPropTypes = {
   action?: (data: any) => any;
   alert?: boolean;
 };
-
-export type OnboardingStep =
-  | 'verifyEmail'
-  | 'passwordSetup'
-  | 'profileInformation'
-  | 'pinSetup'
-  | 'createEventSeries';
