@@ -8,6 +8,41 @@ import { resendOTP, Verifyotp } from '../../Containers/onBoardingApi';
 import { Storage } from '../../stores/InAppStorage';
 import maskEmail from '../../components/helpers/maskedEmail';
 import { formatCountdownTimer } from '../../components/helpers/dateTimeHelpers';
+import { OnboardingStep } from '../../utils/types';
+
+export const STEP_ROUTE: Record<OnboardingStep, string> = {
+  verifyEmail: '/email-verification',
+  passwordSetup: '/password-setup',
+  profileInformation: '/profile-information',
+  pinSetup: '/pin-setup',
+  createEventSeries: '/create-event-series', // optional
+};
+
+const ORDER: OnboardingStep[] = [
+  'verifyEmail',
+  'passwordSetup',
+  'profileInformation',
+  'pinSetup',
+  'createEventSeries', // optional
+];
+
+export function routeForUser(user: {
+  isOnboardingComplete: boolean;
+  onboardingStep: OnboardingStep;
+}) {
+  if (user.isOnboardingComplete) return '/dashboard';
+  if (user.onboardingStep === 'createEventSeries') return '/dashboard'; // <-- skip optional
+  return STEP_ROUTE[user.onboardingStep] ?? '/email-verification';
+}
+
+export function nextRouteAfter(step: OnboardingStep) {
+  const i = ORDER.indexOf(step);
+  const next = ORDER[i + 1];
+  if (!next) return '/dashboard';
+  // Skip optional step
+  if (next === 'createEventSeries') return '/dashboard';
+  return STEP_ROUTE[next];
+}
 
 const EmailVerification = () => {
   const [otp, setOtp] = useState('');
@@ -38,7 +73,9 @@ const EmailVerification = () => {
       Storage.setItem('token', res.accessToken);
       Storage.setItem('user', res.user);
       markStepComplete('emailVerification');
-      navigate('/password-setup', { replace: true });
+      // Problem 1.
+      // navigate('/password-setup', { replace: true });
+      navigate(routeForUser(res.user), { replace: true });
     } catch (error) {
       setisLoading(false);
     } finally {
