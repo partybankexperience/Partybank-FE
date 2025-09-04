@@ -37,7 +37,7 @@ const Login = () => {
 
   function toKebabCase(str: string): string {
     return str
-      .replace(/([a-z])([A-Z])/g, "$1-$2") // insert dash before capital letters
+      .replace(/([a-z])([A-Z])/g, '$1-$2') // insert dash before capital letters
       .toLowerCase();
   }
 
@@ -61,12 +61,12 @@ const Login = () => {
       Storage.setItem('token', res.accessToken);
       Storage.setItem('user', res.user);
       console.log(res, 'Login Response');
-      if (res.user.onboardingStep && res.user.onboardingStep !== "completed") {
+      if (res.user.onboardingStep && res.user.onboardingStep !== 'completed') {
         const path = toKebabCase(res.user.onboardingStep);
         navigate(`/${path}`);
         return;
       } else {
-        navigate("/dashboard");
+        navigate('/dashboard');
       }
     } catch (error) {
       console.log(error);
