@@ -33,24 +33,24 @@ const LoginLayout = ({ children }: LoginLayoutProps) => {
       </div>
 
       <div className="hidden xl:block fixed top-0 right-0 w-[55%] h-screen z-0">
-        <img src={login} alt="" className="object-cover min-h-screen" />
+        <img src={login} alt="Login illustration" className="object-cover min-h-screen" />
         <div className="absolute bottom-10 left-10 text-white space-y-4 max-w-[80%]">
           <h2 className="text-2xl font-bold">Create and Manage your own Event</h2>
           <div className="flex items-center gap-2">
             <div className="flex items-center -space-x-4">
               <img
                 src={avatar3}
-                alt="User Image"
+                alt="User"
                 className="w-12 h-12 rounded-full object-cover border border-black"
               />
               <img
                 src={avatar1}
-                alt="User Image"
+                alt="User"
                 className="w-12 h-12 rounded-full object-cover border border-black"
               />
               <img
                 src={avatar2}
-                alt="User Image"
+                alt="User"
                 className="w-12 h-12 rounded-full object-cover border border-black"
               />
             </div>
