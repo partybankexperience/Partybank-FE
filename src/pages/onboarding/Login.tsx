@@ -35,6 +35,12 @@ const Login = () => {
     }
   }, [state, message]);
 
+  function toKebabCase(str: string): string {
+    return str
+      .replace(/([a-z])([A-Z])/g, "$1-$2") // insert dash before capital letters
+      .toLowerCase();
+  }
+
   async function handleSignIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (emailError) {
@@ -55,7 +61,13 @@ const Login = () => {
       Storage.setItem('token', res.accessToken);
       Storage.setItem('user', res.user);
       console.log(res, 'Login Response');
-      navigate('/dashboard');
+      if (res.user.onboardingStep && res.user.onboardingStep !== "completed") {
+        const path = toKebabCase(res.user.onboardingStep);
+        navigate(`/${path}`);
+        return;
+      } else {
+        navigate("/dashboard");
+      }
     } catch (error) {
       console.log(error);
       setisLoading(false);

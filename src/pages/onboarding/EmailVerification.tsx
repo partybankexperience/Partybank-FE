@@ -56,7 +56,7 @@ const EmailVerification = () => {
   const handleResendOtp = async () => {
     try {
       setisLoading(true);
-      await resendOTP(email);
+      await resendOTP(email, 'signup');
       setTimer(60); // Reset timer
     } catch (error) {
     } finally {

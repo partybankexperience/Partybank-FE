@@ -104,10 +104,10 @@ const resetPassword = async (
   });
   return response;
 };
-const resendOTP = async (email: string): Promise<any> => {
+const resendOTP = async (email: string,purpose:"signup"|"password"): Promise<any> => {
   const response = await apiCall({
     name: 'resendOTP',
-    data: { email },
+    data: { email,purpose },
   });
   return response;
 };

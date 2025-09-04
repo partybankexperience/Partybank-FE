@@ -21,7 +21,7 @@ const StepTwo = ({ email, otp, setOtp, onSubmit, isLoading}:any) => {
   const handleResendOtp = async () => {
     try {
       setisResendOTPLoading(true);
-      await resendOTP(email);
+      await resendOTP(email, "password");
       setTimer(60); // Reset timer
     
      
