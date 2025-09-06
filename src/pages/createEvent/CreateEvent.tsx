@@ -482,7 +482,7 @@ const CreateEvent = () => {
 
           // Convert form data to match backend expectations
           const payload = {
-            visibility: accessibilityData.eventVisibility === 'Public Event' ? 'public' : 'private',
+            visibility: accessibilityData.eventVisibility,
             wheelchairAccessible: accessibilityData.wheelchairAccess === 'Yes',
             parkingAvailable: accessibilityData.parkingAvailable === 'Yes',
             attendeesCoverFees: accessibilityData.transferCharges || false,

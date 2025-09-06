@@ -22,7 +22,7 @@ const Accessibility = () => {
 
   const eventVisibility = [
     { name: 'Public Event', value: 'public', extraText: 'Visible to all users' },
-    // { name: "Private Event", value: "private", extraText: "Access via direct link or invite" },
+    { name: 'Private Event', value: 'private', extraText: 'Access via direct link or invite' },
   ];
   const features = ['Yes', 'No'];
   const list = [

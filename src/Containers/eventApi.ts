@@ -1,4 +1,4 @@
-import { apiCall } from "../utils/axiosFormat";
+import { apiCall } from '../utils/axiosFormat';
 
 interface Address {
   street?: string;
@@ -16,14 +16,14 @@ const createEvent = async (
   tags: any[],
   phone: string,
   category: string,
-  seriesId?: string // optional
+  seriesId?: string, // optional
 ): Promise<any> => {
   const payload: Record<string, any> = {
     name,
     description,
     bannerImage,
     tags,
-    contactPhone:phone,
+    contactPhone: phone,
     category,
   };
 
@@ -32,58 +32,68 @@ const createEvent = async (
   }
 
   const response = await apiCall({
-    name: "createEvent",
+    name: 'createEvent',
     data: payload,
   });
 
   return response;
 };
-const getEvents=async (): Promise<any> =>{
+const getEvents = async (): Promise<any> => {
   const response = await apiCall({
-    name: "getEvents",
-    alert: false
+    name: 'getEvents',
+    alert: false,
   });
   return response;
-}
+};
 
-const createTag = async (name: string,description:string): Promise<any> =>{
+const createTag = async (name: string, description: string): Promise<any> => {
   const payload = {
     name,
-    description
-  }
+    description,
+  };
   const response = await apiCall({
-    name: "createTag",
+    name: 'createTag',
     data: payload,
-    alert: false
+    alert: false,
   });
   return response;
-}
+};
 
-const getTags = async (): Promise<any> =>{
+const getTags = async (): Promise<any> => {
   const response = await apiCall({
-    name: "getTags",
-    alert: false
+    name: 'getTags',
+    alert: false,
   });
   return response;
-}
-const getEventsById =async (id: string): Promise<any> =>{
+};
+const getEventsById = async (id: string): Promise<any> => {
   const response = await apiCall({
-    name: "getEventsById",
+    name: 'getEventsById',
     urlExtra: `/${id}`,
-    alert: false
+    alert: false,
   });
   return response;
-}
-const getScheduleandLocation = async (id:string,eventType: string,startDate:string,startTime:string,endTime:string,isLocationTBA:boolean,venueName?:string,address?: Address,endDate?:string): Promise<any> => {
+};
+const getScheduleandLocation = async (
+  id: string,
+  eventType: string,
+  startDate: string,
+  startTime: string,
+  endTime: string,
+  isLocationTBA: boolean,
+  venueName?: string,
+  address?: Address,
+  endDate?: string,
+): Promise<any> => {
   const normalizeAddress = (addr?: Partial<Address>): Address => ({
-    country: addr?.country || "N/A",
-    state: addr?.state || "N/A",
-    city: addr?.city || "N/A",
-    street: addr?.street || "N/A",
-    postalCode: addr?.postalCode || "N/A",
+    country: addr?.country || 'N/A',
+    state: addr?.state || 'N/A',
+    city: addr?.city || 'N/A',
+    street: addr?.street || 'N/A',
+    postalCode: addr?.postalCode || 'N/A',
   });
   const response = await apiCall({
-    name: "getScheduleandLocation",
+    name: 'getScheduleandLocation',
     urlExtra: `/${id}/schedule-location`,
     data: {
       eventType,
@@ -97,7 +107,7 @@ const getScheduleandLocation = async (id:string,eventType: string,startDate:stri
     },
   });
   return response;
-}
+};
 const editEvent = async (
   id: string,
   name: string,
@@ -106,7 +116,7 @@ const editEvent = async (
   tags: any[],
   phone: string,
   category: string,
-  seriesId?: string
+  seriesId?: string,
 ): Promise<any> => {
   const payload: Record<string, any> = {
     name,
@@ -122,7 +132,7 @@ const editEvent = async (
   }
 
   const response = await apiCall({
-    name: "editEvent",
+    name: 'editEvent',
     urlExtra: `/${id}`,
     data: payload,
   });
@@ -132,47 +142,63 @@ const editEvent = async (
 
 const deleteEvent = async (id: string): Promise<any> => {
   const response = await apiCall({
-    name: "deleteEvent",
+    name: 'deleteEvent',
     urlExtra: `/${id}/soft-delete`,
   });
   return response;
 };
 
-const duplicateEvent = async (id: string,includeTicket:boolean,includeTags:boolean,name:string): Promise<any> => {
+const duplicateEvent = async (
+  id: string,
+  includeTicket: boolean,
+  includeTags: boolean,
+  name: string,
+): Promise<any> => {
   const response = await apiCall({
-    name: "duplicateEvent",
+    name: 'duplicateEvent',
     urlExtra: `/${id}/duplicate`,
     params: {
       includeTicket,
-      includeTags
+      includeTags,
     },
     data: {
-      name
-    }
+      name,
+    },
   });
   return response;
 };
 
-const accessibility = async (id: string, wheelchairAccessible:boolean,parkingAvailable:boolean,attendeesCoverFees:boolean,minAge:string,visibility:'private'|'public'): Promise<any> => {
+const accessibility = async (
+  id: string,
+  wheelchairAccessible: boolean,
+  parkingAvailable: boolean,
+  attendeesCoverFees: boolean,
+  minAge: string,
+  visibility: 'private' | 'public',
+): Promise<any> => {
   const response = await apiCall({
-    name: "accessibility",
+    name: 'accessibility',
     urlExtra: `/${id}/accessibility`,
     data: {
-     wheelchairAccessible, parkingAvailable, attendeesCoverFees, minAge, visibility
+      wheelchairAccessible,
+      parkingAvailable,
+      attendeesCoverFees,
+      minAge,
+      visibility,
     },
   });
   return response;
 };
 const publishEvent = async (id: string): Promise<any> => {
   const response = await apiCall({
-    name: "publishEvent",
+    name: 'publishEvent',
     urlExtra: `/${id}/publish`,
   });
   return response;
-};  
+};
 const notification = async (id: string, notifyOnTicketSale: boolean): Promise<any> => {
   const response = await apiCall({
-    name: "notification",
+    name: 'notification',
     urlExtra: `/${id}/notifications`,
     data: {
       notifyOnTicketSale,
@@ -180,25 +206,40 @@ const notification = async (id: string, notifyOnTicketSale: boolean): Promise<an
   });
   return response;
 };
-const checkSimilarEvent = async(name: string, date: string): Promise<any> => {
+const checkSimilarEvent = async (name: string, date: string): Promise<any> => {
   const response = await apiCall({
-    name: "checkSimilarEvent",
+    name: 'checkSimilarEvent',
     params: {
       name,
-      date
+      date,
     },
-    alert: false
+    alert: false,
   });
   return response;
 };
 
 const getEventsBySlug = async (slug: string): Promise<any> => {
   const response = await apiCall({
-    name: "getEventsBySlug",
+    name: 'getEventsBySlug',
     urlExtra: `/${slug}`,
-    alert: false
+    alert: false,
   });
   return response;
 };
 
-export { createEvent, createTag, getTags, getEventsById, getEvents, getScheduleandLocation, editEvent, deleteEvent, duplicateEvent, accessibility, publishEvent, notification, checkSimilarEvent,getEventsBySlug };
+export {
+  createEvent,
+  createTag,
+  getTags,
+  getEventsById,
+  getEvents,
+  getScheduleandLocation,
+  editEvent,
+  deleteEvent,
+  duplicateEvent,
+  accessibility,
+  publishEvent,
+  notification,
+  checkSimilarEvent,
+  getEventsBySlug,
+};
