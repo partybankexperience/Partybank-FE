@@ -11,12 +11,32 @@ export const stages = [
   // 'Event Guests',
   'Review & Publish',
 ];
+
 const number = Storage.getItem('user')?.phoneNumber;
+
+// ---- Helpers (pure) ----
+type YesNo = 'Yes' | 'No' | '';
+type Visibility = 'public' | 'private' | '';
+
+const normalizeYesNo = (val?: string): YesNo => (val === 'Yes' ? 'Yes' : val === 'No' ? 'No' : '');
+
+const normalizeVisibility = (val?: string): Visibility =>
+  val === 'public' || val === 'private' ? (val as Visibility) : '';
+
+export interface AccessibilityPayload {
+  visibility: 'public' | 'private';
+  wheelchairAccessible: boolean | null;
+  parkingAvailable: boolean | null;
+  attendeesCoverFees: boolean;
+  minAge: number | null;
+}
+
 interface EventData {
   stage: string;
   form: Record<string, Record<string, any>>;
   errors: Record<string, Record<string, string>>;
   isNextButtonDisabled: boolean;
+
   setStage: (stage: string) => void;
   setForm: (form: Record<string, any>) => void;
   setFormValue: (stage: string, key: string, value: any) => void;
@@ -24,6 +44,7 @@ interface EventData {
   clearError: (stage: string, key: string) => void;
   clearStageErrors: (stage: string) => void;
   setIsNextButtonDisabled: (disabled: boolean) => void;
+
   // Actions
   clearForm: (stage: string) => void;
   resetEventStore: () => void;
@@ -31,6 +52,10 @@ interface EventData {
   conditionalClearStorage: () => void;
   prefillEventData: (eventData: any) => void;
   mapBackendStepToFrontend: (backendStep: string) => string;
+
+  // Accessibility helpers
+  ensureAccessibilityDefaults: () => void;
+  buildAccessibilityPayload: () => AccessibilityPayload;
 }
 
 export const useEventStore = create<EventData>()(
@@ -40,8 +65,10 @@ export const useEventStore = create<EventData>()(
       form: {},
       errors: {},
       isNextButtonDisabled: false,
+
       setStage: (stage) => set(() => ({ stage })),
       setForm: (form) => set(() => ({ form })),
+
       setFormValue: (stage, key, value) => {
         const prevForm = get().form;
         set({
@@ -54,6 +81,7 @@ export const useEventStore = create<EventData>()(
           },
         });
       },
+
       setError: (stage, key, error) => {
         const prevErrors = get().errors;
         set({
@@ -66,6 +94,7 @@ export const useEventStore = create<EventData>()(
           },
         });
       },
+
       clearError: (stage, key) => {
         const prevErrors = get().errors;
         const stageErrors = { ...prevErrors[stage] };
@@ -77,20 +106,21 @@ export const useEventStore = create<EventData>()(
           },
         });
       },
+
       clearStageErrors: (stage) => {
         const prevErrors = get().errors;
         const newErrors = { ...prevErrors };
         delete newErrors[stage];
-        set({
-          errors: newErrors,
-        });
+        set({ errors: newErrors });
       },
+
       clearForm: (stage) => {
         const prevForm = get().form;
         const newForm = { ...prevForm };
         delete newForm[stage];
         set({ form: newForm });
       },
+
       resetEventStore: () => {
         set(() => ({
           form: {},
@@ -100,7 +130,9 @@ export const useEventStore = create<EventData>()(
         }));
         localStorage.removeItem('event-creation-storage');
       },
+
       setIsNextButtonDisabled: (disabled) => set({ isNextButtonDisabled: disabled }),
+
       clearEventStorage: () => {
         localStorage.removeItem('event-creation-storage');
         set(() => ({
@@ -110,6 +142,7 @@ export const useEventStore = create<EventData>()(
           isNextButtonDisabled: false,
         }));
       },
+
       conditionalClearStorage: () => {
         // Only clear if there's no eventId in storage (new event creation)
         const eventId = localStorage.getItem('eventId');
@@ -127,65 +160,80 @@ export const useEventStore = create<EventData>()(
       prefillEventData: (eventData: any) => {
         const form: Record<string, any> = {};
 
-        // Map backend data to Event Setup stage
+        // Event Setup
         form['Event Setup'] = {
-          name: eventData.name || '',
-          description: eventData.description || '',
-          coverImage: eventData.bannerImage || '',
-          category: eventData.category || '',
-          // Handle tags - if it's an array, get the first tag's ID, otherwise use the value
+          name: eventData?.name || '',
+          description: eventData?.description || '',
+          coverImage: eventData?.bannerImage || '',
+          category: eventData?.category || '',
+          // tags: store first tag id if array, else value
           tags:
-            eventData.tags && Array.isArray(eventData.tags) && eventData.tags.length > 0
+            eventData?.tags && Array.isArray(eventData.tags) && eventData.tags.length > 0
               ? eventData.tags[0].id || eventData.tags[0]
-              : eventData.tags || '',
+              : eventData?.tags || '',
           selectedTags:
-            eventData.tags && Array.isArray(eventData.tags) && eventData.tags.length > 0
+            eventData?.tags && Array.isArray(eventData.tags) && eventData.tags.length > 0
               ? eventData.tags[0].id || eventData.tags[0]
-              : eventData.tags || '',
-          contactNumber: eventData.contactPhone || number || '',
-          seriesId: eventData.seriesId || '',
-          // Add series name for display if available
-          seriesName: eventData.series?.name || '',
+              : eventData?.tags || '',
+          contactNumber: eventData?.contactPhone || number || '',
+          seriesId: eventData?.seriesId || '',
+          seriesName: eventData?.series?.name || '',
         };
 
-        // Map backend data to Schedule & Location stage
+        // Schedule & Location
         form['Schedule & Location'] = {
-          eventType: eventData.eventType || '',
-          startDate: eventData.startDate ? eventData.startDate.slice(0, 10) : '',
-          endDate: eventData.endDate ? eventData.endDate.slice(0, 10) : '',
-          startTime: eventData.startTime || '',
-          endTime: eventData.endTime || '',
-          venueName: eventData.venueName || eventData.location || '',
+          eventType: eventData?.eventType || '',
+          startDate: eventData?.startDate ? eventData.startDate.slice(0, 10) : '',
+          endDate: eventData?.endDate ? eventData.endDate.slice(0, 10) : '',
+          startTime: eventData?.startTime || '',
+          endTime: eventData?.endTime || '',
+          venueName: eventData?.venueName || eventData?.location || '',
           selectedLocation:
-            eventData.selectedLocation ||
-            (eventData.venueName
+            eventData?.selectedLocation ||
+            (eventData?.venueName
               ? {
                   name: eventData.venueName,
-                  lat: eventData.coordinates?.lat || 0,
-                  lon: eventData.coordinates?.lon || 0,
+                  lat: eventData?.coordinates?.lat || 0,
+                  lon: eventData?.coordinates?.lon || 0,
                 }
               : null),
-          address: eventData.address || null,
-          coordinates: eventData.coordinates || null,
-          showLocation: !!(eventData.venueName || eventData.location || eventData.selectedLocation),
-          isLocationTBA: !(eventData.venueName || eventData.location || eventData.selectedLocation),
+          address: eventData?.address || null,
+          coordinates: eventData?.coordinates || null,
+          showLocation: !!(
+            eventData?.venueName ||
+            eventData?.location ||
+            eventData?.selectedLocation
+          ),
+          isLocationTBA: !(
+            eventData?.venueName ||
+            eventData?.location ||
+            eventData?.selectedLocation
+          ),
         };
 
-        // Map backend data to Accessibility stage
+        // Accessibility (default to 'public' if missing/unknown)
         form['Accessibility'] = {
-          eventVisibility: eventData.visibility || '',
-          wheelchairAccess: eventData.wheelchairAccessible ? 'Yes' : 'No',
-          parkingAvailable: eventData.parkingAvailable ? 'Yes' : 'No',
-          transferCharges: eventData.attendeesCoverFees || false,
-          minAge: eventData.minAge?.toString() || '',
+          eventVisibility: normalizeVisibility(eventData?.visibility) || 'public',
+          wheelchairAccess:
+            eventData?.wheelchairAccessible === true
+              ? 'Yes'
+              : eventData?.wheelchairAccessible === false
+                ? 'No'
+                : '',
+          parkingAvailable:
+            eventData?.parkingAvailable === true
+              ? 'Yes'
+              : eventData?.parkingAvailable === false
+                ? 'No'
+                : '',
+          transferCharges: !!eventData?.attendeesCoverFees,
+          minAge: eventData?.minAge != null ? String(eventData.minAge) : '',
         };
 
-        // Map tickets if any
-        if (eventData.tickets && eventData.tickets.length > 0) {
-          // console.log(eventData.tickets,'the tickets from the event side');
+        // Tickets Create
+        if (eventData?.tickets && eventData.tickets.length > 0) {
           form['Tickets Create'] = {
             tickets: eventData.tickets.map((ticket: any) => ({
-              
               ...ticket,
               isSaved: true,
             })),
@@ -194,6 +242,7 @@ export const useEventStore = create<EventData>()(
 
         set(() => ({ form }));
       },
+
       mapBackendStepToFrontend: (backendStep: string): string => {
         const stepMapping: Record<string, string> = {
           eventSetup: 'Event Setup',
@@ -205,9 +254,51 @@ export const useEventStore = create<EventData>()(
         };
         return stepMapping[backendStep] || 'Event Setup';
       },
+
+      // ---- Accessibility helpers ----
+      ensureAccessibilityDefaults: () => {
+        const { form } = get();
+        const current = (form['Accessibility'] ?? {}) as Record<string, any>;
+
+        const next = {
+          eventVisibility: normalizeVisibility(current.eventVisibility) || 'public',
+          wheelchairAccess: normalizeYesNo(current.wheelchairAccess) || '',
+          parkingAvailable: normalizeYesNo(current.parkingAvailable) || '',
+          transferCharges:
+            typeof current.transferCharges === 'boolean' ? current.transferCharges : false,
+          minAge: typeof current.minAge === 'string' ? current.minAge : '',
+        };
+
+        set((state) => ({ form: { ...state.form, Accessibility: next } }));
+      },
+
+      buildAccessibilityPayload: (): AccessibilityPayload => {
+        const { form } = get();
+        const acc = (form['Accessibility'] ?? {}) as Record<string, any>;
+
+        const visibility = (normalizeVisibility(acc.eventVisibility) || 'public') as
+          | 'public'
+          | 'private';
+
+        const wheelchairAccessible =
+          acc.wheelchairAccess === 'Yes' ? true : acc.wheelchairAccess === 'No' ? false : null;
+
+        const parkingAvailable =
+          acc.parkingAvailable === 'Yes' ? true : acc.parkingAvailable === 'No' ? false : null;
+
+        const attendeesCoverFees = !!acc.transferCharges;
+
+        const minAge = acc.minAge && String(acc.minAge).trim() !== '' ? Number(acc.minAge) : null;
+
+        return {
+          visibility,
+          wheelchairAccessible,
+          parkingAvailable,
+          attendeesCoverFees,
+          minAge,
+        };
+      },
     }),
-    {
-      name: 'event-creation-storage',
-    },
+    { name: 'event-creation-storage' },
   ),
 );
